@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypertension Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bp-blue: #1565C0;
+            --bp-light-blue: #42A5F5;
+            --heart-red: #E53935;
+            --kidney-amber: #FF8F00;
+            --safe-green: #43A047;
+            --danger-red: #C62828;
+            --warning-orange: #EF6C00;
+            --purple-accent: #7B1FA2;
+            --dark-navy: #0D47A1;
+            --bg-sky: #E3F2FD;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-sky) 0%, #BBDEFB 100%);
+            color: #1A237E;
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, var(--bp-blue), var(--heart-red));
+            border-radius: 30px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "❤️";
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.15;
+            top: -20px;
+            right: 30px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: "🩺";
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.15;
+            bottom: -10px;
+            left: 40px;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.8rem;
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* BP Display */
+        .bp-display {
+            background: white;
+            border-radius: 20px;
+            padding: 20px 40px;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .bp-display .reading {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            color: var(--heart-red);
+        }
+
+        .bp-display .label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border-left: 6px solid var(--bp-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section.red { border-left-color: var(--heart-red); }
+        .section.green { border-left-color: var(--safe-green); }
+        .section.amber { border-left-color: var(--kidney-amber); }
+        .section.purple { border-left-color: var(--purple-accent); }
+        .section.danger { border-left-color: var(--danger-red); }
+
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.6rem;
+            color: var(--bp-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section.red .section-title { color: var(--heart-red); }
+        .section.green .section-title { color: var(--safe-green); }
+        .section.amber .section-title { color: var(--kidney-amber); }
+        .section.purple .section-title { color: var(--purple-accent); }
+        .section.danger .section-title { color: var(--danger-red); }
+
+        .section-title .emoji {
+            font-size: 1.8rem;
+        }
+
+        /* Types Cards */
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .type-card {
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .type-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .type-card.primary { background: linear-gradient(135deg, var(--bp-blue), #1976D2); }
+        .type-card.secondary { background: linear-gradient(135deg, var(--purple-accent), #9C27B0); }
+
+        .type-card h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .type-card .percent {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.5rem;
+            opacity: 0.3;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+        }
+
+        .type-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .type-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .type-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Alert Boxes */
+        .alert-box {
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            border-left: 5px solid var(--danger-red);
+            color: #B71C1C;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-left: 5px solid var(--warning-orange);
+            color: #E65100;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-left: 5px solid var(--bp-blue);
+            color: #0D47A1;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border-left: 5px solid var(--safe-green);
+            color: #1B5E20;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid var(--safe-green);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: var(--card-shadow);
+        }
+
+        .stat-card .number {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2rem;
+            color: var(--safe-green);
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Drug Class Grid */
+        .drug-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .drug-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #eee;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .drug-card:hover {
+            border-color: var(--bp-blue);
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .drug-card h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--bp-blue);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .drug-card .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .drug-card .badge.first-line {
+            background: var(--safe-green);
+            color: white;
+        }
+
+        .drug-card ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .drug-card li {
+            padding: 5px 0;
+            color: #555;
+        }
+
+        /* Avoid/Use Table */
+        .condition-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .condition-table th {
+            background: var(--dark-navy);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .condition-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background: white;
+        }
+
+        .condition-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .condition-table tr:hover td {
+            background: #E3F2FD;
+        }
+
+        .condition-table .condition {
+            font-weight: 700;
+            color: var(--dark-navy);
+        }
+
+        .condition-table .avoid {
+            color: var(--danger-red);
+            font-weight: 600;
+        }
+
+        .condition-table .why {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Lifestyle Cards */
+        .lifestyle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .lifestyle-card {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .lifestyle-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .lifestyle-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .lifestyle-card h4 {
+            font-weight: 800;
+            color: #1B5E20;
+            margin-bottom: 8px;
+        }
+
+        .lifestyle-card p {
+            font-size: 0.9rem;
+            color: #2E7D32;
+        }
+
+        /* Special Populations */
+        .population-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .pop-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .pop-card:hover {
+            border-color: var(--purple-accent);
+            box-shadow: var(--card-shadow);
+        }
+
+        .pop-card h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--purple-accent);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .pop-card .best-choice {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-weight: 700;
+            color: #1B5E20;
+        }
+
+        .pop-card .less-effective {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-weight: 700;
+            color: #E65100;
+        }
+
+        .pop-card ul {
+            list-style: none;
+        }
+
+        .pop-card li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.95rem;
+        }
+
+        .pop-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* Emergency Box */
+        .emergency-box {
+            background: linear-gradient(135deg, var(--danger-red), #B71C1C);
+            border-radius: 25px;
+            padding: 30px;
+            color: white;
+            margin: 25px 0;
+        }
+
+        .emergency-box h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .emergency-box .definition {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .emergency-drugs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .e-drug {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 15px;
+        }
+
+        .e-drug h5 {
+            font-family: 'Fredoka One', cursive;
+            margin-bottom: 10px;
+        }
+
+        .e-drug ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .e-drug li {
+            padding: 4px 0;
+            opacity: 0.95;
+        }
+
+        /* Pregnancy Section */
+        .pregnancy-box {
+            background: linear-gradient(135deg, #FCE4EC, #F8BBD9);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .pregnancy-box h3 {
+            font-family: 'Fredoka One', cursive;
+            color: #880E4F;
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .pregnancy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .preg-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+        }
+
+        .preg-card h5 {
+            color: #880E4F;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .preg-card.danger {
+            border: 3px solid var(--danger-red);
+        }
+
+        .preg-card.safe {
+            border: 3px solid var(--safe-green);
+        }
+
+        /* Memory Tips */
+        .memory-tip {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px dashed var(--kidney-amber);
+        }
+
+        .memory-tip h4 {
+            font-family: 'Fredoka One', cursive;
+            color: #FF6F00;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .memory-tip p {
+            font-size: 1.05rem;
+        }
+
+        /* Adherence Section */
+        .adherence-box {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-radius: 25px;
+            padding: 30px;
+            margin: 25px 0;
+        }
+
+        .adherence-box h3 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--bp-blue);
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .adherence-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .adhere-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .adhere-item .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .adhere-item h5 {
+            color: var(--bp-blue);
+            margin-bottom: 8px;
+        }
+
+        .adhere-item p {
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        /* Exam Pearls */
+        .exam-pearls {
+            background: linear-gradient(135deg, var(--bp-blue), var(--purple-accent));
+            border-radius: 25px;
+            padding: 30px;
+            color: white;
+            margin: 25px 0;
+        }
+
+        .exam-pearls h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .pearl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .pearl-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .pearl-item .icon {
+            font-size: 1.3rem;
+        }
+
+        .pearl-item p {
+            font-weight: 600;
+        }
+
+        /* Quick Reference */
+        .quick-ref {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px solid var(--bp-blue);
+        }
+
+        .quick-ref h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--bp-blue);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .bp-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bp-level {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .bp-level.normal { background: #C8E6C9; color: #1B5E20; }
+        .bp-level.elevated { background: #FFF9C4; color: #F57F17; }
+        .bp-level.stage1 { background: #FFCC80; color: #E65100; }
+        .bp-level.stage2 { background: #FFAB91; color: #BF360C; }
+        .bp-level.crisis { background: #EF9A9A; color: #B71C1C; }
+
+        .bp-level .range {
+            flex: 1;
+        }
+
+        .bp-level .label {
+            font-weight: 800;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .bp-display .reading {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🩺 Hypertension</h1>
+            <p>Complete Study Guide for Blood Pressure Management</p>
+            <div class="bp-display">
+                <div class="label">Target BP</div>
+                <div class="reading">&lt;130/80</div>
+            </div>
+        </div>
+
+        <!-- BP Classification -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">📊</span> Blood Pressure Classification</h2>
+            
+            <div class="quick-ref">
+                <h4>Know Your Numbers!</h4>
+                <div class="bp-scale">
+                    <div class="bp-level normal">
+                        <span class="range">SBP &lt;120 AND DBP &lt;80</span>
+                        <span class="label">✅ Normal</span>
+                    </div>
+                    <div class="bp-level elevated">
+                        <span class="range">SBP 120-129 AND DBP &lt;80</span>
+                        <span class="label">⚠️ Elevated</span>
+                    </div>
+                    <div class="bp-level stage1">
+                        <span class="range">SBP 130-139 OR DBP 80-89</span>
+                        <span class="label">Stage 1 HTN</span>
+                    </div>
+                    <div class="bp-level stage2">
+                        <span class="range">SBP ≥140 OR DBP ≥90</span>
+                        <span class="label">Stage 2 HTN</span>
+                    </div>
+                    <div class="bp-level crisis">
+                        <span class="range">SBP &gt;180 AND/OR DBP &gt;120</span>
+                        <span class="label">🚨 CRISIS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-danger" style="margin-top: 20px;">
+                <strong>⚠️ "Silent Killer":</strong> Hypertension is often asymptomatic! Every 20 mm Hg ↑ SBP or 10 mm Hg ↑ DBP <strong>DOUBLES</strong> cardiovascular risk (ages 40-70).
+            </div>
+        </div>
+
+        <!-- Types of HTN -->
+        <div class="section purple">
+            <h2 class="section-title"><span class="emoji">🔬</span> Types of Hypertension</h2>
+            
+            <div class="types-grid">
+                <div class="type-card primary">
+                    <div class="percent">~90%</div>
+                    <h3>Primary (Essential) HTN</h3>
+                    <ul>
+                        <li>❓ <strong>No identifiable cause</strong></li>
+                        <li>📋 Diagnosis by ruling out secondary causes</li>
+                        <li>📈 Chronic and progressive</li>
+                        <li>💊 Requires lifelong treatment</li>
+                        <li>⚠️ Treatment CONTROLS but does NOT cure</li>
+                    </ul>
+                </div>
+                <div class="type-card secondary">
+                    <div class="percent">&lt;10%</div>
+                    <h3>Secondary HTN</h3>
+                    <ul>
+                        <li>✅ <strong>Identifiable cause</strong></li>
+                        <li>Examples: Pheochromocytoma, Cushing's, OCPs</li>
+                        <li>🎯 Treating cause may CURE HTN</li>
+                        <li>If not curable → manage like primary</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="memory-tip">
+                <h4>💡 Risk Factors to Remember</h4>
+                <p>Older age • African Americans • Postmenopausal women • Family history • Smoking • Diabetes • Dyslipidemia • Physical inactivity</p>
+            </div>
+        </div>
+
+        <!-- Benefits of Treatment -->
+        <div class="section green">
+            <h2 class="section-title"><span class="emoji">📉</span> Benefits of Lowering Blood Pressure</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="number">↓35-40%</div>
+                    <div class="label">Stroke Reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">↓20-25%</div>
+                    <div class="label">MI Reduction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">↓&gt;50%</div>
+                    <div class="label">Heart Failure</div>
+                </div>
+                <div class="stat-card" style="border-color: var(--bp-blue);">
+                    <div class="number" style="color: var(--bp-blue);">&lt;130/80</div>
+                    <div class="label">Goal for ALL Adults</div>
+                </div>
+            </div>
+
+            <div class="alert-success">
+                <strong>✅ Bottom Line:</strong> Sustained BP control = significant reduction in mortality!
+            </div>
+        </div>
+
+        <!-- Lifestyle Modifications -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">🏃</span> Lifestyle Modifications</h2>
+            
+            <div class="lifestyle-grid">
+                <div class="lifestyle-card">
+                    <div class="icon">🧂</div>
+                    <h4>Sodium</h4>
+                    <p>≤2300 mg/day<br>(ideal: 1500 mg/day)</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🥗</div>
+                    <h4>DASH Diet</h4>
+                    <p>Fruits, veggies, low-fat dairy, whole grains</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🍷</div>
+                    <h4>Alcohol</h4>
+                    <p>Men: ≤1 oz/day<br>Women: ≤0.5 oz/day</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🏋️</div>
+                    <h4>Exercise</h4>
+                    <p>30-45 min most days</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🚭</div>
+                    <h4>Smoking</h4>
+                    <p>Complete cessation</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">⚖️</div>
+                    <h4>Weight Loss</h4>
+                    <p>Achieve healthy BMI</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🍌</div>
+                    <h4>Potassium</h4>
+                    <p>~4700 mg/day</p>
+                </div>
+                <div class="lifestyle-card">
+                    <div class="icon">🥛</div>
+                    <h4>Calcium</h4>
+                    <p>Adequate for age</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Drug Classes -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">💊</span> Major Antihypertensive Drug Classes</h2>
+            
+            <div class="drug-grid">
+                <div class="drug-card">
+                    <span class="badge first-line">⭐ FIRST-LINE</span>
+                    <h4>Thiazide Diuretics</h4>
+                    <ul>
+                        <li>↓ Blood volume & ↓ SVR</li>
+                        <li>⚠️ Hypokalemia, hyperglycemia</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>Loop Diuretics</h4>
+                    <ul>
+                        <li>Use: Low GFR, severe fluid overload</li>
+                        <li>⚠️ Hypokalemia</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>K⁺-Sparing Diuretics</h4>
+                    <ul>
+                        <li>Prevent hypokalemia</li>
+                        <li>⚠️ Hyperkalemia risk</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>β-Blockers</h4>
+                    <ul>
+                        <li>↓ HR, ↓ contractility, ↓ renin</li>
+                        <li>❌ Avoid in asthma, AV block</li>
+                        <li>Less effective in African Americans</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <span class="badge first-line">⭐ KIDNEY PROTECTION</span>
+                    <h4>ACE Inhibitors</h4>
+                    <ul>
+                        <li>Protect kidneys (esp. in diabetes)</li>
+                        <li>⚠️ Hyperkalemia, angioedema</li>
+                        <li>❌ Contraindicated in pregnancy</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <span class="badge first-line">⭐ KIDNEY PROTECTION</span>
+                    <h4>ARBs</h4>
+                    <ul>
+                        <li>Same benefits as ACE inhibitors</li>
+                        <li>Less cough than ACEi</li>
+                        <li>❌ Contraindicated in pregnancy</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>CCBs (Dihydropyridines)</h4>
+                    <ul>
+                        <li>Vasodilation</li>
+                        <li>⚠️ Reflex tachycardia, edema</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>CCBs (Non-DHP)</h4>
+                    <ul>
+                        <li>Vasodilation + cardiac suppression</li>
+                        <li>❌ Avoid in HF, AV block</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conditions to Avoid -->
+        <div class="section danger">
+            <h2 class="section-title"><span class="emoji">🚫</span> Drug-Condition Interactions: What to AVOID</h2>
+            
+            <table class="condition-table">
+                <thead>
+                    <tr>
+                        <th>Condition</th>
+                        <th>AVOID These Drugs</th>
+                        <th>Why?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="condition">❤️ Heart Failure</td>
+                        <td class="avoid">Verapamil, Diltiazem</td>
+                        <td class="why">↓ Contractility → worsens HF</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🔌 AV Heart Block</td>
+                        <td class="avoid">β-Blockers, Labetalol, Verapamil, Diltiazem</td>
+                        <td class="why">Suppress AV conduction → worsens block</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">💔 CAD / Post-MI</td>
+                        <td class="avoid">Hydralazine</td>
+                        <td class="why">Reflex tachycardia ↑ O₂ demand → angina</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🫁 Asthma</td>
+                        <td class="avoid">β-Blockers, Labetalol</td>
+                        <td class="why">β₂ blockade → bronchoconstriction</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🩸 Diabetes</td>
+                        <td class="avoid">Thiazides, Furosemide, β-Blockers (caution)</td>
+                        <td class="why">↑ Glucose; β-blockers mask hypoglycemia</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🫘 Renal Insufficiency</td>
+                        <td class="avoid">K⁺-sparing diuretics, K⁺ supplements</td>
+                        <td class="why">Risk of dangerous hyperkalemia</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">⬆️ Hyperkalemia</td>
+                        <td class="avoid">K⁺-sparing, ACEi, ARBs, DRIs</td>
+                        <td class="why">All cause K⁺ retention</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🦶 Gout</td>
+                        <td class="avoid">Thiazides, Furosemide</td>
+                        <td class="why">Promote hyperuricemia</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🤰 Pregnancy</td>
+                        <td class="avoid">ACEi, ARBs, DRIs</td>
+                        <td class="why">Fetal injury, growth delay, renal failure</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🧠 Depression</td>
+                        <td class="avoid">Reserpine</td>
+                        <td class="why">Can cause or worsen depression</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🫀 Collagen Diseases</td>
+                        <td class="avoid">Hydralazine</td>
+                        <td class="why">Can cause lupus-like syndrome</td>
+                    </tr>
+                    <tr>
+                        <td class="condition">🫘 Liver Disease</td>
+                        <td class="avoid">Methyldopa</td>
+                        <td class="why">Hepatotoxic</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Special Populations -->
+        <div class="section purple">
+            <h2 class="section-title"><span class="emoji">👥</span> Special Populations</h2>
+            
+            <div class="population-cards">
+                <div class="pop-card">
+                    <h4>👨🏿 African American Adults</h4>
+                    <p style="margin-bottom: 10px;">Higher incidence, earlier onset, more severe HTN. ↑ Risk of stroke, ESRD, heart disease.</p>
+                    <div class="best-choice">⭐ BEST: Thiazide diuretics, CCBs</div>
+                    <div class="less-effective">⚠️ Less Effective as Monotherapy: β-Blockers, ACE inhibitors</div>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">➡️ Still use ACEi/β-blockers if strongly indicated (e.g., diabetes with proteinuria)</p>
+                </div>
+                <div class="pop-card">
+                    <h4>🫘 Diabetes & Renal Disease</h4>
+                    <p style="margin-bottom: 10px;">BP Target: &lt;130/80 mm Hg</p>
+                    <div class="best-choice">⭐ BEST: ACE inhibitors, ARBs (↓ albuminuria, slow renal damage)</div>
+                    <ul style="margin-top: 15px;">
+                        <li>Add thiazide or loop diuretic as needed</li>
+                        <li>Use loop diuretic if low GFR</li>
+                        <li>❌ Avoid K⁺-sparing diuretics</li>
+                    </ul>
+                </div>
+                <div class="pop-card">
+                    <h4>👴 Older Adults</h4>
+                    <p style="margin-bottom: 10px;">Most have isolated systolic HTN</p>
+                    <ul>
+                        <li>Treatment ↓ HF, stroke, mortality</li>
+                        <li>⚠️ Blunted reflexes → ↑ orthostatic hypotension</li>
+                        <li>Start LOW doses, titrate SLOWLY</li>
+                        <li>Use caution with: Reserpine, α₁-blockers</li>
+                    </ul>
+                </div>
+                <div class="pop-card">
+                    <h4>👶 Children & Adolescents</h4>
+                    <ul>
+                        <li>Secondary HTN more common → search for cause!</li>
+                        <li>Drug classes: ACEi, Diuretics, β-Blockers, CCBs</li>
+                        <li>Lower doses required</li>
+                        <li>❌ Avoid ACEi/ARBs in sexually active or pregnant adolescents</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hypertensive Emergency -->
+        <div class="emergency-box">
+            <h3>🚨 HYPERTENSIVE EMERGENCY</h3>
+            <div class="definition">
+                <strong>Definition:</strong> DBP &gt;120 mm Hg WITH end-organ damage<br>
+                <strong>Goal:</strong> Severe emergency → ↓ BP within 1 hour | Otherwise → gradual ↓ over 24-48 hours<br>
+                <strong>Route:</strong> ALL drugs given IV!
+            </div>
+            
+            <div class="emergency-drugs">
+                <div class="e-drug">
+                    <h5>⭐ Sodium Nitroprusside</h5>
+                    <ul>
+                        <li>Drug of choice</li>
+                        <li>Dilates arterioles & veins</li>
+                        <li>Onset: SECONDS</li>
+                        <li>Continuous IV infusion</li>
+                        <li>⚠️ Thiocyanate toxicity (&gt;72 hrs)</li>
+                    </ul>
+                </div>
+                <div class="e-drug">
+                    <h5>Fenoldopam</h5>
+                    <ul>
+                        <li>Dopamine₁ agonist</li>
+                        <li>Arteriolar dilation</li>
+                        <li>✅ Preserves renal function</li>
+                        <li>⚠️ Headache, flushing, reflex tachycardia</li>
+                        <li>❌ Avoid in glaucoma</li>
+                    </ul>
+                </div>
+                <div class="e-drug">
+                    <h5>Labetalol</h5>
+                    <ul>
+                        <li>α + β blocker</li>
+                        <li>✅ Prevents reflex tachycardia</li>
+                        <li>✅ Safe in angina/MI</li>
+                        <li>❌ Avoid: Asthma, HF, AV block</li>
+                    </ul>
+                </div>
+                <div class="e-drug">
+                    <h5>Clevidipine</h5>
+                    <ul>
+                        <li>IV dihydropyridine CCB</li>
+                        <li>Ultra-short acting</li>
+                        <li>Easily titrated</li>
+                        <li>⚠️ Headache, N/V</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pregnancy -->
+        <div class="pregnancy-box">
+            <h3>🤰 Hypertension in Pregnancy</h3>
+            
+            <div class="pregnancy-grid">
+                <div class="preg-card danger">
+                    <h5>❌ CONTRAINDICATED</h5>
+                    <ul style="list-style: none;">
+                        <li>• ACE inhibitors</li>
+                        <li>• ARBs</li>
+                        <li>• Direct Renin Inhibitors</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--danger-red);">Cause fetal injury, growth delay, renal failure</p>
+                </div>
+                <div class="preg-card safe">
+                    <h5>✅ SAFE CHOICES</h5>
+                    <ul style="list-style: none;">
+                        <li>• <strong>Methyldopa</strong></li>
+                        <li>• <strong>Labetalol</strong></li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--safe-green);">Only treat severe HTN</p>
+                </div>
+                <div class="preg-card" style="border: 3px solid var(--purple-accent);">
+                    <h5 style="color: var(--purple-accent);">Preeclampsia</h5>
+                    <ul style="list-style: none; font-size: 0.9rem;">
+                        <li>• BP ≥140/90 + proteinuria after 20 weeks</li>
+                        <li>• Only cure = DELIVERY</li>
+                        <li>• Severe: IV labetalol</li>
+                    </ul>
+                </div>
+                <div class="preg-card" style="border: 3px solid var(--danger-red);">
+                    <h5 style="color: var(--danger-red);">Eclampsia</h5>
+                    <ul style="list-style: none; font-size: 0.9rem;">
+                        <li>• Preeclampsia + SEIZURES</li>
+                        <li>• Drug of choice: <strong>Magnesium sulfate</strong></li>
+                        <li>• Monitor reflexes & Mg levels</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Adherence -->
+        <div class="adherence-box">
+            <h3>📋 Promoting Adherence</h3>
+            <p style="text-align: center; margin-bottom: 20px; color: #0D47A1;">Why patients DON'T adhere: HTN is asymptomatic • Slow progression • Lifelong therapy • Cost & side effects</p>
+            
+            <div class="adherence-grid">
+                <div class="adhere-item">
+                    <div class="icon">📚</div>
+                    <h5>Patient Education</h5>
+                    <p>Explain why BP control matters</p>
+                </div>
+                <div class="adhere-item">
+                    <div class="icon">📊</div>
+                    <h5>Self-Monitoring</h5>
+                    <p>Home BP readings</p>
+                </div>
+                <div class="adhere-item">
+                    <div class="icon">💊</div>
+                    <h5>Minimize Side Effects</h5>
+                    <p>Start low, adjust as needed</p>
+                </div>
+                <div class="adhere-item">
+                    <div class="icon">📝</div>
+                    <h5>Simplify Regimens</h5>
+                    <p>Once-daily dosing when possible</p>
+                </div>
+                <div class="adhere-item">
+                    <div class="icon">💉</div>
+                    <h5>Fixed-Dose Combos</h5>
+                    <p>One pill = multiple drugs</p>
+                </div>
+                <div class="adhere-item">
+                    <div class="icon">👨‍👩‍👧</div>
+                    <h5>Family Support</h5>
+                    <p>Involve loved ones</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Treatment Strategy -->
+        <div class="section green">
+            <h2 class="section-title"><span class="emoji">📋</span> Treatment Strategy</h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px 20px; border-radius: 15px; border-left: 4px solid var(--safe-green);">
+                    <span style="font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--safe-green);">1</span>
+                    <span>Start with <strong>lifestyle changes</strong></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px 20px; border-radius: 15px; border-left: 4px solid var(--bp-blue);">
+                    <span style="font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--bp-blue);">2</span>
+                    <span>Begin <strong>drug therapy</strong> if needed (use LOW doses initially)</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px 20px; border-radius: 15px; border-left: 4px solid var(--purple-accent);">
+                    <span style="font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--purple-accent);">3</span>
+                    <span><strong>Add drugs</strong> from different classes as needed</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px 20px; border-radius: 15px; border-left: 4px solid var(--kidney-amber);">
+                    <span style="font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--kidney-amber);">4</span>
+                    <span><strong>Adjust</strong> based on response and side effects</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 15px 20px; border-radius: 15px; border-left: 4px solid var(--safe-green);">
+                    <span style="font-family: 'Fredoka One', cursive; font-size: 1.5rem; color: var(--safe-green);">5</span>
+                    <span>Consider <strong>step-down therapy</strong> after ≥1 year of control</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Exam Pearls -->
+        <div class="exam-pearls">
+            <h3>🧠 EXAM GOLD SUMMARY</h3>
+            <div class="pearl-grid">
+                <div class="pearl-item">
+                    <span class="icon">🎯</span>
+                    <p>Match drug class → comorbidity</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">❤️</span>
+                    <p>Avoid reflex tachycardia in CAD/MI (no hydralazine!)</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🫘</span>
+                    <p>ACE inhibitors BEST for diabetes & renal disease</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">⭐</span>
+                    <p>Thiazides = first-line unless contraindicated</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🤰</span>
+                    <p>Pregnancy = NO ACEi / ARBs / DRIs</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🚨</span>
+                    <p>Hypertensive emergency = IV drugs ONLY</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">👨🏿</span>
+                    <p>African Americans: Thiazides & CCBs most effective</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">💊</span>
+                    <p>Sodium nitroprusside = drug of choice for emergency</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🤱</span>
+                    <p>Eclampsia → Magnesium sulfate</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">📊</span>
+                    <p>Goal BP for ALL adults: &lt;130/80 mm Hg</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Tip -->
+        <div class="memory-tip">
+            <h4>🧠 Final Memory Tip: "ACE the KIDNEYS"</h4>
+            <p>ACE inhibitors and ARBs are <strong>SUPERIOR</strong> for:
+            <br>• <strong>Diabetes</strong> (↓ MI risk vs CCBs)
+            <br>• <strong>Chronic Kidney Disease</strong> (↓ albuminuria, slow progression)
+            <br>• <strong>Diabetic Nephropathy</strong> (protect those kidneys!)</p>
+        </div>
+
+        <div class="footer">
+            <p>📚 Study Guide based on Lehne's Chapter 50: Hypertension<br>
+            Created with 💙 for nursing students</p>
+        </div>
+    </div>
+
+    <script>
+        // Add hover effects
+        document.querySelectorAll('.drug-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px)';
+                }, 200);
+            });
+        });
+
+        document.querySelectorAll('.lifestyle-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'translateY(-8px) scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px)';
+                }, 200);
+            });
+        });
+
+        document.querySelectorAll('.stat-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1.05)';
+                }, 200);
+            });
+        });
+    </script>
+</body>
+</html>
