@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasodilator Pharmacology Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #FF6B9D;
+            --coral: #FF8A5B;
+            --teal: #00CEC9;
+            --purple: #A29BFE;
+            --mint: #55EFC4;
+            --yellow: #FFEAA7;
+            --blue: #74B9FF;
+            --lavender: #DDA0DD;
+            --peach: #FFDAB9;
+            --orange: #FF9F43;
+            --green: #26DE81;
+            --red: #FF6B6B;
+            --navy: #0984E3;
+            --indigo: #6C5CE7;
+            --crimson: #E17055;
+            --dark: #2D3436;
+            --light: #FAFAFA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 30%, #e74c3c 60%, #ff6b6b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🫀';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.1;
+            top: -10px;
+            right: 10px;
+        }
+
+        .header::after {
+            content: '💊';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            bottom: -10px;
+            left: 10px;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            background: linear-gradient(135deg, var(--red), var(--coral), var(--pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--dark);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            background: linear-gradient(135deg, var(--red), var(--coral));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        /* Big Picture Box */
+        .big-picture {
+            background: linear-gradient(135deg, var(--red), var(--coral));
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: white;
+            box-shadow: 0 15px 50px rgba(255,107,107,0.4);
+        }
+
+        .big-picture-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vessel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .vessel-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .vessel-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .vessel-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        /* Navigation Pills */
+        .nav-container {
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .nav-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .nav-pill {
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-pill.active {
+            transform: scale(1.05);
+        }
+
+        .pill-select { background: linear-gradient(135deg, var(--red), var(--coral)); color: white; }
+        .pill-adverse { background: linear-gradient(135deg, var(--orange), var(--yellow)); color: var(--dark); }
+        .pill-hydral { background: linear-gradient(135deg, var(--teal), var(--mint)); color: white; }
+        .pill-minox { background: linear-gradient(135deg, var(--purple), var(--lavender)); color: white; }
+        .pill-nitro { background: linear-gradient(135deg, var(--blue), var(--navy)); color: white; }
+        .pill-uses { background: linear-gradient(135deg, var(--green), var(--mint)); color: white; }
+        .pill-memory { background: linear-gradient(135deg, var(--pink), var(--coral)); color: white; }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #636e72;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            margin-left: auto;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            display: none;
+            padding-top: 15px;
+            border-top: 2px dashed #dfe6e9;
+        }
+
+        .card.expanded .card-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 2000px; }
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .info-box.pink { background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(255,138,91,0.1)); border-left: 5px solid var(--pink); }
+        .info-box.teal { background: linear-gradient(135deg, rgba(0,206,201,0.2), rgba(85,239,196,0.1)); border-left: 5px solid var(--teal); }
+        .info-box.purple { background: linear-gradient(135deg, rgba(162,155,254,0.2), rgba(221,160,221,0.1)); border-left: 5px solid var(--purple); }
+        .info-box.yellow { background: linear-gradient(135deg, rgba(255,234,167,0.3), rgba(255,218,185,0.2)); border-left: 5px solid var(--coral); }
+        .info-box.blue { background: linear-gradient(135deg, rgba(116,185,255,0.2), rgba(0,206,201,0.1)); border-left: 5px solid var(--blue); }
+        .info-box.green { background: linear-gradient(135deg, rgba(38,222,129,0.2), rgba(85,239,196,0.1)); border-left: 5px solid var(--green); }
+        .info-box.orange { background: linear-gradient(135deg, rgba(255,159,67,0.2), rgba(255,234,167,0.1)); border-left: 5px solid var(--orange); }
+        .info-box.red { background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(255,138,91,0.1)); border-left: 5px solid var(--red); }
+
+        .info-box-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Lists */
+        .fancy-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .fancy-list li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .fancy-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-weight: 800;
+        }
+
+        .fancy-list.pink li::before { color: var(--pink); }
+        .fancy-list.purple li::before { color: var(--purple); }
+        .fancy-list.coral li::before { color: var(--coral); }
+        .fancy-list.blue li::before { color: var(--blue); }
+        .fancy-list.green li::before { color: var(--green); }
+        .fancy-list.orange li::before { color: var(--orange); }
+        .fancy-list.red li::before { color: var(--red); }
+
+        /* Memory Tricks */
+        .memory-trick {
+            background: linear-gradient(135deg, var(--yellow), var(--peach));
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .memory-trick::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 1.5rem;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .memory-trick-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--dark);
+            margin-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        /* Red Flag Box */
+        .red-flag {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+
+        .red-flag-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* NCLEX Gold Box */
+        .nclex-gold {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            color: var(--dark);
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            border: 3px solid var(--orange);
+        }
+
+        .nclex-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Comparison Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 15px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .compare-table th {
+            padding: 15px;
+            font-family: 'Fredoka One', cursive;
+            color: white;
+        }
+
+        .compare-table th:first-child { background: var(--teal); }
+        .compare-table th:nth-child(2) { background: var(--pink); }
+        .compare-table th:nth-child(3) { background: var(--purple); }
+        .compare-table th:nth-child(4) { background: var(--blue); }
+
+        .compare-table td {
+            padding: 12px 15px;
+            background: white;
+            border-bottom: 1px solid #dfe6e9;
+            font-weight: 600;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* 3-Column Vessel Comparison */
+        .vessel-compare {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .vessel-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--teal);
+        }
+
+        .vessel-box:nth-child(2) { border-top-color: var(--pink); }
+        .vessel-box:nth-child(3) { border-top-color: var(--purple); }
+
+        .vessel-box-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .vessel-box-subtitle {
+            font-size: 0.85rem;
+            color: #636e72;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        /* Drug Profile Card */
+        .drug-profile {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            border-left: 8px solid var(--teal);
+        }
+
+        .drug-profile.hydralazine { border-left-color: var(--teal); }
+        .drug-profile.minoxidil { border-left-color: var(--purple); }
+        .drug-profile.nitroprusside { border-left-color: var(--blue); }
+
+        .drug-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .drug-class {
+            background: var(--mint);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        /* Flow Chart */
+        .flow-chart {
+            background: linear-gradient(135deg, var(--red), var(--coral));
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .flow-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .flow-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-item {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+        }
+
+        /* Memory Grid */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .memory-card {
+            background: linear-gradient(135deg, var(--teal), var(--mint));
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,206,201,0.3);
+        }
+
+        .memory-card:nth-child(2) { background: linear-gradient(135deg, var(--pink), var(--coral)); box-shadow: 0 10px 30px rgba(255,107,157,0.3); }
+        .memory-card:nth-child(3) { background: linear-gradient(135deg, var(--purple), var(--lavender)); box-shadow: 0 10px 30px rgba(162,155,254,0.3); }
+        .memory-card:nth-child(4) { background: linear-gradient(135deg, var(--blue), var(--navy)); box-shadow: 0 10px 30px rgba(116,185,255,0.3); }
+        .memory-card:nth-child(5) { background: linear-gradient(135deg, var(--orange), var(--yellow)); color: var(--dark); box-shadow: 0 10px 30px rgba(255,159,67,0.3); }
+        .memory-card:nth-child(6) { background: linear-gradient(135deg, var(--green), var(--mint)); box-shadow: 0 10px 30px rgba(38,222,129,0.3); }
+        .memory-card:nth-child(7) { background: linear-gradient(135deg, var(--red), var(--coral)); box-shadow: 0 10px 30px rgba(255,107,107,0.3); }
+        .memory-card:nth-child(8) { background: linear-gradient(135deg, var(--indigo), var(--purple)); box-shadow: 0 10px 30px rgba(108,92,231,0.3); }
+
+        .memory-hook {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .memory-explain {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Quiz Section */
+        .quiz-card {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .quiz-question {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: rgba(255,255,255,0.9);
+            color: var(--dark);
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .quiz-option:hover {
+            transform: translateX(10px);
+            border-color: white;
+        }
+
+        .quiz-option.correct {
+            background: var(--mint);
+            color: white;
+            border-color: white;
+        }
+
+        .quiz-option.incorrect {
+            background: #ff7675;
+            color: white;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            display: none;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            min-height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            min-height: 200px;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--red), var(--coral));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--teal), var(--mint));
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .flashcard-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+        }
+
+        .flashcard-hint {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        /* Key Drug Box */
+        .key-drug-box {
+            background: linear-gradient(135deg, var(--navy), var(--blue));
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .key-drug-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-pills {
+                flex-direction: column;
+            }
+            
+            .nav-pill {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .memory-grid, .vessel-compare {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-items {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Icon backgrounds */
+        .icon-pink { background: linear-gradient(135deg, var(--pink), var(--coral)); }
+        .icon-teal { background: linear-gradient(135deg, var(--teal), var(--mint)); }
+        .icon-purple { background: linear-gradient(135deg, var(--purple), var(--lavender)); }
+        .icon-yellow { background: linear-gradient(135deg, var(--yellow), var(--peach)); }
+        .icon-blue { background: linear-gradient(135deg, var(--blue), var(--teal)); }
+        .icon-green { background: linear-gradient(135deg, var(--green), var(--mint)); }
+        .icon-orange { background: linear-gradient(135deg, var(--orange), var(--yellow)); }
+        .icon-red { background: linear-gradient(135deg, var(--red), var(--coral)); }
+        .icon-navy { background: linear-gradient(135deg, var(--navy), var(--blue)); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🫀 Vasodilator Pharmacology</h1>
+            <p>Basic Concepts in Vasodilator Drugs</p>
+            <span class="subtitle">💊 High-Yield NCLEX Review!</span>
+        </div>
+
+        <!-- Big Picture -->
+        <div class="big-picture">
+            <div class="big-picture-title">🔹 CORE CONCEPT: How Vasodilators Work</div>
+            <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">
+                Vasodilators lower BP by <strong>relaxing vascular smooth muscle</strong> → dilation of blood vessels
+            </p>
+            <p style="margin-bottom: 10px;">Clinical effects depend on <strong>WHICH VESSELS</strong> they dilate:</p>
+            <div class="vessel-grid">
+                <div class="vessel-card">
+                    <div class="vessel-icon">🔴</div>
+                    <div class="vessel-name">ARTERIOLES</div>
+                    <div>↓ Afterload</div>
+                </div>
+                <div class="vessel-card">
+                    <div class="vessel-icon">🔵</div>
+                    <div class="vessel-name">VEINS</div>
+                    <div>↓ Preload</div>
+                </div>
+                <div class="vessel-card">
+                    <div class="vessel-icon">🟣</div>
+                    <div class="vessel-name">BOTH</div>
+                    <div>Most powerful!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-container">
+            <div class="nav-title">📚 Jump to a Section</div>
+            <div class="nav-pills">
+                <button class="nav-pill pill-select active" onclick="showSection('selectivity')">🎯 Vessel Selectivity</button>
+                <button class="nav-pill pill-adverse" onclick="showSection('adverse')">⚠️ Adverse Effects</button>
+                <button class="nav-pill pill-hydral" onclick="showSection('hydralazine')">💊 Hydralazine</button>
+                <button class="nav-pill pill-minox" onclick="showSection('minoxidil')">💊 Minoxidil</button>
+                <button class="nav-pill pill-nitro" onclick="showSection('nitroprusside')">💊 Nitroprusside</button>
+                <button class="nav-pill pill-uses" onclick="showSection('uses')">✅ Therapeutic Uses</button>
+                <button class="nav-pill pill-memory" onclick="showSection('memory')">🧠 Memory Hooks</button>
+            </div>
+        </div>
+
+        <!-- SELECTIVITY SECTION -->
+        <div id="selectivity" class="section active">
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-red">🎯</div>
+                    <div>
+                        <div class="card-title">Selectivity of Vasodilatory Effects - EXAM FAVORITE!</div>
+                        <div class="card-subtitle">Know which vessels each drug dilates!</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <div class="vessel-compare">
+                        <div class="vessel-box">
+                            <div class="vessel-box-title">🔴 ARTERIOLAR DILATION</div>
+                            <div class="vessel-box-subtitle">(Resistance Vessels)</div>
+                            <div class="info-box teal" style="margin: 10px 0;">
+                                <div class="info-box-title">Primary Effect: ↓ AFTERLOAD</div>
+                                <ul class="fancy-list">
+                                    <li>↓ Peripheral resistance</li>
+                                    <li>↓ Cardiac work</li>
+                                    <li>↑ Cardiac output</li>
+                                    <li>↑ Tissue perfusion</li>
+                                </ul>
+                            </div>
+                            <div style="font-weight: 700; margin-top: 10px;">
+                                <strong>Key Drugs:</strong><br>
+                                • Hydralazine<br>
+                                • Minoxidil<br>
+                                • CCBs
+                            </div>
+                        </div>
+
+                        <div class="vessel-box">
+                            <div class="vessel-box-title">🔵 VENOUS DILATION</div>
+                            <div class="vessel-box-subtitle">(Capacitance Vessels)</div>
+                            <div class="info-box pink" style="margin: 10px 0;">
+                                <div class="info-box-title">Primary Effect: ↓ PRELOAD</div>
+                                <ul class="fancy-list pink">
+                                    <li>↓ Venous return</li>
+                                    <li>↓ Ventricular filling</li>
+                                    <li>↓ Cardiac work</li>
+                                    <li>↓ Cardiac output</li>
+                                    <li>↓ Tissue perfusion</li>
+                                </ul>
+                            </div>
+                            <div style="font-weight: 700; margin-top: 10px;">
+                                <strong>Key Drugs:</strong><br>
+                                • Nitroglycerin<br>
+                                • Isosorbide dinitrate
+                            </div>
+                        </div>
+
+                        <div class="vessel-box">
+                            <div class="vessel-box-title">🟣 ARTERIOLES + VEINS</div>
+                            <div class="vessel-box-subtitle">(Both!)</div>
+                            <div class="info-box purple" style="margin: 10px 0;">
+                                <div class="info-box-title">Combines ↓ Afterload & ↓ Preload</div>
+                                <ul class="fancy-list purple">
+                                    <li>More powerful BP reduction</li>
+                                    <li>Higher hypotension risk!</li>
+                                </ul>
+                            </div>
+                            <div style="font-weight: 700; margin-top: 10px;">
+                                <strong>Key Drugs:</strong><br>
+                                • Prazosin<br>
+                                • Nitroprusside<br>
+                                • ACE inhibitors<br>
+                                • ARBs, Aliskiren
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">Remember: Arterioles vs Veins!</div>
+                        <strong>Arterioles = AFTERLOAD</strong> (both start with "A"!)<br>
+                        <strong>Veins = PRELOAD</strong> (Veins = Pool blood = less return to heart)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADVERSE EFFECTS SECTION -->
+        <div id="adverse" class="section">
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-orange">😵</div>
+                    <div>
+                        <div class="card-title">1. Postural (Orthostatic) Hypotension</div>
+                        <div class="card-subtitle">Caused primarily by VENOUS dilation</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="flow-chart" style="background: linear-gradient(135deg, var(--orange), var(--coral));">
+                        <div class="flow-title">Why Orthostatic Hypotension Happens</div>
+                        <div class="flow-items">
+                            <div class="flow-item">Venous Dilation</div>
+                            <span class="flow-arrow">→</span>
+                            <div class="flow-item">Blood Pools in Veins</div>
+                            <span class="flow-arrow">→</span>
+                            <div class="flow-item">↓ Venous Return</div>
+                            <span class="flow-arrow">→</span>
+                            <div class="flow-item">↓ CO → ↓ BP</div>
+                        </div>
+                    </div>
+
+                    <div class="info-box orange">
+                        <div class="info-box-title">📌 Key Points</div>
+                        <ul class="fancy-list orange">
+                            <li>Occurs when moving from lying/sitting → STANDING</li>
+                            <li>Minimal when recumbent (lying down)</li>
+                        </ul>
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">👩‍⚕️ Nursing Priority - FALL RISK!</div>
+                        <ul style="font-weight: 700;">
+                            <li>Fall risk education</li>
+                            <li>Rise SLOWLY</li>
+                            <li>Sit or lie down if dizzy</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-red">💓</div>
+                    <div>
+                        <div class="card-title">2. Reflex Tachycardia ⭐</div>
+                        <div class="card-subtitle">The heart fights back!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="flow-chart">
+                        <div class="flow-title">Mechanism of Reflex Tachycardia</div>
+                        <div class="flow-items" style="flex-direction: column; gap: 8px;">
+                            <div class="flow-item" style="width: 100%;">↓ BP (from arteriolar dilation) OR ↓ CO (from venous dilation)</div>
+                            <span class="flow-arrow" style="transform: rotate(90deg);">→</span>
+                            <div class="flow-item" style="width: 100%;">Baroreceptors Activated</div>
+                            <span class="flow-arrow" style="transform: rotate(90deg);">→</span>
+                            <div class="flow-item" style="width: 100%;">↑ Sympathetic Output</div>
+                            <span class="flow-arrow" style="transform: rotate(90deg);">→</span>
+                            <div class="flow-item" style="width: 100%;">↑ HEART RATE!</div>
+                        </div>
+                    </div>
+
+                    <div class="red-flag">
+                        <div class="red-flag-title">⚠️ Why Reflex Tachycardia is BAD!</div>
+                        • ↑ Cardiac work & O₂ demand<br>
+                        • COUNTERACTS the BP-lowering effects!
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">🛡️ Prevention</div>
+                        <strong>Co-administer a BETA BLOCKER!</strong><br>
+                        (e.g., metoprolol)
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">Reflex Tachycardia = Give Beta Blocker!</div>
+                        The heart speeds up to compensate → Block that with a beta blocker!
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-blue">💧</div>
+                    <div>
+                        <div class="card-title">3. Expansion of Blood Volume</div>
+                        <div class="card-subtitle">Fluid retention cancels BP reduction!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box blue">
+                        <div class="info-box-title">🔬 Why It Happens</div>
+                        <ul class="fancy-list blue">
+                            <li>↓ BP → ↑ Aldosterone → Na⁺ & water retention</li>
+                            <li>↓ Renal perfusion → ↑ Na⁺ & water reabsorption</li>
+                        </ul>
+                    </div>
+
+                    <div class="red-flag">
+                        <div class="red-flag-title">⚠️ Clinical Consequences</div>
+                        • CANCELS the BP-lowering effects!<br>
+                        • Worsens HEART FAILURE!
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">🛡️ Prevention</div>
+                        <strong>Combine with a DIURETIC!</strong>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">Fluid Retention = Give Diuretic!</div>
+                        Body holds onto fluid to raise BP → Diuretic prevents this!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Box -->
+            <div class="nclex-gold" style="margin-top: 20px;">
+                <div class="nclex-title">⭐ ADVERSE EFFECTS SUMMARY - MUST KNOW!</div>
+                <table class="compare-table">
+                    <tr>
+                        <th>Problem</th>
+                        <th>Solution</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Reflex Tachycardia</strong></td>
+                        <td>Add <strong>BETA BLOCKER</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fluid Retention</strong></td>
+                        <td>Add <strong>DIURETIC</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Orthostatic Hypotension</strong></td>
+                        <td><strong>Rise slowly, Fall precautions</strong></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- HYDRALAZINE SECTION -->
+        <div id="hydralazine" class="section">
+            <div class="drug-profile hydralazine">
+                <div class="drug-name">💊 HYDRALAZINE</div>
+                <div class="drug-class">Selective Arteriolar Dilator</div>
+
+                <div class="info-box teal">
+                    <div class="info-box-title">⚙️ Mechanism & CV Effects</div>
+                    <ul class="fancy-list">
+                        <li><strong>SELECTIVE arteriolar dilator</strong></li>
+                        <li>Direct action on vascular smooth muscle</li>
+                        <li>↓ Peripheral resistance & BP</li>
+                        <li>Reflex ↑ HR & contractility</li>
+                        <li><strong>MINIMAL postural hypotension!</strong></li>
+                    </ul>
+                </div>
+
+                <div class="info-box purple">
+                    <div class="info-box-title">⏰ Pharmacokinetics</div>
+                    <table class="compare-table">
+                        <tr>
+                            <th>Route</th>
+                            <th>Onset</th>
+                            <th>Duration</th>
+                        </tr>
+                        <tr>
+                            <td><strong>PO</strong></td>
+                            <td>~45 min</td>
+                            <td>≥6 hours</td>
+                        </tr>
+                        <tr>
+                            <td><strong>IV</strong></td>
+                            <td>~10 min</td>
+                            <td>2-4 hours</td>
+                        </tr>
+                    </table>
+                    <p style="margin-top: 10px; font-weight: 700;">
+                        Metabolized by <strong>ACETYLATION</strong><br>
+                        ⚠️ <strong>Slow acetylators</strong> → ↑ drug levels → ↑ toxicity → Need dose reduction!
+                    </p>
+                </div>
+
+                <div class="info-box green">
+                    <div class="info-box-title">✅ Therapeutic Uses</div>
+                    <ul class="fancy-list green">
+                        <li>Essential hypertension (PO)</li>
+                        <li>Hypertensive crisis (IV)</li>
+                        <li>Heart failure (with isosorbide dinitrate)</li>
+                    </ul>
+                </div>
+
+                <div class="red-flag">
+                    <div class="red-flag-title">⚠️ Adverse Effects - HIGH YIELD!</div>
+                    <ul style="font-weight: 700;">
+                        <li><strong>REFLEX TACHYCARDIA</strong> → Give beta blocker!</li>
+                        <li><strong>FLUID RETENTION</strong> → Give diuretic!</li>
+                        <li><strong>SLE-LIKE SYNDROME:</strong>
+                            <ul>
+                                <li>Muscle/joint pain, fever, nephritis, pericarditis</li>
+                                <li>↑ Risk in SLOW acetylators</li>
+                                <li>Rare if dose &lt;200 mg/day</li>
+                            </ul>
+                        </li>
+                        <li>Headache, dizziness, fatigue</li>
+                    </ul>
+                </div>
+
+                <div class="memory-trick">
+                    <div class="memory-trick-title">Hydralazine = SLE-like Syndrome!</div>
+                    Think: <strong>"HYDRA-LUPUS"</strong> - Hydralazine can cause a lupus-like syndrome!
+                </div>
+
+                <div class="info-box orange">
+                    <div class="info-box-title">💊 Common Drug Combinations</div>
+                    <ul class="fancy-list orange">
+                        <li>+ Beta blocker (prevents tachycardia)</li>
+                        <li>+ Diuretic (prevents fluid retention)</li>
+                        <li>+ Isosorbide dinitrate (for HF)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- MINOXIDIL SECTION -->
+        <div id="minoxidil" class="section">
+            <div class="drug-profile minoxidil">
+                <div class="drug-name">💊 MINOXIDIL</div>
+                <div class="drug-class">Potent Arteriolar Dilator - Reserved for Refractory HTN!</div>
+
+                <div class="red-flag">
+                    <div class="red-flag-title">⭐ KEY CONCEPT</div>
+                    <strong>MORE POTENT than hydralazine</strong><br>
+                    <strong>MORE DANGEROUS than hydralazine</strong><br><br>
+                    Reserved for <strong>SEVERE, REFRACTORY HYPERTENSION</strong> only!
+                </div>
+
+                <div class="info-box purple">
+                    <div class="info-box-title">⚙️ Mechanism</div>
+                    <ul class="fancy-list purple">
+                        <li>Selective ARTERIOLAR dilation</li>
+                        <li>Prodrug → Minoxidil sulfate (active)</li>
+                        <li>Opens K⁺ channels → Hyperpolarizes VSM → Relaxation</li>
+                    </ul>
+                </div>
+
+                <div class="info-box blue">
+                    <div class="info-box-title">⏰ Pharmacokinetics</div>
+                    <ul class="fancy-list blue">
+                        <li>PO only, rapid absorption</li>
+                        <li>Peak effect: 2-3 hours</li>
+                        <li>Effects may persist <strong>≥2 DAYS!</strong></li>
+                        <li>Eliminated in urine</li>
+                    </ul>
+                </div>
+
+                <div class="nclex-gold">
+                    <div class="nclex-title">⚠️ MUST be combined with:</div>
+                    <ul style="font-weight: 700; font-size: 1.1rem;">
+                        <li>1️⃣ BETA BLOCKER (prevent severe reflex tachycardia)</li>
+                        <li>2️⃣ LOOP DIURETIC (prevent severe fluid retention)</li>
+                    </ul>
+                </div>
+
+                <div class="red-flag">
+                    <div class="red-flag-title">⚠️ Adverse Effects - SEVERE!</div>
+                    <ul style="font-weight: 700;">
+                        <li><strong>SEVERE reflex tachycardia</strong></li>
+                        <li><strong>SEVERE fluid retention → Can cause HF!</strong></li>
+                        <li><strong>HYPERTRICHOSIS (~80%!)</strong> - Excessive hair growth</li>
+                        <li><strong>Pericardial effusion → Tamponade (rare)</strong></li>
+                    </ul>
+                </div>
+
+                <div class="memory-trick">
+                    <div class="memory-trick-title">Minoxidil = Hair Growth!</div>
+                    That's why it's also used topically for <strong>HAIR LOSS</strong> (Rogaine®)!<br>
+                    Side effect turned into a treatment! 💇
+                </div>
+            </div>
+        </div>
+
+        <!-- NITROPRUSSIDE SECTION -->
+        <div id="nitroprusside" class="section">
+            <div class="drug-profile nitroprusside">
+                <div class="drug-name">💊 SODIUM NITROPRUSSIDE</div>
+                <div class="drug-class">Fastest & Most Potent Vasodilator - IV ONLY!</div>
+
+                <div class="key-drug-box">
+                    <div class="key-drug-title">⭐⭐⭐ DRUG OF CHOICE</div>
+                    <p style="font-size: 1.2rem; font-weight: 700;">For HYPERTENSIVE EMERGENCIES!</p>
+                </div>
+
+                <div class="info-box blue">
+                    <div class="info-box-title">⚙️ Mechanism</div>
+                    <ul class="fancy-list blue">
+                        <li>Dilates <strong>BOTH arterioles AND veins</strong></li>
+                        <li>Releases nitric oxide (NO)</li>
+                        <li>↑ cGMP → VSM relaxation</li>
+                        <li><strong>MINIMAL reflex tachycardia!</strong></li>
+                        <li>Effects STOP within minutes of stopping infusion</li>
+                    </ul>
+                </div>
+
+                <div class="info-box green">
+                    <div class="info-box-title">✅ Therapeutic Use</div>
+                    <ul class="fancy-list green">
+                        <li><strong>HYPERTENSIVE EMERGENCIES</strong></li>
+                        <li>Start oral antihypertensives concurrently</li>
+                        <li>Diuretic often required</li>
+                    </ul>
+                </div>
+
+                <div class="red-flag">
+                    <div class="red-flag-title">🚨 MAJOR Adverse Effects!</div>
+                    
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <strong>1️⃣ EXCESSIVE HYPOTENSION</strong><br>
+                        Requires <strong>CONTINUOUS BP MONITORING!</strong>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <strong>2️⃣ CYANIDE TOXICITY ☠️</strong><br>
+                        • ↑ Risk with liver disease<br>
+                        • Avoid infusion &gt;5 μg/kg/min<br>
+                        • Treat/prevent with <strong>THIOSULFATE</strong>
+                    </div>
+
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 10px; margin: 10px 0;">
+                        <strong>3️⃣ THIOCYANATE TOXICITY</strong><br>
+                        • With prolonged use (&gt;3 days)<br>
+                        • CNS effects: confusion, delirium<br>
+                        • Keep levels &lt;0.1 mg/mL
+                    </div>
+                </div>
+
+                <div class="memory-trick">
+                    <div class="memory-trick-title">Nitroprusside = Think CYANIDE!</div>
+                    <strong>"NitroPRUSSIDE = CYANIDE"</strong><br>
+                    The drug contains cyanide groups that can accumulate!<br>
+                    Give THIOSULFATE to detoxify!
+                </div>
+
+                <div class="nclex-gold">
+                    <div class="nclex-title">👩‍⚕️ Nursing Priorities</div>
+                    <ul style="font-weight: 700;">
+                        <li>IV INFUSION ONLY - Never bolus!</li>
+                        <li>CONTINUOUS BP monitoring (arterial line often used)</li>
+                        <li>Protect from light (wrap IV bag)</li>
+                        <li>Watch for cyanide toxicity signs</li>
+                        <li>Don't use &gt;3 days if possible</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- THERAPEUTIC USES SECTION -->
+        <div id="uses" class="section">
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-green">✅</div>
+                    <div>
+                        <div class="card-title">Therapeutic Uses of Vasodilators</div>
+                        <div class="card-subtitle">Principal & Additional Indications</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <div class="info-box green">
+                        <div class="info-box-title">⭐ Principal Indications</div>
+                        <ul class="fancy-list green">
+                            <li><strong>Essential hypertension</strong></li>
+                            <li><strong>Hypertensive crisis/emergency</strong></li>
+                            <li><strong>Angina pectoris</strong></li>
+                            <li><strong>Heart failure</strong></li>
+                            <li><strong>Myocardial infarction</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box blue">
+                        <div class="info-box-title">📋 Additional Uses</div>
+                        <ul class="fancy-list blue">
+                            <li>Pheochromocytoma</li>
+                            <li>Peripheral vascular disease</li>
+                            <li>Pulmonary arterial hypertension</li>
+                            <li>Controlled hypotension during surgery</li>
+                        </ul>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">Choice of Drug Depends On:</div>
+                        1️⃣ <strong>Route</strong> (PO vs IV)<br>
+                        2️⃣ <strong>Vessel selectivity</strong> (arterioles vs veins vs both)<br>
+                        3️⃣ <strong>Intensity & duration</strong> of effect needed
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-purple">👶👴</div>
+                    <div>
+                        <div class="card-title">Lifespan Considerations</div>
+                        <div class="card-subtitle">Special populations</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <table class="compare-table">
+                        <tr>
+                            <th>Population</th>
+                            <th>Consideration</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Infants/Children</strong></td>
+                            <td>Hydralazine & Nitroprusside safe at LOWER doses</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pregnancy</strong></td>
+                            <td>Use only if benefits outweigh risks</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Breastfeeding</strong></td>
+                            <td>Limited data; Nitroprusside may harm infant</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Older Adults</strong></td>
+                            <td><strong>HIGH FALL RISK!</strong> - Orthostatic hypotension</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMORY HOOKS SECTION -->
+        <div id="memory" class="section">
+            <h2 style="font-family: 'Fredoka One', cursive; color: white; text-align: center; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🧠 Key Exam Takeaways - Rapid Review!</h2>
+            
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-hook">Arterioles → ↓ Afterload</div>
+                    <div class="memory-explain">Both start with "A"!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Veins → ↓ Preload</div>
+                    <div class="memory-explain">Veins Pool blood = Orthostatic hypotension!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Reflex Tachy = Beta Blocker</div>
+                    <div class="memory-explain">Heart speeds up → Block it!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Fluid Retention = Diuretic</div>
+                    <div class="memory-explain">Body holds fluid → Remove it!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Hydralazine → SLE-like</div>
+                    <div class="memory-explain">"HYDRA-LUPUS" syndrome!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Minoxidil → Hypertrichosis</div>
+                    <div class="memory-explain">80% get hair growth - now used for baldness!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Nitroprusside → Cyanide</div>
+                    <div class="memory-explain">Give THIOSULFATE to detoxify!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Nitroprusside = HTN Emergency</div>
+                    <div class="memory-explain">Fastest, most potent - IV only!</div>
+                </div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-question">🎯 Quick Quiz: A patient on hydralazine develops joint pain, fever, and a facial rash. What should the nurse suspect?</div>
+                <div class="quiz-options" id="quiz1">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Allergic reaction</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) SLE-like syndrome</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Cyanide toxicity</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Thiocyanate toxicity</div>
+                </div>
+                <div class="quiz-feedback" id="quiz1-feedback"></div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-front">
+                        <div class="flashcard-label">Question</div>
+                        <div class="flashcard-text">What TWO drugs MUST be given with minoxidil?</div>
+                        <div class="flashcard-hint">👆 Tap to reveal</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-label">Answer</div>
+                        <div class="flashcard-text">BETA BLOCKER + LOOP DIURETIC!</div>
+                        <div class="flashcard-hint">Prevents severe tachycardia & fluid retention</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-card" style="background: linear-gradient(135deg, var(--teal), var(--mint));">
+                <div class="quiz-question">🎯 What is the antidote for nitroprusside-induced cyanide toxicity?</div>
+                <div class="quiz-options" id="quiz2">
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">A) Vitamin K</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">B) Protamine sulfate</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, true)">C) Thiosulfate</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">D) Flumazenil</div>
+                </div>
+                <div class="quiz-feedback" id="quiz2-feedback"></div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-front">
+                        <div class="flashcard-label">Question</div>
+                        <div class="flashcard-text">What is the DRUG OF CHOICE for hypertensive emergency?</div>
+                        <div class="flashcard-hint">👆 Tap to reveal</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-label">Answer</div>
+                        <div class="flashcard-text">SODIUM NITROPRUSSIDE!</div>
+                        <div class="flashcard-hint">Fastest & most potent vasodilator - IV only!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-card" style="background: linear-gradient(135deg, var(--orange), var(--coral));">
+                <div class="quiz-question">🎯 Which vasodilator adverse effect is prevented by adding a beta blocker?</div>
+                <div class="quiz-options" id="quiz3">
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">A) Orthostatic hypotension</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, true)">B) Reflex tachycardia</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">C) Fluid retention</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">D) SLE-like syndrome</div>
+                </div>
+                <div class="quiz-feedback" id="quiz3-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Toggle card
+        function toggleCard(header) {
+            header.parentElement.classList.toggle('expanded');
+        }
+
+        // Check quiz answers
+        function checkAnswer(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz1-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! Hydralazine can cause an SLE-like syndrome with joint pain, fever, and skin manifestations - especially in slow acetylators!' :
+                '❌ Not quite! This is the classic SLE-like syndrome associated with hydralazine. Think "HYDRA-LUPUS"!';
+        }
+
+        function checkAnswer2(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz2-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! Thiosulfate helps convert cyanide to thiocyanate, which is less toxic and can be excreted!' :
+                '❌ Not quite! Thiosulfate is used to treat/prevent cyanide toxicity from nitroprusside!';
+        }
+
+        function checkAnswer3(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz3-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! Beta blockers prevent the reflex tachycardia that occurs when BP drops. Diuretics prevent fluid retention!' :
+                '❌ Not quite! Beta blockers prevent reflex tachycardia. Diuretics prevent fluid retention!';
+        }
+    </script>
+</body>
+</html>
