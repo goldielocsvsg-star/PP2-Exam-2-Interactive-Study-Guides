@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapter 51: Heart Failure Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #FF6B9D;
+            --coral: #FF8A5B;
+            --teal: #00CEC9;
+            --purple: #A29BFE;
+            --mint: #55EFC4;
+            --yellow: #FFEAA7;
+            --blue: #74B9FF;
+            --lavender: #DDA0DD;
+            --peach: #FFDAB9;
+            --orange: #FF9F43;
+            --green: #26DE81;
+            --red: #FF6B6B;
+            --navy: #0984E3;
+            --indigo: #6C5CE7;
+            --crimson: #E17055;
+            --dark: #2D3436;
+            --light: #FAFAFA;
+            --maroon: #B83280;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #c0392b 0%, #8e44ad 50%, #e74c3c 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '❤️';
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.1;
+            top: -10px;
+            right: 10px;
+        }
+
+        .header::after {
+            content: '💔';
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            bottom: -10px;
+            left: 10px;
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: clamp(1.8rem, 5vw, 2.8rem);
+            background: linear-gradient(135deg, var(--crimson), var(--maroon), var(--purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: var(--dark);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .header .subtitle {
+            background: linear-gradient(135deg, var(--crimson), var(--maroon));
+            color: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 700;
+        }
+
+        /* Big Picture Box */
+        .big-picture {
+            background: linear-gradient(135deg, var(--crimson), var(--maroon));
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 30px;
+            color: white;
+            box-shadow: 0 15px 50px rgba(184,50,128,0.4);
+        }
+
+        .big-picture-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .hf-card {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .hf-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .hf-name {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        /* Navigation Pills */
+        .nav-container {
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+        }
+
+        .nav-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .nav-pill {
+            padding: 12px 20px;
+            border-radius: 50px;
+            border: none;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-pill:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-pill.active {
+            transform: scale(1.05);
+        }
+
+        .pill-patho { background: linear-gradient(135deg, var(--crimson), var(--coral)); color: white; }
+        .pill-cycle { background: linear-gradient(135deg, var(--purple), var(--lavender)); color: white; }
+        .pill-drugs { background: linear-gradient(135deg, var(--teal), var(--mint)); color: white; }
+        .pill-digoxin { background: linear-gradient(135deg, var(--orange), var(--yellow)); color: var(--dark); }
+        .pill-newer { background: linear-gradient(135deg, var(--blue), var(--navy)); color: white; }
+        .pill-class { background: linear-gradient(135deg, var(--green), var(--mint)); color: white; }
+        .pill-memory { background: linear-gradient(135deg, var(--pink), var(--coral)); color: white; }
+
+        /* Section Styles */
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Styles */
+        .card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            flex-shrink: 0;
+        }
+
+        .card-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .card-subtitle {
+            font-size: 0.9rem;
+            color: #636e72;
+            font-weight: 600;
+        }
+
+        .toggle-icon {
+            margin-left: auto;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card.expanded .toggle-icon {
+            transform: rotate(180deg);
+        }
+
+        .card-content {
+            display: none;
+            padding-top: 15px;
+            border-top: 2px dashed #dfe6e9;
+        }
+
+        .card.expanded .card-content {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; max-height: 0; }
+            to { opacity: 1; max-height: 3000px; }
+        }
+
+        /* Info Boxes */
+        .info-box {
+            padding: 15px 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .info-box.pink { background: linear-gradient(135deg, rgba(255,107,157,0.2), rgba(255,138,91,0.1)); border-left: 5px solid var(--pink); }
+        .info-box.teal { background: linear-gradient(135deg, rgba(0,206,201,0.2), rgba(85,239,196,0.1)); border-left: 5px solid var(--teal); }
+        .info-box.purple { background: linear-gradient(135deg, rgba(162,155,254,0.2), rgba(221,160,221,0.1)); border-left: 5px solid var(--purple); }
+        .info-box.yellow { background: linear-gradient(135deg, rgba(255,234,167,0.3), rgba(255,218,185,0.2)); border-left: 5px solid var(--coral); }
+        .info-box.blue { background: linear-gradient(135deg, rgba(116,185,255,0.2), rgba(0,206,201,0.1)); border-left: 5px solid var(--blue); }
+        .info-box.green { background: linear-gradient(135deg, rgba(38,222,129,0.2), rgba(85,239,196,0.1)); border-left: 5px solid var(--green); }
+        .info-box.orange { background: linear-gradient(135deg, rgba(255,159,67,0.2), rgba(255,234,167,0.1)); border-left: 5px solid var(--orange); }
+        .info-box.red { background: linear-gradient(135deg, rgba(255,107,107,0.2), rgba(255,138,91,0.1)); border-left: 5px solid var(--red); }
+
+        .info-box-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Lists */
+        .fancy-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .fancy-list li {
+            padding: 8px 0 8px 30px;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .fancy-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-weight: 800;
+        }
+
+        .fancy-list.pink li::before { color: var(--pink); }
+        .fancy-list.purple li::before { color: var(--purple); }
+        .fancy-list.coral li::before { color: var(--coral); }
+        .fancy-list.blue li::before { color: var(--blue); }
+        .fancy-list.green li::before { color: var(--green); }
+        .fancy-list.orange li::before { color: var(--orange); }
+        .fancy-list.red li::before { color: var(--red); }
+
+        /* Memory Tricks */
+        .memory-trick {
+            background: linear-gradient(135deg, var(--yellow), var(--peach));
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            position: relative;
+        }
+
+        .memory-trick::before {
+            content: '💡';
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            font-size: 1.5rem;
+            background: white;
+            padding: 5px 10px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .memory-trick-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--dark);
+            margin-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        /* Red Flag Box */
+        .red-flag {
+            background: linear-gradient(135deg, #ff7675, #fd79a8);
+            color: white;
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+        }
+
+        .red-flag-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* NCLEX Gold Box */
+        .nclex-gold {
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            color: var(--dark);
+            padding: 20px;
+            border-radius: 20px;
+            margin: 15px 0;
+            border: 3px solid var(--orange);
+        }
+
+        .nclex-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Comparison Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 15px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .compare-table th {
+            padding: 15px;
+            font-family: 'Fredoka One', cursive;
+            color: white;
+        }
+
+        .compare-table th:first-child { background: var(--teal); }
+        .compare-table th:nth-child(2) { background: var(--pink); }
+        .compare-table th:nth-child(3) { background: var(--purple); }
+        .compare-table th:nth-child(4) { background: var(--blue); }
+
+        .compare-table td {
+            padding: 12px 15px;
+            background: white;
+            border-bottom: 1px solid #dfe6e9;
+            font-weight: 600;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Flow Chart */
+        .flow-chart {
+            background: linear-gradient(135deg, var(--crimson), var(--maroon));
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .flow-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .flow-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .flow-item {
+            background: rgba(255,255,255,0.2);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .flow-arrow {
+            font-size: 1.5rem;
+        }
+
+        /* Vicious Cycle */
+        .vicious-cycle {
+            background: linear-gradient(135deg, var(--purple), var(--indigo));
+            color: white;
+            padding: 25px;
+            border-radius: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .cycle-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cycle-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .cycle-item {
+            background: rgba(255,255,255,0.2);
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .cycle-arrow {
+            font-size: 2rem;
+            color: var(--yellow);
+        }
+
+        /* Drug Class Grid */
+        .drug-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .drug-box {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 5px solid var(--teal);
+        }
+
+        .drug-box:nth-child(2) { border-top-color: var(--pink); }
+        .drug-box:nth-child(3) { border-top-color: var(--purple); }
+        .drug-box:nth-child(4) { border-top-color: var(--orange); }
+        .drug-box:nth-child(5) { border-top-color: var(--blue); }
+        .drug-box:nth-child(6) { border-top-color: var(--green); }
+
+        .drug-box-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .survival-badge {
+            display: inline-block;
+            background: var(--green);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        .symptom-badge {
+            display: inline-block;
+            background: var(--orange);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-left: 5px;
+        }
+
+        /* Memory Grid */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .memory-card {
+            background: linear-gradient(135deg, var(--teal), var(--mint));
+            border-radius: 20px;
+            padding: 20px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,206,201,0.3);
+        }
+
+        .memory-card:nth-child(2) { background: linear-gradient(135deg, var(--pink), var(--coral)); box-shadow: 0 10px 30px rgba(255,107,157,0.3); }
+        .memory-card:nth-child(3) { background: linear-gradient(135deg, var(--purple), var(--lavender)); box-shadow: 0 10px 30px rgba(162,155,254,0.3); }
+        .memory-card:nth-child(4) { background: linear-gradient(135deg, var(--blue), var(--navy)); box-shadow: 0 10px 30px rgba(116,185,255,0.3); }
+        .memory-card:nth-child(5) { background: linear-gradient(135deg, var(--orange), var(--yellow)); color: var(--dark); box-shadow: 0 10px 30px rgba(255,159,67,0.3); }
+        .memory-card:nth-child(6) { background: linear-gradient(135deg, var(--green), var(--mint)); box-shadow: 0 10px 30px rgba(38,222,129,0.3); }
+        .memory-card:nth-child(7) { background: linear-gradient(135deg, var(--red), var(--coral)); box-shadow: 0 10px 30px rgba(255,107,107,0.3); }
+        .memory-card:nth-child(8) { background: linear-gradient(135deg, var(--indigo), var(--purple)); box-shadow: 0 10px 30px rgba(108,92,231,0.3); }
+
+        .memory-hook {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .memory-explain {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Quiz Section */
+        .quiz-card {
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            color: white;
+        }
+
+        .quiz-question {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+        }
+
+        .quiz-options {
+            display: grid;
+            gap: 10px;
+        }
+
+        .quiz-option {
+            background: rgba(255,255,255,0.9);
+            color: var(--dark);
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .quiz-option:hover {
+            transform: translateX(10px);
+            border-color: white;
+        }
+
+        .quiz-option.correct {
+            background: var(--mint);
+            color: white;
+            border-color: white;
+        }
+
+        .quiz-option.incorrect {
+            background: #ff7675;
+            color: white;
+        }
+
+        .quiz-feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.2);
+            display: none;
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            min-height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            min-height: 200px;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--crimson), var(--maroon));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--teal), var(--mint));
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .flashcard-text {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.4rem;
+        }
+
+        .flashcard-hint {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+
+        /* Digoxin Highlight */
+        .digoxin-highlight {
+            background: linear-gradient(135deg, var(--orange), var(--coral));
+            color: white;
+            padding: 25px;
+            border-radius: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .digoxin-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .nav-pills {
+                flex-direction: column;
+            }
+            
+            .nav-pill {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.1rem;
+            }
+
+            .memory-grid, .drug-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-items, .cycle-items {
+                flex-direction: column;
+            }
+
+            .flow-arrow, .cycle-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        /* Icon backgrounds */
+        .icon-pink { background: linear-gradient(135deg, var(--pink), var(--coral)); }
+        .icon-teal { background: linear-gradient(135deg, var(--teal), var(--mint)); }
+        .icon-purple { background: linear-gradient(135deg, var(--purple), var(--lavender)); }
+        .icon-yellow { background: linear-gradient(135deg, var(--yellow), var(--peach)); }
+        .icon-blue { background: linear-gradient(135deg, var(--blue), var(--teal)); }
+        .icon-green { background: linear-gradient(135deg, var(--green), var(--mint)); }
+        .icon-orange { background: linear-gradient(135deg, var(--orange), var(--yellow)); }
+        .icon-red { background: linear-gradient(135deg, var(--red), var(--coral)); }
+        .icon-maroon { background: linear-gradient(135deg, var(--crimson), var(--maroon)); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>💔 Heart Failure</h1>
+            <p>Chapter 51: Pathophysiology & Pharmacologic Management</p>
+            <span class="subtitle">💊 GDMT - Guideline-Directed Medical Therapy</span>
+        </div>
+
+        <!-- Big Picture -->
+        <div class="big-picture">
+            <div class="big-picture-title">🔹 BIG PICTURE: What is Heart Failure?</div>
+            <p style="font-weight: 700; font-size: 1.1rem; margin-bottom: 15px;">
+                Heart failure is a <strong>CLINICAL SYNDROME</strong> - when the heart can't pump enough blood to meet tissue metabolic demands.
+            </p>
+            <div class="hf-grid">
+                <div class="hf-card">
+                    <div class="hf-icon">😓</div>
+                    <div class="hf-name">↓ PERFUSION</div>
+                    <div>Fatigue, dyspnea, exercise intolerance</div>
+                </div>
+                <div class="hf-card">
+                    <div class="hf-icon">💧</div>
+                    <div class="hf-name">VOLUME OVERLOAD</div>
+                    <div>Edema, JVD, pulmonary congestion</div>
+                </div>
+                <div class="hf-card">
+                    <div class="hf-icon">📈</div>
+                    <div class="hf-name">CHRONIC & PROGRESSIVE</div>
+                    <div>Requires lifelong management</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-container">
+            <div class="nav-title">📚 Jump to a Section</div>
+            <div class="nav-pills">
+                <button class="nav-pill pill-patho active" onclick="showSection('patho')">🫀 Pathophysiology</button>
+                <button class="nav-pill pill-cycle" onclick="showSection('cycle')">🔄 Vicious Cycle</button>
+                <button class="nav-pill pill-drugs" onclick="showSection('drugs')">💊 GDMT Drugs</button>
+                <button class="nav-pill pill-digoxin" onclick="showSection('digoxin')">⚠️ Digoxin</button>
+                <button class="nav-pill pill-newer" onclick="showSection('newer')">🆕 Newer Agents</button>
+                <button class="nav-pill pill-class" onclick="showSection('class')">📋 Classification</button>
+                <button class="nav-pill pill-memory" onclick="showSection('memory')">🧠 Memory Hooks</button>
+            </div>
+        </div>
+
+        <!-- PATHOPHYSIOLOGY SECTION -->
+        <div id="patho" class="section active">
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-red">🔥</div>
+                    <div>
+                        <div class="card-title">Common Causes of Heart Failure</div>
+                        <div class="card-subtitle">Know these for the exam!</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <div class="info-box red">
+                        <div class="info-box-title">⚠️ Most Common Causes</div>
+                        <ul class="fancy-list red">
+                            <li><strong>Chronic Hypertension (#1 MOST COMMON!)</strong></li>
+                            <li>Myocardial infarction</li>
+                            <li>Coronary artery disease</li>
+                            <li>Valvular heart disease</li>
+                            <li>Congenital heart disease</li>
+                            <li>Dysrhythmias</li>
+                            <li>Aging myocardium</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-purple">🔄</div>
+                    <div>
+                        <div class="card-title">Cardiac Remodeling</div>
+                        <div class="card-subtitle">Structural changes that worsen HF</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box purple">
+                        <div class="info-box-title">🔬 Remodeling Changes</div>
+                        <ul class="fancy-list purple">
+                            <li>Ventricular dilation</li>
+                            <li>Myocardial hypertrophy</li>
+                            <li>Cylindrical → Spherical shape</li>
+                            <li>↑ Wall stress</li>
+                            <li>↓ LVEF (Left Ventricular Ejection Fraction)</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box orange">
+                        <div class="info-box-title">⚡ Causes of Remodeling</div>
+                        <ul class="fancy-list orange">
+                            <li>MI</li>
+                            <li>Chronic pressure/volume overload</li>
+                            <li><strong>Neurohormonal activation:</strong>
+                                <ul>
+                                    <li>SNS (Sympathetic Nervous System)</li>
+                                    <li>RAAS</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="red-flag">
+                        <div class="red-flag-title">⚠️ Key Point!</div>
+                        Remodeling begins <strong>BEFORE symptoms</strong> appear and continues afterward!
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-teal">🛡️</div>
+                    <div>
+                        <div class="card-title">Compensatory Mechanisms</div>
+                        <div class="card-subtitle">Initially helpful → Eventually harmful!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box teal">
+                        <div class="info-box-title">1️⃣ Cardiac Dilation (Frank-Starling)</div>
+                        <ul class="fancy-list">
+                            <li>↑ Venous pressure → ↑ diastolic filling</li>
+                            <li>Starling mechanism temporarily ↑ stroke volume</li>
+                            <li><strong>BUT:</strong> Excessive dilation eventually ↓ stroke volume!</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box pink">
+                        <div class="info-box-title">2️⃣ ↑ Sympathetic Tone (SNS Activation)</div>
+                        <table class="compare-table">
+                            <tr>
+                                <th>Effect</th>
+                                <th>Initial Benefit</th>
+                                <th>Ultimate Harm</th>
+                            </tr>
+                            <tr>
+                                <td>↑ HR</td>
+                                <td>↑ CO</td>
+                                <td>↓ Filling time, ↑ O₂ demand</td>
+                            </tr>
+                            <tr>
+                                <td>↑ Contractility</td>
+                                <td>↑ CO</td>
+                                <td>↑ Myocardial O₂ demand</td>
+                            </tr>
+                            <tr>
+                                <td>↑ Venous tone</td>
+                                <td>↑ Preload/SV</td>
+                                <td>Pulmonary/peripheral edema</td>
+                            </tr>
+                            <tr>
+                                <td>↑ Arteriolar tone</td>
+                                <td>↑ BP/perfusion</td>
+                                <td>↑ Afterload → ↓ CO</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="info-box blue">
+                        <div class="info-box-title">3️⃣ Water Retention (RAAS Activation)</div>
+                        <ul class="fancy-list blue">
+                            <li>↓ Renal perfusion → ↓ GFR → ↓ urine output</li>
+                            <li>Aldosterone → Na⁺ & water retention</li>
+                            <li>Ang II → Vasoconstriction</li>
+                            <li><strong>Result:</strong> Pulmonary, peripheral, & cardiac edema</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box green">
+                        <div class="info-box-title">4️⃣ Natriuretic Peptides (BNP/ANP) - The Good Guys!</div>
+                        <ul class="fancy-list green">
+                            <li>Promote vasodilation</li>
+                            <li>↑ Na⁺ & water excretion</li>
+                            <li>COUNTERACT SNS & RAAS effects</li>
+                            <li><strong>BNP level reflects HF severity!</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">BNP = "Bad News Peptide"</div>
+                        High BNP = Worse prognosis<br>
+                        Low BNP at discharge = Better survival!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VICIOUS CYCLE SECTION -->
+        <div id="cycle" class="section">
+            <div class="vicious-cycle">
+                <div class="cycle-title">🔄 The VICIOUS CYCLE of Heart Failure</div>
+                <div class="cycle-items">
+                    <div class="cycle-item">↓ Cardiac Output</div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-item">Compensatory Responses</div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-item">SNS & RAAS Activation</div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-item">↑ Afterload, Fluid Retention</div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-item">Remodeling & Fibrosis</div>
+                    <span class="cycle-arrow">→</span>
+                    <div class="cycle-item">WORSENING HF!</div>
+                    <span class="cycle-arrow">🔁</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-pink">😰</div>
+                    <div>
+                        <div class="card-title">Signs & Symptoms of Heart Failure</div>
+                        <div class="card-subtitle">↓ Perfusion vs. Volume Overload</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="drug-grid">
+                        <div class="drug-box">
+                            <div class="drug-box-title" style="color: var(--teal);">😓 Due to ↓ PERFUSION</div>
+                            <ul class="fancy-list">
+                                <li>Fatigue</li>
+                                <li>Exercise intolerance</li>
+                                <li>Shortness of breath</li>
+                            </ul>
+                        </div>
+                        <div class="drug-box">
+                            <div class="drug-box-title" style="color: var(--pink);">💧 Due to VOLUME OVERLOAD</div>
+                            <ul class="fancy-list pink">
+                                <li>Pulmonary edema</li>
+                                <li>Peripheral edema</li>
+                                <li>JVD (Jugular venous distention)</li>
+                                <li>Hepatomegaly</li>
+                                <li>Weight gain</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="info-box orange">
+                        <div class="info-box-title">Other Findings</div>
+                        <ul class="fancy-list orange">
+                            <li>Tachycardia (SNS activation)</li>
+                            <li>Cardiomegaly</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-trick">
+                <div class="memory-trick-title">Understanding the Ultimate Consequences</div>
+                Without treatment, the vicious cycle leads to:<br>
+                • Severe edema<br>
+                • Renal failure<br>
+                • Complete cardiac failure<br>
+                • <strong>DEATH</strong>
+            </div>
+        </div>
+
+        <!-- GDMT DRUGS SECTION -->
+        <div id="drugs" class="section">
+            <div class="nclex-gold">
+                <div class="nclex-title">⭐ First-Line Drug Classes (GDMT)</div>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 10px;">
+                    <div><strong>1️⃣ Diuretics</strong></div>
+                    <div><strong>2️⃣ RAAS Inhibitors</strong></div>
+                    <div><strong>3️⃣ Beta Blockers</strong></div>
+                    <div><strong>4️⃣ SGLT-2 Inhibitors</strong></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-blue">💧</div>
+                    <div>
+                        <div class="card-title">Diuretics in Heart Failure</div>
+                        <div class="card-subtitle">Reduce volume overload - SYMPTOMS only!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <table class="compare-table">
+                        <tr>
+                            <th>Type</th>
+                            <th>Key Points</th>
+                            <th>Risk</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Thiazides</strong></td>
+                            <td>Moderate diuresis, oral, long-term<br>Ineffective with low GFR</td>
+                            <td>Hypokalemia → Digoxin toxicity!</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Loop</strong><br>(Drug of choice!)</td>
+                            <td>PROFOUND diuresis<br>Effective at low GFR<br>IV or oral</td>
+                            <td>Hypokalemia, Hypotension</td>
+                        </tr>
+                        <tr>
+                            <td><strong>K⁺-Sparing</strong><br>(Spironolactone)</td>
+                            <td>Minimal diuresis<br><strong>IMPROVES SURVIVAL!</strong><br>Blocks aldosterone</td>
+                            <td>Hyperkalemia</td>
+                        </tr>
+                    </table>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">Loop Diuretics = Drug of Choice for Severe HF!</div>
+                        Works even when kidneys are struggling (low GFR)
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-teal">🛡️</div>
+                    <div>
+                        <div class="card-title">RAAS Inhibitors</div>
+                        <div class="card-subtitle">CORNERSTONE therapy - Improve SURVIVAL!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="drug-grid">
+                        <div class="drug-box">
+                            <div class="drug-box-title">ACE Inhibitors (-prils) <span class="survival-badge">↑ SURVIVAL</span></div>
+                            <ul class="fancy-list">
+                                <li>Cornerstone therapy</li>
+                                <li>↓ Remodeling</li>
+                                <li>Improve symptoms & survival</li>
+                            </ul>
+                            <p style="color: var(--red); font-weight: 700; margin-top: 10px;">
+                                AE: Hypotension, Hyperkalemia, COUGH, Angioedema<br>
+                                ❌ Contraindicated in pregnancy!
+                            </p>
+                        </div>
+                        <div class="drug-box">
+                            <div class="drug-box-title">ARBs (-sartans) <span class="survival-badge">↑ SURVIVAL</span></div>
+                            <ul class="fancy-list pink">
+                                <li>Similar hemodynamic effects</li>
+                                <li>Less effect on remodeling</li>
+                                <li><strong>NO COUGH!</strong></li>
+                                <li>Used if ACE-I not tolerated</li>
+                            </ul>
+                        </div>
+                        <div class="drug-box">
+                            <div class="drug-box-title">ARNI (Entresto) <span class="survival-badge">↑ SURVIVAL</span></div>
+                            <p><strong>Sacubitril + Valsartan</strong></p>
+                            <ul class="fancy-list purple">
+                                <li>↑ Natriuretic peptides</li>
+                                <li>Suppresses RAAS</li>
+                                <li><strong>SUPERIOR to ACE-I alone!</strong></li>
+                            </ul>
+                            <p style="color: var(--red); font-weight: 700; margin-top: 10px;">
+                                Risks: Angioedema, Hyperkalemia, Hypotension
+                            </p>
+                        </div>
+                        <div class="drug-box">
+                            <div class="drug-box-title">MRAs (Spironolactone, Eplerenone) <span class="survival-badge">↑ SURVIVAL</span></div>
+                            <ul class="fancy-list orange">
+                                <li>Block harmful aldosterone effects</li>
+                                <li>↓ Mortality & hospitalizations</li>
+                            </ul>
+                            <p style="color: var(--red); font-weight: 700; margin-top: 10px;">
+                                Risk: Hyperkalemia<br>
+                                Spironolactone → Gynecomastia
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-green">💚</div>
+                    <div>
+                        <div class="card-title">Beta Blockers in HF</div>
+                        <div class="card-subtitle">Protect heart from SNS overactivation</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box green">
+                        <div class="info-box-title">✅ Benefits <span class="survival-badge">↑ SURVIVAL</span></div>
+                        <ul class="fancy-list green">
+                            <li>Reduce mortality</li>
+                            <li>Protect heart from SNS overactivation</li>
+                            <li>Improve LVEF</li>
+                        </ul>
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">⭐ KEY: Start LOW, Titrate SLOW!</div>
+                        Beta blockers can initially worsen HF symptoms before they help!
+                    </div>
+
+                    <div class="info-box red">
+                        <div class="info-box-title">⚠️ Adverse Effects</div>
+                        <ul class="fancy-list red">
+                            <li>Fluid retention</li>
+                            <li>Bradycardia</li>
+                            <li>Hypotension</li>
+                            <li>Fatigue</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-purple">🆕</div>
+                    <div>
+                        <div class="card-title">SGLT-2 Inhibitors</div>
+                        <div class="card-subtitle">Game-changer for HF!</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box purple">
+                        <div class="info-box-title">✅ Benefits <span class="survival-badge">↑ SURVIVAL</span></div>
+                        <ul class="fancy-list purple">
+                            <li>↓ HF hospitalizations</li>
+                            <li>Improve cardiovascular outcomes</li>
+                            <li><strong>Effective WITH or WITHOUT diabetes!</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">SGLT-2 Inhibitors = Not Just for Diabetes!</div>
+                        Originally diabetes drugs, now proven to help ALL HFrEF patients!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DIGOXIN SECTION -->
+        <div id="digoxin" class="section">
+            <div class="digoxin-highlight">
+                <div class="digoxin-title">⚠️ DIGOXIN - HIGH-YIELD PHARMACOLOGY ⭐⭐⭐</div>
+                <p style="font-size: 1.2rem; font-weight: 700;">NARROW THERAPEUTIC INDEX = Very Testable!</p>
+            </div>
+
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-orange">💊</div>
+                    <div>
+                        <div class="card-title">Digoxin Basics</div>
+                        <div class="card-subtitle">Mechanism & Key Points</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <div class="info-box orange">
+                        <div class="info-box-title">⚙️ Mechanism of Action</div>
+                        <ul class="fancy-list orange">
+                            <li>Inhibits <strong>Na⁺/K⁺-ATPase</strong></li>
+                            <li>↑ Intracellular Na⁺ → ↑ Ca²⁺</li>
+                            <li>↑ Contractility (positive inotrope)</li>
+                            <li>↓ Heart rate (vagal effect)</li>
+                        </ul>
+                    </div>
+
+                    <div class="red-flag">
+                        <div class="red-flag-title">⚠️ CRITICAL POINT!</div>
+                        <strong>Digoxin improves SYMPTOMS only - does NOT improve SURVIVAL!</strong>
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">🎯 Target Level: 0.5 - 0.8 ng/mL</div>
+                        Levels >1 ng/mL: No added benefit + ↑ Toxicity risk!
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-red">☠️</div>
+                    <div>
+                        <div class="card-title">Digoxin Toxicity - MUST KNOW!</div>
+                        <div class="card-subtitle">Early warning signs</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="red-flag">
+                        <div class="red-flag-title">🚨 Early Warning Signs of Toxicity</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div>
+                                <strong>GI:</strong><br>
+                                • Anorexia<br>
+                                • Nausea<br>
+                                • Vomiting
+                            </div>
+                            <div>
+                                <strong>CNS:</strong><br>
+                                • Fatigue<br>
+                                • Visual disturbances<br>
+                                • <strong>YELLOW VISION!</strong>
+                            </div>
+                        </div>
+                        <p style="margin-top: 15px; text-align: center; font-size: 1.1rem;">
+                            These often appear <strong>BEFORE dysrhythmias!</strong>
+                        </p>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">"Yellow Vision" = Think Van Gogh!</div>
+                        Some historians believe Van Gogh's yellow paintings were due to digoxin toxicity (he was treated with foxglove)!
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-pink">⚡</div>
+                    <div>
+                        <div class="card-title">Drug Interactions - SUPER TESTABLE!</div>
+                        <div class="card-subtitle">What increases toxicity risk?</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="red-flag">
+                        <div class="red-flag-title">🚨 #1 CAUSE OF DIGOXIN TOXICITY: HYPOKALEMIA!</div>
+                        <strong>Drugs that cause K⁺ loss → ↑ Digoxin toxicity:</strong><br>
+                        • Thiazide diuretics<br>
+                        • Loop diuretics<br>
+                        • Succinylcholine
+                    </div>
+
+                    <div class="info-box purple">
+                        <div class="info-box-title">↑ Digoxin Levels (↓ Excretion) ⭐⭐⭐</div>
+                        <strong>These drugs ↑ digoxin levels - need dose reduction!</strong>
+                        <ul class="fancy-list purple">
+                            <li><strong>Quinidine</strong> - displaces from tissue, ↓ renal excretion</li>
+                            <li><strong>Verapamil</strong></li>
+                            <li><strong>Amiodarone</strong></li>
+                            <li>Diltiazem, Nifedipine</li>
+                            <li>Captopril, Atorvastatin</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box blue">
+                        <div class="info-box-title">↓ Contractility & HR (Additive Suppression)</div>
+                        <ul class="fancy-list blue">
+                            <li>Beta blockers</li>
+                            <li>Verapamil</li>
+                            <li>Diltiazem</li>
+                        </ul>
+                        <p style="color: var(--red); font-weight: 700;">Risk: Bradycardia, AV block, Worsening HF!</p>
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">⭐ AVOID: Quinidine + Digoxin!</div>
+                        High toxicity risk - displaces digoxin from tissue + ↓ renal excretion!
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-green">👩‍⚕️</div>
+                    <div>
+                        <div class="card-title">Digoxin Administration & Nursing</div>
+                        <div class="card-subtitle">Safety priorities</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="nclex-gold">
+                        <div class="nclex-title">⭐ NURSING PRIORITY: Check Apical Pulse!</div>
+                        <strong>HOLD if:</strong><br>
+                        • HR <60 bpm<br>
+                        • Rhythm changes<br><br>
+                        <strong>IV administration:</strong> Continuous cardiac monitoring for 1-2 hours
+                    </div>
+
+                    <div class="info-box teal">
+                        <div class="info-box-title">📊 Pharmacokinetics</div>
+                        <table class="compare-table">
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                            </tr>
+                            <tr>
+                                <td>Half-life</td>
+                                <td><strong>~1.5 days</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Steady state</td>
+                                <td><strong>~6 days</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Elimination after stopping</td>
+                                <td><strong>~6 days</strong></td>
+                            </tr>
+                            <tr>
+                                <td>Excretion</td>
+                                <td><strong>RENAL (primary)</strong></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">↓ Kidney Function = ↑ Toxicity!</div>
+                        Digoxin is renally excreted. Poor kidney function → drug accumulates!<br>
+                        (Liver disease does NOT affect levels)
+                    </div>
+
+                    <div class="info-box orange">
+                        <div class="info-box-title">📋 When to Check Levels</div>
+                        <ul class="fancy-list orange">
+                            <li>Dose changes</li>
+                            <li>HF worsens</li>
+                            <li>Kidney function declines</li>
+                            <li>Toxicity suspected</li>
+                            <li>Interacting drugs added/removed</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEWER AGENTS SECTION -->
+        <div id="newer" class="section">
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-blue">🆕</div>
+                    <div>
+                        <div class="card-title">Ivabradine</div>
+                        <div class="card-subtitle">Heart rate control without affecting contractility</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <div class="info-box blue">
+                        <div class="info-box-title">⚙️ Mechanism & Use</div>
+                        <ul class="fancy-list blue">
+                            <li>Reduces HR <strong>without affecting contractility!</strong></li>
+                            <li>Used in sinus rhythm with HR >70 bpm</li>
+                            <li>↓ HF hospitalizations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-purple">💜</div>
+                    <div>
+                        <div class="card-title">Vericiguat (Verquvo) - NEW!</div>
+                        <div class="card-subtitle">For worsening HFrEF</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box purple">
+                        <div class="info-box-title">📋 Class & Indication</div>
+                        <strong>Class:</strong> Soluble guanylate cyclase (sGC) stimulator<br><br>
+                        <strong>Indication:</strong> Symptomatic HFrEF with:<br>
+                        • Recent hospitalization OR IV diuretic use<br>
+                        • Already on GDMT
+                    </div>
+
+                    <div class="info-box teal">
+                        <div class="info-box-title">⚙️ Mechanism</div>
+                        <ul class="fancy-list">
+                            <li>Enhances nitric oxide pathway</li>
+                            <li>↑ cGMP → Vasodilation</li>
+                            <li>↓ Cardiac remodeling</li>
+                            <li>↓ NT-proBNP</li>
+                        </ul>
+                    </div>
+
+                    <div class="info-box orange">
+                        <div class="info-box-title">⚠️ Adverse Effects</div>
+                        <ul class="fancy-list orange">
+                            <li>Headache, Nausea, Dizziness</li>
+                            <li><strong>Hypotension (16%)</strong></li>
+                            <li><strong>Anemia (10%)</strong></li>
+                        </ul>
+                    </div>
+
+                    <div class="red-flag">
+                        <div class="red-flag-title">❌ Drug Interaction: NO PDE-5 Inhibitors!</div>
+                        Vericiguat + PDE-5 inhibitors (sildenafil, etc.) = <strong>SEVERE HYPOTENSION!</strong>
+                    </div>
+
+                    <div class="nclex-gold">
+                        <div class="nclex-title">📝 Dosing</div>
+                        Start: 2.5 mg daily<br>
+                        Titrate: q2 weeks<br>
+                        Max: 10 mg daily<br>
+                        <strong>TAKE WITH FOOD!</strong> (93% absorption with food)
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-pink">💉</div>
+                    <div>
+                        <div class="card-title">IV Inotropes (Acute HF Only)</div>
+                        <div class="card-subtitle">Short-term, hospitalized patients</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box pink">
+                        <div class="info-box-title">💉 IV Inotropes for Acute HF</div>
+                        <ul class="fancy-list pink">
+                            <li><strong>Dopamine</strong></li>
+                            <li><strong>Dobutamine</strong></li>
+                            <li><strong>Milrinone</strong></li>
+                        </ul>
+                        <p style="margin-top: 10px;"><strong>Used SHORT-TERM in hospitalized patients only!</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-green">🌿</div>
+                    <div>
+                        <div class="card-title">Vasodilators (ISDN + Hydralazine)</div>
+                        <div class="card-subtitle">Special population indication</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <div class="info-box green">
+                        <div class="info-box-title">✅ Key Points</div>
+                        <ul class="fancy-list green">
+                            <li>Reduce preload & afterload</li>
+                            <li><strong>Recommended in BLACK patients with HF</strong></li>
+                            <li>Alternative when ACE/ARB not tolerated</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLASSIFICATION SECTION -->
+        <div id="class" class="section">
+            <div class="card expanded">
+                <div class="card-header">
+                    <div class="card-icon icon-teal">📊</div>
+                    <div>
+                        <div class="card-title">NYHA Functional Classification</div>
+                        <div class="card-subtitle">Based on symptoms</div>
+                    </div>
+                </div>
+                <div class="card-content" style="display: block;">
+                    <table class="compare-table">
+                        <tr>
+                            <th>Class</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Class I</strong></td>
+                            <td>No limitation of physical activity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Class II</strong></td>
+                            <td>Symptoms with <strong>ordinary</strong> activity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Class III</strong></td>
+                            <td>Symptoms with <strong>minimal</strong> activity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Class IV</strong></td>
+                            <td>Symptoms <strong>at REST</strong></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <div class="card-icon icon-purple">🏥</div>
+                    <div>
+                        <div class="card-title">ACC/AHA Stages</div>
+                        <div class="card-subtitle">Based on disease progression</div>
+                    </div>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="card-content">
+                    <table class="compare-table">
+                        <tr>
+                            <th>Stage</th>
+                            <th>Description</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Stage A</strong></td>
+                            <td>High risk, <strong>NO</strong> structural disease</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stage B</strong></td>
+                            <td>Structural disease, <strong>NO</strong> symptoms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stage C</strong></td>
+                            <td>Structural disease <strong>WITH</strong> symptoms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Stage D</strong></td>
+                            <td>Advanced disease requiring specialized interventions</td>
+                        </tr>
+                    </table>
+
+                    <div class="memory-trick">
+                        <div class="memory-trick-title">NYHA vs. ACC/AHA</div>
+                        <strong>NYHA</strong> = How patient FEELS (symptoms)<br>
+                        <strong>ACC/AHA</strong> = What's happening to the HEART (structure)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEMORY HOOKS SECTION -->
+        <div id="memory" class="section">
+            <h2 style="font-family: 'Fredoka One', cursive; color: white; text-align: center; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🧠 EXAM POWER POINTS - Rapid Review!</h2>
+            
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-hook">Hypokalemia + Digoxin</div>
+                    <div class="memory-explain">= DYSRHYTHMIAS! #1 cause of dig toxicity</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Quinidine & Verapamil</div>
+                    <div class="memory-explain">↑ Digoxin levels - reduce dose!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Digoxin = Symptoms Only</div>
+                    <div class="memory-explain">Does NOT improve survival!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Target Dig Level: 0.5-0.8</div>
+                    <div class="memory-explain">>1 ng/mL = No benefit + ↑ toxicity</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Vericiguat + PDE-5</div>
+                    <div class="memory-explain">= SEVERE HYPOTENSION! ❌</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Beta Blockers in HF</div>
+                    <div class="memory-explain">Start LOW, Titrate SLOW!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">Loop Diuretics</div>
+                    <div class="memory-explain">Drug of choice for severe HF!</div>
+                </div>
+                <div class="memory-card">
+                    <div class="memory-hook">HTN = #1 Cause of HF</div>
+                    <div class="memory-explain">Chronic hypertension leads the list!</div>
+                </div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-question">🎯 Quick Quiz: What is the MOST COMMON cause of digoxin toxicity?</div>
+                <div class="quiz-options" id="quiz1">
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">A) Drug overdose</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, true)">B) Hypokalemia</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">C) Renal failure</div>
+                    <div class="quiz-option" onclick="checkAnswer(this, false)">D) Drug interactions</div>
+                </div>
+                <div class="quiz-feedback" id="quiz1-feedback"></div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-front">
+                        <div class="flashcard-label">Question</div>
+                        <div class="flashcard-text">What HR should you HOLD digoxin?</div>
+                        <div class="flashcard-hint">👆 Tap to reveal</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-label">Answer</div>
+                        <div class="flashcard-text">HR < 60 bpm!</div>
+                        <div class="flashcard-hint">Always check apical pulse before administering!</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-card" style="background: linear-gradient(135deg, var(--teal), var(--mint));">
+                <div class="quiz-question">🎯 A patient asks why they're on an ACE inhibitor for heart failure. What's the BEST response?</div>
+                <div class="quiz-options" id="quiz2">
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">A) "It makes your heart beat stronger"</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, true)">B) "It helps your heart by reducing harmful hormones and improving survival"</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">C) "It removes extra fluid from your body"</div>
+                    <div class="quiz-option" onclick="checkAnswer2(this, false)">D) "It only treats symptoms"</div>
+                </div>
+                <div class="quiz-feedback" id="quiz2-feedback"></div>
+            </div>
+
+            <div class="flashcard-container">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-front">
+                        <div class="flashcard-label">Question</div>
+                        <div class="flashcard-text">What visual disturbance is classic for digoxin toxicity?</div>
+                        <div class="flashcard-hint">👆 Tap to reveal</div>
+                    </div>
+                    <div class="flashcard-back">
+                        <div class="flashcard-label">Answer</div>
+                        <div class="flashcard-text">YELLOW VISION!</div>
+                        <div class="flashcard-hint">Think Van Gogh's yellow paintings! GI symptoms & CNS effects appear before dysrhythmias.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-card" style="background: linear-gradient(135deg, var(--orange), var(--coral));">
+                <div class="quiz-question">🎯 Which drug should NOT be combined with vericiguat?</div>
+                <div class="quiz-options" id="quiz3">
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">A) Beta blockers</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">B) ACE inhibitors</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, true)">C) PDE-5 inhibitors (sildenafil)</div>
+                    <div class="quiz-option" onclick="checkAnswer3(this, false)">D) Loop diuretics</div>
+                </div>
+                <div class="quiz-feedback" id="quiz3-feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show section
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Toggle card
+        function toggleCard(header) {
+            header.parentElement.classList.toggle('expanded');
+        }
+
+        // Check quiz answers
+        function checkAnswer(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz1-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! Hypokalemia is the MOST COMMON cause of digoxin toxicity! Low K⁺ increases digoxin binding to the Na⁺/K⁺-ATPase.' :
+                '❌ Not quite! Hypokalemia is the #1 cause - that\'s why monitoring potassium with diuretics is so important!';
+        }
+
+        function checkAnswer2(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz2-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! ACE inhibitors are cornerstone therapy - they block harmful RAAS effects, reduce remodeling, AND improve survival!' :
+                '❌ Not quite! ACE inhibitors don\'t increase contractility - they block RAAS, reduce remodeling, and improve SURVIVAL!';
+        }
+
+        function checkAnswer3(option, isCorrect) {
+            const options = option.parentElement.querySelectorAll('.quiz-option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                if (opt === option) {
+                    opt.classList.add(isCorrect ? 'correct' : 'incorrect');
+                }
+            });
+            
+            const feedback = document.getElementById('quiz3-feedback');
+            feedback.style.display = 'block';
+            feedback.innerHTML = isCorrect ? 
+                '🎉 Correct! Vericiguat + PDE-5 inhibitors = SEVERE HYPOTENSION! Both enhance the NO-cGMP pathway.' :
+                '❌ Not quite! PDE-5 inhibitors (like sildenafil/Viagra) combined with vericiguat causes dangerous hypotension!';
+        }
+    </script>
+</body>
+</html>
