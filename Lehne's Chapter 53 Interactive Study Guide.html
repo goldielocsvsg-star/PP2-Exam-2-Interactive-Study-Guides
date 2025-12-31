@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cholesterol & Lipoproteins Study Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ldl-red: #E53935;
+            --hdl-green: #43A047;
+            --cholesterol-gold: #FFB300;
+            --statin-blue: #1E88E5;
+            --vldl-orange: #FB8C00;
+            --danger-red: #C62828;
+            --purple-accent: #8E24AA;
+            --dark-brown: #4E342E;
+            --bg-cream: #FFFDE7;
+            --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--bg-cream) 0%, #FFF8E1 100%);
+            color: var(--dark-brown);
+            line-height: 1.7;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, var(--cholesterol-gold), var(--vldl-orange));
+            border-radius: 30px;
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: "🧈";
+            position: absolute;
+            font-size: 120px;
+            opacity: 0.15;
+            top: -20px;
+            right: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: "💊";
+            position: absolute;
+            font-size: 80px;
+            opacity: 0.15;
+            bottom: -10px;
+            left: 40px;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.6rem;
+            color: white;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255,255,255,0.95);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Section Cards */
+        .section {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            border-left: 6px solid var(--cholesterol-gold);
+            transition: transform 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+        }
+
+        .section.red { border-left-color: var(--ldl-red); }
+        .section.green { border-left-color: var(--hdl-green); }
+        .section.blue { border-left-color: var(--statin-blue); }
+        .section.purple { border-left-color: var(--purple-accent); }
+        .section.orange { border-left-color: var(--vldl-orange); }
+
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.6rem;
+            color: var(--cholesterol-gold);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section.red .section-title { color: var(--ldl-red); }
+        .section.green .section-title { color: var(--hdl-green); }
+        .section.blue .section-title { color: var(--statin-blue); }
+        .section.purple .section-title { color: var(--purple-accent); }
+        .section.orange .section-title { color: var(--vldl-orange); }
+
+        .section-title .emoji {
+            font-size: 1.8rem;
+        }
+
+        /* Lipoprotein Cards */
+        .lipo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .lipo-card {
+            border-radius: 20px;
+            padding: 25px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lipo-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+        }
+
+        .lipo-card.vldl { background: linear-gradient(135deg, var(--vldl-orange), #E65100); }
+        .lipo-card.ldl { background: linear-gradient(135deg, var(--ldl-red), #B71C1C); }
+        .lipo-card.hdl { background: linear-gradient(135deg, var(--hdl-green), #2E7D32); }
+
+        .lipo-card h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .lipo-card .nickname {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .lipo-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .lipo-card li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .lipo-card li:last-child {
+            border-bottom: none;
+        }
+
+        .lipo-card .key-point {
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 15px;
+            font-weight: 700;
+        }
+
+        /* Alert Boxes */
+        .alert-box {
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            font-weight: 600;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            border-left: 5px solid var(--danger-red);
+            color: #B71C1C;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border-left: 5px solid var(--cholesterol-gold);
+            color: #E65100;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-left: 5px solid var(--statin-blue);
+            color: #0D47A1;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #E8F5E9, #C8E6C9);
+            border-left: 5px solid var(--hdl-green);
+            color: #1B5E20;
+        }
+
+        /* Roles Grid */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .role-card {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .role-card:hover {
+            border-color: var(--cholesterol-gold);
+            transform: translateY(-5px);
+            box-shadow: var(--card-shadow);
+        }
+
+        .role-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .role-card h4 {
+            font-weight: 800;
+            color: var(--dark-brown);
+            margin-bottom: 8px;
+        }
+
+        .role-card p {
+            font-size: 0.9rem;
+            color: #5D4037;
+        }
+
+        /* Atherosclerosis Steps */
+        .athero-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .athero-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            border-left: 4px solid var(--ldl-red);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .athero-step:hover {
+            transform: translateX(10px);
+        }
+
+        .athero-step .step-num {
+            background: var(--ldl-red);
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.2rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .athero-step.danger {
+            background: linear-gradient(135deg, #FFEBEE, #FFCDD2);
+            border-left-color: var(--danger-red);
+        }
+
+        .athero-step.danger .step-num {
+            background: var(--danger-red);
+        }
+
+        /* Statin Benefits */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .benefit-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 3px solid var(--statin-blue);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-card:hover {
+            background: var(--statin-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .benefit-card .icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .benefit-card h4 {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        /* Statin Groups */
+        .statin-groups {
+            background: linear-gradient(135deg, #E3F2FD, #BBDEFB);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+
+        .statin-groups h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--statin-blue);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .group-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .group-item {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .group-item .num {
+            background: var(--statin-blue);
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* Adverse Effects */
+        .adverse-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .adverse-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .adverse-card:hover {
+            border-color: var(--ldl-red);
+            box-shadow: var(--card-shadow);
+        }
+
+        .adverse-card.serious {
+            border-color: var(--ldl-red);
+            background: linear-gradient(135deg, #FFEBEE, white);
+        }
+
+        .adverse-card h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--ldl-red);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .adverse-card ul {
+            list-style: none;
+        }
+
+        .adverse-card li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            font-size: 0.95rem;
+        }
+
+        .adverse-card li:last-child {
+            border-bottom: none;
+        }
+
+        /* CYP3A4 Box */
+        .cyp-box {
+            background: linear-gradient(135deg, #F3E5F5, #E1BEE7);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px dashed var(--purple-accent);
+        }
+
+        .cyp-box h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--purple-accent);
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .cyp-statins {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .cyp-statin {
+            background: var(--purple-accent);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: 700;
+        }
+
+        .cyp-inhibitors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .inhibitor {
+            background: #FFCDD2;
+            color: var(--danger-red);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* TLC Box */
+        .tlc-box {
+            background: linear-gradient(135deg, var(--hdl-green), #2E7D32);
+            border-radius: 25px;
+            padding: 30px;
+            color: white;
+            margin: 25px 0;
+        }
+
+        .tlc-box h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tlc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .tlc-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .tlc-item .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .tlc-item h5 {
+            margin-bottom: 5px;
+        }
+
+        .tlc-item p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        /* Non-Statin Drugs */
+        .drug-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .drug-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            border: 3px solid #eee;
+            transition: all 0.3s ease;
+        }
+
+        .drug-card:hover {
+            border-color: var(--cholesterol-gold);
+            box-shadow: var(--card-shadow);
+        }
+
+        .drug-card h4 {
+            font-family: 'Fredoka One', cursive;
+            color: var(--dark-brown);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .drug-card .moa {
+            background: #FFF8E1;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #E65100;
+        }
+
+        .drug-card ul {
+            list-style: none;
+            font-size: 0.9rem;
+        }
+
+        .drug-card li {
+            padding: 5px 0;
+        }
+
+        .drug-card .highlight {
+            background: var(--hdl-green);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* Memory Tips */
+        .memory-tip {
+            background: linear-gradient(135deg, #FFF3E0, #FFE0B2);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 3px dashed var(--vldl-orange);
+        }
+
+        .memory-tip h4 {
+            font-family: 'Fredoka One', cursive;
+            color: #E65100;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .memory-tip p {
+            font-size: 1.05rem;
+        }
+
+        /* Comparison Table */
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .compare-table th {
+            background: var(--dark-brown);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .compare-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            background: white;
+        }
+
+        .compare-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .compare-table tr:hover td {
+            background: #FFF8E1;
+        }
+
+        /* Exam Pearls */
+        .exam-pearls {
+            background: linear-gradient(135deg, var(--statin-blue), var(--purple-accent));
+            border-radius: 25px;
+            padding: 30px;
+            color: white;
+            margin: 25px 0;
+        }
+
+        .exam-pearls h3 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .pearl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+
+        .pearl-item {
+            background: rgba(255,255,255,0.15);
+            border-radius: 15px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .pearl-item .icon {
+            font-size: 1.3rem;
+        }
+
+        .pearl-item p {
+            font-weight: 600;
+        }
+
+        /* Good vs Bad Visual */
+        .good-bad-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .good-bad-card {
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+
+        .good-bad-card.bad {
+            background: linear-gradient(135deg, var(--ldl-red), #B71C1C);
+        }
+
+        .good-bad-card.good {
+            background: linear-gradient(135deg, var(--hdl-green), #2E7D32);
+        }
+
+        .good-bad-card .emoji {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .good-bad-card h4 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .good-bad-card p {
+            opacity: 0.95;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #8D6E63;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 20px;
+            }
+
+            .good-bad-visual {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧈 Cholesterol & Lipoproteins</h1>
+            <p>High-Yield Study Guide for Lipid Management</p>
+        </div>
+
+        <!-- Cholesterol Roles -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">⭐</span> Physiologic Roles of Cholesterol</h2>
+            <p style="margin-bottom: 20px;">Cholesterol isn't all bad - it's <strong>essential</strong> for many body functions!</p>
+            
+            <div class="roles-grid">
+                <div class="role-card">
+                    <div class="icon">🧬</div>
+                    <h4>Cell Membranes</h4>
+                    <p>Component of ALL cell membranes; maintains stability & permeability</p>
+                </div>
+                <div class="role-card">
+                    <div class="icon">💉</div>
+                    <h4>Hormone Synthesis</h4>
+                    <p>Estrogen, Progesterone, Testosterone</p>
+                </div>
+                <div class="role-card">
+                    <div class="icon">🫀</div>
+                    <h4>Bile Salt Production</h4>
+                    <p>Required for fat digestion & absorption</p>
+                </div>
+                <div class="role-card">
+                    <div class="icon">🧴</div>
+                    <h4>Skin Barrier</h4>
+                    <p>Deposited in stratum corneum; ↓ water loss</p>
+                </div>
+            </div>
+
+            <div class="alert-info">
+                <strong>📌 Sources of Cholesterol:</strong><br>
+                • <strong>Endogenous (Most Important):</strong> Made in liver, controlled by HMG-CoA reductase (statin target!)<br>
+                • <strong>Exogenous (Dietary):</strong> From animal foods - has only a SMALL effect on blood cholesterol
+            </div>
+        </div>
+
+        <!-- Diet Pearls -->
+        <div class="section orange">
+            <h2 class="section-title"><span class="emoji">🍔</span> Diet Pearls (VERY TESTABLE!)</h2>
+            
+            <div class="memory-tip">
+                <h4>🧠 Key Exam Concept</h4>
+                <p>
+                    ↑ Dietary cholesterol → <strong>small</strong> ↑ blood cholesterol<br>
+                    ↑ Saturated fat → <strong>15-25%</strong> ↑ LDL (much bigger effect!)<br><br>
+                    <strong>➡️ Reducing SATURATED FAT is more important than reducing cholesterol intake alone!</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Good vs Bad -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">⚖️</span> Good vs Bad Cholesterol</h2>
+            
+            <div class="good-bad-visual">
+                <div class="good-bad-card bad">
+                    <div class="emoji">👎</div>
+                    <h4>LDL-C</h4>
+                    <p>"Bad" Cholesterol<br>Promotes Atherosclerosis</p>
+                </div>
+                <div class="good-bad-card good">
+                    <div class="emoji">👍</div>
+                    <h4>HDL-C</h4>
+                    <p>"Good" Cholesterol<br>Protects Against ASCVD</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lipoproteins -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">🔬</span> Lipoprotein Classes</h2>
+            <p style="margin-bottom: 20px;">Cholesterol & triglycerides aren't water soluble - <strong>lipoproteins</strong> allow transport in blood!</p>
+            
+            <div class="lipo-grid">
+                <div class="lipo-card vldl">
+                    <h3>VLDL</h3>
+                    <p class="nickname">Very-Low-Density Lipoprotein</p>
+                    <ul>
+                        <li><strong>Major lipid:</strong> Triglycerides</li>
+                        <li><strong>Source:</strong> Liver</li>
+                        <li><strong>Function:</strong> Delivers TGs to muscle & adipose</li>
+                        <li><strong>Apolipoprotein:</strong> B-100</li>
+                    </ul>
+                    <div class="key-point">
+                        ⚠️ TGs >500 mg/dL → pancreatitis risk!
+                    </div>
+                </div>
+                <div class="lipo-card ldl">
+                    <h3>LDL ⚠️ MOST DANGEROUS</h3>
+                    <p class="nickname">Low-Density Lipoprotein</p>
+                    <ul>
+                        <li><strong>Major lipid:</strong> Cholesterol</li>
+                        <li>Contains 60-70% of total blood cholesterol</li>
+                        <li><strong>Function:</strong> Delivers cholesterol to tissues</li>
+                        <li><strong>Apolipoprotein:</strong> B-100</li>
+                    </ul>
+                    <div class="key-point">
+                        📌 1% ↓ LDL → ~1% ↓ CV events!
+                    </div>
+                </div>
+                <div class="lipo-card hdl">
+                    <h3>HDL ✅ PROTECTIVE</h3>
+                    <p class="nickname">High-Density Lipoprotein</p>
+                    <ul>
+                        <li><strong>Major lipid:</strong> Cholesterol</li>
+                        <li><strong>Function:</strong> Reverse cholesterol transport</li>
+                        <li>Returns cholesterol TO liver</li>
+                        <li><strong>Apolipoproteins:</strong> A-I, A-II</li>
+                    </ul>
+                    <div class="key-point">
+                        ✅ Higher HDL = Lower ASCVD risk
+                    </div>
+                </div>
+            </div>
+
+            <div class="memory-tip">
+                <h4>💡 Apolipoprotein Memory Trick</h4>
+                <p><strong>B-100 = "Bad" delivery</strong> → Delivers lipids TO tissues (VLDL, LDL)<br>
+                <strong>A-I = "Away"</strong> → Takes cholesterol AWAY to liver (HDL)</p>
+            </div>
+        </div>
+
+        <!-- Atherosclerosis -->
+        <div class="section red">
+            <h2 class="section-title"><span class="emoji">🔴</span> LDL & Atherosclerosis Development</h2>
+            <p style="margin-bottom: 20px;">Understanding how plaques form is HIGH-YIELD!</p>
+            
+            <div class="athero-steps">
+                <div class="athero-step">
+                    <div class="step-num">1</div>
+                    <div>LDL enters <strong>damaged endothelium</strong></div>
+                </div>
+                <div class="athero-step">
+                    <div class="step-num">2</div>
+                    <div>LDL becomes <strong>oxidized</strong></div>
+                </div>
+                <div class="athero-step">
+                    <div class="step-num">3</div>
+                    <div>Oxidized LDL attracts monocytes → converts them to <strong>macrophages</strong></div>
+                </div>
+                <div class="athero-step">
+                    <div class="step-num">4</div>
+                    <div>Macrophages ingest oxidized LDL → become <strong>foam cells</strong></div>
+                </div>
+                <div class="athero-step">
+                    <div class="step-num">5</div>
+                    <div>Foam cells form <strong>fatty streaks</strong></div>
+                </div>
+                <div class="athero-step">
+                    <div class="step-num">6</div>
+                    <div>Smooth muscle migration + collagen → <strong>fibrous cap</strong></div>
+                </div>
+                <div class="athero-step danger">
+                    <div class="step-num">7</div>
+                    <div><strong>Cap rupture</strong> → platelet aggregation → <strong>thrombosis</strong></div>
+                </div>
+                <div class="athero-step danger">
+                    <div class="step-num">8</div>
+                    <div>Thrombosis → <strong>MI or STROKE</strong></div>
+                </div>
+            </div>
+
+            <div class="alert-danger">
+                <strong>⚠️ KEY CONCEPT:</strong> Unstable plaques = HIGHEST MI risk!<br>
+                Atherosclerosis is a <strong>chronic inflammatory disease</strong> involving macrophages, T-cells, and CRP.
+            </div>
+        </div>
+
+        <!-- Statin Benefit Groups -->
+        <div class="section blue">
+            <h2 class="section-title"><span class="emoji">💊</span> Who Benefits from Statins? (MEMORIZE!)</h2>
+            
+            <div class="statin-groups">
+                <h4>2018 ACC/AHA Statin Benefit Groups</h4>
+                <div class="group-list">
+                    <div class="group-item">
+                        <div class="num">1</div>
+                        <div><strong>Clinical ASCVD</strong> (existing heart disease)</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="num">2</div>
+                        <div><strong>LDL-C ≥190 mg/dL</strong></div>
+                    </div>
+                    <div class="group-item">
+                        <div class="num">3</div>
+                        <div><strong>Diabetes</strong> (age 40-75, LDL 70-189)</div>
+                    </div>
+                    <div class="group-item">
+                        <div class="num">4</div>
+                        <div>Age 40-75 with <strong>LDL 70-189</strong> + <strong>10-yr ASCVD risk ≥7.5%</strong></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-warning" style="margin-top: 20px;">
+                <strong>⭐ EXAM PEARL:</strong> Diabetes = ASCVD risk EQUIVALENT! Treated like established heart disease.
+            </div>
+        </div>
+
+        <!-- TLC -->
+        <div class="tlc-box">
+            <h3>🥗 Therapeutic Lifestyle Changes (TLC) - ALWAYS FIRST!</h3>
+            <div class="tlc-grid">
+                <div class="tlc-item">
+                    <div class="icon">🍳</div>
+                    <h5>Cholesterol</h5>
+                    <p>≤200 mg/day</p>
+                </div>
+                <div class="tlc-item">
+                    <div class="icon">🧈</div>
+                    <h5>Saturated Fat</h5>
+                    <p>≤7% of calories</p>
+                </div>
+                <div class="tlc-item">
+                    <div class="icon">🚫</div>
+                    <h5>Trans Fats</h5>
+                    <p>AVOID completely</p>
+                </div>
+                <div class="tlc-item">
+                    <div class="icon">🥣</div>
+                    <h5>Soluble Fiber</h5>
+                    <p>↑ Intake (oatmeal!)</p>
+                </div>
+                <div class="tlc-item">
+                    <div class="icon">🏃</div>
+                    <h5>Exercise</h5>
+                    <p>30-60 min most days</p>
+                </div>
+                <div class="tlc-item">
+                    <div class="icon">🚭</div>
+                    <h5>Smoking</h5>
+                    <p>CESSATION (↑LDL, ↓HDL)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statins -->
+        <div class="section blue">
+            <h2 class="section-title"><span class="emoji">⭐</span> STATINS (HMG-CoA Reductase Inhibitors)</h2>
+            
+            <div class="alert-success">
+                <strong>Why Statins Are #1:</strong><br>
+                ↓ LDL up to 63% • ↑ HDL • ↓ TGs • ↓ MI, Stroke, Death!
+            </div>
+
+            <h4 style="margin: 20px 0 15px; color: var(--statin-blue); font-family: 'Fredoka One', cursive;">Mechanism of Action</h4>
+            <div style="background: #E3F2FD; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                <p>1. Inhibit <strong>HMG-CoA reductase</strong> (rate-limiting enzyme)<br>
+                2. ↑ LDL receptors on liver<br>
+                3. ↑ LDL clearance from blood</p>
+            </div>
+
+            <h4 style="margin: 20px 0 15px; color: var(--statin-blue); font-family: 'Fredoka One', cursive;">Additional CV Benefits (Beyond LDL Lowering)</h4>
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <div class="icon">🛡️</div>
+                    <h4>Stabilize Plaques</h4>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🔥</div>
+                    <h4>↓ Inflammation</h4>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🩸</div>
+                    <h4>Improve Endothelial Function</h4>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">🩹</div>
+                    <h4>↓ Thrombosis Risk</h4>
+                </div>
+                <div class="benefit-card">
+                    <div class="icon">❤️</div>
+                    <h4>↓ Atrial Fibrillation</h4>
+                </div>
+            </div>
+
+            <div class="memory-tip">
+                <h4>⏰ Timing Tip</h4>
+                <p><strong>Give statins in the EVENING!</strong> Cholesterol synthesis ↑ at night.</p>
+            </div>
+        </div>
+
+        <!-- CYP3A4 -->
+        <div class="cyp-box">
+            <h4>⚠️ CYP3A4 Metabolized Statins (EXAM FAVORITE!)</h4>
+            <p style="margin-bottom: 10px;">These statins are metabolized by CYP3A4 → levels ↑ with inhibitors!</p>
+            <div class="cyp-statins">
+                <span class="cyp-statin">Atorvastatin</span>
+                <span class="cyp-statin">Lovastatin</span>
+                <span class="cyp-statin">Simvastatin</span>
+            </div>
+            <p style="margin-top: 15px;"><strong>CYP3A4 Inhibitors to Watch:</strong></p>
+            <div class="cyp-inhibitors">
+                <span class="inhibitor">Macrolides</span>
+                <span class="inhibitor">Azole antifungals</span>
+                <span class="inhibitor">Protease inhibitors</span>
+                <span class="inhibitor">Amiodarone</span>
+                <span class="inhibitor">Cyclosporine</span>
+                <span class="inhibitor">🍊 Grapefruit juice</span>
+            </div>
+        </div>
+
+        <!-- Adverse Effects -->
+        <div class="section red">
+            <h2 class="section-title"><span class="emoji">⚠️</span> Statin Adverse Effects</h2>
+            
+            <div class="adverse-grid">
+                <div class="adverse-card">
+                    <h4 style="color: var(--cholesterol-gold);">Common (Usually Mild)</h4>
+                    <ul>
+                        <li>Headache</li>
+                        <li>GI upset</li>
+                        <li>Rash</li>
+                        <li>Memory complaints</li>
+                    </ul>
+                </div>
+                <div class="adverse-card serious">
+                    <h4>🚨 Myopathy / Rhabdomyolysis</h4>
+                    <ul>
+                        <li>Muscle pain, weakness, tenderness</li>
+                        <li>CK ↑</li>
+                        <li><strong>Rhabdomyolysis:</strong> CK >10× ULN, myoglobinuria, AKI</li>
+                        <li>Highest risk: Rosuvastatin (still rare)</li>
+                    </ul>
+                    <p style="margin-top: 10px; font-size: 0.85rem; color: #666;"><strong>Risk factors:</strong> Older age, high dose, renal disease, hypothyroidism, fibrates, CYP3A4 inhibitors</p>
+                </div>
+                <div class="adverse-card serious">
+                    <h4>🚨 Hepatotoxicity</h4>
+                    <ul>
+                        <li>↑ AST/ALT (0.5-2%)</li>
+                        <li>Rare liver failure</li>
+                        <li><strong>Stop if:</strong> Transaminases ≥3× ULN and persistent</li>
+                        <li>✅ OK in NAFLD</li>
+                        <li>❌ Avoid in viral/alcoholic hepatitis</li>
+                    </ul>
+                </div>
+                <div class="adverse-card">
+                    <h4 style="color: var(--vldl-orange);">New-Onset Diabetes</h4>
+                    <ul>
+                        <li>Risk: ~1 in 500</li>
+                        <li>Benefits >> risk</li>
+                        <li>Do NOT stop therapy!</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert-danger" style="margin-top: 20px;">
+                <strong>❌ CONTRAINDICATED IN PREGNANCY!</strong> Stop immediately if pregnancy occurs.
+            </div>
+        </div>
+
+        <!-- Special Situations -->
+        <div class="section purple">
+            <h2 class="section-title"><span class="emoji">📋</span> Special Statin Situations</h2>
+            
+            <table class="compare-table">
+                <thead>
+                    <tr>
+                        <th>Situation</th>
+                        <th>Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Post-MI</strong></td>
+                        <td>Start statin ASAP, even if not on one before! "Better late than never"</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Diabetes</strong></td>
+                        <td>Most diabetics should be on a statin (ASCVD = #1 cause of death)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Asian Patients</strong></td>
+                        <td>Rosuvastatin levels ↑ 2× → Start with LOW dose</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Renal Disease</strong></td>
+                        <td>Preferred: Atorvastatin, Fluvastatin</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Normal LDL + High CRP</strong></td>
+                        <td>Rosuvastatin approved (JUPITER trial) → anti-inflammatory benefits!</td>
+                    </tr>
+                    <tr>
+                        <td><strong>LDL Reduction Needed</strong></td>
+                        <td>>40% reduction → Atorvastatin or Simvastatin</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Non-Statin Drugs -->
+        <div class="section">
+            <h2 class="section-title"><span class="emoji">💊</span> Non-Statin Lipid-Lowering Drugs</h2>
+            
+            <div class="drug-cards">
+                <div class="drug-card">
+                    <h4>🧪 Bile-Acid Sequestrants (Colesevelam)</h4>
+                    <div class="moa">Prevent bile acid reabsorption → ↑ LDL receptors → ↓ LDL</div>
+                    <ul>
+                        <li>↓ LDL ~20%</li>
+                        <li>⚠️ May ↑ VLDL → avoid if TG high</li>
+                        <li>✅ Fewer GI effects than older agents</li>
+                        <li>✅ Improves glucose in T2DM</li>
+                        <li>❌ Constipation, bloating</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>💊 Ezetimibe</h4>
+                    <div class="moa">↓ Intestinal cholesterol absorption</div>
+                    <ul>
+                        <li>↓ LDL ~19%</li>
+                        <li>Add to statin → extra ~25% LDL reduction</li>
+                        <li>⚠️ No proven CV outcome benefit alone</li>
+                        <li>⚠️ ↑ Liver injury & myopathy with statins</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>🔥 Fibrates (Gemfibrozil)</h4>
+                    <div class="moa">BEST for high triglycerides!</div>
+                    <ul>
+                        <li>↓ VLDL 40-55%</li>
+                        <li>↑ HDL</li>
+                        <li>❌ No mortality benefit</li>
+                        <li>⚠️ Gallstones, myopathy (↑ with statins), liver injury</li>
+                        <li>⚠️ ↑ Warfarin effect</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>💉 PCSK9 Inhibitors</h4>
+                    <div class="moa">Alirocumab, Evolocumab (SC injection)</div>
+                    <ul>
+                        <li>Adjunct to statins</li>
+                        <li>For familial hypercholesterolemia or ASCVD</li>
+                        <li>⚠️ Hypersensitivity</li>
+                        <li>✅ No major drug interactions</li>
+                        <li>$$$ Expensive</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>🆕 Bempedoic Acid (ACL Inhibitor)</h4>
+                    <div class="moa">Oral; ↓ LDL via ↑ LDL receptors</div>
+                    <ul>
+                        <li>Used with statins</li>
+                        <li>⚠️ Hyperuricemia / gout</li>
+                        <li>⚠️ Tendon rupture</li>
+                        <li>⚠️ Limits simvastatin & pravastatin dose</li>
+                    </ul>
+                </div>
+                <div class="drug-card">
+                    <h4>🐟 Omega-3 Fatty Acids</h4>
+                    <div class="moa">Lovaza (EPA+DHA): ↓ TG 20-50%</div>
+                    <ul>
+                        <li>⚠️ Bleeding risk</li>
+                    </ul>
+                    <div class="highlight">
+                        ⭐ VASCEPA (EPA only): ↓ ASCVD events! Only omega-3 with CV outcome benefit. For patients on statins with TG >150.
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert-warning" style="margin-top: 20px;">
+                <strong>⚠️ Cholestin (Red Yeast Rice):</strong> Contains lovastatin-like compounds. No proven CV outcome data, unknown safety/interactions. NOT a statin substitute!
+            </div>
+        </div>
+
+        <!-- Exam Pearls -->
+        <div class="exam-pearls">
+            <h3>🧠 EXAM POWER POINTS</h3>
+            <div class="pearl-grid">
+                <div class="pearl-item">
+                    <span class="icon">🎯</span>
+                    <p>LDL = strongest ASCVD predictor</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">✅</span>
+                    <p>HDL is PROTECTIVE</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🧈</span>
+                    <p>Saturated fat ↑ LDL MORE than cholesterol</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🩺</span>
+                    <p>Diabetes = ASCVD equivalent</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">💊</span>
+                    <p>Statins = FIRST-LINE, improve survival</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🥗</span>
+                    <p>Lifestyle changes ALWAYS required</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🔥</span>
+                    <p>Atherosclerosis is INFLAMMATORY</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">⚠️</span>
+                    <p>Myopathy risk ↑ with fibrates + CYP3A4 inhibitors</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🧪</span>
+                    <p>Colesevelam = safest bile-acid sequestrant</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">🐟</span>
+                    <p>Vascepa = ONLY omega-3 with CV benefit</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">💉</span>
+                    <p>PCSK9 inhibitors = injectable + expensive + powerful</p>
+                </div>
+                <div class="pearl-item">
+                    <span class="icon">⏰</span>
+                    <p>Give statins in the EVENING</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Memory Tip -->
+        <div class="memory-tip">
+            <h4>🧠 Final Memory Trick: "LDL = Lousy, HDL = Healthy"</h4>
+            <p>
+                <strong>L</strong>DL = <strong>L</strong>ousy (Bad - delivers cholesterol TO tissues)<br>
+                <strong>H</strong>DL = <strong>H</strong>ealthy (Good - takes cholesterol AWAY to liver)<br><br>
+                <strong>B-100</strong> = "Bad" apolipoproteins (on VLDL, LDL)<br>
+                <strong>A-I</strong> = "Away" apolipoproteins (on HDL)
+            </p>
+        </div>
+
+        <div class="footer">
+            <p>📚 Study Guide based on Lehne's Chapter 53: Cholesterol & Lipoproteins<br>
+            Created with 💛 for nursing students</p>
+        </div>
+    </div>
+
+    <script>
+        // Add hover effects to cards
+        document.querySelectorAll('.role-card, .benefit-card, .drug-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 200);
+            });
+        });
+
+        // Add animation to atherosclerosis steps
+        document.querySelectorAll('.athero-step').forEach((step, index) => {
+            step.style.animationDelay = `${index * 0.1}s`;
+        });
+    </script>
+</body>
+</html>
