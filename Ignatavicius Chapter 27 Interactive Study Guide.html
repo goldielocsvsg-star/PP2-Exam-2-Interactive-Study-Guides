@@ -1,0 +1,2324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🫀 Cardiovascular System Basics | Chapter 27</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --red: #E63946;
+            --red-light: #FFE5E7;
+            --blue: #457B9D;
+            --blue-light: #E8F4F8;
+            --navy: #1D3557;
+            --cream: #F1FAEE;
+            --teal: #2A9D8F;
+            --teal-light: #E0F5F3;
+            --orange: #F4A261;
+            --orange-light: #FFF3E8;
+            --purple: #7B68EE;
+            --purple-light: #F0EDFF;
+            --pink: #E91E63;
+            --pink-light: #FCE4EC;
+            --green: #4CAF50;
+            --green-light: #E8F5E9;
+            --gold: #FFC107;
+            --gold-light: #FFF8E1;
+            --dark: #1A1A2E;
+            --gray: #6C757D;
+            --light: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #E63946 0%, #457B9D 50%, #1D3557 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 50px 30px;
+            background: rgba(255,255,255,0.97);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 25px 80px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--red), var(--orange), var(--gold), var(--teal), var(--blue), var(--purple));
+        }
+
+        .header::after {
+            content: '🫀';
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.05;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .header h1 {
+            font-size: 2.8em;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--red), var(--navy));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: var(--gray);
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .subtitle {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--red-light), var(--blue-light));
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-top: 15px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.97);
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.1em;
+            color: var(--navy);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .progress-bar {
+            height: 18px;
+            background: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--red), var(--orange), var(--teal), var(--blue));
+            background-size: 200% 100%;
+            animation: progressPulse 2s infinite;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes progressPulse {
+            0%, 100% { background-position: 0% 0; }
+            50% { background-position: 100% 0; }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.95);
+            color: var(--dark);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--red), var(--navy));
+            color: white;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeSlide 0.5s ease;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Topic Cards */
+        .topic-card {
+            background: white;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .topic-header {
+            padding: 22px 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 7px;
+            height: 100%;
+        }
+
+        .topic-header.red::before { background: var(--red); }
+        .topic-header.blue::before { background: var(--blue); }
+        .topic-header.teal::before { background: var(--teal); }
+        .topic-header.orange::before { background: var(--orange); }
+        .topic-header.purple::before { background: var(--purple); }
+        .topic-header.green::before { background: var(--green); }
+        .topic-header.pink::before { background: var(--pink); }
+        .topic-header.gold::before { background: var(--gold); }
+        .topic-header.navy::before { background: var(--navy); }
+
+        .topic-icon {
+            font-size: 2.2em;
+            width: 65px;
+            height: 65px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 18px;
+            flex-shrink: 0;
+        }
+
+        .topic-icon.red { background: var(--red-light); }
+        .topic-icon.blue { background: var(--blue-light); }
+        .topic-icon.teal { background: var(--teal-light); }
+        .topic-icon.orange { background: var(--orange-light); }
+        .topic-icon.purple { background: var(--purple-light); }
+        .topic-icon.green { background: var(--green-light); }
+        .topic-icon.pink { background: var(--pink-light); }
+        .topic-icon.gold { background: var(--gold-light); }
+        .topic-icon.navy { background: var(--blue-light); }
+
+        .topic-title {
+            flex: 1;
+        }
+
+        .topic-title h2 {
+            font-size: 1.35em;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--dark);
+        }
+
+        .topic-title span {
+            font-size: 0.9em;
+            color: var(--gray);
+        }
+
+        .expand-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+            color: var(--gray);
+        }
+
+        .topic-card.expanded .expand-btn {
+            transform: rotate(180deg);
+            background: var(--red-light);
+            color: var(--red);
+        }
+
+        .topic-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .topic-card.expanded .topic-content {
+            max-height: 6000px;
+        }
+
+        .topic-inner {
+            padding: 0 28px 28px;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 18px;
+        }
+
+        .info-box.definition {
+            background: var(--red-light);
+            border-left: 5px solid var(--red);
+        }
+
+        .info-box.important {
+            background: var(--gold-light);
+            border-left: 5px solid var(--gold);
+        }
+
+        .info-box.clinical {
+            background: var(--teal-light);
+            border-left: 5px solid var(--teal);
+        }
+
+        .info-box.tip {
+            background: var(--purple-light);
+            border-left: 5px solid var(--purple);
+        }
+
+        .info-box.warning {
+            background: var(--pink-light);
+            border-left: 5px solid var(--pink);
+        }
+
+        .info-box h4 {
+            font-size: 1.05em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--dark);
+        }
+
+        /* Key Points */
+        .key-points {
+            background: linear-gradient(135deg, var(--blue-light), var(--teal-light));
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .key-points h3 {
+            font-size: 1.1em;
+            color: var(--navy);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .key-points ul {
+            list-style: none;
+        }
+
+        .key-points li {
+            padding: 10px 0;
+            padding-left: 32px;
+            position: relative;
+            border-bottom: 1px dashed rgba(69,123,157,0.2);
+        }
+
+        .key-points li:last-child {
+            border-bottom: none;
+        }
+
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        /* Tables */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+        }
+
+        .styled-table thead {
+            background: linear-gradient(135deg, var(--red), var(--navy));
+            color: white;
+        }
+
+        .styled-table th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .styled-table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .styled-table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        .styled-table tbody tr:hover {
+            background: var(--blue-light);
+        }
+
+        /* Flow Diagram */
+        .flow-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            margin: 25px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--cream), white);
+            border-radius: 20px;
+        }
+
+        .flow-step {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .flow-step.red { background: var(--red-light); border: 2px solid var(--red); }
+        .flow-step.blue { background: var(--blue-light); border: 2px solid var(--blue); }
+        .flow-step.teal { background: var(--teal-light); border: 2px solid var(--teal); }
+        .flow-step.purple { background: var(--purple-light); border: 2px solid var(--purple); }
+
+        .flow-arrow {
+            font-size: 1.8em;
+            color: var(--gray);
+            margin: 5px 0;
+        }
+
+        /* Comparison Cards */
+        .comparison {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 18px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            padding: 22px;
+            border-radius: 18px;
+        }
+
+        .comparison-card.left {
+            background: var(--red-light);
+            border: 2px solid var(--red);
+        }
+
+        .comparison-card.right {
+            background: var(--blue-light);
+            border: 2px solid var(--blue);
+        }
+
+        .comparison-card.center {
+            background: var(--teal-light);
+            border: 2px solid var(--teal);
+        }
+
+        .comparison-card h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            color: var(--dark);
+        }
+
+        .comparison-card ul {
+            list-style: none;
+        }
+
+        .comparison-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .comparison-card li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            font-weight: bold;
+        }
+
+        .comparison-card.left li::before { color: var(--red); }
+        .comparison-card.right li::before { color: var(--blue); }
+        .comparison-card.center li::before { color: var(--teal); }
+
+        /* Mnemonic Box */
+        .mnemonic {
+            background: linear-gradient(135deg, var(--gold-light), var(--orange-light));
+            border-radius: 18px;
+            padding: 22px;
+            margin: 18px 0;
+            border-left: 5px solid var(--orange);
+        }
+
+        .mnemonic h4 {
+            color: var(--red);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.1em;
+        }
+
+        .mnemonic .letter {
+            font-weight: 800;
+            color: var(--red);
+            font-size: 1.15em;
+        }
+
+        /* Quick Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .stat-card .value {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--red);
+        }
+
+        .stat-card .label {
+            font-size: 0.85em;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        /* Check Box */
+        .check-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            background: var(--light);
+            border-radius: 14px;
+            margin: 12px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-box:hover {
+            background: var(--blue-light);
+        }
+
+        .check-box input {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--teal);
+            margin-top: 2px;
+        }
+
+        .check-box.checked {
+            background: var(--green-light);
+            border: 2px solid var(--green);
+        }
+
+        /* Flashcard Section */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 25px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 220px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.7s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 35px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--red), var(--orange));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--teal), var(--blue));
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard h3 {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        .flashcard p {
+            font-size: 1.15em;
+            line-height: 1.5;
+        }
+
+        .flashcard-nav {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .flashcard-btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--navy);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .flashcard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* Quiz Section */
+        .quiz-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px;
+            margin-bottom: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+
+        .quiz-question {
+            font-size: 1.25em;
+            font-weight: 600;
+            margin-bottom: 22px;
+            color: var(--navy);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .quiz-option {
+            padding: 16px 22px;
+            border: 2px solid #E0E0E0;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--blue);
+            background: var(--blue-light);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--green);
+            background: var(--green-light);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--red);
+            background: var(--red-light);
+        }
+
+        .quiz-option .letter {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .quiz-feedback {
+            margin-top: 22px;
+            padding: 18px;
+            border-radius: 14px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: var(--green-light);
+        }
+
+        .quiz-feedback.incorrect {
+            background: var(--red-light);
+        }
+
+        .quiz-score {
+            text-align: center;
+            padding: 35px;
+            background: linear-gradient(135deg, var(--gold-light), var(--teal-light));
+            border-radius: 20px;
+            margin-top: 25px;
+        }
+
+        .quiz-score h3 {
+            font-size: 2.2em;
+            color: var(--navy);
+        }
+
+        /* Heart Diagram Styling */
+        .heart-diagram {
+            background: linear-gradient(135deg, var(--cream), white);
+            border-radius: 20px;
+            padding: 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .chambers-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .chamber {
+            padding: 20px;
+            border-radius: 16px;
+            font-weight: 600;
+        }
+
+        .chamber.ra { background: var(--blue-light); border: 3px solid var(--blue); }
+        .chamber.la { background: var(--red-light); border: 3px solid var(--red); }
+        .chamber.rv { background: var(--blue-light); border: 3px solid var(--blue); }
+        .chamber.lv { background: var(--red-light); border: 3px solid var(--red); }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 35px;
+            margin-top: 40px;
+            color: white;
+        }
+
+        .footer p {
+            opacity: 0.85;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .nav-tab {
+                padding: 12px 18px;
+                font-size: 0.85em;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-header {
+                padding: 18px 20px;
+            }
+
+            .topic-icon {
+                width: 55px;
+                height: 55px;
+                font-size: 1.8em;
+            }
+
+            .chambers-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; }
+            .nav-tabs, .flashcard-nav { display: none; }
+            .topic-content { max-height: none !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>🫀 Cardiovascular System</h1>
+            <p>Ignatavicius Chapter 27 | Anatomy, Function & Assessment</p>
+            <div class="subtitle">📚 Foundation Concepts for Nursing</div>
+        </header>
+
+        <!-- Progress Tracker -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <h3>🎯 Your Study Progress</h3>
+                <span id="progress-text">0 of 12 sections completed</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('learn')">📖 Learn</button>
+            <button class="nav-tab" onclick="showSection('flashcards')">🎴 Flashcards</button>
+            <button class="nav-tab" onclick="showSection('quiz')">✏️ Quiz</button>
+            <button class="nav-tab" onclick="showSection('quickref')">📋 Quick Ref</button>
+        </div>
+
+        <!-- LEARN SECTION -->
+        <div id="learn" class="content-section active">
+            
+            <!-- PRIORITY CONCEPTS -->
+            <div class="topic-card" id="card-priority">
+                <div class="topic-header red" onclick="toggleCard('card-priority')">
+                    <div class="topic-icon red">⭐</div>
+                    <div class="topic-title">
+                        <h2>Priority Concepts</h2>
+                        <span>Perfusion • Fluid & Electrolyte Balance</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 PERFUSION</h4>
+                            <p>The <strong>delivery of oxygenated blood to tissues</strong>. This is THE priority concept in cardiovascular nursing! Without perfusion, tissues die.</p>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>💧 FLUID & ELECTROLYTE BALANCE</h4>
+                            <p>Directly affects <strong>blood volume, blood pressure, and heart function</strong>. Think about it: too much fluid = heart overload; too little = poor perfusion!</p>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Remember: The Heart's Job</h4>
+                            <p>The cardiovascular system is essentially a <strong>PUMP (heart)</strong> connected to <strong>PIPES (blood vessels)</strong> carrying <strong>FLUID (blood)</strong>. Problems with any of these = perfusion problems!</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'priority')">
+                            <input type="checkbox" id="check-priority">
+                            <span>I understand Priority Concepts! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KEY TERMS: HEART FUNCTION -->
+            <div class="topic-card" id="card-terms">
+                <div class="topic-header blue" onclick="toggleCard('card-terms')">
+                    <div class="topic-icon blue">📊</div>
+                    <div class="topic-title">
+                        <h2>Key Terms: Heart Function</h2>
+                        <span>CO, SV, HR, EF, Preload, Afterload</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <h3 style="color: var(--navy); margin-bottom: 15px;">🔢 The Big Formula</h3>
+                        <div class="info-box tip" style="text-align: center; font-size: 1.3em;">
+                            <strong>Cardiac Output (CO) = Heart Rate (HR) × Stroke Volume (SV)</strong>
+                        </div>
+
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Term</th>
+                                    <th>Simple Definition</th>
+                                    <th>Normal Values</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Cardiac Output (CO)</strong></td>
+                                    <td>Blood pumped per minute</td>
+                                    <td>4-8 L/min (avg 5-6)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Stroke Volume (SV)</strong></td>
+                                    <td>Blood pumped per heartbeat</td>
+                                    <td>60-100 mL/beat</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Heart Rate (HR)</strong></td>
+                                    <td>Heartbeats per minute</td>
+                                    <td>60-100 bpm</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ejection Fraction (EF)</strong></td>
+                                    <td>% of blood pumped out of ventricle</td>
+                                    <td>55-70%</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cardiac Index</strong></td>
+                                    <td>CO adjusted for body size</td>
+                                    <td>2.5-4.0 L/min/m²</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">💪 Stroke Volume Determinants</h3>
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>⬅️ PRELOAD</h4>
+                                <ul>
+                                    <li>Amount of STRETCH before contraction</li>
+                                    <li>How FULL the ventricle is</li>
+                                    <li>Think: "pre" = before pumping</li>
+                                    <li>↑ by fluids, ↓ by diuretics</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>➡️ AFTERLOAD</h4>
+                                <ul>
+                                    <li>RESISTANCE to pump against</li>
+                                    <li>Mainly determined by BP</li>
+                                    <li>Think: "after" = resistance after valve opens</li>
+                                    <li>↑ by HTN, ↓ by vasodilators</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card center">
+                                <h4>💪 CONTRACTILITY</h4>
+                                <ul>
+                                    <li>Strength of heart contraction</li>
+                                    <li>Independent of preload/afterload</li>
+                                    <li>↑ by inotropes (digoxin)</li>
+                                    <li>↓ by heart failure, MI</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Memory Aid: Preload vs Afterload</h4>
+                            <p><strong>Preload = Volume ("filling pressure")</strong> - Think of filling a water balloon<br>
+                            <strong>Afterload = Pressure ("resistance")</strong> - Think of squeezing water through a narrow hose</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'terms')">
+                            <input type="checkbox" id="check-terms">
+                            <span>I understand Heart Function Terms! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BLOOD PRESSURE -->
+            <div class="topic-card" id="card-bp">
+                <div class="topic-header teal" onclick="toggleCard('card-bp')">
+                    <div class="topic-icon teal">🩺</div>
+                    <div class="topic-title">
+                        <h2>Blood Pressure Terms</h2>
+                        <span>Systolic, Diastolic, MAP, Pulse Pressure</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Blood Pressure (BP)</h4>
+                            <p><strong>Force of blood against vessel walls</strong>. Written as Systolic/Diastolic (e.g., 120/80 mmHg)</p>
+                        </div>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>💥 SYSTOLIC BP</h4>
+                                <ul>
+                                    <li>Pressure when heart CONTRACTS</li>
+                                    <li>Top number</li>
+                                    <li>Maximum pressure</li>
+                                    <li>Normal: &lt;120 mmHg</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>😌 DIASTOLIC BP</h4>
+                                <ul>
+                                    <li>Pressure when heart RELAXES</li>
+                                    <li>Bottom number</li>
+                                    <li>Minimum pressure</li>
+                                    <li>Normal: &lt;80 mmHg</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">📐 Important BP Calculations</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Term</th>
+                                    <th>Formula/Definition</th>
+                                    <th>Normal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Pulse Pressure</strong></td>
+                                    <td>Systolic − Diastolic</td>
+                                    <td>30-40 mmHg</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Mean Arterial Pressure (MAP)</strong></td>
+                                    <td>Average pressure to perfuse organs</td>
+                                    <td>≥60-70 mmHg minimum!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Critical: MAP Must Be ≥60 mmHg!</h4>
+                            <p>MAP &lt;60 mmHg = organs are NOT being perfused adequately! This is a medical emergency.</p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">⚠️ Special BP Conditions</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Condition</th>
+                                    <th>Definition</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Orthostatic Hypotension</strong></td>
+                                    <td>BP drop when standing (≥20 SBP or ≥10 DBP)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pulsus Paradoxus</strong></td>
+                                    <td>SBP drops &gt;10 mmHg during inspiration (seen in cardiac tamponade!)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <label class="check-box" onclick="markComplete(this, 'bp')">
+                            <input type="checkbox" id="check-bp">
+                            <span>I understand Blood Pressure Terms! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEART ANATOMY -->
+            <div class="topic-card" id="card-anatomy">
+                <div class="topic-header orange" onclick="toggleCard('card-anatomy')">
+                    <div class="topic-icon orange">🫀</div>
+                    <div class="topic-title">
+                        <h2>Heart Anatomy</h2>
+                        <span>Chambers, Valves, Blood Flow</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="key-points">
+                            <h3>📍 Location & Structure</h3>
+                            <ul>
+                                <li>Located in the <strong>mediastinum</strong> (center of chest)</li>
+                                <li>About the size of your <strong>fist</strong></li>
+                                <li>Surrounded by the <strong>pericardium</strong> (protective sac)</li>
+                                <li>Divided into <strong>right and left sides</strong></li>
+                            </ul>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🏠 The Four Chambers</h3>
+                        <div class="heart-diagram">
+                            <div class="chambers-grid">
+                                <div class="chamber ra">
+                                    <strong>RIGHT ATRIUM</strong><br>
+                                    Receives deoxygenated blood from body
+                                </div>
+                                <div class="chamber la">
+                                    <strong>LEFT ATRIUM</strong><br>
+                                    Receives oxygenated blood from lungs
+                                </div>
+                                <div class="chamber rv">
+                                    <strong>RIGHT VENTRICLE</strong><br>
+                                    Pumps to lungs
+                                </div>
+                                <div class="chamber lv">
+                                    <strong>LEFT VENTRICLE</strong><br>
+                                    Pumps to body (thickest wall!)
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="info-box tip">
+                            <h4>💡 Easy Way to Remember</h4>
+                            <p><strong>Atria = "A"ttics</strong> (receiving rooms on top)<br>
+                            <strong>Ventricles = "V"ans</strong> (delivery trucks on bottom that pump blood out)</p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🚪 Heart Valves</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Valve Type</th>
+                                    <th>Valve Name</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="2"><strong>AV Valves</strong><br>(between atria & ventricles)</td>
+                                    <td>Tricuspid</td>
+                                    <td>RA → RV (Right side)</td>
+                                </tr>
+                                <tr>
+                                    <td>Mitral (Bicuspid)</td>
+                                    <td>LA → LV (Left side)</td>
+                                </tr>
+                                <tr>
+                                    <td rowspan="2"><strong>Semilunar Valves</strong><br>(exiting ventricles)</td>
+                                    <td>Pulmonic</td>
+                                    <td>RV → Lungs</td>
+                                </tr>
+                                <tr>
+                                    <td>Aortic</td>
+                                    <td>LV → Body</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Valve Memory Aid: "Toilet Paper My A**"</h4>
+                            <p>Flow through valves in order:<br>
+                            <span class="letter">T</span>ricuspid → <span class="letter">P</span>ulmonic → <span class="letter">M</span>itral → <span class="letter">A</span>ortic</p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🔄 Blood Flow Through the Heart</h3>
+                        <div class="flow-diagram">
+                            <div class="flow-step blue">Body (deoxygenated) → Superior/Inferior Vena Cava</div>
+                            <div class="flow-arrow">⬇️</div>
+                            <div class="flow-step blue">RIGHT ATRIUM</div>
+                            <div class="flow-arrow">⬇️ Tricuspid Valve</div>
+                            <div class="flow-step blue">RIGHT VENTRICLE</div>
+                            <div class="flow-arrow">⬇️ Pulmonic Valve</div>
+                            <div class="flow-step purple">LUNGS (get oxygen!) 🫁</div>
+                            <div class="flow-arrow">⬇️</div>
+                            <div class="flow-step red">LEFT ATRIUM</div>
+                            <div class="flow-arrow">⬇️ Mitral Valve</div>
+                            <div class="flow-step red">LEFT VENTRICLE</div>
+                            <div class="flow-arrow">⬇️ Aortic Valve</div>
+                            <div class="flow-step red">BODY (via Aorta) → delivers O₂!</div>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>⚠️ Key Principle</h4>
+                            <p>Blood always flows from <strong>HIGH pressure to LOW pressure</strong>. The left ventricle has the highest pressure because it pumps to the entire body!</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'anatomy')">
+                            <input type="checkbox" id="check-anatomy">
+                            <span>I understand Heart Anatomy! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CORONARY CIRCULATION -->
+            <div class="topic-card" id="card-coronary">
+                <div class="topic-header purple" onclick="toggleCard('card-coronary')">
+                    <div class="topic-icon purple">💉</div>
+                    <div class="topic-title">
+                        <h2>Coronary Circulation</h2>
+                        <span>Heart's Own Blood Supply</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 What Is Coronary Circulation?</h4>
+                            <p>The heart muscle (myocardium) needs its OWN blood supply! The coronary arteries deliver oxygen directly to heart tissue.</p>
+                        </div>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Critical Facts</h4>
+                            <p>• Coronary blood flow occurs mainly during <strong>DIASTOLE</strong> (when heart relaxes)<br>
+                            • Requires <strong>MAP ≥60 mmHg</strong> for adequate perfusion<br>
+                            • Blocked coronary artery = <strong>Myocardial Infarction (MI)</strong></p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🫀 Main Coronary Arteries</h3>
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>⬅️ LEFT MAIN CORONARY</h4>
+                                <ul>
+                                    <li><strong>LAD</strong> (Left Anterior Descending)</li>
+                                    <li>Supplies front of heart</li>
+                                    <li><strong>LCX</strong> (Left Circumflex)</li>
+                                    <li>Supplies lateral/back of heart</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>➡️ RIGHT CORONARY (RCA)</h4>
+                                <ul>
+                                    <li>Supplies right side of heart</li>
+                                    <li>Supplies SA node (60-70% of people)</li>
+                                    <li>Supplies AV node (90% of people)</li>
+                                    <li>Supplies inferior wall</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Remember: LAD = "Widow Maker"</h4>
+                            <p>The LAD supplies a large portion of the left ventricle. Blockage here can be fatal, hence the nickname!</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'coronary')">
+                            <input type="checkbox" id="check-coronary">
+                            <span>I understand Coronary Circulation! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARDIAC CYCLE -->
+            <div class="topic-card" id="card-cycle">
+                <div class="topic-header green" onclick="toggleCard('card-cycle')">
+                    <div class="topic-icon green">🔄</div>
+                    <div class="topic-title">
+                        <h2>The Cardiac Cycle</h2>
+                        <span>Systole & Diastole</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>😌 DIASTOLE (Relaxation)</h4>
+                                <ul>
+                                    <li>Heart muscle RELAXES</li>
+                                    <li>Chambers FILL with blood</li>
+                                    <li>Takes about <strong>⅔ of the cycle</strong></li>
+                                    <li>Coronary arteries fill!</li>
+                                    <li>AV valves OPEN</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>💪 SYSTOLE (Contraction)</h4>
+                                <ul>
+                                    <li>Heart muscle CONTRACTS</li>
+                                    <li>Blood is EJECTED</li>
+                                    <li>Takes about <strong>⅓ of the cycle</strong></li>
+                                    <li>Generates BP!</li>
+                                    <li>Semilunar valves OPEN</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-box tip">
+                            <h4>💡 Why Diastole Matters</h4>
+                            <p>Since coronary blood flow happens during diastole, a <strong>fast heart rate (tachycardia)</strong> shortens diastole and can reduce coronary perfusion! This is why tachycardia is dangerous in cardiac patients.</p>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🔬 Role of Calcium</h4>
+                            <p><strong>Calcium RELEASE</strong> → Muscle CONTRACTION<br>
+                            <strong>Calcium REMOVAL</strong> → Muscle RELAXATION<br>
+                            <em>This is why calcium channel blockers decrease heart contractility!</em></p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'cycle')">
+                            <input type="checkbox" id="check-cycle">
+                            <span>I understand the Cardiac Cycle! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEART SOUNDS & ASSESSMENT -->
+            <div class="topic-card" id="card-sounds">
+                <div class="topic-header pink" onclick="toggleCard('card-sounds')">
+                    <div class="topic-icon pink">👂</div>
+                    <div class="topic-title">
+                        <h2>Heart Sounds & Assessment</h2>
+                        <span>S1, S2, Murmurs, PMI</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <h3 style="color: var(--navy); margin-bottom: 15px;">🔊 Normal Heart Sounds</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Sound</th>
+                                    <th>What Causes It</th>
+                                    <th>Memory Trick</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>S1 "LUB"</strong></td>
+                                    <td>AV valves closing (Tricuspid & Mitral)</td>
+                                    <td>Start of SYSTOLE</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>S2 "DUB"</strong></td>
+                                    <td>Semilunar valves closing (Aortic & Pulmonic)</td>
+                                    <td>Start of DIASTOLE</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box tip">
+                            <h4>💡 "LUB-DUB" = One Complete Heartbeat!</h4>
+                            <p>S1 marks the <strong>beginning of systole</strong> (contraction)<br>
+                            S2 marks the <strong>beginning of diastole</strong> (relaxation)</p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">⚠️ Abnormal Heart Sounds</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Sound</th>
+                                    <th>Description</th>
+                                    <th>Associated With</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>S3 Gallop</strong></td>
+                                    <td>"Ken-TUC-ky" rhythm</td>
+                                    <td>Heart failure (volume overload)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>S4 Gallop</strong></td>
+                                    <td>"TEN-nes-see" rhythm</td>
+                                    <td>Stiff ventricle, HTN</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Murmur</strong></td>
+                                    <td>Whooshing/swishing sound</td>
+                                    <td>Turbulent blood flow through valves</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Bruit</strong></td>
+                                    <td>Swishing in arteries</td>
+                                    <td>Narrowed arteries (carotid, femoral)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Pericardial Friction Rub</strong></td>
+                                    <td>Scratchy/scraping sound</td>
+                                    <td>Inflamed pericardium (pericarditis)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box clinical">
+                            <h4>📍 Apical Impulse (PMI)</h4>
+                            <p><strong>Point of Maximum Impulse</strong> - Where you can feel/see the heartbeat<br>
+                            <strong>Location:</strong> Left 5th intercostal space, midclavicular line<br>
+                            <em>Displacement may indicate cardiomegaly (enlarged heart)!</em></p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'sounds')">
+                            <input type="checkbox" id="check-sounds">
+                            <span>I understand Heart Sounds! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VASCULAR SYSTEM -->
+            <div class="topic-card" id="card-vascular">
+                <div class="topic-header gold" onclick="toggleCard('card-vascular')">
+                    <div class="topic-icon gold">🩸</div>
+                    <div class="topic-title">
+                        <h2>Vascular System</h2>
+                        <span>Arteries, Veins, BP Regulation</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="key-points">
+                            <h3>🎯 Functions of Blood Vessels</h3>
+                            <ul>
+                                <li>Deliver oxygen and nutrients to tissues</li>
+                                <li>Remove metabolic waste</li>
+                                <li>Regulate body temperature</li>
+                                <li>Return blood to the heart</li>
+                            </ul>
+                        </div>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>🔴 ARTERIAL SYSTEM</h4>
+                                <ul>
+                                    <li>Carries blood AWAY from heart</li>
+                                    <li>HIGH pressure system</li>
+                                    <li>Thick, muscular walls</li>
+                                    <li>Carries oxygenated blood (mostly)</li>
+                                    <li>Palpate for pulses!</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>🔵 VENOUS SYSTEM</h4>
+                                <ul>
+                                    <li>Returns blood TO heart</li>
+                                    <li>LOW pressure system</li>
+                                    <li>Thinner walls, has VALVES</li>
+                                    <li>Carries deoxygenated blood (mostly)</li>
+                                    <li>Can store large blood volumes</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🎛️ Blood Pressure Regulation</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Mechanism</th>
+                                    <th>How It Works</th>
+                                    <th>Speed</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Nervous System (SNS)</strong></td>
+                                    <td>Vasoconstriction, ↑HR</td>
+                                    <td>FAST (seconds)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Baroreceptors</strong></td>
+                                    <td>Sense BP changes, trigger reflexes</td>
+                                    <td>FAST</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Kidneys (RAAS)</strong></td>
+                                    <td>Fluid & sodium balance</td>
+                                    <td>SLOW (hours-days)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hormones</strong></td>
+                                    <td>ADH, aldosterone, ANP</td>
+                                    <td>SLOW (long-term)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box clinical">
+                            <h4>🔬 Chemoreceptors</h4>
+                            <p><strong>Peripheral chemoreceptors:</strong> Respond to LOW oxygen<br>
+                            <strong>Central chemoreceptors:</strong> Respond to HIGH CO₂ and LOW pH<br>
+                            <strong>Stretch receptors:</strong> Detect volume changes</p>
+                        </div>
+
+                        <div class="info-box tip">
+                            <h4>💡 Venous Return Helpers</h4>
+                            <p>• <strong>Muscle movement</strong> squeezes veins (calf pump!)<br>
+                            • <strong>Valves</strong> prevent backflow<br>
+                            • <strong>Breathing</strong> creates pressure changes<br>
+                            <em>This is why immobility increases DVT risk!</em></p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'vascular')">
+                            <input type="checkbox" id="check-vascular">
+                            <span>I understand the Vascular System! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LAB VALUES & DIAGNOSTIC TESTS -->
+            <div class="topic-card" id="card-labs">
+                <div class="topic-header navy" onclick="toggleCard('card-labs')">
+                    <div class="topic-icon navy">🔬</div>
+                    <div class="topic-title">
+                        <h2>Labs & Diagnostic Tests</h2>
+                        <span>Troponin, Lipids, Echo, Cath</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <h3 style="color: var(--navy); margin-bottom: 15px;">🧪 Key Lab Markers</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Lab Test</th>
+                                    <th>What It Shows</th>
+                                    <th>Clinical Significance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Troponin</strong></td>
+                                    <td>Heart muscle injury</td>
+                                    <td>Elevated in MI - GOLD STANDARD!</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>BNP/NT-proBNP</strong></td>
+                                    <td>Heart stretch/failure</td>
+                                    <td>Elevated in heart failure</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>hsCRP</strong></td>
+                                    <td>Inflammation</td>
+                                    <td>Cardiovascular risk marker</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Homocysteine</strong></td>
+                                    <td>Amino acid levels</td>
+                                    <td>↑ levels linked to heart disease</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">💊 Lipid Panel</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Lipid</th>
+                                    <th>Goal</th>
+                                    <th>Remember</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Total Cholesterol</strong></td>
+                                    <td>&lt;200 mg/dL</td>
+                                    <td>Lower is better</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>LDL ("Bad")</strong></td>
+                                    <td>&lt;100 mg/dL</td>
+                                    <td><strong>L</strong> = <strong>L</strong>ousy - LOWER!</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>HDL ("Good")</strong></td>
+                                    <td>&gt;40-60 mg/dL</td>
+                                    <td><strong>H</strong> = <strong>H</strong>ealthy - HIGHER!</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Triglycerides</strong></td>
+                                    <td>&lt;150 mg/dL</td>
+                                    <td>Stored fats</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🏥 Diagnostic Tests</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Test</th>
+                                    <th>What It Does</th>
+                                    <th>Key Nursing Points</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ECG/EKG</strong></td>
+                                    <td>Records heart's electrical activity</td>
+                                    <td>Non-invasive, quick, first-line test</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Echocardiogram</strong></td>
+                                    <td>Ultrasound of heart structure/function</td>
+                                    <td>Shows EF, valve function, wall motion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>TEE</strong></td>
+                                    <td>Echo through esophagus</td>
+                                    <td>NPO before; sedation used</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Stress Test</strong></td>
+                                    <td>Heart response to exercise</td>
+                                    <td>Monitor for ischemia during exertion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cardiac Cath</strong></td>
+                                    <td>Invasive test with contrast dye</td>
+                                    <td>Check allergies! Monitor puncture site</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>EPS</strong></td>
+                                    <td>Evaluates rhythm disorders</td>
+                                    <td>Can trigger/treat arrhythmias</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Post-Cardiac Cath Care</h4>
+                            <p>• Monitor puncture site for <strong>bleeding/hematoma</strong><br>
+                            • Check <strong>distal pulses</strong> frequently<br>
+                            • Keep leg <strong>straight</strong> if femoral approach<br>
+                            • Watch for <strong>contrast reaction</strong> (especially if allergy to shellfish/iodine)<br>
+                            • <strong>Hydrate</strong> to flush contrast</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'labs')">
+                            <input type="checkbox" id="check-labs">
+                            <span>I understand Labs & Diagnostic Tests! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RISK FACTORS & SYMPTOMS -->
+            <div class="topic-card" id="card-risk">
+                <div class="topic-header red" onclick="toggleCard('card-risk')">
+                    <div class="topic-icon red">⚠️</div>
+                    <div class="topic-title">
+                        <h2>Risk Factors & Symptoms</h2>
+                        <span>Modifiable vs Non-Modifiable</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <h3 style="color: var(--navy); margin-bottom: 15px;">🎯 Cardiovascular Risk Factors</h3>
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>🔒 NON-MODIFIABLE</h4>
+                                <ul>
+                                    <li><strong>Age</strong> (risk ↑ with age)</li>
+                                    <li><strong>Sex</strong> (men at higher risk earlier)</li>
+                                    <li><strong>Genetics</strong></li>
+                                    <li><strong>Family history</strong></li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>✅ MODIFIABLE</h4>
+                                <ul>
+                                    <li><strong>Smoking</strong> - #1 preventable cause!</li>
+                                    <li><strong>Physical inactivity</strong></li>
+                                    <li><strong>Obesity</strong></li>
+                                    <li><strong>Hypertension</strong></li>
+                                    <li><strong>Diabetes</strong></li>
+                                    <li><strong>Stress</strong></li>
+                                    <li><strong>Diet</strong> (high fat, high sodium)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">🩺 Common CV Symptoms</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Symptom</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Chest Pain/Discomfort</strong></td>
+                                    <td>ALWAYS treat as cardiac until proven otherwise!</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dyspnea</strong></td>
+                                    <td>Shortness of breath, especially on exertion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Orthopnea</strong></td>
+                                    <td>Difficulty breathing when lying flat</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>PND</strong></td>
+                                    <td>Paroxysmal nocturnal dyspnea - wakes up gasping</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fatigue</strong></td>
+                                    <td>Decreased cardiac output = less perfusion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Palpitations</strong></td>
+                                    <td>Awareness of heartbeat, fluttering</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Edema</strong></td>
+                                    <td>Swelling, especially in legs/ankles</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Syncope</strong></td>
+                                    <td>Fainting - decreased cerebral perfusion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Weight Gain</strong></td>
+                                    <td>Fluid retention (HF sign)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Chest Pain Assessment: "OLDCARTS"</h4>
+                            <p><span class="letter">O</span>nset - When did it start?<br>
+                            <span class="letter">L</span>ocation - Where is it?<br>
+                            <span class="letter">D</span>uration - How long?<br>
+                            <span class="letter">C</span>haracteristics - What does it feel like?<br>
+                            <span class="letter">A</span>ggravating factors - What makes it worse?<br>
+                            <span class="letter">R</span>elieving factors - What makes it better?<br>
+                            <span class="letter">T</span>reatment - What have you tried?<br>
+                            <span class="letter">S</span>everity - Scale 0-10?</p>
+                        </div>
+
+                        <h3 style="color: var(--navy); margin: 25px 0 15px;">📊 Functional Classification (NYHA)</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Class</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Class I</strong></td>
+                                    <td>NO limitation - normal activities OK</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class II</strong></td>
+                                    <td>SLIGHT limitation - comfortable at rest</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class III</strong></td>
+                                    <td>MARKED limitation - less than ordinary activity causes symptoms</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Class IV</strong></td>
+                                    <td>Symptoms at REST - unable to do any activity</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <label class="check-box" onclick="markComplete(this, 'risk')">
+                            <input type="checkbox" id="check-risk">
+                            <span>I understand Risk Factors & Symptoms! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AGING & CV SYSTEM -->
+            <div class="topic-card" id="card-aging">
+                <div class="topic-header teal" onclick="toggleCard('card-aging')">
+                    <div class="topic-icon teal">👴</div>
+                    <div class="topic-title">
+                        <h2>Aging & the CV System</h2>
+                        <span>Normal Changes with Age</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box important">
+                            <h4>⚠️ Key Concept</h4>
+                            <p>These changes are <strong>NORMAL aging</strong>, not disease! But they do increase risk and affect how older adults respond to stress.</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Age-Related CV Changes</h3>
+                            <ul>
+                                <li><strong>Valves stiffen</strong> → May cause murmurs</li>
+                                <li><strong>Conduction system slows</strong> → Increased risk of dysrhythmias</li>
+                                <li><strong>Left ventricle stiffens</strong> → Reduced filling (diastolic dysfunction)</li>
+                                <li><strong>Arteries stiffen</strong> → Increased SYSTOLIC BP</li>
+                                <li><strong>Baroreceptors less sensitive</strong> → Orthostatic hypotension risk!</li>
+                                <li><strong>Decreased max HR</strong> → Less cardiac reserve for stress</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Nursing Implications</h4>
+                            <p>• Monitor BP in <strong>multiple positions</strong> (orthostatic checks!)<br>
+                            • Allow time for <strong>slow position changes</strong><br>
+                            • Watch for <strong>atypical presentations</strong> of cardiac problems<br>
+                            • Older adults may not have typical chest pain with MI!</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'aging')">
+                            <input type="checkbox" id="check-aging">
+                            <span>I understand Aging & the CV System! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FLASHCARDS SECTION -->
+        <div id="flashcards" class="content-section">
+            <div class="topic-card">
+                <div class="topic-inner" style="padding: 35px;">
+                    <h2 style="text-align: center; color: var(--navy); margin-bottom: 10px;">🎴 Flashcard Review</h2>
+                    <p style="text-align: center; color: var(--gray); margin-bottom: 30px;">Click the card to flip! Master these key concepts.</p>
+                    
+                    <div class="flashcard-container">
+                        <div class="flashcard" id="flashcard" onclick="flipCard()">
+                            <div class="flashcard-front">
+                                <h3 id="flash-q">Loading...</h3>
+                                <p style="opacity: 0.8; margin-top: 20px;">👆 Tap to reveal answer</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <p id="flash-a">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-nav">
+                        <button class="flashcard-btn" onclick="prevCard()">← Previous</button>
+                        <button class="flashcard-btn" onclick="nextCard()">Next →</button>
+                    </div>
+                    <p style="text-align: center; color: var(--gray); margin-top: 20px;" id="flash-counter">Card 1 of 25</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div id="quiz" class="content-section">
+            <div class="quiz-card">
+                <h2 style="text-align: center; color: var(--navy); margin-bottom: 25px;">✏️ Test Your Knowledge</h2>
+                <div id="quiz-container">
+                    <div class="quiz-question" id="quiz-q">Loading question...</div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                    <div style="text-align: center; margin-top: 22px;">
+                        <button class="flashcard-btn" id="next-q-btn" onclick="nextQuestion()" style="display: none;">Next Question →</button>
+                    </div>
+                </div>
+                <div class="quiz-score" id="quiz-score" style="display: none;">
+                    <h3>🎉 Quiz Complete!</h3>
+                    <p id="final-score"></p>
+                    <button class="flashcard-btn" onclick="restartQuiz()" style="margin-top: 18px;">Try Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK REFERENCE SECTION -->
+        <div id="quickref" class="content-section">
+            <div class="topic-card">
+                <div class="topic-inner" style="padding: 35px;">
+                    <h2 style="text-align: center; color: var(--navy); margin-bottom: 30px;">📋 Quick Reference Guide</h2>
+                    
+                    <h3 style="color: var(--red); margin-bottom: 18px;">❤️ Cardiac Output Formula</h3>
+                    <div class="info-box tip" style="text-align: center; font-size: 1.4em; margin-bottom: 25px;">
+                        <strong>CO = HR × SV</strong><br>
+                        <span style="font-size: 0.7em;">(Cardiac Output = Heart Rate × Stroke Volume)</span>
+                    </div>
+
+                    <h3 style="color: var(--blue); margin-bottom: 18px;">📊 Normal Values</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="value">4-8 L/min</div>
+                            <div class="label">Cardiac Output</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">60-100</div>
+                            <div class="label">Heart Rate (bpm)</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">60-100 mL</div>
+                            <div class="label">Stroke Volume</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">55-70%</div>
+                            <div class="label">Ejection Fraction</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">&lt;120/80</div>
+                            <div class="label">Normal BP</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">≥60 mmHg</div>
+                            <div class="label">Minimum MAP</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">30-40</div>
+                            <div class="label">Pulse Pressure</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">⅔</div>
+                            <div class="label">Diastole of Cycle</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--teal); margin: 30px 0 18px;">💊 Lipid Goals</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="value">&lt;200</div>
+                            <div class="label">Total Cholesterol</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">&lt;100</div>
+                            <div class="label">LDL ("Lousy")</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">&gt;40-60</div>
+                            <div class="label">HDL ("Healthy")</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="value">&lt;150</div>
+                            <div class="label">Triglycerides</div>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 35px 0; border: none; border-top: 2px dashed var(--blue-light);">
+
+                    <h3 style="color: var(--purple); margin-bottom: 18px;">🚪 Valve Order (Blood Flow)</h3>
+                    <div class="flow-diagram" style="padding: 15px;">
+                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;">
+                            <span style="background: var(--blue-light); padding: 10px 20px; border-radius: 50px; font-weight: 600;">Tricuspid</span>
+                            <span style="font-size: 1.5em;">→</span>
+                            <span style="background: var(--purple-light); padding: 10px 20px; border-radius: 50px; font-weight: 600;">Pulmonic</span>
+                            <span style="font-size: 1.5em;">→</span>
+                            <span style="background: var(--red-light); padding: 10px 20px; border-radius: 50px; font-weight: 600;">Mitral</span>
+                            <span style="font-size: 1.5em;">→</span>
+                            <span style="background: var(--orange-light); padding: 10px 20px; border-radius: 50px; font-weight: 600;">Aortic</span>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 35px 0; border: none; border-top: 2px dashed var(--blue-light);">
+
+                    <h3 style="color: var(--green); margin-bottom: 18px;">🔊 Heart Sounds Quick Guide</h3>
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Sound</th>
+                                <th>Cause</th>
+                                <th>Associated With</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>S1 "LUB"</strong></td>
+                                <td>AV valves close</td>
+                                <td>Normal - start of systole</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S2 "DUB"</strong></td>
+                                <td>Semilunar valves close</td>
+                                <td>Normal - start of diastole</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S3 "Ken-TUC-ky"</strong></td>
+                                <td>Rapid ventricular filling</td>
+                                <td>Heart failure (volume overload)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>S4 "TEN-nes-see"</strong></td>
+                                <td>Atrial kick into stiff ventricle</td>
+                                <td>HTN, HFpEF</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <hr style="margin: 35px 0; border: none; border-top: 2px dashed var(--blue-light);">
+
+                    <h3 style="color: var(--pink); margin-bottom: 18px;">📝 Chest Pain Assessment: OLDCARTS</h3>
+                    <div class="key-points">
+                        <ul>
+                            <li><strong>O</strong>nset - When did it start?</li>
+                            <li><strong>L</strong>ocation - Where exactly?</li>
+                            <li><strong>D</strong>uration - How long does it last?</li>
+                            <li><strong>C</strong>haracteristics - Sharp? Dull? Pressure?</li>
+                            <li><strong>A</strong>ggravating factors - What makes it worse?</li>
+                            <li><strong>R</strong>elieving factors - What helps?</li>
+                            <li><strong>T</strong>reatment - What have you tried?</li>
+                            <li><strong>S</strong>everity - 0-10 scale?</li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>🫀 Chapter 27 Cardiovascular System Study Guide</p>
+            <p>Made for nursing students with ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        // Flashcard Data
+        const flashcards = [
+            { q: "What is Cardiac Output (CO)?", a: "Blood pumped per minute. Formula: CO = HR × SV. Normal: 4-8 L/min" },
+            { q: "What is Preload?", a: "The amount of STRETCH on heart muscle before contraction - how full the ventricle is (volume/filling pressure)" },
+            { q: "What is Afterload?", a: "The RESISTANCE the ventricles must push against to pump blood out - mainly determined by blood pressure" },
+            { q: "What is Stroke Volume?", a: "The amount of blood pumped out with EACH heartbeat. Normal: 60-100 mL/beat" },
+            { q: "What is Ejection Fraction (EF)?", a: "Percentage of blood pumped OUT of the ventricle with each beat. Normal: 55-70%" },
+            { q: "What is Mean Arterial Pressure (MAP)?", a: "Average pressure needed to perfuse organs. MUST be ≥60 mmHg for adequate perfusion!" },
+            { q: "What is Pulse Pressure?", a: "Systolic BP minus Diastolic BP. Normal: 30-40 mmHg" },
+            { q: "What causes the S1 heart sound?", a: "Closure of AV valves (Tricuspid & Mitral) - marks the START of systole. 'LUB'" },
+            { q: "What causes the S2 heart sound?", a: "Closure of Semilunar valves (Aortic & Pulmonic) - marks the START of diastole. 'DUB'" },
+            { q: "What does an S3 heart sound indicate?", a: "Heart failure with volume overload! Sounds like 'Ken-TUC-ky'" },
+            { q: "What does an S4 heart sound indicate?", a: "Stiff ventricle (HTN, HFpEF). Atrial kick against resistance. Sounds like 'TEN-nes-see'" },
+            { q: "What is the order of heart valves in blood flow?", a: "Tricuspid → Pulmonic → Mitral → Aortic ('Toilet Paper My A**')" },
+            { q: "When does coronary blood flow mainly occur?", a: "During DIASTOLE (when heart is relaxed). Tachycardia shortens diastole and can reduce coronary perfusion!" },
+            { q: "What is the minimum MAP needed for organ perfusion?", a: "≥60 mmHg. Below this, organs are NOT getting adequate blood flow!" },
+            { q: "What percentage of the cardiac cycle is diastole?", a: "About ⅔ (two-thirds) of the cardiac cycle" },
+            { q: "What is Orthostatic Hypotension?", a: "BP drop when standing: ≥20 mmHg systolic OR ≥10 mmHg diastolic within 3 minutes" },
+            { q: "What is Pulsus Paradoxus?", a: "Systolic BP drops >10 mmHg during inspiration. Associated with cardiac tamponade!" },
+            { q: "What is the role of calcium in the cardiac cycle?", a: "Calcium RELEASE = Contraction. Calcium REMOVAL = Relaxation" },
+            { q: "What is Troponin?", a: "Gold standard marker for heart muscle injury - elevated in MI" },
+            { q: "What is 'good' vs 'bad' cholesterol?", a: "HDL = 'Healthy' (higher is better). LDL = 'Lousy' (lower is better)" },
+            { q: "Where is the PMI (Point of Maximum Impulse)?", a: "Left 5th intercostal space, midclavicular line. Displacement may indicate enlarged heart!" },
+            { q: "What is a Bruit?", a: "Swishing sound heard over narrowed arteries (like carotid) - indicates stenosis" },
+            { q: "How does aging affect the CV system?", a: "Valves stiffen, arteries stiffen (↑ systolic BP), baroreceptors less sensitive (orthostatic hypotension risk)" },
+            { q: "What helps venous return?", a: "Muscle movement (calf pump), valves preventing backflow, and breathing/pressure changes" },
+            { q: "What is NYHA Class IV heart failure?", a: "Symptoms at REST - unable to perform ANY physical activity without discomfort" }
+        ];
+
+        let currentCard = 0;
+        let cardFlipped = false;
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                q: "The formula for Cardiac Output is:",
+                options: ["CO = BP × HR", "CO = HR × SV", "CO = SV ÷ HR", "CO = EF × HR"],
+                correct: 1,
+                explanation: "Cardiac Output = Heart Rate × Stroke Volume. This tells you how much blood is pumped per minute."
+            },
+            {
+                q: "Preload is best described as:",
+                options: ["Resistance to blood flow", "Force of contraction", "Stretch on the ventricle before contraction", "Blood pressure in arteries"],
+                correct: 2,
+                explanation: "Preload is the amount of stretch (or filling) of the ventricle before it contracts - think of it as volume/filling pressure."
+            },
+            {
+                q: "The minimum MAP needed for organ perfusion is:",
+                options: ["40 mmHg", "50 mmHg", "60 mmHg", "80 mmHg"],
+                correct: 2,
+                explanation: "MAP must be ≥60 mmHg for adequate organ perfusion. Below this is a medical emergency!"
+            },
+            {
+                q: "The S1 heart sound ('LUB') is caused by:",
+                options: ["Opening of AV valves", "Closure of AV valves", "Opening of semilunar valves", "Closure of semilunar valves"],
+                correct: 1,
+                explanation: "S1 is caused by closure of the AV valves (Tricuspid and Mitral) and marks the start of systole."
+            },
+            {
+                q: "Which heart sound indicates heart failure with volume overload?",
+                options: ["S1", "S2", "S3", "S4"],
+                correct: 2,
+                explanation: "S3 ('Ken-TUC-ky') indicates volume overload and is associated with heart failure."
+            },
+            {
+                q: "Coronary blood flow mainly occurs during:",
+                options: ["Systole", "Diastole", "Both equally", "Neither"],
+                correct: 1,
+                explanation: "Coronary blood flow occurs mainly during DIASTOLE when the heart relaxes. Tachycardia reduces coronary perfusion!"
+            },
+            {
+                q: "The correct order of blood flow through heart valves is:",
+                options: ["Mitral → Aortic → Tricuspid → Pulmonic", "Tricuspid → Pulmonic → Mitral → Aortic", "Aortic → Mitral → Pulmonic → Tricuspid", "Pulmonic → Tricuspid → Aortic → Mitral"],
+                correct: 1,
+                explanation: "Blood flows: Tricuspid → Pulmonic → Mitral → Aortic ('Toilet Paper My A**')"
+            },
+            {
+                q: "Which cholesterol should be HIGHER for heart health?",
+                options: ["LDL", "HDL", "Total cholesterol", "Triglycerides"],
+                correct: 1,
+                explanation: "HDL = 'Healthy' cholesterol - higher is better! It removes cholesterol from tissues."
+            },
+            {
+                q: "A patient's BP drops 25 mmHg systolic when standing. This is:",
+                options: ["Normal response", "Orthostatic hypotension", "Pulsus paradoxus", "Hypertensive crisis"],
+                correct: 1,
+                explanation: "Orthostatic hypotension is a BP drop ≥20 mmHg systolic or ≥10 mmHg diastolic when standing."
+            },
+            {
+                q: "Troponin is a marker for:",
+                options: ["Inflammation", "Heart failure", "Heart muscle injury/MI", "Blood clotting"],
+                correct: 2,
+                explanation: "Troponin is the GOLD STANDARD marker for heart muscle injury and is elevated in myocardial infarction."
+            }
+        ];
+
+        let currentQuiz = 0;
+        let quizScore = 0;
+        let answered = false;
+
+        // Progress tracking
+        const completedSections = new Set();
+        const totalSections = 12;
+
+        function updateProgress() {
+            const percentage = (completedSections.size / totalSections) * 100;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = 
+                completedSections.size + ' of ' + totalSections + ' sections completed';
+        }
+
+        function markComplete(element, section) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                element.classList.add('checked');
+                completedSections.add(section);
+            } else {
+                element.classList.remove('checked');
+                completedSections.delete(section);
+            }
+            updateProgress();
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (sectionId === 'flashcards') {
+                loadCard();
+            } else if (sectionId === 'quiz') {
+                loadQuestion();
+            }
+        }
+
+        // Card Toggle
+        function toggleCard(cardId) {
+            const card = document.getElementById(cardId);
+            card.classList.toggle('expanded');
+        }
+
+        // Flashcard Functions
+        function loadCard() {
+            document.getElementById('flash-q').textContent = flashcards[currentCard].q;
+            document.getElementById('flash-a').textContent = flashcards[currentCard].a;
+            document.getElementById('flash-counter').textContent = 
+                'Card ' + (currentCard + 1) + ' of ' + flashcards.length;
+            document.getElementById('flashcard').classList.remove('flipped');
+            cardFlipped = false;
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+            cardFlipped = !cardFlipped;
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            loadCard();
+        }
+
+        function prevCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            loadCard();
+        }
+
+        // Quiz Functions
+        function loadQuestion() {
+            if (currentQuiz >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const q = quizQuestions[currentQuiz];
+            document.getElementById('quiz-q').textContent = 
+                'Question ' + (currentQuiz + 1) + ' of ' + quizQuestions.length + ': ' + q.q;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'quiz-option';
+                optDiv.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span>';
+                optDiv.onclick = () => selectAnswer(i);
+                optionsDiv.appendChild(optDiv);
+            });
+
+            document.getElementById('quiz-feedback').className = 'quiz-feedback';
+            document.getElementById('quiz-feedback').textContent = '';
+            document.getElementById('next-q-btn').style.display = 'none';
+            answered = false;
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quiz-feedback');
+
+            options.forEach((opt, i) => {
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== q.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (index === q.correct) {
+                quizScore++;
+                feedback.className = 'quiz-feedback show correct';
+                feedback.innerHTML = '✅ Correct! ' + q.explanation;
+            } else {
+                feedback.className = 'quiz-feedback show incorrect';
+                feedback.innerHTML = '❌ Not quite. ' + q.explanation;
+            }
+
+            document.getElementById('next-q-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuiz++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('quiz-score').style.display = 'block';
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let message = '';
+            if (percentage >= 90) message = '🌟 Outstanding! You know your stuff!';
+            else if (percentage >= 70) message = '👏 Great job! Keep reviewing!';
+            else if (percentage >= 50) message = '📚 Good effort! Review the material again.';
+            else message = '💪 Keep studying! You\'ll get there!';
+            
+            document.getElementById('final-score').innerHTML = 
+                'You scored <strong>' + quizScore + '/' + quizQuestions.length + 
+                '</strong> (' + percentage + '%)<br>' + message;
+        }
+
+        function restartQuiz() {
+            currentQuiz = 0;
+            quizScore = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-score').style.display = 'none';
+            loadQuestion();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCard();
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
