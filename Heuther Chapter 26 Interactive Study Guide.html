@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💓 Cardiovascular Study Guide | Chapter 26</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --coral: #FF6B6B;
+            --coral-light: #FFE5E5;
+            --teal: #4ECDC4;
+            --teal-light: #E0F7F5;
+            --purple: #A06CD5;
+            --purple-light: #F0E6F7;
+            --gold: #FFD93D;
+            --gold-light: #FFF9E0;
+            --blue: #6C9BCF;
+            --blue-light: #E6F0F9;
+            --mint: #95D5B2;
+            --mint-light: #E8F5E9;
+            --peach: #FFAB91;
+            --peach-light: #FFF3E0;
+            --pink: #F48FB1;
+            --pink-light: #FCE4EC;
+            --dark: #2D3436;
+            --gray: #636E72;
+            --light: #F8F9FA;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,107,107,0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(78,205,196,0.1) 0%, transparent 40%);
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+        }
+
+        .header h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2.8em;
+            background: linear-gradient(135deg, var(--coral), var(--purple), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            color: var(--gray);
+            margin-top: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: rgba(255,255,255,0.95);
+            padding: 20px 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .progress-header h3 {
+            font-size: 1.1em;
+            color: var(--purple);
+        }
+
+        .progress-bar {
+            height: 16px;
+            background: #E0E0E0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--coral), var(--gold), var(--teal), var(--purple));
+            background-size: 300% 100%;
+            animation: shimmer 3s infinite linear;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 100% 0; }
+            100% { background-position: 0 0; }
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .nav-tab {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            font-size: 0.95em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.9);
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .nav-tab.active {
+            background: linear-gradient(135deg, var(--coral), var(--purple));
+            color: white;
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Topic Cards */
+        .topic-card {
+            background: white;
+            border-radius: 24px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .topic-header {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-header::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+        }
+
+        .topic-header.coral::before { background: var(--coral); }
+        .topic-header.teal::before { background: var(--teal); }
+        .topic-header.purple::before { background: var(--purple); }
+        .topic-header.gold::before { background: var(--gold); }
+        .topic-header.blue::before { background: var(--blue); }
+        .topic-header.mint::before { background: var(--mint); }
+        .topic-header.peach::before { background: var(--peach); }
+        .topic-header.pink::before { background: var(--pink); }
+
+        .topic-icon {
+            font-size: 2em;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            flex-shrink: 0;
+        }
+
+        .topic-icon.coral { background: var(--coral-light); }
+        .topic-icon.teal { background: var(--teal-light); }
+        .topic-icon.purple { background: var(--purple-light); }
+        .topic-icon.gold { background: var(--gold-light); }
+        .topic-icon.blue { background: var(--blue-light); }
+        .topic-icon.mint { background: var(--mint-light); }
+        .topic-icon.peach { background: var(--peach-light); }
+        .topic-icon.pink { background: var(--pink-light); }
+
+        .topic-title {
+            flex: 1;
+        }
+
+        .topic-title h2 {
+            font-size: 1.3em;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .topic-title span {
+            font-size: 0.9em;
+            color: var(--gray);
+        }
+
+        .expand-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+        }
+
+        .topic-card.expanded .expand-btn {
+            transform: rotate(180deg);
+            background: var(--purple-light);
+        }
+
+        .topic-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .topic-card.expanded .topic-content {
+            max-height: 5000px;
+        }
+
+        .topic-inner {
+            padding: 0 25px 25px;
+        }
+
+        /* Key Points */
+        .key-points {
+            background: linear-gradient(135deg, var(--purple-light), var(--teal-light));
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .key-points h3 {
+            font-size: 1.1em;
+            color: var(--purple);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .key-points ul {
+            list-style: none;
+        }
+
+        .key-points li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            border-bottom: 1px dashed rgba(160,108,213,0.2);
+        }
+
+        .key-points li:last-child {
+            border-bottom: none;
+        }
+
+        .key-points li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--teal);
+            font-weight: bold;
+        }
+
+        /* Info Boxes */
+        .info-box {
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .info-box.definition {
+            background: var(--coral-light);
+            border-left: 4px solid var(--coral);
+        }
+
+        .info-box.important {
+            background: var(--gold-light);
+            border-left: 4px solid var(--gold);
+        }
+
+        .info-box.clinical {
+            background: var(--teal-light);
+            border-left: 4px solid var(--teal);
+        }
+
+        .info-box.warning {
+            background: var(--pink-light);
+            border-left: 4px solid var(--pink);
+        }
+
+        .info-box h4 {
+            font-size: 1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tables */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .styled-table thead {
+            background: linear-gradient(135deg, var(--purple), var(--teal));
+            color: white;
+        }
+
+        .styled-table th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .styled-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #E0E0E0;
+        }
+
+        .styled-table tbody tr:nth-child(even) {
+            background: var(--light);
+        }
+
+        .styled-table tbody tr:hover {
+            background: var(--purple-light);
+        }
+
+        /* Flashcard Section */
+        .flashcard-container {
+            perspective: 1000px;
+            margin: 20px 0;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, var(--coral), var(--peach));
+            color: white;
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, var(--teal), var(--mint));
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+        }
+
+        .flashcard p {
+            font-size: 1.1em;
+        }
+
+        .flashcard-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .flashcard-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            color: var(--purple);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .flashcard-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        /* Quiz Section */
+        .quiz-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .quiz-question {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--purple);
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .quiz-option {
+            padding: 15px 20px;
+            border: 2px solid #E0E0E0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--purple);
+            background: var(--purple-light);
+        }
+
+        .quiz-option.correct {
+            border-color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        .quiz-option.incorrect {
+            border-color: var(--coral);
+            background: var(--coral-light);
+        }
+
+        .quiz-option .letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--purple);
+        }
+
+        .quiz-feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-feedback.correct {
+            background: var(--teal-light);
+            color: var(--dark);
+        }
+
+        .quiz-feedback.incorrect {
+            background: var(--coral-light);
+            color: var(--dark);
+        }
+
+        .quiz-score {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--gold-light), var(--mint-light));
+            border-radius: 20px;
+            margin-top: 20px;
+        }
+
+        .quiz-score h3 {
+            font-size: 2em;
+            color: var(--purple);
+        }
+
+        /* Memory Aids */
+        .mnemonic {
+            background: linear-gradient(135deg, var(--gold-light), var(--peach-light));
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--gold);
+        }
+
+        .mnemonic h4 {
+            color: var(--coral);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mnemonic .letter {
+            font-weight: 800;
+            color: var(--coral);
+            font-size: 1.1em;
+        }
+
+        /* Pathophysiology Flow */
+        .patho-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 20px 0;
+        }
+
+        .patho-step {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--teal);
+            margin-left: 20px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        .patho-step::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background: var(--teal);
+            border-radius: 50%;
+            transform: translateY(-50%);
+        }
+
+        .patho-step::after {
+            content: '';
+            position: absolute;
+            left: -18px;
+            top: 100%;
+            width: 2px;
+            height: 20px;
+            background: var(--teal);
+        }
+
+        .patho-step:last-child::after {
+            display: none;
+        }
+
+        .patho-connector {
+            text-align: center;
+            padding: 5px;
+            color: var(--teal);
+            font-size: 1.5em;
+        }
+
+        /* Quick Reference */
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .quick-ref-item {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .quick-ref-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+        }
+
+        .quick-ref-item .value {
+            font-family: 'Fredoka One', cursive;
+            font-size: 2em;
+            color: var(--coral);
+        }
+
+        .quick-ref-item .label {
+            font-size: 0.9em;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        /* Comparison Chart */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .comparison-card {
+            padding: 20px;
+            border-radius: 16px;
+        }
+
+        .comparison-card.left {
+            background: var(--coral-light);
+            border: 2px solid var(--coral);
+        }
+
+        .comparison-card.right {
+            background: var(--teal-light);
+            border: 2px solid var(--teal);
+        }
+
+        .comparison-card h4 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .comparison-card ul {
+            list-style: none;
+        }
+
+        .comparison-card li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .comparison-card.left li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--coral);
+            font-weight: bold;
+        }
+
+        .comparison-card.right li::before {
+            content: '•';
+            position: absolute;
+            left: 5px;
+            color: var(--teal);
+            font-weight: bold;
+        }
+
+        /* Check Understanding */
+        .check-box {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 12px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .check-box:hover {
+            background: var(--purple-light);
+        }
+
+        .check-box input {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--teal);
+            margin-top: 2px;
+        }
+
+        .check-box.checked {
+            background: var(--mint-light);
+            border: 2px solid var(--mint);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            color: white;
+        }
+
+        .footer p {
+            opacity: 0.8;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .nav-tab {
+                padding: 10px 16px;
+                font-size: 0.85em;
+            }
+
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-header {
+                padding: 15px 20px;
+            }
+
+            .topic-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5em;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            .nav-tabs, .flashcard-nav, .quiz-options {
+                display: none;
+            }
+            .topic-content {
+                max-height: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>💓 Cardiovascular Study Guide</h1>
+            <p>Heuther Chapter 26 | Hypertension, Atherosclerosis & Heart Disease</p>
+        </header>
+
+        <!-- Progress Tracker -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <h3>📚 Your Study Progress</h3>
+                <span id="progress-text">0 of 10 sections completed</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('learn')">📖 Learn</button>
+            <button class="nav-tab" onclick="showSection('flashcards')">🎴 Flashcards</button>
+            <button class="nav-tab" onclick="showSection('quiz')">✏️ Quiz</button>
+            <button class="nav-tab" onclick="showSection('quickref')">📋 Quick Reference</button>
+        </div>
+
+        <!-- LEARN SECTION -->
+        <div id="learn" class="content-section active">
+            
+            <!-- HYPERTENSION -->
+            <div class="topic-card" id="card-htn">
+                <div class="topic-header coral" onclick="toggleCard('card-htn')">
+                    <div class="topic-icon coral">🩺</div>
+                    <div class="topic-title">
+                        <h2>Hypertension</h2>
+                        <span>The Silent Killer • BP Classification • Pathophysiology</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Hypertension</strong> = Sustained BP elevation with <strong>systolic ≥130 mmHg</strong> OR <strong>diastolic ≥80 mmHg</strong>. It's called the "silent disease" because it often has NO symptoms until organ damage occurs!</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Key Stats to Remember</h3>
+                            <ul>
+                                <li><strong>Affects 50%+</strong> of adult males and nearly 50% of adult females in the US</li>
+                                <li><strong>75%+ of people over 65</strong> have hypertension</li>
+                                <li>More common in <strong>Black individuals</strong> and people with <strong>diabetes</strong></li>
+                                <li>Major cause of <strong>heart disease, kidney disease, and stroke</strong></li>
+                            </ul>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Blood Pressure Classification</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Systolic (mmHg)</th>
+                                    <th>Diastolic (mmHg)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>✅ Normal</td>
+                                    <td>&lt;120</td>
+                                    <td>&lt;80</td>
+                                </tr>
+                                <tr>
+                                    <td>⚠️ Elevated</td>
+                                    <td>120-129</td>
+                                    <td>&lt;80</td>
+                                </tr>
+                                <tr>
+                                    <td>🟠 Stage 1 HTN</td>
+                                    <td>130-139</td>
+                                    <td>80-89</td>
+                                </tr>
+                                <tr>
+                                    <td>🔴 Stage 2 HTN</td>
+                                    <td>≥140</td>
+                                    <td>≥90</td>
+                                </tr>
+                                <tr>
+                                    <td>🚨 Crisis</td>
+                                    <td>≥180</td>
+                                    <td>≥120</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>🔵 Primary (Essential) HTN</h4>
+                                <ul>
+                                    <li>90-95% of all cases</li>
+                                    <li>No single identifiable cause</li>
+                                    <li>Complex interaction of genetics, lifestyle, metabolism</li>
+                                    <li>Now considered a metabolic disease</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>🟢 Secondary HTN</h4>
+                                <ul>
+                                    <li>5-10% of cases</li>
+                                    <li>Has identifiable cause</li>
+                                    <li>Kidney disease, endocrine disorders, pregnancy</li>
+                                    <li>Certain meds (NSAIDs, OCPs, steroids)</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">🔬 Pathophysiology Flow</h3>
+                        <div class="patho-flow">
+                            <div class="patho-step"><strong>RAAS Activation</strong> → Kidneys release renin when blood flow perceived as low</div>
+                            <div class="patho-step"><strong>Angiotensin II</strong> → Causes vasoconstriction + aldosterone release</div>
+                            <div class="patho-step"><strong>Aldosterone</strong> → ↑ Sodium & water retention</div>
+                            <div class="patho-step"><strong>SNS Overactivity</strong> → ↑ Heart rate + widespread vasoconstriction</div>
+                            <div class="patho-step"><strong>Vascular Changes</strong> → Smooth muscle hypertrophy + vessel stiffening</div>
+                            <div class="patho-step"><strong>Target Organ Damage</strong> → Heart, kidneys, brain, eyes, blood vessels</div>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Memory Aid: RAAS Medications</h4>
+                            <p><span class="letter">A</span>CE inhibitors (-pril drugs) → Block angiotensin conversion<br>
+                            <span class="letter">A</span>RBs (-sartan drugs) → Block angiotensin receptors<br>
+                            <span class="letter">A</span>ldosterone antagonists → Block aldosterone effects</p>
+                        </div>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Hypertensive Crisis</h4>
+                            <p>BP ≥180/120 mmHg • Life-threatening emergency • Causes capillary damage, cerebral edema, retinal hemorrhages, encephalopathy • IMMEDIATE treatment required!</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'htn')">
+                            <input type="checkbox" id="check-htn">
+                            <span>I understand Hypertension! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORTHOSTATIC HYPOTENSION -->
+            <div class="topic-card" id="card-ortho">
+                <div class="topic-header teal" onclick="toggleCard('card-ortho')">
+                    <div class="topic-icon teal">🧍</div>
+                    <div class="topic-title">
+                        <h2>Orthostatic Hypotension</h2>
+                        <span>Position Changes • Fall Risk • Compensatory Mechanisms</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Orthostatic hypotension</strong> = Drop of <strong>≥20 mmHg systolic</strong> OR <strong>≥10 mmHg diastolic</strong> within <strong>3 minutes of standing</strong>. Common in older adults & increases FALL RISK!</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 What Should Happen (Normal Response)</h3>
+                            <ul>
+                                <li>Standing triggers <strong>SNS activation</strong></li>
+                                <li>Blood vessels <strong>constrict</strong> to prevent pooling</li>
+                                <li><strong>Heart rate increases</strong> to maintain cardiac output</li>
+                                <li>Cerebral perfusion stays stable</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>⚠️ In Orthostatic Hypotension</h4>
+                            <p>These compensatory mechanisms <strong>FAIL</strong> → Blood pools in lower extremities → Cerebral perfusion decreases → Symptoms occur!</p>
+                        </div>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>⚡ Acute Causes</h4>
+                                <ul>
+                                    <li>Dehydration</li>
+                                    <li>Medications</li>
+                                    <li>Prolonged immobility</li>
+                                    <li>Volume depletion</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>🔄 Chronic Causes</h4>
+                                <ul>
+                                    <li>Parkinson's disease</li>
+                                    <li>Diabetic autonomic neuropathy</li>
+                                    <li>Adrenal insufficiency</li>
+                                    <li>Long-term medications</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Clinical Manifestations</h4>
+                            <p><strong>Dizziness • Blurred vision • Syncope • Weakness</strong><br>
+                            Especially after standing, meals, or exercise!</p>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Treatment Memory Aid: FLUIDS</h4>
+                            <p><span class="letter">F</span>ix underlying cause<br>
+                            <span class="letter">L</span>iquids (increase fluid intake)<br>
+                            <span class="letter">U</span>p the salt intake<br>
+                            <span class="letter">I</span>ncrease slowly when standing<br>
+                            <span class="letter">D</span>on compression garments<br>
+                            <span class="letter">S</span>pecific meds if needed (vasoconstrictors)</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'ortho')">
+                            <input type="checkbox" id="check-ortho">
+                            <span>I understand Orthostatic Hypotension! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ANEURYSMS & ARTERIAL THROMBI -->
+            <div class="topic-card" id="card-aneurysm">
+                <div class="topic-header purple" onclick="toggleCard('card-aneurysm')">
+                    <div class="topic-icon purple">💥</div>
+                    <div class="topic-title">
+                        <h2>Aneurysms & Arterial Thrombi</h2>
+                        <span>Vessel Wall Weakness • Types • Rupture Risk</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Aneurysm Definition</h4>
+                            <p>A <strong>localized dilation</strong> of a blood vessel or cardiac chamber caused by <strong>weakening of the vessel wall</strong>. Most common in thoracic or abdominal aorta.</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Types of Aneurysms</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>True Aneurysm</strong></td>
+                                    <td>Involves ALL 3 layers of vessel wall</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>False Aneurysm</strong></td>
+                                    <td>Blood collects OUTSIDE vessel wall</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Dissecting Aneurysm</strong></td>
+                                    <td>Blood enters BETWEEN layers of vessel wall</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="key-points">
+                            <h3>🎯 Risk Factors</h3>
+                            <ul>
+                                <li><strong>Hypertension</strong> (chronic mechanical stress!)</li>
+                                <li>Smoking</li>
+                                <li>Atherosclerosis</li>
+                                <li>Older age</li>
+                                <li>Genetic disorders (Marfan, Ehlers-Danlos)</li>
+                                <li>Infection & trauma</li>
+                            </ul>
+                        </div>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Aneurysm Rupture</h4>
+                            <p><strong>Often asymptomatic until rupture!</strong> Rupture causes severe pain, hypotension, and shock. LIFE-THREATENING! Small = medical management; Large/expanding = surgical repair</p>
+                        </div>
+
+                        <hr style="margin: 25px 0; border: none; border-top: 2px dashed var(--purple-light);">
+
+                        <div class="info-box definition">
+                            <h4>📌 Arterial Thrombus Definition</h4>
+                            <p>Form when <strong>endothelial injury, inflammation, or blood flow abnormalities</strong> activate the coagulation system. Can obstruct blood flow or become emboli!</p>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Diagnosis & Treatment</h4>
+                            <p><strong>Diagnosis:</strong> Doppler ultrasound, CT angiography<br>
+                            <strong>Treatment:</strong> Anticoagulants, thrombolytics, surgical removal</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'aneurysm')">
+                            <input type="checkbox" id="check-aneurysm">
+                            <span>I understand Aneurysms & Arterial Thrombi! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ATHEROSCLEROSIS -->
+            <div class="topic-card" id="card-athero">
+                <div class="topic-header gold" onclick="toggleCard('card-athero')">
+                    <div class="topic-icon gold">🧱</div>
+                    <div class="topic-title">
+                        <h2>Atherosclerosis</h2>
+                        <span>Plaque Formation • Inflammation • Complications</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Atherosclerosis</strong> = Buildup of <strong>lipid-laden macrophages (foam cells)</strong> within the arterial wall forming <strong>plaques</strong>. It's a <strong>CHRONIC INFLAMMATORY disease</strong>, not just cholesterol accumulation!</p>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>⚠️ Leading Cause Of:</h4>
+                            <p>Coronary Artery Disease (CAD) • Peripheral Artery Disease (PAD) • Cerebrovascular Disease (Stroke)</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">🔬 Pathophysiology: The Journey of a Plaque</h3>
+                        <div class="patho-flow">
+                            <div class="patho-step"><strong>1. Endothelial Injury</strong> → Damage from smoking, HTN, diabetes, dyslipidemia</div>
+                            <div class="patho-step"><strong>2. Inflammation Begins</strong> → Endothelium expresses adhesion molecules</div>
+                            <div class="patho-step"><strong>3. LDL Entry</strong> → LDL moves into arterial intima & gets OXIDIZED</div>
+                            <div class="patho-step"><strong>4. Foam Cell Formation</strong> → Macrophages engulf oxidized LDL → Become "foam cells"</div>
+                            <div class="patho-step"><strong>5. Fatty Streak</strong> → Accumulation of foam cells (earliest visible sign!)</div>
+                            <div class="patho-step"><strong>6. Plaque Maturation</strong> → Smooth muscle forms fibrous cap over lipid core</div>
+                            <div class="patho-step"><strong>7. Complicated Plaque</strong> → Rupture + Thrombosis = ACUTE EVENT!</div>
+                        </div>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>🟠 Stable Plaque</h4>
+                                <ul>
+                                    <li>Thick fibrous cap</li>
+                                    <li>Small lipid core</li>
+                                    <li>Slowly narrows vessel</li>
+                                    <li>Causes exertional symptoms</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>🔴 Unstable (Vulnerable) Plaque</h4>
+                                <ul>
+                                    <li>THIN fibrous cap</li>
+                                    <li>Large lipid core</li>
+                                    <li>May not narrow vessel much</li>
+                                    <li>Can RUPTURE suddenly → MI/Stroke!</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Risk Factor Memory: "SHADED"</h4>
+                            <p><span class="letter">S</span>moking<br>
+                            <span class="letter">H</span>ypertension<br>
+                            <span class="letter">A</span>ge (advanced)<br>
+                            <span class="letter">D</span>iabetes & Dyslipidemia<br>
+                            <span class="letter">E</span>xcessive weight (obesity)<br>
+                            <span class="letter">D</span>iet (poor) & sedentary lifestyle</p>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Clinical Manifestations</h4>
+                            <p>Depends on location! <strong>Coronaries</strong> → Angina, MI • <strong>Peripherals</strong> → Claudication, PAD • <strong>Cerebrals</strong> → TIA, Stroke<br>
+                            <em>Often affects MULTIPLE vascular beds simultaneously!</em></p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'athero')">
+                            <input type="checkbox" id="check-athero">
+                            <span>I understand Atherosclerosis! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAD -->
+            <div class="topic-card" id="card-pad">
+                <div class="topic-header blue" onclick="toggleCard('card-pad')">
+                    <div class="topic-icon blue">🦵</div>
+                    <div class="topic-title">
+                        <h2>Peripheral Artery Disease (PAD)</h2>
+                        <span>Lower Extremity Ischemia • Claudication • ABI</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>PAD</strong> = Atherosclerosis of arteries supplying the limbs, most commonly <strong>lower extremities</strong>. Affects millions, especially those over 40!</p>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>⭐ Classic Symptom: Intermittent Claudication</h4>
+                            <p><strong>Cramping or pain in legs during walking that is RELIEVED BY REST</strong><br>
+                            Caused by ischemia during increased oxygen demand of exercise!</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Disease Progression</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Stage</th>
+                                    <th>Symptoms</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Early</td>
+                                    <td>May be asymptomatic</td>
+                                </tr>
+                                <tr>
+                                    <td>Moderate</td>
+                                    <td>Exertional leg pain, weakness, numbness, fatigue</td>
+                                </tr>
+                                <tr>
+                                    <td>Severe</td>
+                                    <td>REST pain, nonhealing wounds</td>
+                                </tr>
+                                <tr>
+                                    <td>Critical</td>
+                                    <td>Tissue necrosis, gangrene</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box clinical">
+                            <h4>🔬 Key Diagnostic Test: Ankle-Brachial Index (ABI)</h4>
+                            <p><strong>ABI = Ankle BP ÷ Arm BP</strong><br>
+                            Normal: 1.0-1.3 • Borderline: 0.91-0.99 • PAD: ≤0.90<br>
+                            <em>Lower ankle pressure = arterial obstruction!</em></p>
+                        </div>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Acute Arterial Occlusion = EMERGENCY!</h4>
+                            <p><strong>6 P's:</strong> Pain, Pallor, Pulselessness, Paresthesia, Paralysis, Poikilothermia (cold)</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Treatment Priorities</h3>
+                            <ul>
+                                <li><strong>Risk factor modification</strong> - smoking cessation is CRITICAL!</li>
+                                <li>Regular exercise (supervised walking programs)</li>
+                                <li>Diabetes & HTN management</li>
+                                <li>Dyslipidemia treatment (statins)</li>
+                                <li>Proper foot/skin care to prevent ulcers</li>
+                                <li>Antiplatelet therapy & vasodilators</li>
+                                <li>Revascularization if severe</li>
+                            </ul>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'pad')">
+                            <input type="checkbox" id="check-pad">
+                            <span>I understand PAD! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CAD & MYOCARDIAL ISCHEMIA -->
+            <div class="topic-card" id="card-cad">
+                <div class="topic-header mint" onclick="toggleCard('card-cad')">
+                    <div class="topic-icon mint">❤️</div>
+                    <div class="topic-title">
+                        <h2>CAD & Myocardial Ischemia</h2>
+                        <span>Risk Factors • Angina Types • Silent Ischemia</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Coronary Artery Disease (CAD)</strong> = Atherosclerosis of coronary arteries → Reduced blood flow to myocardium → <strong>Myocardial Ischemia</strong>. Leading cause of death in both men and women!</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Risk Factors</h3>
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>🔒 Non-Modifiable</h4>
+                                <ul>
+                                    <li>Advanced age</li>
+                                    <li>Male sex / postmenopausal</li>
+                                    <li>Family history</li>
+                                    <li>Genetics</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>✅ Modifiable</h4>
+                                <ul>
+                                    <li>Dyslipidemia (high LDL, low HDL)</li>
+                                    <li>Hypertension</li>
+                                    <li>Smoking</li>
+                                    <li>Diabetes</li>
+                                    <li>Obesity & sedentary lifestyle</li>
+                                    <li>Poor diet</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="info-box important">
+                            <h4>💡 Remember: LDL vs HDL</h4>
+                            <p><strong>LDL = "Lousy"</strong> → Delivers cholesterol TO vessel walls → BAD!<br>
+                            <strong>HDL = "Healthy"</strong> → Removes cholesterol FROM tissues → GOOD!</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Types of Myocardial Ischemia</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Key Features</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Stable Angina</strong></td>
+                                    <td>Predictable chest pain with exertion; relieved by rest/nitrates; ECG shows ST depression</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Vasospastic (Prinzmetal's)</strong></td>
+                                    <td>Unpredictable; occurs at REST; coronary artery spasm without blockage</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Silent Ischemia</strong></td>
+                                    <td>NO chest pain! Only fatigue/SOB; common in diabetics due to autonomic neuropathy</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Microvascular (CMD)</strong></td>
+                                    <td>Small vessel disease; common in WOMEN; atypical symptoms</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Takotsubo</strong></td>
+                                    <td>Stress-induced; "broken heart syndrome"; catecholamine surge; reversible</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Stable Angina Clinical Picture</h4>
+                            <p><strong>Pain description:</strong> Pressure, heaviness, tightness (NOT sharp!)<br>
+                            <strong>Radiation:</strong> Neck, jaw, left arm, shoulder, back (C3-T4 dermatomes)<br>
+                            <strong>Associated:</strong> Pallor, diaphoresis, shortness of breath<br>
+                            <strong>Troponins:</strong> NORMAL (no cell death has occurred!)</p>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 Angina Treatment: "MONA"</h4>
+                            <p><span class="letter">M</span>orphine (pain relief)<br>
+                            <span class="letter">O</span>xygen (if hypoxic)<br>
+                            <span class="letter">N</span>itrates (vasodilation, decrease preload)<br>
+                            <span class="letter">A</span>spirin (antiplatelet)</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'cad')">
+                            <input type="checkbox" id="check-cad">
+                            <span>I understand CAD & Myocardial Ischemia! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ACUTE CORONARY SYNDROMES -->
+            <div class="topic-card" id="card-acs">
+                <div class="topic-header peach" onclick="toggleCard('card-acs')">
+                    <div class="topic-icon peach">⚡</div>
+                    <div class="topic-title">
+                        <h2>Acute Coronary Syndromes</h2>
+                        <span>Unstable Angina • NSTEMI • STEMI • MI</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 What Triggers ACS?</h4>
+                            <p><strong>Plaque RUPTURE + Thrombus Formation</strong> → Sudden reduction or complete obstruction of coronary blood flow!</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 ACS Spectrum</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Condition</th>
+                                    <th>Obstruction</th>
+                                    <th>Troponins</th>
+                                    <th>ECG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Unstable Angina</strong></td>
+                                    <td>Brief/intermittent</td>
+                                    <td>NEGATIVE ✓</td>
+                                    <td>ST depression, T wave changes</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>NSTEMI</strong></td>
+                                    <td>Partial-thickness damage</td>
+                                    <td>POSITIVE ↑</td>
+                                    <td>ST depression, T wave inversion</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>STEMI</strong></td>
+                                    <td>Full-thickness damage</td>
+                                    <td>POSITIVE ↑↑↑</td>
+                                    <td>ST ELEVATION!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box warning">
+                            <h4>🚨 STEMI = TIME-CRITICAL EMERGENCY!</h4>
+                            <p>"Time is muscle!" Urgent PCI (percutaneous coronary intervention) needed. Full-thickness myocardial death is occurring!</p>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">🔬 MI Pathophysiology Timeline</h3>
+                        <div class="patho-flow">
+                            <div class="patho-step"><strong>Seconds:</strong> Ischemia begins → Aerobic metabolism stops</div>
+                            <div class="patho-step"><strong>Minutes:</strong> Anaerobic metabolism → Lactic acid builds up</div>
+                            <div class="patho-step"><strong>~20 Minutes:</strong> Point of no return → Irreversible cell death begins</div>
+                            <div class="patho-step"><strong>Hours:</strong> Inflammation triggered → More damage</div>
+                            <div class="patho-step"><strong>Days-Weeks:</strong> Scar tissue forms → Lost contractility</div>
+                            <div class="patho-step"><strong>Long-term:</strong> Ventricular remodeling → Heart failure risk</div>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 MI Clinical Picture</h4>
+                            <p><strong>Pain:</strong> More SEVERE and LONGER lasting than angina; often described as "crushing" or "elephant on chest"<br>
+                            <strong>Associated:</strong> Diaphoresis, nausea/vomiting, cool/clammy skin, tachycardia<br>
+                            <strong>⚠️ Atypical:</strong> Elderly & diabetics may have NO PAIN!</p>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 MI Complications: "DARTH VADER"</h4>
+                            <p><span class="letter">D</span>eath<br>
+                            <span class="letter">A</span>rrhythmias<br>
+                            <span class="letter">R</span>upture (wall, septum, papillary muscle)<br>
+                            <span class="letter">T</span>amponade<br>
+                            <span class="letter">H</span>eart failure<br>
+                            <span class="letter">V</span>alve disease<br>
+                            <span class="letter">A</span>neurysm<br>
+                            <span class="letter">D</span>ressler syndrome<br>
+                            <span class="letter">E</span>mbolism<br>
+                            <span class="letter">R</span>ecurrence</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'acs')">
+                            <input type="checkbox" id="check-acs">
+                            <span>I understand ACS & MI! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HEART FAILURE -->
+            <div class="topic-card" id="card-hf">
+                <div class="topic-header pink" onclick="toggleCard('card-hf')">
+                    <div class="topic-icon pink">💔</div>
+                    <div class="topic-title">
+                        <h2>Heart Failure</h2>
+                        <span>HFrEF vs HFpEF • Left vs Right • Compensatory Mechanisms</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Heart failure</strong> = The heart CANNOT pump enough blood to meet the body's needs OR cannot fill properly without increasing pressure. Results in poor tissue perfusion and/or fluid buildup!</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Major Risk Factors</h3>
+                            <ul>
+                                <li><strong>Ischemic heart disease</strong> (most common cause!)</li>
+                                <li><strong>Hypertension</strong></li>
+                                <li>Diabetes (directly damages heart muscle)</li>
+                                <li>Obesity, kidney disease, valvular disease</li>
+                                <li>Cardiomyopathies, myocarditis</li>
+                                <li>Arrhythmias, substance use</li>
+                            </ul>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 The Big Comparison: HFrEF vs HFpEF</h3>
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>💪 HFrEF (Systolic Failure)</h4>
+                                <ul>
+                                    <li>Ejection Fraction ≤40%</li>
+                                    <li>Problem = PUMPING (contractility)</li>
+                                    <li>Common cause: MI</li>
+                                    <li>Heart dilates over time</li>
+                                    <li>Hear S3 gallop ("Ken-TUC-ky")</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>🧘 HFpEF (Diastolic Failure)</h4>
+                                <ul>
+                                    <li>Ejection Fraction ≥50%</li>
+                                    <li>Problem = FILLING (relaxation)</li>
+                                    <li>Common cause: HTN, aging</li>
+                                    <li>Stiff, thickened ventricle</li>
+                                    <li>Hear S4 gallop ("TEN-nes-see")</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">🔬 The Vicious Cycle of HFrEF</h3>
+                        <div class="patho-flow">
+                            <div class="patho-step"><strong>↓ Cardiac Output</strong> → Less blood pumped out</div>
+                            <div class="patho-step"><strong>↓ Kidney Perfusion</strong> → Kidneys think "low volume!"</div>
+                            <div class="patho-step"><strong>RAAS + SNS Activation</strong> → Hormonal compensation</div>
+                            <div class="patho-step"><strong>↑ Fluid Retention</strong> → ↑ Preload (volume overload)</div>
+                            <div class="patho-step"><strong>↑ Vasoconstriction</strong> → ↑ Afterload (more resistance)</div>
+                            <div class="patho-step"><strong>↑ Heart Work</strong> → Further damage & remodeling</div>
+                            <div class="patho-step"><strong>WORSENING HEART FAILURE!</strong></div>
+                        </div>
+
+                        <div class="comparison">
+                            <div class="comparison-card left">
+                                <h4>⬅️ LEFT-Sided HF Symptoms</h4>
+                                <ul>
+                                    <li>Pulmonary congestion (backward failure)</li>
+                                    <li>SOB, orthopnea, PND</li>
+                                    <li>Crackles/rales in lungs</li>
+                                    <li>Frothy cough</li>
+                                    <li>Fatigue (forward failure)</li>
+                                </ul>
+                            </div>
+                            <div class="comparison-card right">
+                                <h4>➡️ RIGHT-Sided HF Symptoms</h4>
+                                <ul>
+                                    <li>Systemic venous congestion</li>
+                                    <li>Peripheral edema (legs/ankles)</li>
+                                    <li>JVD (jugular venous distension)</li>
+                                    <li>Hepatomegaly, ascites</li>
+                                    <li>Weight gain</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="mnemonic">
+                            <h4>🧠 HFrEF Medications: "ABDMS"</h4>
+                            <p><span class="letter">A</span>RNI (Entresto - angiotensin receptor-neprilysin inhibitor)<br>
+                            <span class="letter">B</span>eta blockers<br>
+                            <span class="letter">D</span>iuretics (symptom relief)<br>
+                            <span class="letter">M</span>ineralocorticoid antagonists (spironolactone)<br>
+                            <span class="letter">S</span>GLT2 inhibitors (game changers!)</p>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🔬 Key Lab Finding</h4>
+                            <p><strong>BNP (B-type Natriuretic Peptide)</strong> is elevated in heart failure!<br>
+                            Released when heart is stretched → Indicates severity</p>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'hf')">
+                            <input type="checkbox" id="check-hf">
+                            <span>I understand Heart Failure! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DYSRHYTHMIAS -->
+            <div class="topic-card" id="card-dys">
+                <div class="topic-header coral" onclick="toggleCard('card-dys')">
+                    <div class="topic-icon coral">⚡</div>
+                    <div class="topic-title">
+                        <h2>Dysrhythmias</h2>
+                        <span>Rhythm Abnormalities • Causes • Treatment</span>
+                    </div>
+                    <div class="expand-btn">▼</div>
+                </div>
+                <div class="topic-content">
+                    <div class="topic-inner">
+                        <div class="info-box definition">
+                            <h4>📌 Definition</h4>
+                            <p><strong>Dysrhythmias</strong> = Abnormalities in heart rhythm caused by problems with <strong>impulse formation</strong> or <strong>conduction</strong>.</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Common Causes</h3>
+                            <ul>
+                                <li><strong>Ischemia</strong> (most common!)</li>
+                                <li>Electrolyte disturbances (K+, Mg2+, Ca2+)</li>
+                                <li>Medications & drugs</li>
+                                <li>Infection & inflammation</li>
+                                <li>Inherited disorders</li>
+                                <li>Cardiac procedures</li>
+                            </ul>
+                        </div>
+
+                        <h3 style="margin: 20px 0 15px; color: var(--purple);">📊 Classification</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Examples</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Atrial Dysrhythmias</strong></td>
+                                    <td>Afib, Aflutter, SVT, PACs</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ventricular Dysrhythmias</strong></td>
+                                    <td>VT, VFib, PVCs</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Conduction/Sinus Disorders</strong></td>
+                                    <td>Heart blocks, sick sinus syndrome</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="info-box warning">
+                            <h4>🚨 Lethal Dysrhythmias</h4>
+                            <p><strong>VFib & Pulseless VT</strong> → No cardiac output → IMMEDIATE defibrillation needed!<br>
+                            <strong>Asystole & PEA</strong> → CPR + epinephrine; NOT shockable!</p>
+                        </div>
+
+                        <div class="info-box clinical">
+                            <h4>🏥 Symptoms</h4>
+                            <p>Range from <strong>NONE</strong> to <strong>syncope, shock, or sudden death</strong><br>
+                            Depends on how much cardiac output is affected!</p>
+                        </div>
+
+                        <div class="key-points">
+                            <h3>🎯 Treatment Goals</h3>
+                            <ul>
+                                <li>Maintain adequate cardiac output</li>
+                                <li>Medications (antiarrhythmics)</li>
+                                <li>Cardioversion/defibrillation</li>
+                                <li>Pacemakers for bradycardia</li>
+                                <li>ICDs for ventricular dysrhythmias</li>
+                                <li>Ablation procedures</li>
+                                <li>Treat underlying cause!</li>
+                            </ul>
+                        </div>
+
+                        <label class="check-box" onclick="markComplete(this, 'dys')">
+                            <input type="checkbox" id="check-dys">
+                            <span>I understand Dysrhythmias! ✓</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FLASHCARDS SECTION -->
+        <div id="flashcards" class="content-section">
+            <div class="topic-card">
+                <div class="topic-inner" style="padding: 30px;">
+                    <h2 style="text-align: center; color: var(--purple); margin-bottom: 10px;">🎴 Flashcard Review</h2>
+                    <p style="text-align: center; color: var(--gray); margin-bottom: 25px;">Click the card to flip! Test your knowledge.</p>
+                    
+                    <div class="flashcard-container">
+                        <div class="flashcard" id="flashcard" onclick="flipCard()">
+                            <div class="flashcard-front">
+                                <h3 id="flash-q">Loading...</h3>
+                                <p style="opacity: 0.8; margin-top: 15px;">👆 Click to reveal answer</p>
+                            </div>
+                            <div class="flashcard-back">
+                                <p id="flash-a">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flashcard-nav">
+                        <button class="flashcard-btn" onclick="prevCard()">← Previous</button>
+                        <button class="flashcard-btn" onclick="nextCard()">Next →</button>
+                    </div>
+                    <p style="text-align: center; color: var(--gray); margin-top: 15px;" id="flash-counter">Card 1 of 20</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ SECTION -->
+        <div id="quiz" class="content-section">
+            <div class="quiz-card">
+                <h2 style="text-align: center; color: var(--purple); margin-bottom: 20px;">✏️ Test Your Knowledge</h2>
+                <div id="quiz-container">
+                    <div class="quiz-question" id="quiz-q">Loading question...</div>
+                    <div class="quiz-options" id="quiz-options"></div>
+                    <div class="quiz-feedback" id="quiz-feedback"></div>
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button class="flashcard-btn" id="next-q-btn" onclick="nextQuestion()" style="display: none;">Next Question →</button>
+                    </div>
+                </div>
+                <div class="quiz-score" id="quiz-score" style="display: none;">
+                    <h3>🎉 Quiz Complete!</h3>
+                    <p id="final-score"></p>
+                    <button class="flashcard-btn" onclick="restartQuiz()" style="margin-top: 15px;">Try Again</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUICK REFERENCE SECTION -->
+        <div id="quickref" class="content-section">
+            <div class="topic-card">
+                <div class="topic-inner" style="padding: 30px;">
+                    <h2 style="text-align: center; color: var(--purple); margin-bottom: 25px;">📋 Quick Reference Numbers</h2>
+                    
+                    <h3 style="color: var(--coral); margin-bottom: 15px;">🩺 Blood Pressure Values</h3>
+                    <div class="quick-ref">
+                        <div class="quick-ref-item">
+                            <div class="value">&lt;120/80</div>
+                            <div class="label">Normal BP</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">130/80</div>
+                            <div class="label">HTN Threshold</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">180/120</div>
+                            <div class="label">Hypertensive Crisis</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--teal); margin-top: 30px; margin-bottom: 15px;">🧍 Orthostatic Hypotension</h3>
+                    <div class="quick-ref">
+                        <div class="quick-ref-item">
+                            <div class="value">≥20</div>
+                            <div class="label">SBP drop (mmHg)</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">≥10</div>
+                            <div class="label">DBP drop (mmHg)</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">3 min</div>
+                            <div class="label">Within standing</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--purple); margin-top: 30px; margin-bottom: 15px;">💔 Heart Failure EF Values</h3>
+                    <div class="quick-ref">
+                        <div class="quick-ref-item">
+                            <div class="value">≤40%</div>
+                            <div class="label">HFrEF (Reduced)</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">41-49%</div>
+                            <div class="label">HFmrEF (Mid-range)</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">≥50%</div>
+                            <div class="label">HFpEF (Preserved)</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--blue); margin-top: 30px; margin-bottom: 15px;">🦵 Ankle-Brachial Index (ABI)</h3>
+                    <div class="quick-ref">
+                        <div class="quick-ref-item">
+                            <div class="value">1.0-1.3</div>
+                            <div class="label">Normal</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">0.91-0.99</div>
+                            <div class="label">Borderline</div>
+                        </div>
+                        <div class="quick-ref-item">
+                            <div class="value">≤0.90</div>
+                            <div class="label">PAD Present</div>
+                        </div>
+                    </div>
+
+                    <h3 style="color: var(--gold); margin-top: 30px; margin-bottom: 15px;">⏱️ Ischemia Timeline</h3>
+                    <div class="quick-ref">
+                        <div class="quick-ref-item">
+                            <div class="value">~20 min</div>
+                            <div class="label">Irreversible injury begins</div>
+                        </div>
+                    </div>
+
+                    <hr style="margin: 30px 0; border: none; border-top: 2px dashed var(--purple-light);">
+
+                    <h2 style="text-align: center; color: var(--purple); margin-bottom: 25px;">📝 Key Medications Cheat Sheet</h2>
+                    
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Drug Class</th>
+                                <th>Examples</th>
+                                <th>Main Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ACE Inhibitors</strong></td>
+                                <td>Lisinopril, Enalapril (-pril)</td>
+                                <td>HTN, HF - Block RAAS</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ARBs</strong></td>
+                                <td>Losartan, Valsartan (-sartan)</td>
+                                <td>HTN, HF - Block angiotensin receptors</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Beta Blockers</strong></td>
+                                <td>Metoprolol, Carvedilol (-olol)</td>
+                                <td>HTN, HF, Angina - ↓ HR & contractility</td>
+                            </tr>
+                            <tr>
+                                <td><strong>CCBs</strong></td>
+                                <td>Amlodipine, Diltiazem</td>
+                                <td>HTN, Angina - Vasodilation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Diuretics</strong></td>
+                                <td>Furosemide, HCTZ</td>
+                                <td>HTN, HF - ↓ Volume</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Statins</strong></td>
+                                <td>Atorvastatin, Rosuvastatin</td>
+                                <td>Dyslipidemia - ↓ LDL</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Nitrates</strong></td>
+                                <td>Nitroglycerin</td>
+                                <td>Angina - Vasodilation</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Antiplatelets</strong></td>
+                                <td>Aspirin, Clopidogrel</td>
+                                <td>CAD, PAD, MI - Prevent clots</td>
+                            </tr>
+                            <tr>
+                                <td><strong>SGLT2 Inhibitors</strong></td>
+                                <td>Empagliflozin (-gliflozin)</td>
+                                <td>HF, Diabetes - ↓ Mortality!</td>
+                            </tr>
+                            <tr>
+                                <td><strong>ARNI</strong></td>
+                                <td>Sacubitril/Valsartan (Entresto)</td>
+                                <td>HFrEF - Gold standard</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>💓 Chapter 26 Cardiovascular Study Guide</p>
+            <p>Made for nursing students with ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        // Flashcard Data
+        const flashcards = [
+            { q: "What blood pressure defines hypertension?", a: "Systolic ≥130 mmHg OR Diastolic ≥80 mmHg" },
+            { q: "What percentage of hypertension is Primary (Essential)?", a: "90-95% - No single identifiable cause" },
+            { q: "What system becomes overactive in hypertension?", a: "RAAS (Renin-Angiotensin-Aldosterone System) and Sympathetic Nervous System" },
+            { q: "What defines orthostatic hypotension?", a: "Drop of ≥20 mmHg systolic OR ≥10 mmHg diastolic within 3 minutes of standing" },
+            { q: "What are the 3 types of aneurysms?", a: "True (all 3 layers), False (outside wall), Dissecting (between layers)" },
+            { q: "Atherosclerosis is primarily what type of disease?", a: "A CHRONIC INFLAMMATORY disease, not just cholesterol buildup" },
+            { q: "What are 'foam cells'?", a: "Macrophages that have engulfed oxidized LDL - earliest visible sign of atherosclerosis" },
+            { q: "What is intermittent claudication?", a: "Leg cramping/pain during walking that is relieved by rest - hallmark of PAD" },
+            { q: "What does ABI stand for and measure?", a: "Ankle-Brachial Index - compares ankle BP to arm BP; ≤0.90 indicates PAD" },
+            { q: "What's the difference between stable and unstable angina?", a: "Stable = predictable with exertion, relieved by rest; Unstable = unpredictable, signals impending MI" },
+            { q: "What ECG change indicates STEMI?", a: "ST segment ELEVATION - indicates full-thickness myocardial damage" },
+            { q: "How long until ischemic myocardial injury becomes irreversible?", a: "Approximately 20 minutes" },
+            { q: "What lab marker is elevated in MI?", a: "Troponins (cardiac-specific proteins released when cells die)" },
+            { q: "What EF defines HFrEF?", a: "Ejection Fraction ≤40% (systolic/pumping problem)" },
+            { q: "What EF defines HFpEF?", a: "Ejection Fraction ≥50% (diastolic/filling problem)" },
+            { q: "What heart sound is heard in HFrEF?", a: "S3 gallop ('Ken-TUC-ky') - due to volume overload" },
+            { q: "What heart sound is heard in HFpEF?", a: "S4 gallop ('TEN-nes-see') - due to stiff ventricle" },
+            { q: "Left-sided heart failure causes what symptoms?", a: "Pulmonary symptoms - SOB, orthopnea, crackles, frothy cough" },
+            { q: "Right-sided heart failure causes what symptoms?", a: "Systemic venous congestion - peripheral edema, JVD, hepatomegaly, ascites" },
+            { q: "What does BNP indicate?", a: "Heart failure severity - released when the heart is stretched" }
+        ];
+
+        let currentCard = 0;
+        let cardFlipped = false;
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                q: "Which blood pressure category is defined as 130-139/80-89 mmHg?",
+                options: ["Normal", "Elevated", "Stage 1 Hypertension", "Stage 2 Hypertension"],
+                correct: 2,
+                explanation: "Stage 1 HTN is defined as systolic 130-139 OR diastolic 80-89 mmHg."
+            },
+            {
+                q: "What percentage of hypertension cases are considered 'primary' or 'essential'?",
+                options: ["50-60%", "70-80%", "90-95%", "99%"],
+                correct: 2,
+                explanation: "Primary (essential) hypertension accounts for 90-95% of all cases with no single identifiable cause."
+            },
+            {
+                q: "Which type of angina occurs unpredictably at rest due to coronary artery spasm?",
+                options: ["Stable angina", "Vasospastic (Prinzmetal's) angina", "Silent ischemia", "Unstable angina"],
+                correct: 1,
+                explanation: "Vasospastic (Prinzmetal's) angina occurs unpredictably at rest due to coronary artery spasm, not blockage."
+            },
+            {
+                q: "What is the hallmark symptom of Peripheral Artery Disease (PAD)?",
+                options: ["Chest pain", "Intermittent claudication", "Palpitations", "Syncope"],
+                correct: 1,
+                explanation: "Intermittent claudication is leg pain/cramping during walking that is relieved by rest - classic PAD symptom."
+            },
+            {
+                q: "An ABI of 0.85 indicates:",
+                options: ["Normal circulation", "Borderline PAD", "PAD is present", "Severe PAD emergency"],
+                correct: 2,
+                explanation: "ABI ≤0.90 indicates PAD is present. Normal is 1.0-1.3, borderline is 0.91-0.99."
+            },
+            {
+                q: "Which lab marker is elevated in myocardial infarction but NOT in stable angina?",
+                options: ["BNP", "Troponins", "CRP", "LDL"],
+                correct: 1,
+                explanation: "Troponins are released when myocardial cells die. In stable angina, there's no cell death so troponins stay normal."
+            },
+            {
+                q: "What ejection fraction defines HFrEF (Heart Failure with Reduced Ejection Fraction)?",
+                options: ["≤30%", "≤40%", "≤50%", "≤60%"],
+                correct: 1,
+                explanation: "HFrEF is defined as EF ≤40%, indicating the heart can't pump (contract) effectively."
+            },
+            {
+                q: "The S3 heart sound ('Ken-TUC-ky') is associated with:",
+                options: ["HFpEF - stiff ventricle", "HFrEF - volume overload", "Normal heart sounds", "Aortic stenosis"],
+                correct: 1,
+                explanation: "S3 gallop indicates volume overload in HFrEF. S4 is associated with HFpEF (stiff ventricle)."
+            },
+            {
+                q: "Which type of plaque is MORE likely to rupture and cause an acute MI?",
+                options: ["Stable plaque with thick fibrous cap", "Unstable plaque with thin fibrous cap", "Calcified plaque", "Small, early plaque"],
+                correct: 1,
+                explanation: "Unstable (vulnerable) plaques have thin fibrous caps and large lipid cores - prone to rupture!"
+            },
+            {
+                q: "What is the approximate time before ischemic myocardial injury becomes irreversible?",
+                options: ["5 minutes", "20 minutes", "1 hour", "6 hours"],
+                correct: 1,
+                explanation: "Heart cells can survive about 20 minutes of ischemia. After that, irreversible damage begins - 'time is muscle!'"
+            }
+        ];
+
+        let currentQuiz = 0;
+        let quizScore = 0;
+        let answered = false;
+
+        // Progress tracking
+        const completedSections = new Set();
+        const totalSections = 10;
+
+        function updateProgress() {
+            const percentage = (completedSections.size / totalSections) * 100;
+            document.getElementById('progress-fill').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = 
+                completedSections.size + ' of ' + totalSections + ' sections completed';
+        }
+
+        function markComplete(element, section) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            
+            if (checkbox.checked) {
+                element.classList.add('checked');
+                completedSections.add(section);
+            } else {
+                element.classList.remove('checked');
+                completedSections.delete(section);
+            }
+            updateProgress();
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+            
+            if (sectionId === 'flashcards') {
+                loadCard();
+            } else if (sectionId === 'quiz') {
+                loadQuestion();
+            }
+        }
+
+        // Card Toggle
+        function toggleCard(cardId) {
+            const card = document.getElementById(cardId);
+            card.classList.toggle('expanded');
+        }
+
+        // Flashcard Functions
+        function loadCard() {
+            document.getElementById('flash-q').textContent = flashcards[currentCard].q;
+            document.getElementById('flash-a').textContent = flashcards[currentCard].a;
+            document.getElementById('flash-counter').textContent = 
+                'Card ' + (currentCard + 1) + ' of ' + flashcards.length;
+            document.getElementById('flashcard').classList.remove('flipped');
+            cardFlipped = false;
+        }
+
+        function flipCard() {
+            document.getElementById('flashcard').classList.toggle('flipped');
+            cardFlipped = !cardFlipped;
+        }
+
+        function nextCard() {
+            currentCard = (currentCard + 1) % flashcards.length;
+            loadCard();
+        }
+
+        function prevCard() {
+            currentCard = (currentCard - 1 + flashcards.length) % flashcards.length;
+            loadCard();
+        }
+
+        // Quiz Functions
+        function loadQuestion() {
+            if (currentQuiz >= quizQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const q = quizQuestions[currentQuiz];
+            document.getElementById('quiz-q').textContent = 
+                'Question ' + (currentQuiz + 1) + ' of ' + quizQuestions.length + ': ' + q.q;
+            
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            q.options.forEach((opt, i) => {
+                const optDiv = document.createElement('div');
+                optDiv.className = 'quiz-option';
+                optDiv.innerHTML = '<span class="letter">' + letters[i] + '</span><span>' + opt + '</span>';
+                optDiv.onclick = () => selectAnswer(i);
+                optionsDiv.appendChild(optDiv);
+            });
+
+            document.getElementById('quiz-feedback').className = 'quiz-feedback';
+            document.getElementById('quiz-feedback').textContent = '';
+            document.getElementById('next-q-btn').style.display = 'none';
+            answered = false;
+        }
+
+        function selectAnswer(index) {
+            if (answered) return;
+            answered = true;
+
+            const q = quizQuestions[currentQuiz];
+            const options = document.querySelectorAll('.quiz-option');
+            const feedback = document.getElementById('quiz-feedback');
+
+            options.forEach((opt, i) => {
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== q.correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (index === q.correct) {
+                quizScore++;
+                feedback.className = 'quiz-feedback show correct';
+                feedback.innerHTML = '✅ Correct! ' + q.explanation;
+            } else {
+                feedback.className = 'quiz-feedback show incorrect';
+                feedback.innerHTML = '❌ Not quite. ' + q.explanation;
+            }
+
+            document.getElementById('next-q-btn').style.display = 'inline-block';
+        }
+
+        function nextQuestion() {
+            currentQuiz++;
+            loadQuestion();
+        }
+
+        function showResults() {
+            document.getElementById('quiz-container').style.display = 'none';
+            document.getElementById('quiz-score').style.display = 'block';
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let message = '';
+            if (percentage >= 90) message = '🌟 Outstanding!';
+            else if (percentage >= 70) message = '👏 Great job!';
+            else if (percentage >= 50) message = '📚 Keep studying!';
+            else message = '💪 Review and try again!';
+            
+            document.getElementById('final-score').innerHTML = 
+                'You scored <strong>' + quizScore + '/' + quizQuestions.length + 
+                '</strong> (' + percentage + '%)<br>' + message;
+        }
+
+        function restartQuiz() {
+            currentQuiz = 0;
+            quizScore = 0;
+            document.getElementById('quiz-container').style.display = 'block';
+            document.getElementById('quiz-score').style.display = 'none';
+            loadQuestion();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCard();
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
