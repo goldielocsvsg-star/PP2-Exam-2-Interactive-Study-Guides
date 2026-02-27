@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💊 Cardiac Meds NCLEX Exam — 60 Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --hot-pink:#ff2d8a;--pink:#ff69b4;--lpink:#ff85c0;--xpink:#2a1020;
+  --purple:#c084f5;--lpurple:#a855f7;--xlpurple:#1e1030;
+  --lavender:#2d1f4a;--mauve:#d8b4fe;
+  --bg-grad:linear-gradient(135deg,#0d0010 0%,#0f0820 40%,#080d1e 100%);
+  --card:#1a1228ee;--border-radius:18px;
+  --shadow:0 6px 30px rgba(255,45,138,0.15);
+  --shadow-hover:0 12px 40px rgba(192,132,245,0.25);
+  --correct:#22c55e;--incorrect:#ef4444;--missed:#f59e0b;
+  --text-primary:#f0e6ff;--text-secondary:#c4b5d4;--text-muted:#8b7a9e;
+  --font-head:'Fredoka One',cursive;
+  --font-body:'Nunito',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg-grad);min-height:100vh;background-attachment:fixed;color:var(--text-primary);position:relative}
+body::before{content:"";position:fixed;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(192,132,245,0.08) 0%,transparent 70%);pointer-events:none;z-index:0}
+body::after{content:"";position:fixed;bottom:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(255,45,138,0.07) 0%,transparent 70%);pointer-events:none;z-index:0}
+
+/* ========== HEADER ========== */
+header{
+  background:linear-gradient(135deg,#ff2d8a,#c026d3,#7c3aed);
+  color:#fff;padding:2.5rem 1.5rem 2rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+header::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.ticker{
+  position:absolute;top:0;left:0;width:100%;overflow:hidden;height:28px;
+  background:rgba(255,255,255,0.08);display:flex;align-items:center;
+}
+.ticker-inner{
+  display:flex;gap:2rem;animation:ticker 30s linear infinite;white-space:nowrap;
+  font-size:0.78rem;letter-spacing:0.5px;opacity:0.7;
+}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.header-body{position:relative;z-index:1;padding-top:0.5rem}
+header h1{font-family:var(--font-head);font-size:2.4rem;letter-spacing:1px;text-shadow:0 3px 10px rgba(0,0,0,0.3);line-height:1.2}
+header h1 span{color:#ffd1ec}
+header p{font-size:0.95rem;opacity:0.88;margin-top:0.5rem;font-weight:600}
+.header-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:0.6rem;margin-top:1rem}
+.hbadge{background:rgba(255,255,255,0.18);border:1.5px solid rgba(255,255,255,0.3);
+  border-radius:30px;padding:0.3rem 0.9rem;font-size:0.78rem;font-weight:700;letter-spacing:0.3px}
+
+/* ========== CONTAINER ========== */
+.container{max-width:900px;margin:0 auto;padding:1.5rem 1rem 3rem;position:relative;z-index:1}
+
+/* ========== SCORE CARD ========== */
+.score-card{
+  display:none;background:var(--card);border-radius:var(--border-radius);
+  padding:2rem;text-align:center;box-shadow:var(--shadow);margin-bottom:2rem;
+  border:2px solid #ff2d8a55;animation:popIn 0.5s ease;
+}
+.score-card.show{display:block}
+@keyframes popIn{0%{transform:scale(0.8);opacity:0}100%{transform:scale(1);opacity:1}}
+.score-emoji{font-size:3.5rem;display:block;margin-bottom:0.8rem}
+.score-big{font-family:var(--font-head);font-size:3rem;color:var(--hot-pink)}
+.score-pct{font-size:1rem;color:var(--text-muted);margin:0.3rem 0 1rem}
+.score-bar-wrap{background:#2d1f4a;border-radius:99px;height:18px;overflow:hidden;margin:0.8rem 0}
+.score-bar{height:100%;background:linear-gradient(90deg,var(--hot-pink),var(--purple));
+  border-radius:99px;transition:width 1.2s cubic-bezier(.4,0,.2,1);width:0}
+.score-breakdown{display:flex;justify-content:center;gap:1.5rem;margin-top:1rem;flex-wrap:wrap}
+.breakdown-item{text-align:center}
+.breakdown-num{font-family:var(--font-head);font-size:1.5rem}
+.breakdown-label{font-size:0.75rem;color:var(--text-muted);font-weight:700}
+.breakdown-item.c .breakdown-num{color:var(--correct)}
+.breakdown-item.i .breakdown-num{color:var(--incorrect)}
+.breakdown-item.u .breakdown-num{color:var(--missed)}
+
+/* ========== PROGRESS BAR ========== */
+.progress-wrap{
+  background:var(--card);border-radius:var(--border-radius);
+  padding:1.2rem 1.5rem;margin-bottom:1.2rem;
+  box-shadow:var(--shadow);border:1px solid #ff2d8a22;
+}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.7rem}
+.progress-label{font-family:var(--font-head);font-size:1rem;color:var(--hot-pink)}
+.progress-section-tag{font-size:0.8rem;color:var(--text-muted);font-weight:700;
+  background:#2d1f4a;border-radius:99px;padding:0.25rem 0.8rem}
+.prog-bar-bg{background:#2d1f4a;border-radius:99px;height:10px;overflow:hidden}
+.prog-bar-fill{height:100%;background:linear-gradient(90deg,var(--hot-pink),var(--purple));
+  border-radius:99px;transition:width 0.4s cubic-bezier(.4,0,.2,1);width:0}
+.prog-dots{display:flex;justify-content:center;flex-wrap:wrap;gap:4px;margin-top:0.8rem}
+.prog-dot{width:11px;height:11px;border-radius:50%;background:#2d1f4a;
+  border:1.5px solid #4a3060;transition:all 0.2s;cursor:pointer;flex-shrink:0}
+.prog-dot.active{background:var(--hot-pink);border-color:var(--hot-pink);
+  box-shadow:0 0 8px rgba(255,45,138,0.6);transform:scale(1.25)}
+.prog-dot.answered{background:#7c3aed;border-color:#a855f7}
+.prog-dot.correct-dot{background:var(--correct);border-color:var(--correct)}
+.prog-dot.incorrect-dot{background:var(--incorrect);border-color:var(--incorrect)}
+
+/* ========== SECTION LABEL ========== */
+.section-label{
+  display:inline-flex;align-items:center;gap:0.5rem;margin-bottom:0.8rem;
+  background:linear-gradient(135deg,var(--hot-pink),var(--purple));
+  color:#fff;border-radius:99px;padding:0.3rem 1rem;
+  font-family:var(--font-head);font-size:0.8rem;
+  box-shadow:0 3px 12px rgba(200,50,150,0.3);
+}
+
+/* ========== NAV BUTTONS ========== */
+.nav-row{display:flex;gap:1rem;margin-top:1.2rem;flex-wrap:wrap}
+.nav-btn{
+  flex:1;min-width:120px;padding:0.85rem 1.5rem;border:none;border-radius:99px;
+  font-family:var(--font-head);font-size:1rem;cursor:pointer;
+  transition:transform 0.2s,box-shadow 0.2s;letter-spacing:0.3px;
+}
+.nav-btn:disabled{opacity:0.3;cursor:default;transform:none !important}
+.btn-back{background:#2d1f4a;color:var(--text-secondary);border:2px solid #4a3060}
+.btn-back:not(:disabled):hover{transform:translateY(-2px);background:#3d2f5a}
+.btn-next{background:linear-gradient(135deg,var(--hot-pink),var(--purple));color:#fff;
+  box-shadow:0 4px 18px rgba(255,45,138,0.35)}
+.btn-next:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,45,138,0.5)}
+.btn-submit{background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;
+  box-shadow:0 4px 18px rgba(34,197,94,0.35)}
+.btn-submit:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(34,197,94,0.5)}
+.btn-review{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;
+  box-shadow:0 4px 18px rgba(124,58,237,0.35)}
+.btn-review:not(:disabled):hover{transform:translateY(-2px)}
+
+/* ========== QUESTION CARD ========== */
+.qcard{
+  background:var(--card);border-radius:var(--border-radius);
+  padding:1.5rem;margin-bottom:1.2rem;
+  box-shadow:var(--shadow);border-left:5px solid var(--pink);
+  transition:box-shadow 0.2s,transform 0.2s;
+  animation:slideIn 0.3s ease;
+}
+@keyframes slideIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+.qcard:hover{box-shadow:var(--shadow-hover);transform:translateY(-2px);border-color:#ff2d8a44}
+.qcard.sata-card{border-left-color:var(--purple)}
+.qcard.matrix-card{border-left-color:#7c3aed}
+.qcard.correct-card{border-left-color:var(--correct)}
+.qcard.incorrect-card{border-left-color:var(--incorrect)}
+
+.qheader{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.9rem}
+.qnum{font-family:var(--font-head);color:var(--hot-pink);font-size:1rem}
+.qbadge{font-size:0.72rem;font-weight:800;border-radius:99px;padding:0.25rem 0.8rem;letter-spacing:0.4px}
+.badge-mcq{background:#3d0a22;color:#ff85c0}
+.badge-sata{background:var(--xlpurple);color:#c084f5}
+.badge-matrix{background:#1e1040;color:#a78bfa}
+
+.qtext{font-size:0.97rem;line-height:1.65;font-weight:600;color:var(--text-primary);margin-bottom:1rem}
+.sata-note{
+  background:#1e1030;border-radius:10px;padding:0.5rem 1rem;
+  margin-bottom:0.9rem;font-size:0.82rem;color:#c084f5;font-weight:700;
+  border-left:3px solid #7c3aed;
+}
+
+/* MCQ / SATA Options */
+.option{
+  display:flex;align-items:flex-start;gap:0.75rem;
+  padding:0.7rem 1rem;border-radius:12px;margin-bottom:0.45rem;
+  cursor:pointer;transition:background 0.15s,border-color 0.15s;
+  border:2px solid transparent;background:#1e1530;
+}
+.option:hover{background:#2a1535;border-color:#ff69b4}
+.option.sel-active{background:#2d1f4a !important;border-color:var(--purple) !important;border-width:2px}
+.option input{margin-top:3px;cursor:pointer;accent-color:var(--hot-pink);width:16px;height:16px;flex-shrink:0}
+.option label{cursor:pointer;font-size:0.91rem;line-height:1.5;flex:1;color:var(--text-primary)}
+
+.option.opt-correct{background:#0d2818 !important;border-color:#22c55e !important}
+.option.opt-correct label{color:#4ade80;font-weight:700}
+.option.opt-incorrect{background:#2a0a0a !important;border-color:#ef4444 !important}
+.option.opt-incorrect label{color:#f87171;font-weight:700}
+.option.opt-missed{background:#2a1c00 !important;border-color:#f59e0b !important}
+.option.opt-missed label{color:#fbbf24;font-weight:700}
+
+/* Matrix */
+.matrix-wrap{overflow-x:auto;margin-top:0.5rem;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+table.matrix{width:100%;border-collapse:collapse;min-width:480px;font-size:0.84rem}
+.matrix thead tr{background:linear-gradient(135deg,var(--hot-pink),var(--purple))}
+.matrix thead th{color:#fff;padding:0.65rem 0.8rem;font-weight:700;text-align:center;font-size:0.82rem}
+.matrix thead th:first-child{text-align:left;min-width:140px}
+.matrix tbody tr{border-bottom:1px solid #2d1f4a}
+.matrix tbody tr:last-child{border-bottom:none}
+.matrix tbody tr:nth-child(even){background:#1e1530}
+.matrix tbody tr:hover td{background:#2a1535}
+.matrix tbody td{padding:0.6rem 0.8rem;text-align:center;vertical-align:middle}
+.matrix tbody td:first-child{text-align:left;font-weight:700;color:#d8b4fe;background:#2d1f4a !important}
+.matrix input[type=radio]{accent-color:#c084f5;cursor:pointer;width:17px;height:17px}
+
+/* Result row */
+.qresult{
+  display:none;margin-top:0.9rem;padding:0.6rem 1rem;border-radius:10px;
+  font-weight:700;font-size:0.88rem;
+}
+.qresult.show{display:block}
+.qresult.res-correct{background:#0d2818;color:#4ade80}
+.qresult.res-incorrect{background:#2a0a0a;color:#f87171}
+.qresult.res-partial{background:#2a1c00;color:#fbbf24}
+
+/* Rationale */
+.rationale{
+  display:none;margin-top:0.9rem;padding:1rem;border-radius:12px;
+  background:linear-gradient(135deg,#0d2018,#0a1f15);border-left:4px solid #22c55e;
+}
+.rationale.show{display:block}
+.rationale-title{font-weight:800;color:#4ade80;font-size:0.85rem;margin-bottom:0.4rem}
+.rationale p{font-size:0.88rem;line-height:1.6;color:var(--text-primary)}
+
+/* Matrix cell highlighting after submit */
+.matrix-correct-cell{background:#dcfce7 !important}
+.matrix-incorrect-cell{background:#fee2e2 !important}
+
+/* Answer key note */
+.correct-label::before{content:'✅ '}
+.incorrect-label::before{content:'❌ '}
+.missed-label::before{content:'⭐ Correct Answer: '}
+
+footer{text-align:center;padding:2rem;font-size:0.8rem;color:#7c5fa8;font-weight:600}
+
+@keyframes slideIn{0%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:translateY(0)}}
+
+/* Unanswered warning banner */
+.unanswered-warn{
+  background:#2a1c00;border:1.5px solid #f59e0b;border-radius:12px;
+  padding:0.7rem 1rem;margin-bottom:1rem;font-size:0.88rem;
+  color:#fbbf24;font-weight:700;display:none;
+}
+.unanswered-warn.show{display:block}
+
+/* Jump-to panel */
+.jump-label{text-align:center;font-size:0.75rem;color:var(--text-muted);
+  font-weight:700;margin-top:0.5rem;letter-spacing:0.3px}
+
+@media(max-width:600px){
+  header h1{font-size:1.6rem}
+  .matrix{font-size:0.75rem}
+  .matrix thead th,.matrix tbody td{padding:0.4rem 0.4rem}
+  .nav-btn{font-size:0.9rem;padding:0.75rem 1rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="ticker">
+    <div class="ticker-inner">
+      💊 NCLEX CARDIAC MEDS EXAM &nbsp;•&nbsp; 60 QUESTIONS &nbsp;•&nbsp; MCQ + SATA + MATRIX &nbsp;•&nbsp; @SophiaLaEstudiante &nbsp;•&nbsp; 💊 NCLEX CARDIAC MEDS EXAM &nbsp;•&nbsp; 60 QUESTIONS &nbsp;•&nbsp; MCQ + SATA + MATRIX &nbsp;•&nbsp; @SophiaLaEstudiante &nbsp;•&nbsp;
+    </div>
+  </div>
+  <div class="header-body">
+    <h1>💊 Cardiac Medications<br><span>NCLEX Practice Exam</span></h1>
+    <p>Application-Level Questions • Generic Names • Classifications • Pharmacology</p>
+    <div class="header-badges">
+      <span class="hbadge">❤️ Cardiac Theme</span>
+      <span class="hbadge">📝 60 Questions</span>
+      <span class="hbadge">🎯 NCLEX Application</span>
+      <span class="hbadge">✨ 38 MCQ &nbsp;|&nbsp; 15 SATA &nbsp;|&nbsp; 7 Matrix</span>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- SCORE CARD -->
+  <div class="score-card" id="scoreCard">
+    <span class="score-emoji" id="scoreEmoji">🏆</span>
+    <div class="score-big" id="scoreBig">—</div>
+    <div class="score-pct" id="scorePct">Calculating your score...</div>
+    <div class="score-bar-wrap"><div class="score-bar" id="scoreBarFill"></div></div>
+    <div class="score-breakdown">
+      <div class="breakdown-item c"><div class="breakdown-num" id="correctCount">0</div><div class="breakdown-label">CORRECT</div></div>
+      <div class="breakdown-item i"><div class="breakdown-num" id="incorrectCount">0</div><div class="breakdown-label">INCORRECT</div></div>
+      <div class="breakdown-item u"><div class="breakdown-num" id="unansweredCount">0</div><div class="breakdown-label">UNANSWERED</div></div>
+    </div>
+    <p style="margin-top:1rem;color:var(--text-muted);font-size:0.85rem;font-weight:600">Use the dot tracker below to jump to any question for review ↓</p>
+    <div class="nav-row" style="margin-top:1.2rem;justify-content:center">
+      <button class="nav-btn btn-review" onclick="reviewExam()">🔍 Review All Answers</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-top">
+      <span class="progress-label" id="progressLabel">Question 1 of 60</span>
+      <span class="progress-section-tag" id="progressSection">📚 Section 1: MCQ</span>
+    </div>
+    <div class="prog-bar-bg"><div class="prog-bar-fill" id="progBarFill"></div></div>
+    <div class="prog-dots" id="progDots"></div>
+    <div class="jump-label">Click any dot to jump to that question</div>
+  </div>
+
+  <!-- SINGLE QUESTION VIEW -->
+  <div id="questionView"></div>
+
+  <!-- REVIEW MODE -->
+  <div id="reviewMode" style="display:none">
+    <div id="reviewContainer"></div>
+  </div>
+
+</div>
+
+<footer>💊 Cardiac Medications NCLEX Practice Exam &nbsp;•&nbsp; @SophiaLaEstudiante &nbsp;•&nbsp; University of West Georgia BSN Cohort May 2027 &nbsp;•&nbsp; Study Hard, Nurse Smart! ❤️</footer>
+
+<script>
+/* ===============================================================
+   STATE
+=============================================================== */
+let currentIdx = 0;
+let examSubmitted = false;
+const answers = {};
+
+const QUESTIONS = [
+/* ===============================================================
+   SECTION 1: MULTIPLE CHOICE (Q1–Q38)
+=============================================================== */
+{
+  id:1,type:'mcq',
+  q:'A 58-year-old patient with hypertension is started on hydrochlorothiazide. The nurse understands that this medication belongs to which drug classification?',
+  opts:['A. Loop diuretic','B. Thiazide diuretic','C. Potassium-sparing diuretic','D. Aldosterone antagonist'],
+  correct:'B',
+  rationale:'Hydrochlorothiazide (HCTZ) is a thiazide diuretic. It acts on the distal convoluted tubule (DCT) to inhibit the sodium-chloride (Na-Cl) cotransporter, increasing sodium and water excretion. This is distinct from loop diuretics (furosemide), which act on the loop of Henle, and potassium-sparing/aldosterone antagonists (spironolactone), which act on the collecting duct.'
+},
+{
+  id:2,type:'mcq',
+  q:'Furosemide exerts its primary diuretic effect by blocking which transport mechanism?',
+  opts:['A. Na-Cl cotransporter in the distal tubule','B. Aldosterone receptors in the collecting duct','C. Na-K-2Cl cotransporter in the ascending loop of Henle','D. Aquaporin channels in the collecting duct'],
+  correct:'C',
+  rationale:'Furosemide is a loop diuretic that inhibits the Na-K-2Cl cotransporter in the thick ascending limb of the loop of Henle. This blocks reabsorption of sodium, potassium, and chloride, resulting in a large diuresis. Because it acts on the loop of Henle (site of 25% of sodium reabsorption), furosemide is one of the most potent diuretics available.'
+},
+{
+  id:3,type:'mcq',
+  q:'A nurse reviews the morning labs for a patient taking spironolactone for heart failure. The serum potassium is 6.2 mEq/L. The nurse correctly identifies this as:',
+  opts:['A. A therapeutic effect demonstrating drug efficacy','B. Mild hypokalemia requiring supplementation','C. A normal finding for patients on diuretics','D. Hyperkalemia — a serious adverse effect of spironolactone'],
+  correct:'D',
+  rationale:'Spironolactone is a potassium-sparing diuretic and aldosterone antagonist. By blocking aldosterone, it prevents potassium excretion, leading to hyperkalemia (K+ >5.5 mEq/L). A potassium of 6.2 mEq/L is dangerously elevated and can cause life-threatening cardiac arrhythmias. The nurse should hold the medication and notify the provider immediately.'
+},
+{
+  id:4,type:'mcq',
+  q:'A nurse is about to administer lisinopril to a patient when the patient reveals she is 14 weeks pregnant. What is the nurse\'s priority action?',
+  opts:['A. Administer the medication as ordered — hypertension poses more risk than the drug','B. Hold the medication and notify the provider immediately','C. Administer half the usual dose to minimize fetal risk','D. Continue administration and document the finding in the chart'],
+  correct:'B',
+  rationale:'ACE inhibitors (lisinopril, captopril, enalapril) are absolutely contraindicated in pregnancy (FDA Category D in 2nd/3rd trimester, formerly Category X). They cause fetal renal dysgenesis, oligohydramnios, skull hypoplasia, and neonatal renal failure. The nurse must withhold the medication and notify the provider so an alternative antihypertensive can be ordered.'
+},
+{
+  id:5,type:'mcq',
+  q:'A patient newly prescribed captopril for hypertension calls the clinic to report an annoying, tickling sensation in the throat causing a dry cough. The nurse\'s best response is:',
+  opts:['A. "This is a sign of allergic reaction — go to the ER immediately."','B. "This is a known side effect caused by the medication — notify your provider to discuss alternatives."','C. "Increase your fluid intake; the cough should resolve within 24 hours."','D. "Take an antihistamine to suppress the cough and continue the medication."'],
+  correct:'B',
+  rationale:'ACE inhibitors (captopril, lisinopril, enalapril) cause a persistent, dry, nonproductive cough in up to 10–20% of patients. This occurs because ACE inhibitors prevent the breakdown of bradykinin, which accumulates in the lungs and stimulates cough receptors. It is not a sign of allergic reaction (angioedema presents differently with swelling), but the patient should discuss switching to an ARB (valsartan, losartan) with the provider, as ARBs do not cause this effect.'
+},
+{
+  id:6,type:'mcq',
+  q:'Valsartan is prescribed for a patient with hypertension who cannot tolerate ACE inhibitors. The nurse correctly identifies valsartan as belonging to which drug class?',
+  opts:['A. ACE inhibitor','B. Beta-1 selective adrenergic blocker','C. Angiotensin II receptor blocker (ARB)','D. Dihydropyridine calcium channel blocker'],
+  correct:'C',
+  rationale:'Valsartan (and losartan) are angiotensin II receptor blockers (ARBs). Unlike ACE inhibitors, which prevent formation of angiotensin II, ARBs block angiotensin II at the AT1 receptor in blood vessels and the adrenal glands. They produce the same hemodynamic benefits as ACE inhibitors (vasodilation, reduced aldosterone secretion) without causing bradykinin accumulation, so they do not cause the dry cough associated with ACE inhibitors.'
+},
+{
+  id:7,type:'mcq',
+  q:'A 65-year-old patient with heart failure reports he was switched from lisinopril to losartan by his cardiologist due to intolerance. The nurse understands that ARBs are preferred over ACE inhibitors in patients who develop which adverse effect?',
+  opts:['A. Hyperkalemia','B. Peripheral edema and weight gain','C. Persistent dry nonproductive cough','D. First-dose orthostatic hypotension'],
+  correct:'C',
+  rationale:'The most common reason patients are switched from ACE inhibitors to ARBs is the persistent dry cough. Both drug classes can cause hyperkalemia (A) and hypotension (D), so these are not the differentiating factor. Peripheral edema (B) is associated with dihydropyridine calcium channel blockers. ARBs are the preferred alternative when patients are intolerant of ACE inhibitors specifically due to the bradykinin-mediated cough.'
+},
+{
+  id:8,type:'mcq',
+  q:'Nifedipine is prescribed for a patient with hypertension. The nurse understands that nifedipine is classified as which type of calcium channel blocker (CCB)?',
+  opts:['A. Non-dihydropyridine (rate-limiting)','B. Dihydropyridine (vascular-selective)','C. Beta-1 adrenergic antagonist','D. Alpha-1 adrenergic antagonist'],
+  correct:'B',
+  rationale:'Calcium channel blockers have two main subclasses: (1) Dihydropyridines (nifedipine, amlodipine, felodipine) — primarily cause arterial vasodilation with minimal effect on heart rate; (2) Non-dihydropyridines (verapamil, diltiazem) — slow heart rate and have negative inotropic effects. Nifedipine is a dihydropyridine CCB used primarily for hypertension and angina. It primarily relaxes vascular smooth muscle.'
+},
+{
+  id:9,type:'mcq',
+  q:'A patient taking amlodipine for hypertension reports bilateral ankle swelling. The nurse\'s priority action is to:',
+  opts:['A. Stop the medication immediately and call 911','B. Educate the patient that this is an expected, common side effect of the medication class','C. Assess for signs of heart failure exacerbation','D. Obtain an echocardiogram order'],
+  correct:'B',
+  rationale:'Peripheral edema (ankle swelling) is a common, expected side effect of dihydropyridine calcium channel blockers like amlodipine and nifedipine. It occurs due to arterial vasodilation that shifts fluid into interstitial spaces — it is NOT caused by sodium and water retention (as in heart failure). While the nurse should assess the patient, the priority is education that this is expected and not dangerous. The provider may adjust the dose or add a diuretic.'
+},
+{
+  id:10,type:'mcq',
+  q:'Which calcium channel blocker is CONTRAINDICATED in a patient with decompensated heart failure with reduced ejection fraction (HFrEF)?',
+  opts:['A. Amlodipine','B. Nifedipine','C. Verapamil','D. Felodipine'],
+  correct:'C',
+  rationale:'Non-dihydropyridine CCBs — verapamil and diltiazem — are contraindicated in HFrEF because of their significant negative inotropic (decreased contractility) and chronotropic (decreased heart rate) effects, which can precipitate acute decompensation. Amlodipine and felodipine (dihydropyridines) have minimal negative inotropic effects and may be used cautiously in HF for hypertension management when other agents are insufficient.'
+},
+{
+  id:11,type:'mcq',
+  q:'Metoprolol succinate (Toprol-XL) is ordered for a patient post-myocardial infarction. The nurse correctly classifies this medication as:',
+  opts:['A. Non-selective beta-adrenergic blocker','B. Alpha and beta adrenergic blocker','C. Cardioselective (beta-1 selective) beta-blocker','D. Potassium channel blocker'],
+  correct:'C',
+  rationale:'Metoprolol is a cardioselective beta-1 selective adrenergic blocker. It preferentially blocks beta-1 receptors (found predominantly in the heart), decreasing heart rate, contractility, and blood pressure. Because it is beta-1 selective, it has less bronchospasm risk than non-selective beta-blockers (like propranolol or carvedilol), making it safer for patients with mild reactive airway disease. Post-MI, beta-blockers reduce mortality by decreasing myocardial oxygen demand.'
+},
+{
+  id:12,type:'mcq',
+  q:'The nurse is preparing to administer metoprolol tartrate to a patient. The morning vital signs are: HR 52 bpm, BP 118/72 mmHg, RR 16/min. Which action is most appropriate?',
+  opts:['A. Administer the medication — all vitals are within acceptable parameters','B. Hold the medication and notify the provider — the heart rate is below safe threshold','C. Administer half the dose due to the low heart rate','D. Hold the medication and check again in 30 minutes before calling the provider'],
+  correct:'B',
+  rationale:'Beta-blockers should be withheld when the heart rate is below 60 bpm (per standard protocol) and the provider should be notified. Administering metoprolol to a patient with HR 52 bpm risks causing significant bradycardia or heart block. The nurse should never independently reduce a dose (C) — that requires a provider order. Waiting 30 minutes (D) is not appropriate; notification should be immediate.'
+},
+{
+  id:13,type:'mcq',
+  q:'A nurse is administering IV labetalol to a patient in hypertensive emergency. Labetalol differs from atenolol because labetalol:',
+  opts:['A. Is beta-1 selective and has rapid oral onset','B. Blocks both alpha-1 and beta (beta-1 and beta-2) adrenergic receptors','C. Has no effect on heart rate or contractility','D. Is primarily used for supraventricular tachycardia management'],
+  correct:'B',
+  rationale:'Labetalol is a combined alpha-1 and non-selective beta (beta-1 and beta-2) adrenergic blocker. Alpha-1 blockade causes vasodilation; beta-1 blockade reduces heart rate and contractility. This dual mechanism makes labetalol effective in hypertensive emergencies where rapid blood pressure reduction is needed. Atenolol and metoprolol are cardioselective (beta-1 only). Carvedilol also has alpha + beta blockade and is used in heart failure.'
+},
+{
+  id:14,type:'mcq',
+  q:'A patient asks the nurse why they are prescribed atorvastatin after being diagnosed with peripheral arterial disease (PAD). The nurse\'s best response is:',
+  opts:['A. "It will dissolve the clots in your leg arteries."','B. "It acts as a blood thinner to prevent clots from forming."','C. "It reduces LDL cholesterol levels and stabilizes atherosclerotic plaques, reducing cardiovascular risk."','D. "It improves blood flow by dilating blood vessels in your legs."'],
+  correct:'C',
+  rationale:'Atorvastatin is a statin (HMG-CoA reductase inhibitor) that reduces LDL cholesterol synthesis in the liver and has pleiotropic effects including stabilization of atherosclerotic plaques. In PAD and cardiovascular disease, statins reduce risk of MI, stroke, and death by slowing atherosclerotic progression and reducing plaque vulnerability to rupture. They do not dissolve clots (thrombolytics), thin blood (anticoagulants), or dilate vessels (vasodilators).'
+},
+{
+  id:15,type:'mcq',
+  q:'A patient on atorvastatin therapy calls reporting severe bilateral thigh and calf pain for 3 days and noticing that their urine appears dark brown. The nurse\'s priority action is:',
+  opts:['A. Reassure the patient that muscle cramps are a minor expected side effect','B. Advise the patient to take the medication at bedtime to reduce symptoms','C. Instruct the patient to hold the medication and go to the emergency department immediately','D. Recommend that the patient increase fluid intake to 3 L/day and call back in 2 days'],
+  correct:'C',
+  rationale:'The combination of severe muscle pain (myalgia) and dark brown urine (myoglobinuria) indicates rhabdomyolysis — a life-threatening adverse effect of statins in which massive muscle breakdown releases myoglobin into the bloodstream, which can cause acute kidney injury. This is a medical emergency. The statin should be immediately discontinued and the patient needs urgent evaluation, IV fluids, and renal monitoring. CK levels will be markedly elevated.'
+},
+{
+  id:16,type:'mcq',
+  q:'Aspirin is prescribed for a patient following an acute MI. The nurse explains that aspirin exerts its antiplatelet effect by which mechanism?',
+  opts:['A. Reversibly blocking the ADP receptor (P2Y12) on platelets','B. Irreversibly inhibiting cyclooxygenase (COX-1 and COX-2), preventing thromboxane A2 synthesis','C. Activating antithrombin III to inhibit factor Xa and thrombin','D. Binding to glycoprotein IIb/IIIa receptors on platelets'],
+  correct:'B',
+  rationale:'Aspirin irreversibly acetylates cyclooxygenase enzymes (COX-1 and COX-2), preventing the synthesis of thromboxane A2 (TXA2) from arachidonic acid. TXA2 is a potent promoter of platelet aggregation and vasoconstriction. Because platelets cannot synthesize new COX (they have no nucleus), the antiplatelet effect lasts the platelet\'s lifetime (~7–10 days). This is why aspirin must be stopped 7–10 days before elective surgery.'
+},
+{
+  id:17,type:'mcq',
+  q:'Clopidogrel is added to the medication regimen of a post-MI patient already taking aspirin. The nurse correctly identifies clopidogrel\'s drug classification as a(n):',
+  opts:['A. Anticoagulant — inhibits clotting factors in the coagulation cascade','B. Thrombolytic — dissolves existing clots','C. Antiplatelet agent — prevents platelet aggregation','D. Fibrinolytic — activates plasminogen to break down fibrin'],
+  correct:'C',
+  rationale:'Clopidogrel is an antiplatelet agent (P2Y12 ADP receptor antagonist). It irreversibly blocks the ADP receptor on platelets, preventing ADP-mediated platelet activation and aggregation. When combined with aspirin (dual antiplatelet therapy — DAPT), clopidogrel significantly reduces recurrent cardiovascular events post-MI and post-stenting. Unlike anticoagulants, it does not affect PT/INR or aPTT.'
+},
+{
+  id:18,type:'mcq',
+  q:'A patient is receiving a heparin infusion for deep vein thrombosis. The 6-hour aPTT result is 215 seconds (therapeutic range: 60–100 seconds). The nurse anticipates that the provider will most likely order:',
+  opts:['A. Increase the heparin infusion rate by 20%','B. Administer vitamin K 10 mg IV','C. Administer protamine sulfate as an antidote','D. Immediately transition to oral warfarin'],
+  correct:'C',
+  rationale:'Protamine sulfate is the specific antidote for heparin overdose. An aPTT of 215 seconds (>3× the upper therapeutic limit) indicates significant heparin toxicity with high risk of life-threatening bleeding. Protamine sulfate (a positively charged protein) forms an inactive complex with heparin (negatively charged). Vitamin K (B) is the antidote for warfarin, not heparin. Transitioning to warfarin (D) during active heparin toxicity would be contraindicated.'
+},
+{
+  id:19,type:'mcq',
+  q:'A patient with peripheral arterial disease (PAD) is prescribed cilostazol. The nurse reviews the patient\'s medical history and identifies which condition as an absolute contraindication to this medication?',
+  opts:['A. Type 2 diabetes mellitus','B. Hypertension controlled with amlodipine','C. Heart failure of any severity or degree','D. Chronic kidney disease Stage 2'],
+  correct:'C',
+  rationale:'Cilostazol is a phosphodiesterase III (PDE3) inhibitor that increases cAMP, reducing platelet aggregation and causing vasodilation. It is absolutely contraindicated in ANY class of heart failure (even NYHA Class I) because PDE3 inhibitors have been associated with increased mortality in heart failure patients (as seen with milrinone). This is a critical contraindication — if a patient with PAD has concurrent HF, cilostazol must not be prescribed.'
+},
+{
+  id:20,type:'mcq',
+  q:'A patient with acute MI is receiving IV nitroglycerin. The nurse establishes which assessment parameter as the highest priority to monitor during administration?',
+  opts:['A. Oxygen saturation via pulse oximetry','B. Blood pressure — to detect hypotension','C. Respiratory rate — to detect respiratory depression','D. Urine output — to assess renal perfusion'],
+  correct:'B',
+  rationale:'Nitroglycerin causes venodilation (reducing preload) and arterial dilation (reducing afterload), which can produce significant hypotension. This is particularly dangerous in patients with inferior MI who may also have right ventricular involvement — hypotension in these patients can be profound and life-threatening. Blood pressure must be monitored continuously during IV nitroglycerin administration, and the infusion should be held for SBP <90 mmHg.'
+},
+{
+  id:21,type:'mcq',
+  q:'A patient who received morphine sulfate during an acute MI asks the nurse, "Why did I get morphine? I wasn\'t in that much pain." The nurse\'s best response is:',
+  opts:['A. "Morphine prevents blood clots from forming in your coronary arteries."','B. "Morphine reduces your heart\'s workload by relieving pain and anxiety, decreasing preload, and reducing myocardial oxygen demand."','C. "Morphine increases oxygen delivery directly to your heart muscle."','D. "Morphine is given to prevent irregular heart rhythms during a heart attack."'],
+  correct:'B',
+  rationale:'In the context of acute MI, morphine sulfate serves multiple therapeutic purposes: (1) Pain relief reduces sympathetic nervous system activation (decreasing catecholamine release, HR, and BP); (2) Venodilation reduces preload; (3) Reduced anxiety decreases myocardial oxygen demand. All of these effects help limit infarct size. Note: Current guidelines have questioned routine morphine use in NSTEMI due to potential interactions with antiplatelet agents, but it remains used for STEMI patients with refractory pain.'
+},
+{
+  id:22,type:'mcq',
+  q:'A patient is receiving alteplase for an acute STEMI. Thirty minutes into the infusion, the patient develops a sudden severe headache, becomes confused, and the nurse notes unequal pupils. The nurse\'s IMMEDIATE priority action is:',
+  opts:['A. Reposition the patient and dim the lights to reduce headache','B. Stop the alteplase infusion immediately and notify the provider — signs of intracranial hemorrhage','C. Administer morphine 2 mg IV for the headache and reassess','D. Increase the infusion rate to achieve faster coronary reperfusion'],
+  correct:'B',
+  rationale:'A sudden severe headache ("thunderclap"), acute confusion, and unequal pupils are classic signs of intracranial hemorrhage (ICH) — the most feared complication of thrombolytic therapy. The alteplase infusion must be stopped IMMEDIATELY. ICH is a life-threatening emergency requiring neurosurgical consultation, head CT, and consideration of fresh frozen plasma or cryoprecipitate. Stopping the infusion is the absolute first action regardless of reperfusion status.'
+},
+{
+  id:23,type:'mcq',
+  q:'Tenecteplase (TNKase) is ordered for a patient with acute STEMI. The nurse understands that tenecteplase differs from alteplase primarily in that tenecteplase:',
+  opts:['A. Is administered as a 90-minute continuous IV infusion','B. Is given as a single weight-based IV bolus over 5–10 seconds','C. Does not require any anticoagulation after administration','D. Must be reconstituted and administered intramuscularly'],
+  correct:'B',
+  rationale:'Tenecteplase is a modified form of alteplase with longer half-life and greater fibrin specificity, allowing it to be administered as a single IV bolus (weight-based dosing over 5–10 seconds). This is a significant practical advantage over alteplase, which requires a 90-minute continuous infusion. Tenecteplase\'s single-bolus administration makes it ideal for out-of-hospital or prehospital STEMI treatment. Both agents require concurrent anticoagulation with heparin.'
+},
+{
+  id:24,type:'mcq',
+  q:'A nurse assesses a patient who has been on digoxin therapy for heart failure. Which finding most strongly suggests digoxin toxicity?',
+  opts:['A. Blood pressure of 148/92 mmHg and peripheral edema','B. Heart rate of 52 bpm with nausea, vomiting, and yellow-green halos around lights','C. Serum potassium of 4.2 mEq/L and digoxin level of 1.1 ng/mL','D. Respiratory rate of 20/min with bilateral crackles'],
+  correct:'B',
+  rationale:'Classic signs of digoxin toxicity include: bradycardia or heart block (most dangerous cardiac effect), gastrointestinal effects (nausea, vomiting, anorexia — often early signs), and visual disturbances (yellow-green "halo" around lights — characteristic of digoxin toxicity). A digoxin level >2 ng/mL, combined with hypokalemia, hypomagnesemia, or renal insufficiency, increases toxicity risk. Option C shows a therapeutic level (0.5–2 ng/mL) and normal potassium — no concern.'
+},
+{
+  id:25,type:'mcq',
+  q:'Before administering the morning dose of digoxin, the nurse checks laboratory results and finds serum potassium is 2.6 mEq/L. The nurse\'s priority action is:',
+  opts:['A. Administer the digoxin as ordered — hypokalemia is unrelated to digoxin safety','B. Hold the digoxin and notify the provider — hypokalemia significantly increases digoxin toxicity risk','C. Administer the digoxin along with an oral potassium supplement simultaneously','D. Double the digoxin dose to compensate for reduced drug effect in hypokalemia'],
+  correct:'B',
+  rationale:'Hypokalemia is a major risk factor for digoxin toxicity. Potassium and digoxin compete for the same binding site on the Na-K-ATPase pump; when potassium is low, digoxin binds more readily, increasing its toxic effects. A serum K+ of 2.6 mEq/L with concurrent digoxin creates a high risk of life-threatening arrhythmias. The digoxin must be withheld, the provider notified, and potassium replacement ordered before resuming digoxin.'
+},
+{
+  id:26,type:'mcq',
+  q:'A patient in acute decompensated heart failure is prescribed IV dobutamine. The nurse identifies dobutamine as which type of drug?',
+  opts:['A. Cardiac glycoside — inhibits Na-K-ATPase','B. Calcium channel blocker — reduces myocardial calcium influx','C. Sympathomimetic agent — selectively stimulates beta-1 adrenergic receptors','D. Phosphodiesterase III inhibitor — increases cAMP by preventing breakdown'],
+  correct:'C',
+  rationale:'Dobutamine is a synthetic catecholamine that acts as a selective beta-1 adrenergic receptor agonist. By stimulating beta-1 receptors in the heart, it increases myocardial contractility (positive inotropic effect) and cardiac output, which is critical in acute decompensated HF with low CO/cardiogenic shock. Unlike dopamine, dobutamine predominantly increases contractility without causing significant vasoconstriction at standard doses. It does NOT inhibit PDE (that would be milrinone).'
+},
+{
+  id:27,type:'mcq',
+  q:'A patient is prescribed enoxaparin (Lovenox) for DVT prophylaxis post-cardiac surgery. The nurse prepares to administer this medication by which route?',
+  opts:['A. Intravenous infusion via central line only','B. Intramuscular injection into the deltoid','C. Subcutaneous injection into the anterolateral or posterolateral abdominal wall','D. Oral administration with a full glass of water'],
+  correct:'C',
+  rationale:'Enoxaparin is a low-molecular-weight heparin (LMWH) that must be administered subcutaneously — typically into the anterolateral or posterolateral abdominal wall. Key administration points: (1) Do NOT expel the air bubble from prefilled syringes; (2) Do NOT aspirate before injection; (3) Do NOT rub the site after injection (causes bruising/hematoma); (4) Rotate injection sites; (5) Insert needle at 90° for abdominal sites. Unlike unfractionated heparin, enoxaparin does not require aPTT monitoring for standard dosing.'
+},
+{
+  id:28,type:'mcq',
+  q:'A patient on warfarin therapy for atrial fibrillation has an INR result of 4.9. The patient denies any active bleeding. The nurse anticipates the provider\'s most likely order will be:',
+  opts:['A. Administer protamine sulfate IV immediately','B. Transfuse 2 units of packed red blood cells','C. Hold warfarin and administer a low dose of vitamin K','D. Increase the warfarin dose — the INR is not yet at therapeutic level'],
+  correct:'C',
+  rationale:'For a supratherapeutic INR (4.9) without active bleeding, the standard approach is to hold warfarin and consider administering a low oral or IV dose of vitamin K to partially reverse the anticoagulation. Protamine sulfate (A) reverses heparin, NOT warfarin. The therapeutic INR range for atrial fibrillation is 2–3; at 4.9, bleeding risk is significantly elevated. If there were active major bleeding, the management would escalate to IV vitamin K plus fresh frozen plasma or 4-factor PCC.'
+},
+{
+  id:29,type:'mcq',
+  q:'Dabigatran etexilate (Pradaxa) is prescribed for a patient with atrial fibrillation. The nurse is most concerned about which assessment finding requiring dose adjustment or potential contraindication?',
+  opts:['A. Hypertension with SBP 148 mmHg','B. Creatinine clearance of 22 mL/min indicating severe renal impairment','C. Elevated liver enzymes (AST/ALT twice the upper limit of normal)','D. Serum sodium of 134 mEq/L'],
+  correct:'B',
+  rationale:'Dabigatran is a direct thrombin inhibitor that is approximately 80% renally eliminated. Severe renal impairment (CrCl <30 mL/min) leads to drug accumulation, significantly increasing bleeding risk. Dabigatran is contraindicated in severe renal impairment and requires dose adjustment with moderate impairment. This is why renal function must be assessed before initiating dabigatran and monitored periodically. Unlike warfarin, dabigatran requires no routine INR monitoring but does require renal function assessment.'
+},
+{
+  id:30,type:'mcq',
+  q:'A patient on a heparin infusion develops severe bleeding at a surgical site. The nurse will prepare which agent as the specific antidote to reverse heparin anticoagulation?',
+  opts:['A. Vitamin K 10 mg IV slow infusion','B. Andexanet alfa (Andexxa)','C. Idarucizumab (Praxbind)','D. Protamine sulfate'],
+  correct:'D',
+  rationale:'Protamine sulfate is the specific antidote for both unfractionated heparin (UFH) and low-molecular-weight heparins (LMWH). Protamine is a strongly positively-charged protein that binds to heparin (negatively charged), forming an inactive complex that is removed by the reticuloendothelial system. Andexanet alfa (B) reverses factor Xa inhibitors (apixaban, rivaroxaban). Idarucizumab (C) reverses dabigatran. Vitamin K (A) reverses warfarin. Knowing which antidote goes with which anticoagulant is critical for patient safety.'
+},
+{
+  id:31,type:'mcq',
+  q:'Omeprazole is included in the medication protocol for a patient admitted with acute STEMI who is receiving dual antiplatelet therapy (aspirin + clopidogrel). The nurse understands the rationale for omeprazole is to:',
+  opts:['A. Reduce myocardial oxygen demand by decreasing heart rate','B. Protect the gastric mucosa from gastrointestinal bleeding associated with dual antiplatelet therapy','C. Treat acid reflux caused by nitroglycerin administration','D. Enhance the absorption and bioavailability of clopidogrel'],
+  correct:'B',
+  rationale:'Dual antiplatelet therapy (DAPT) with aspirin and clopidogrel significantly increases risk of gastrointestinal (GI) bleeding because (1) aspirin inhibits prostaglandin synthesis, reducing gastric mucosal protection, and (2) antiplatelet effects impair hemostasis. Proton pump inhibitors (PPIs) like omeprazole reduce gastric acid secretion and protect the GI mucosa, substantially reducing DAPT-associated GI bleed risk. Note: Evidence suggests omeprazole may slightly reduce clopidogrel efficacy (via CYP2C19 competition), but current guidelines still support PPI use with DAPT.'
+},
+{
+  id:32,type:'mcq',
+  q:'Carvedilol is prescribed for a patient with stable heart failure. The nurse differentiates carvedilol from atenolol by recognizing that carvedilol:',
+  opts:['A. Is a beta-1 selective blocker used only for hypertension','B. Is a non-selective beta-blocker with additional alpha-1 adrenergic blocking properties','C. Has no negative chronotropic effect and is safe in bradycardia','D. Is classified as a Class III antiarrhythmic with potassium channel blocking activity'],
+  correct:'B',
+  rationale:'Carvedilol (Coreg) is a non-selective beta-adrenergic blocker (blocks beta-1 AND beta-2) with additional alpha-1 adrenergic blocking properties. Alpha-1 blockade produces peripheral vasodilation, reducing afterload. This makes carvedilol particularly beneficial in heart failure management. Atenolol and metoprolol are beta-1 selective (cardioselective) only. Beta-2 blockade in carvedilol means it must be used cautiously in patients with reactive airway disease (bronchospasm risk).'
+},
+{
+  id:33,type:'mcq',
+  q:'A patient with acute decompensated heart failure is receiving IV enalaprilat (enalapril injectable). The nurse identifies which parameter as the priority monitoring need during administration?',
+  opts:['A. Serum sodium — enalapril causes hypernatremia','B. Blood pressure — risk of severe first-dose hypotension','C. Heart rate — enalapril causes significant bradycardia','D. Serum calcium — ACE inhibitors deplete calcium stores'],
+  correct:'B',
+  rationale:'IV enalaprilat (the active metabolite of enalapril) can cause severe first-dose hypotension, especially in patients with acute HF who are already volume-depleted or on diuretics. Blood pressure must be monitored continuously during administration. This is a well-known risk of ACE inhibitors in general, but particularly pronounced with IV administration in HF. The nurse should have IV fluids readily available and be prepared to hold or slow the infusion if SBP drops significantly.'
+},
+{
+  id:34,type:'mcq',
+  q:'A patient with chronic heart failure is prescribed diclofenac by an orthopedic surgeon for osteoarthritis pain. The cardiologist requests the medication be reviewed. The nurse understands the primary concern is that diclofenac (an NSAID):',
+  opts:['A. Increases the risk of digoxin toxicity by reducing renal clearance','B. Causes sodium and water retention, increases blood pressure, and worsens heart failure decompensation','C. Causes severe hypokalemia that counteracts the effects of spironolactone','D. Significantly reduces the antiplatelet effectiveness of aspirin therapy'],
+  correct:'B',
+  rationale:'NSAIDs (including diclofenac, ibuprofen, naproxen) inhibit prostaglandin synthesis in the kidneys, which causes sodium and water retention, increased systemic vascular resistance, and elevated blood pressure. In heart failure patients, this can precipitate acute decompensation, hospitalizations, and increase mortality. NSAIDs are generally contraindicated or strongly discouraged in heart failure. They also reduce the efficacy of diuretics, ACE inhibitors, and ARBs used to manage HF. Option A is a real concern with aminoglycosides; option D applies to high-dose ibuprofen with aspirin but is not the primary concern here.'
+},
+{
+  id:35,type:'mcq',
+  q:'Apixaban (Eliquis) is initiated in a patient with non-valvular atrial fibrillation for stroke prevention. The nurse correctly identifies apixaban\'s mechanism of action and classification as a:',
+  opts:['A. Direct thrombin inhibitor — blocks thrombin (Factor IIa) directly','B. Direct oral anticoagulant (DOAC) — specifically a direct Factor Xa inhibitor','C. Vitamin K antagonist — inhibits vitamin K-dependent clotting factor synthesis','D. Low-molecular-weight heparin — activates antithrombin III to inhibit factor Xa'],
+  correct:'B',
+  rationale:'Apixaban is a direct oral anticoagulant (DOAC) that directly and selectively inhibits Factor Xa. By inhibiting Factor Xa, it blocks the common pathway of the coagulation cascade, preventing conversion of prothrombin to thrombin and ultimately inhibiting fibrin clot formation. Other Factor Xa inhibitors include rivaroxaban (Xarelto) and edoxaban. Direct thrombin inhibitors (A) include dabigatran. Vitamin K antagonists (C) include warfarin. Antidote for apixaban/rivaroxaban is andexanet alfa (Andexxa).'
+},
+{
+  id:36,type:'mcq',
+  q:'A patient on rivaroxaban (Xarelto) asks the nurse, "Why don\'t I need to get frequent blood tests like my neighbor who takes warfarin?" The nurse\'s best explanation is:',
+  opts:['A. "Rivaroxaban has predictable pharmacokinetics with a consistent dose-response relationship that does not require routine coagulation monitoring."','B. "Rivaroxaban is less potent than warfarin, so monitoring is not needed."','C. "Rivaroxaban is new and the monitoring tests haven\'t been developed yet."','D. "You will actually need monthly anti-Xa level monitoring, similar to INR for warfarin."'],
+  correct:'A',
+  rationale:'Direct oral anticoagulants (DOACs) like rivaroxaban and apixaban have predictable, consistent pharmacokinetics with a stable dose-response relationship, unlike warfarin which has narrow therapeutic index and is affected by many foods and drug interactions requiring frequent INR monitoring. DOACs are taken at fixed doses without routine coagulation monitoring in most patients. However, renal function should still be assessed periodically (especially for dabigatran), and anti-Xa levels can be checked in specific situations (bleeding, extremes of weight).'
+},
+{
+  id:37,type:'mcq',
+  q:'A patient receiving high-dose IV furosemide for acute heart failure reports sudden onset ringing in both ears and difficulty hearing. The nurse recognizes this as which adverse effect and takes which action?',
+  opts:['A. Expected side effect of diuresis; document and continue infusion','B. Ototoxicity — a dose-dependent adverse effect of loop diuretics; hold infusion and notify provider immediately','C. Hyponatremia-induced tinnitus; administer oral sodium supplementation','D. A sign of allergic reaction to furosemide; administer diphenhydramine and continue the infusion'],
+  correct:'B',
+  rationale:'Ototoxicity (tinnitus, hearing loss, vertigo) is a known dose-dependent adverse effect of loop diuretics, particularly furosemide and ethacrynic acid. It is more common with rapid IV administration of high doses. The mechanism involves inhibition of ion transport in the cochlea. The infusion should be stopped immediately and the provider notified. In some cases, the hearing loss may be irreversible, particularly with ethacrynic acid. Bumetanide has less ototoxicity than furosemide.'
+},
+{
+  id:38,type:'mcq',
+  q:'A nurse is preparing medication education for patients on various anticoagulants. Which patient would specifically require routine INR monitoring as part of their medication management?',
+  opts:['A. Patient on dabigatran etexilate (Pradaxa) for DVT treatment','B. Patient on warfarin (Coumadin) for mechanical heart valve','C. Patient on apixaban (Eliquis) for atrial fibrillation','D. Patient on rivaroxaban (Xarelto) for PE treatment'],
+  correct:'B',
+  rationale:'Warfarin is a vitamin K antagonist with a narrow therapeutic index, extensive food and drug interactions, and significant inter-individual variability in dose requirements. INR monitoring is essential to ensure the patient remains within the therapeutic range (INR 2–3 for most indications; 2.5–3.5 for mechanical heart valves). Dabigatran (A), apixaban (C), and rivaroxaban (D) are DOACs with predictable pharmacokinetics that do NOT require routine INR monitoring — this is one of their primary advantages over warfarin.'
+},
+
+/* ===============================================================
+   SECTION 2: SATA (Q39–Q53)
+=============================================================== */
+{
+  id:39,type:'sata',
+  q:'A patient is being discharged from the cardiac unit with a new prescription for lisinopril 10 mg daily for hypertension. Which discharge instructions should the nurse include? Select all that apply.',
+  opts:['A. Rise slowly from sitting or lying positions to reduce the risk of dizziness and falls','B. Report any swelling of the face, lips, tongue, or throat to the emergency department immediately','C. Avoid salt substitutes that contain potassium chloride','D. Expect a productive cough — this means the medication is working effectively','E. Do not take this medication if you are pregnant or planning to become pregnant','F. It is safe to take ibuprofen or naproxen freely for pain while on this medication'],
+  correct:['A','B','C','E'],
+  rationale:'Correct answers: A — orthostatic hypotension is a risk, especially with the first dose; B — angioedema is a rare but life-threatening adverse effect requiring emergency care; C — ACE inhibitors cause potassium retention, and potassium-containing salt substitutes can cause dangerous hyperkalemia; E — ACE inhibitors are absolutely contraindicated in pregnancy. Incorrect: D — the cough from ACE inhibitors is DRY and nonproductive, not a sign of efficacy; F — NSAIDs reduce ACE inhibitor effectiveness and increase renal dysfunction risk.'
+},
+{
+  id:40,type:'sata',
+  q:'A nurse is caring for a patient receiving IV furosemide 80 mg for acute heart failure. Which nursing interventions are appropriate for this patient? Select all that apply.',
+  opts:['A. Monitor serum electrolytes, particularly potassium and sodium','B. Weigh the patient daily at the same time, in the same clothes','C. Strict monitoring of intake and output every shift','D. Encourage potassium-rich foods such as bananas, oranges, and potatoes','E. Assess for signs and symptoms of ototoxicity during rapid IV infusion','F. Administer concurrently with spironolactone without concern for potassium imbalance'],
+  correct:['A','B','C','D','E'],
+  rationale:'Correct answers: A — furosemide causes hypokalemia, hyponatremia, and hypomagnesemia; B — daily weight is the best indicator of fluid status changes; C — strict I&O monitors diuretic response; D — dietary potassium replacement is important with loop diuretic therapy; E — ototoxicity (tinnitus, hearing loss) can occur with rapid IV administration. Incorrect: F — furosemide causes hypokalemia; spironolactone causes hyperkalemia. Combination can balance potassium, but concurrent use requires close monitoring — it is not without concern.'
+},
+{
+  id:41,type:'sata',
+  q:'A patient with stable angina is prescribed sublingual nitroglycerin (NTG 0.4 mg SL) for acute episodes. Which patient education points should the nurse include? Select all that apply.',
+  opts:['A. Take one tablet at the onset of chest pain; if not relieved in 5 minutes, take a second; repeat up to 3 doses total','B. Store nitroglycerin tablets in the original dark amber glass bottle away from heat, light, and moisture','C. Call 911 if chest pain is not relieved after 3 doses taken 5 minutes apart','D. Sit or lie down before taking the medication to prevent falls from hypotension','E. Swallow the tablet whole with water for best absorption','F. A throbbing headache after taking nitroglycerin is expected and due to cerebral vasodilation'],
+  correct:['A','B','C','D','F'],
+  rationale:'Correct: A — standard NTG dosing: one q5 min × 3 doses; B — heat, light, and moisture degrade nitroglycerin; original dark glass container is essential; C — unrelieved chest pain after 3 doses = possible MI, call 911; D — nitroglycerin causes significant hypotension; patients should be sitting/lying; F — headache is the most common side effect due to cerebral vasodilation. Incorrect: E — nitroglycerin SL must be placed UNDER the tongue or buccally for sublingual absorption, NOT swallowed.'
+},
+{
+  id:42,type:'sata',
+  q:'A patient with acute DVT is receiving a continuous heparin infusion. Which nursing interventions are appropriate? Select all that apply.',
+  opts:['A. Check aPTT every 6 hours per protocol and adjust rate according to the nomogram','B. Assess the patient every 2–4 hours for signs of bleeding (urine, stool, IV sites, neurological changes)','C. Ensure protamine sulfate is available on the unit as the antidote','D. Administer all scheduled IM injections at alternate sites to maintain the medication schedule','E. Monitor platelet counts daily to detect heparin-induced thrombocytopenia (HIT)','F. Use an infusion pump to administer heparin — never administer by gravity drip'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — aPTT monitoring is essential to maintain therapeutic anticoagulation; B — continuous bleeding assessment is paramount; C — protamine sulfate must be available as antidote; E — HIT (heparin-induced thrombocytopenia) is a serious complication causing paradoxical thrombosis; platelet monitoring is essential; F — heparin infusions must always use an infusion pump for precise dosing. Incorrect: D — IM injections are CONTRAINDICATED in anticoagulated patients due to hematoma risk.'
+},
+{
+  id:43,type:'sata',
+  q:'Before administering the 0800 dose of digoxin to a patient with heart failure, which assessments should the nurse perform? Select all that apply.',
+  opts:['A. Assess the apical pulse for one full minute before administration','B. Review the most recent serum potassium level','C. Check the most recent serum digoxin level','D. Assess the patient\'s current blood glucose level','E. Assess the patient for signs and symptoms of digoxin toxicity','F. Review the most recent serum magnesium level'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — hold digoxin and notify provider if apical HR <60 bpm; B — hypokalemia markedly increases digoxin toxicity risk; C — therapeutic range is 0.5–2 ng/mL (0.5–0.9 ng/mL for HF); E — assess for nausea, vomiting, visual changes, and arrhythmias before giving each dose; F — hypomagnesemia also increases digoxin toxicity risk. Incorrect: D — blood glucose is not directly relevant to digoxin safety assessment.'
+},
+{
+  id:44,type:'sata',
+  q:'A patient anticoagulated with warfarin for mechanical heart valve replacement is preparing for discharge. Which statements by the patient indicate correct understanding of warfarin therapy? Select all that apply.',
+  opts:['A. "I will have my INR checked regularly as scheduled by my provider."','B. "I can eat as many leafy green vegetables as I want since I\'m on a blood thinner."','C. "I will call my provider immediately if I notice unusual bruising, blood in my urine, or black tarry stools."','D. "I should avoid aspirin, ibuprofen, and other NSAIDs unless my provider approves them."','E. "I will tell every healthcare provider, dentist, and surgeon that I take warfarin."','F. "I can stop taking warfarin when my heart valve is working properly."'],
+  correct:['A','C','D','E'],
+  rationale:'Correct: A — regular INR monitoring is essential for warfarin safety; C — these are signs of bleeding requiring immediate notification; D — aspirin and NSAIDs increase bleeding risk significantly when combined with warfarin; E — warfarin has critical interactions with many medications and procedures. Incorrect: B — vitamin K (abundant in leafy greens) antagonizes warfarin; patients should maintain CONSISTENT vitamin K intake, not increase it; F — patients with mechanical heart valves require lifelong anticoagulation — stopping warfarin risks valve thrombosis and stroke.'
+},
+{
+  id:45,type:'sata',
+  q:'The nurse is reviewing adverse effects of spironolactone with a student nurse. Which adverse effects associated with spironolactone should be included in the teaching? Select all that apply.',
+  opts:['A. Hyperkalemia — potentially life-threatening','B. Gynecomastia (breast tissue enlargement) in male patients','C. Menstrual irregularities in female patients','D. Hypokalemia — requiring potassium supplementation','E. Metabolic acidosis (hyperchloremic)','F. Orthostatic hypotension'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — spironolactone is potassium-SPARING, causing hyperkalemia (not hypokalemia); B — spironolactone blocks androgen receptors, causing gynecomastia and sexual dysfunction in men; C — androgen receptor blockade causes menstrual irregularities; E — spironolactone causes mild hyperchloremic metabolic acidosis due to aldosterone antagonism; F — as a diuretic, it can cause hypotension. Incorrect: D — spironolactone RETAINS potassium (hypokalemia is the opposite of what occurs — it is a risk WITH other diuretics like furosemide, which is often why they are combined).'
+},
+{
+  id:46,type:'sata',
+  q:'A nurse is reviewing the medical history before administering metoprolol succinate. Which conditions represent contraindications or precautions requiring provider notification before administration? Select all that apply.',
+  opts:['A. Second- or third-degree AV heart block','B. Cardiogenic shock','C. Symptomatic bradycardia (HR <60 bpm)','D. Controlled hypertension with BP 130/80 mmHg','E. Acute decompensated heart failure (active fluid overload, wet HF)','F. Severe reactive airway disease (status asthmaticus)'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — beta-blockers further impair AV conduction and are contraindicated in 2nd/3rd degree block; B — cardiogenic shock is a contraindication due to negative inotropic/chronotropic effects; C — administration would worsen bradycardia; E — beta-blockers should be withheld or dose-reduced in acute decompensated HF (although they are beneficial in stable HF); F — even cardioselective beta-blockers can cause bronchoconstriction in severe asthma. Incorrect: D — controlled hypertension is actually an indication for metoprolol, not a contraindication.'
+},
+{
+  id:47,type:'sata',
+  q:'The nurse is providing education to a patient newly prescribed atorvastatin 40 mg for hyperlipidemia and coronary artery disease. Which instructions should be included? Select all that apply.',
+  opts:['A. "Report any unexplained muscle pain, tenderness, weakness, or dark urine to your provider immediately — these may indicate a serious muscle condition."','B. "Take atorvastatin with grapefruit juice to improve absorption."','C. "Limit alcohol consumption while on this medication — alcohol increases the risk of liver damage."','D. "Continue taking this medication even when your cholesterol levels look normal — it provides protection beyond just cholesterol reduction."','E. "Report any yellowing of the skin or eyes (jaundice), or upper right abdominal pain — these may indicate liver problems."','F. "Statin therapy alone will control your cardiovascular risk — diet and exercise changes are not necessary."'],
+  correct:['A','C','D','E'],
+  rationale:'Correct: A — myopathy and rhabdomyolysis are serious statin adverse effects requiring immediate reporting; C — alcohol increases hepatotoxicity risk; D — statins have pleiotropic cardiovascular benefits beyond LDL reduction; E — hepatotoxicity signs should be reported. Incorrect: B — grapefruit juice INHIBITS CYP3A4, markedly increasing atorvastatin blood levels and toxicity risk — AVOID grapefruit; F — lifestyle modifications (diet, exercise, smoking cessation) are essential components of cardiovascular risk reduction regardless of statin therapy.'
+},
+{
+  id:48,type:'sata',
+  q:'A patient admitted for acute coronary syndrome is started on clopidogrel (Plavix) in addition to aspirin. Which nursing considerations are appropriate for this patient? Select all that apply.',
+  opts:['A. Assess for and report any signs of unusual or excessive bleeding','B. Instruct the patient to inform all providers and the dentist about this medication; it should be held 5–7 days before elective surgery','C. Administer with aspirin as ordered — combination antiplatelet therapy is standard post-ACS','D. Monitor INR levels weekly to assess therapeutic anticoagulation','E. Assess for thrombocytopenic purpura (TTP) — a rare but life-threatening complication','F. Educate the patient not to discontinue clopidogrel abruptly without provider guidance, especially if a coronary stent is in place'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — bleeding is the major risk with antiplatelet therapy; B — clopidogrel causes irreversible platelet inhibition; surgical bleeding risk requires 5–7 day hold; C — DAPT is the standard of care post-ACS/stenting; E — TTP (thrombotic thrombocytopenic purpura) is a rare but serious adverse effect of clopidogrel; F — abrupt discontinuation of DAPT after coronary stenting can precipitate in-stent thrombosis and MI. Incorrect: D — clopidogrel is an antiplatelet agent, NOT an anticoagulant; INR is not used to monitor antiplatelet therapy.'
+},
+{
+  id:49,type:'sata',
+  q:'The emergency department physician orders alteplase for a patient presenting with acute STEMI. Before administering the thrombolytic, the nurse screens the patient for absolute contraindications. Which findings are absolute contraindications to alteplase therapy? Select all that apply.',
+  opts:['A. Intracranial surgery, serious head trauma, or stroke within the previous 3 months','B. Active internal bleeding (excluding normal menses)','C. Prior history of hemorrhagic stroke at any time','D. Blood pressure of 138/88 mmHg on admission','E. Severe uncontrolled hypertension — SBP >180 mmHg or DBP >110 mmHg not responsive to therapy','F. Suspected aortic dissection'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct absolute contraindications to thrombolytic therapy: A — recent intracranial surgery/trauma/ischemic stroke markedly increases ICH risk; B — active bleeding is an absolute contraindication; C — hemorrhagic stroke at ANY time is an absolute contraindication; E — severe uncontrolled hypertension increases ICH risk significantly; F — thrombolytics in aortic dissection can be fatal (bleeding into the dissection). Incorrect: D — a BP of 138/88 mmHg is elevated but NOT an absolute contraindication; thrombolytics may still be used for STEMI at this BP level.'
+},
+{
+  id:50,type:'sata',
+  q:'A patient presents with acute decompensated heart failure with severe pulmonary edema. The nurse anticipates orders for which medications that may be used in this acute setting? Select all that apply.',
+  opts:['A. IV dobutamine — for inotropic support in patients with low cardiac output','B. IV furosemide — for rapid diuresis and fluid removal','C. IV nitroglycerin — for venodilation to reduce preload','D. Cilostazol — to improve peripheral circulation and reduce symptoms','E. IV morphine sulfate — to reduce anxiety, preload, and respiratory distress','F. IV enalaprilat — for afterload reduction in select patients with preserved renal function'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — dobutamine increases contractility in cardiogenic shock/low CO states; B — IV furosemide is first-line for pulmonary edema; C — IV NTG reduces preload rapidly; E — morphine reduces preload, anxiety, and sympathetic drive in acute decompensation; F — IV enalaprilat can be used for afterload reduction. Incorrect: D — cilostazol is ABSOLUTELY CONTRAINDICATED in all heart failure classes. This is a critical safety point. Using cilostazol in HF has been associated with increased mortality.'
+},
+{
+  id:51,type:'sata',
+  q:'A nurse is preparing to administer a prefilled subcutaneous syringe of enoxaparin 40 mg to a patient post-cardiac catheterization. Which actions reflect correct administration technique? Select all that apply.',
+  opts:['A. Select the anterolateral or posterolateral abdominal wall as the injection site','B. Do NOT expel the air bubble present in the prefilled syringe before administration','C. Vigorously rub the injection site in a circular motion after withdrawing the needle','D. Rotate injection sites and document location with each administration','E. Insert the needle at a 90° angle for the abdominal subcutaneous site','F. Hold the skin fold throughout the injection and until the needle is withdrawn'],
+  correct:['A','B','D','E','F'],
+  rationale:'Correct: A — the abdomen is the recommended site (avoid 2 inches around the navel); B — the air bubble in prefilled enoxaparin syringes ensures full dose delivery and should NOT be expelled; D — site rotation prevents lipohypertrophy and bruising; E — 90° angle is correct for abdominal SubQ injections; F — maintaining the skin fold reduces bruising. Incorrect: C — the injection site should NEVER be rubbed after enoxaparin administration — rubbing causes tissue trauma, hematoma formation, and bruising. Do not aspirate before injection either.'
+},
+{
+  id:52,type:'sata',
+  q:'A patient is being discharged following a myocardial infarction on low-dose aspirin 81 mg daily for secondary prevention. Which teaching points should the nurse include? Select all that apply.',
+  opts:['A. Take aspirin with food or a full glass of water to reduce gastrointestinal irritation','B. Report black, tarry stools or coffee-ground emesis to your provider immediately — these indicate gastrointestinal bleeding','C. Avoid taking other NSAIDs (ibuprofen, naproxen) regularly while on aspirin therapy','D. If you develop ringing in your ears (tinnitus), stop taking aspirin and contact your provider','E. Aspirin is safe to take throughout pregnancy at any dose without concern','F. Inform all healthcare providers and your dentist that you take aspirin daily'],
+  correct:['A','B','C','D','F'],
+  rationale:'Correct: A — aspirin is a GI irritant; taking with food reduces stomach upset; B — black tarry stools = melena indicating GI bleed; C — concurrent NSAID use increases GI bleed risk and NSAIDs may competitively interfere with aspirin\'s COX binding; D — tinnitus suggests aspirin toxicity/overdose; F — aspirin affects bleeding time and is important for all providers to know. Incorrect: E — aspirin use in pregnancy is associated with risks especially in the third trimester (premature closure of ductus arteriosus, risk of neonatal bleeding); it requires physician guidance.'
+},
+{
+  id:53,type:'sata',
+  q:'A patient in cardiogenic shock is receiving IV dobutamine. Which nursing interventions are appropriate for this patient? Select all that apply.',
+  opts:['A. Administer via infusion pump at the ordered rate in mcg/kg/min','B. Continuously monitor heart rate, blood pressure, and cardiac rhythm','C. Assess for tachycardia and arrhythmias — dobutamine can precipitate these','D. Administer as a rapid IV bolus to achieve quicker hemodynamic effect','E. Monitor urine output as an indicator of cardiac output and end-organ perfusion','F. Assess peripheral perfusion — skin color, temperature, capillary refill'],
+  correct:['A','B','C','E','F'],
+  rationale:'Correct: A — dobutamine must be administered via infusion pump for precise weight-based dosing; B — continuous hemodynamic monitoring is essential due to vasoactive effects; C — dobutamine\'s beta-1 stimulation can cause tachycardia and precipitate arrhythmias; E — urine output reflects cardiac output and tissue perfusion; F — peripheral perfusion reflects end-organ response to therapy. Incorrect: D — dobutamine is NEVER given as an IV bolus push; it must be administered as a continuous infusion. Bolus administration would cause dangerous arrhythmias and hemodynamic instability.'
+},
+
+/* ===============================================================
+   SECTION 3: MATRIX QUESTIONS (Q54–Q60)
+=============================================================== */
+{
+  id:54,type:'matrix',
+  q:'The nurse is reviewing diuretic classifications. For each diuretic listed below, select the correct drug classification.',
+  cols:['Loop Diuretic','Thiazide Diuretic','Potassium-Sparing Diuretic'],
+  rows:[
+    {label:'Furosemide',correct:'Loop Diuretic'},
+    {label:'Hydrochlorothiazide (HCTZ)',correct:'Thiazide Diuretic'},
+    {label:'Spironolactone',correct:'Potassium-Sparing Diuretic'},
+    {label:'Bumetanide',correct:'Loop Diuretic'},
+    {label:'Torsemide',correct:'Loop Diuretic'}
+  ],
+  rationale:'Loop diuretics (furosemide, bumetanide, torsemide) act on the thick ascending loop of Henle inhibiting Na-K-2Cl cotransporter. Thiazide diuretics (HCTZ) act on the distal convoluted tubule inhibiting Na-Cl cotransporter. Potassium-sparing diuretics (spironolactone) act on the collecting duct by blocking aldosterone receptors — they retain potassium while promoting sodium excretion. Loop diuretics are most potent; thiazides are moderate; potassium-sparing are weakest alone but valuable for potassium conservation.'
+},
+{
+  id:55,type:'matrix',
+  q:'A nurse educator is reviewing anticoagulant antidotes. For each anticoagulant medication, select its specific reversal agent or antidote.',
+  cols:['Protamine Sulfate','Vitamin K','Idarucizumab','Andexanet Alfa'],
+  rows:[
+    {label:'Heparin (UFH)',correct:'Protamine Sulfate'},
+    {label:'Enoxaparin (LMWH)',correct:'Protamine Sulfate'},
+    {label:'Warfarin (Coumadin)',correct:'Vitamin K'},
+    {label:'Dabigatran (Pradaxa)',correct:'Idarucizumab'},
+    {label:'Apixaban (Eliquis)',correct:'Andexanet Alfa'}
+  ],
+  rationale:'Protamine sulfate reverses both UFH and LMWH (partial reversal ~60–80% for LMWH). Vitamin K reverses warfarin by restoring vitamin K-dependent clotting factor synthesis (works in 6–24 hours; FFP for acute reversal). Idarucizumab (Praxbind) is the specific monoclonal antibody antidote for dabigatran (direct thrombin inhibitor). Andexanet alfa (Andexxa) reverses Factor Xa inhibitors (apixaban, rivaroxaban). Knowing the correct antidote for each anticoagulant is critical for managing bleeding emergencies.'
+},
+{
+  id:56,type:'matrix',
+  q:'The nurse is teaching nursing students about adverse effects of commonly prescribed cardiac medications. For each medication, identify its most characteristic adverse effect.',
+  cols:['Persistent Dry Cough','Hypokalemia','Hyperkalemia','Peripheral Edema','Myopathy / Rhabdomyolysis'],
+  rows:[
+    {label:'Lisinopril (ACE Inhibitor)',correct:'Persistent Dry Cough'},
+    {label:'Furosemide (Loop Diuretic)',correct:'Hypokalemia'},
+    {label:'Spironolactone (K+-Sparing)',correct:'Hyperkalemia'},
+    {label:'Amlodipine (Dihydropyridine CCB)',correct:'Peripheral Edema'},
+    {label:'Atorvastatin (Statin)',correct:'Myopathy / Rhabdomyolysis'}
+  ],
+  rationale:'Lisinopril — dry cough (bradykinin accumulation). Furosemide — hypokalemia (loop diuresis washes out K+). Spironolactone — hyperkalemia (retains K+ by blocking aldosterone). Amlodipine — peripheral edema (arterial vasodilation shifts fluid to interstitium; not fluid retention). Atorvastatin — myopathy/rhabdomyolysis (HMG-CoA reductase inhibition affects muscle CoQ10; manifests as muscle pain, elevated CK, myoglobinuria). Each of these represents the signature adverse effect for clinical identification and nursing intervention.'
+},
+{
+  id:57,type:'matrix',
+  q:'The nurse is reviewing mechanisms of action for anticoagulant and antiplatelet medications. For each medication, select its primary mechanism of action.',
+  cols:['Irreversibly Inhibits COX','Blocks P2Y12 ADP Receptor','Activates Antithrombin III','Inhibits Vitamin K-Dependent Factors','Activates Plasminogen → Plasmin'],
+  rows:[
+    {label:'Aspirin',correct:'Irreversibly Inhibits COX'},
+    {label:'Clopidogrel',correct:'Blocks P2Y12 ADP Receptor'},
+    {label:'Heparin',correct:'Activates Antithrombin III'},
+    {label:'Warfarin',correct:'Inhibits Vitamin K-Dependent Factors'},
+    {label:'Alteplase (tPA)',correct:'Activates Plasminogen → Plasmin'}
+  ],
+  rationale:'Aspirin — irreversibly acetylates COX-1/COX-2, preventing TXA2 synthesis and platelet aggregation. Clopidogrel — irreversibly blocks ADP receptor (P2Y12) on platelets, inhibiting ADP-mediated platelet activation. Heparin — binds antithrombin III, enhancing its inactivation of thrombin (IIa) and factor Xa by ~1000-fold. Warfarin — inhibits vitamin K epoxide reductase, reducing synthesis of Factors II, VII, IX, X, and Proteins C & S. Alteplase — a recombinant tissue plasminogen activator (tPA) that converts plasminogen to plasmin, which degrades fibrin clots (thrombolysis).'
+},
+{
+  id:58,type:'matrix',
+  q:'The nurse is reviewing parameters for withholding cardiac medications. For each medication, identify the primary assessment finding that would cause the nurse to hold the medication and notify the provider.',
+  cols:['Heart Rate < 60 bpm','SBP < 90 mmHg','Serum K+ > 5.5 mEq/L','Active Signs of Bleeding','Supratherapeutic INR (> 3.0)'],
+  rows:[
+    {label:'Metoprolol (Beta-Blocker)',correct:'Heart Rate < 60 bpm'},
+    {label:'Nitroglycerin (IV Infusion)',correct:'SBP < 90 mmHg'},
+    {label:'Spironolactone',correct:'Serum K+ > 5.5 mEq/L'},
+    {label:'Heparin Infusion',correct:'Active Signs of Bleeding'},
+    {label:'Warfarin',correct:'Supratherapeutic INR (> 3.0)'}
+  ],
+  rationale:'Metoprolol — hold for HR <60 (bradycardia risk). Nitroglycerin IV — hold for SBP <90 (severe hypotension risk). Spironolactone — hold for K+ >5.5 (life-threatening hyperkalemia risk; can cause fatal arrhythmias). Heparin — hold/notify for active bleeding (therapeutic anticoagulation with active hemorrhage is life-threatening). Warfarin — hold for supratherapeutic INR to prevent hemorrhagic complications (therapeutic range is typically INR 2–3). These parameters are among the most high-yield NCLEX safety nursing assessments.'
+},
+{
+  id:59,type:'matrix',
+  q:'The nurse is educating a student nurse about beta-adrenergic blocking drugs used in cardiac care. For each beta-blocker, identify the correct receptor selectivity profile.',
+  cols:['Beta-1 Selective (Cardioselective) Only','Non-Selective Beta (Beta-1 + Beta-2) Only','Combined Alpha-1 + Non-Selective Beta Blocker'],
+  rows:[
+    {label:'Metoprolol (Lopressor / Toprol-XL)',correct:'Beta-1 Selective (Cardioselective) Only'},
+    {label:'Atenolol (Tenormin)',correct:'Beta-1 Selective (Cardioselective) Only'},
+    {label:'Carvedilol (Coreg)',correct:'Combined Alpha-1 + Non-Selective Beta Blocker'},
+    {label:'Labetalol (Trandate)',correct:'Combined Alpha-1 + Non-Selective Beta Blocker'}
+  ],
+  rationale:'Beta-1 selective (cardioselective): Metoprolol, atenolol. These primarily block cardiac beta-1 receptors with less effect on bronchial and vascular beta-2 receptors — safer (not safe) in mild asthma/COPD. Combined alpha-1 + beta blockers: Carvedilol, labetalol. Alpha-1 blockade adds vasodilation (reduced afterload) — making them particularly useful in heart failure (carvedilol) and hypertensive emergencies (labetalol IV). Cardioselectivity is RELATIVE, not absolute — all beta-blockers can cause bronchospasm in high doses or severe reactive airway disease.'
+},
+{
+  id:60,type:'matrix',
+  q:'The nurse is studying cardiac medication indications. For each medication, select the PRIMARY therapeutic indication listed.',
+  cols:['Angina / Acute Coronary Syndrome','Heart Failure (Chronic Management)','Peripheral Arterial Disease (PAD)','Anticoagulation / VTE Treatment','Acute HF — Inotropic Support'],
+  rows:[
+    {label:'Sublingual Nitroglycerin',correct:'Angina / Acute Coronary Syndrome'},
+    {label:'Digoxin',correct:'Heart Failure (Chronic Management)'},
+    {label:'Cilostazol',correct:'Peripheral Arterial Disease (PAD)'},
+    {label:'Enoxaparin (Lovenox)',correct:'Anticoagulation / VTE Treatment'},
+    {label:'Dobutamine',correct:'Acute HF — Inotropic Support'}
+  ],
+  rationale:'Sublingual nitroglycerin — first-line agent for acute angina attacks and used in ACS for preload reduction. Digoxin — used in chronic HF to improve symptoms and exercise tolerance by increasing contractility (positive inotrope) and reducing ventricular rate in atrial fibrillation. Cilostazol — FDA-approved for claudication symptoms in PAD by inhibiting PDE3, increasing cAMP, vasodilating, and reducing platelet aggregation. Enoxaparin — LMWH used for DVT/PE treatment and prophylaxis, ACS anticoagulation. Dobutamine — IV inotrope for acute decompensated HF with low cardiac output/cardiogenic shock.'
+}
+];
+
+function buildCard(q, forReview=false){
+  const sectionLabel = q.type==='mcq' ? '📚 Section 1 — Multiple Choice'
+    : q.type==='sata' ? '✅ Section 2 — Select All That Apply'
+    : '📊 Section 3 — Matrix / Chart';
+  let html = `<div class="qcard ${q.type}-card" id="qcard${q.id}">`;
+  html += `<div class="section-label">${sectionLabel}</div>`;
+  html += `<div class="qheader"><span class="qnum">Question ${q.id} of ${QUESTIONS.length}</span>`;
+  if(q.type==='mcq') html+=`<span class="qbadge badge-mcq">Multiple Choice</span>`;
+  if(q.type==='sata') html+=`<span class="qbadge badge-sata">SATA</span>`;
+  if(q.type==='matrix') html+=`<span class="qbadge badge-matrix">Matrix</span>`;
+  html += `</div><div class="qtext">${q.q}</div>`;
+  if(q.type==='sata'){
+    html+=`<div class="sata-note">📌 Select ALL options that apply. NCLEX requires ALL correct and NO incorrect selections for full credit.</div>`;
+  }
+  const savedAns = answers[q.id];
+  const submitted = examSubmitted || forReview;
+  if(q.type==='mcq'){
+    q.opts.forEach(opt=>{
+      const letter=opt.charAt(0);
+      const isChecked = savedAns===letter;
+      let cls='option';
+      if(submitted){
+        if(letter===q.correct && isChecked) cls='option opt-correct';
+        else if(letter!==q.correct && isChecked) cls='option opt-incorrect';
+        else if(letter===q.correct && !isChecked) cls='option opt-missed';
+      } else {
+        if(isChecked) cls+=' sel-active';
+      }
+      html+=`<div class="${cls}" id="opt${q.id}${letter}" ${submitted?'':' onclick="selectMCQ('+q.id+',\''+letter+'\',this)"'}>
+        <input type="radio" name="q${q.id}" id="r${q.id}${letter}" value="${letter}" ${isChecked?'checked':''} ${submitted?'disabled':''}>
+        <label for="r${q.id}${letter}">${opt}</label></div>`;
+    });
+  }
+  if(q.type==='sata'){
+    const savedArr = savedAns || [];
+    q.opts.forEach(opt=>{
+      const letter=opt.charAt(0);
+      const isChecked = savedArr.includes(letter);
+      let cls='option';
+      if(submitted){
+        if(q.correct.includes(letter)&&isChecked) cls='option opt-correct';
+        else if(!q.correct.includes(letter)&&isChecked) cls='option opt-incorrect';
+        else if(q.correct.includes(letter)&&!isChecked) cls='option opt-missed';
+      } else {
+        if(isChecked) cls+=' sel-active';
+      }
+      html+=`<div class="${cls}" id="opt${q.id}${letter}">
+        <input type="checkbox" name="q${q.id}" id="cb${q.id}${letter}" value="${letter}" ${isChecked?'checked':''} ${submitted?'disabled':''}
+          ${submitted?'':` onchange="saveSATA(${q.id})"`}>
+        <label for="cb${q.id}${letter}">${opt}</label></div>`;
+    });
+  }
+  if(q.type==='matrix'){
+    const savedRows = savedAns || {};
+    html+=`<div class="matrix-wrap"><table class="matrix" id="matrix${q.id}"><thead><tr><th>Medication</th>`;
+    q.cols.forEach(col=>html+=`<th>${col}</th>`);
+    html+=`</tr></thead><tbody>`;
+    q.rows.forEach((row,ri)=>{
+      const sel = savedRows[ri];
+      let rowStyle='';
+      if(submitted){
+        if(sel===row.correct) rowStyle='background:#0d2818';
+        else if(sel) rowStyle='background:#2a0a0a';
+        else rowStyle='background:#2a1c00';
+      }
+      html+=`<tr id="mrow${q.id}_${ri}" style="${rowStyle}"><td>${row.label}</td>`;
+      q.cols.forEach(col=>{
+        const safeId=`mr${q.id}_${ri}_${col.replace(/[^a-z0-9]/gi,'_')}`;
+        const isChecked = sel===col;
+        html+=`<td><input type="radio" name="mq${q.id}_${ri}" id="${safeId}" value="${col}"
+          ${isChecked?'checked':''} ${submitted?'disabled':''}
+          ${submitted?'':` onchange="saveMatrix(${q.id},${ri},this)"`}></td>`;
+      });
+      html+=`</tr>`;
+    });
+    html+=`</tbody></table></div>`;
+  }
+  if(submitted){
+    const res = gradeOne(q);
+    let resCls='qresult show ', resTxt='';
+    if(res==='correct'){resCls+='res-correct';resTxt='✅ Correct!';}
+    else if(res==='unanswered'){resCls+='res-incorrect';resTxt='⚠️ Not answered';}
+    else{resCls+='res-incorrect';resTxt=q.type==='sata'?'❌ Incorrect. 🟢 Correct  🔴 Wrong selection  🟡 Missed correct answer':'❌ Incorrect. See rationale below.';}
+    html+=`<div class="${resCls}">${resTxt}</div>`;
+    html+=`<div class="rationale show"><div class="rationale-title">💡 Rationale</div><p>${q.rationale}</p></div>`;
+  } else {
+    html+=`<div class="qresult" id="qres${q.id}"></div>`;
+  }
+  html+=`</div>`;
+  return html;
+}
+
+function selectMCQ(qid, letter, divEl){
+  answers[qid]=letter;
+  document.querySelectorAll(`[id^="opt${qid}"]`).forEach(o=>{o.classList.remove('sel-active');o.style.border='';o.style.background='';});
+  divEl.classList.add('sel-active');
+  divEl.style.border='2px solid var(--purple)';
+  divEl.style.background='#2d1f4a';
+  document.getElementById(`r${qid}${letter}`).checked=true;
+  updateDot(qid-1);
+}
+function saveSATA(qid){
+  const checked=[...document.querySelectorAll(`input[name="q${qid}"]:checked`)].map(i=>i.value);
+  answers[qid]=checked;
+  updateDot(qid-1);
+}
+function saveMatrix(qid,ri,input){
+  if(!answers[qid]) answers[qid]={};
+  answers[qid][ri]=input.value;
+  updateDot(qid-1);
+}
+function isAnswered(qidx){
+  const q=QUESTIONS[qidx];const a=answers[q.id];
+  if(!a) return false;
+  if(q.type==='sata') return a.length>0;
+  if(q.type==='matrix') return Object.keys(a).length>0;
+  return true;
+}
+
+function showQuestion(idx){
+  currentIdx=idx;
+  const q=QUESTIONS[idx];
+  const view=document.getElementById('questionView');
+  const isLast=idx===QUESTIONS.length-1;
+  const isFirst=idx===0;
+  const answered=isAnswered(idx);
+
+  let warnHtml=`<div class="unanswered-warn ${!answered&&examSubmitted?'show':''}">⚠️ This question was not answered.</div>`;
+
+  let navHtml=`<div class="nav-row">`;
+  navHtml+=`<button class="nav-btn btn-back" onclick="goBack()" ${isFirst?'disabled':''}>← Back</button>`;
+  if(!examSubmitted){
+    if(isLast) navHtml+=`<button class="nav-btn btn-submit" onclick="gradeExam()">💊 Submit Exam</button>`;
+    else navHtml+=`<button class="nav-btn btn-next" onclick="goNext()">Next →</button>`;
+  } else {
+    navHtml+=`<button class="nav-btn btn-next" onclick="goNext()" ${isLast?'disabled':''}>Next →</button>`;
+  }
+  navHtml+=`</div>`;
+  view.innerHTML = warnHtml + buildCard(q) + navHtml;
+  updateProgress(idx);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+function goNext(){ if(currentIdx<QUESTIONS.length-1) showQuestion(currentIdx+1); }
+function goBack(){ if(currentIdx>0) showQuestion(currentIdx-1); }
+
+function buildDots(){
+  const container=document.getElementById('progDots');
+  container.innerHTML='';
+  QUESTIONS.forEach((_,i)=>{
+    const d=document.createElement('span');
+    d.className='prog-dot';d.id=`dot${i}`;d.title=`Q${i+1}`;
+    d.onclick=()=>showQuestion(i);
+    container.appendChild(d);
+  });
+}
+function updateDot(idx){
+  const dot=document.getElementById(`dot${idx}`);if(!dot) return;
+  dot.classList.remove('answered','active','correct-dot','incorrect-dot');
+  if(examSubmitted){
+    const res=gradeOne(QUESTIONS[idx]);
+    dot.classList.add(res==='correct'?'correct-dot':'incorrect-dot');
+  } else {
+    if(idx===currentIdx) dot.classList.add('active');
+    else if(isAnswered(idx)) dot.classList.add('answered');
+  }
+}
+function updateProgress(idx){
+  document.getElementById('progressLabel').textContent=`Question ${idx+1} of ${QUESTIONS.length}`;
+  const q=QUESTIONS[idx];
+  const sec=q.type==='mcq'?'📚 Section 1: MCQ':q.type==='sata'?'✅ Section 2: SATA':'📊 Section 3: Matrix';
+  document.getElementById('progressSection').textContent=sec;
+  document.getElementById('progBarFill').style.width=((idx+1)/QUESTIONS.length*100)+'%';
+  QUESTIONS.forEach((_,i)=>updateDot(i));
+}
+
+function gradeOne(q){
+  const a=answers[q.id];
+  if(q.type==='mcq'){if(!a) return 'unanswered';return a===q.correct?'correct':'incorrect';}
+  if(q.type==='sata'){if(!a||a.length===0) return 'unanswered';return(a.length===q.correct.length&&a.every(x=>q.correct.includes(x)))?'correct':'incorrect';}
+  if(q.type==='matrix'){if(!a||Object.keys(a).length===0) return 'unanswered';return q.rows.every((row,ri)=>a[ri]===row.correct)?'correct':'incorrect';}
+}
+
+function gradeExam(){
+  examSubmitted=true;
+  let correct=0,incorrect=0,unanswered=0;
+  QUESTIONS.forEach(q=>{const r=gradeOne(q);if(r==='correct')correct++;else if(r==='unanswered')unanswered++;else incorrect++;});
+  const total=QUESTIONS.length;const pct=Math.round((correct/total)*100);
+  document.getElementById('scoreBig').textContent=`${correct} / ${total}`;
+  document.getElementById('scorePct').textContent=`${pct}% — ${getScoreLabel(pct)}`;
+  document.getElementById('scoreEmoji').textContent=getScoreEmoji(pct);
+  document.getElementById('correctCount').textContent=correct;
+  document.getElementById('incorrectCount').textContent=incorrect;
+  document.getElementById('unansweredCount').textContent=unanswered;
+  const sc=document.getElementById('scoreCard');sc.classList.add('show');
+  setTimeout(()=>document.getElementById('scoreBarFill').style.width=pct+'%',100);
+  // Go to Q1 to start reviewing
+  showQuestion(0);
+  QUESTIONS.forEach((_,i)=>updateDot(i));
+  sc.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function reviewExam(){
+  document.getElementById('progressWrap').style.display='none';
+  document.getElementById('questionView').style.display='none';
+  const reviewDiv=document.getElementById('reviewMode');
+  reviewDiv.style.display='block';
+  let html='';
+  QUESTIONS.forEach(q=>{html+=buildCard(q,true);html+=`<div style="height:1.2rem"></div>`;});
+  const btn=`<div style="text-align:center;margin-top:1.5rem"><button class="nav-btn btn-next" style="max-width:280px" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️ Back to Score</button></div>`;
+  document.getElementById('reviewContainer').innerHTML=html+btn;
+  reviewDiv.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function getScoreLabel(p){if(p>=90)return'Outstanding! NCLEX Ready 🌟';if(p>=80)return'Great Work! Strong Performance 💪';if(p>=75)return'Above Passing Threshold ✨';if(p>=68)return'Near Passing — Keep Studying 📚';return"Keep Reviewing — You've Got This! 💊";}
+function getScoreEmoji(p){if(p>=90)return'🏆';if(p>=80)return'⭐';if(p>=75)return'💊';if(p>=68)return'📚';return'💪';}
+
+window.onload=function(){buildDots();showQuestion(0);};
+</script>
+</body>
+</html>

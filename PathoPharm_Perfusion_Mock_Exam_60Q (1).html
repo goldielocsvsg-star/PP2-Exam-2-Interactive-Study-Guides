@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Perfusion &amp; PathoPharm — 60Q Mock Exam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:        #0A1628;
+      --navy-mid:    #0F2040;
+      --navy-light:  #162A50;
+      --navy-border: #1E3A6A;
+      --ink:         #E8F0FF;
+      --ink-muted:   #7A95C0;
+      --ink-dim:     #4A6490;
+      --ecg:         #00C9A0;
+      --crimson:     #E84855;
+      --amber:       #F4A629;
+      --steel:       #4E9BE8;
+      --card-bg:     rgba(15,32,64,.85);
+      --card-border: rgba(30,58,106,.9);
+      --radius-lg:   18px;
+      --radius-md:   10px;
+      --radius-sm:   6px;
+      --shadow:      0 12px 40px rgba(0,0,0,.5);
+      --mono: 'DM Mono', monospace;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'Outfit', sans-serif;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html,body{height:100%;}
+    body{
+      font-family:var(--sans);
+      background:var(--navy);
+      color:var(--ink);
+      line-height:1.5;
+      min-height:100vh;
+      background-image:
+        radial-gradient(ellipse 900px 500px at 10% 0%,rgba(0,201,160,.07),transparent 60%),
+        radial-gradient(ellipse 700px 600px at 90% 100%,rgba(78,155,232,.07),transparent 60%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Cpath d='M0 30h60M30 0v60' stroke='rgba(30,58,106,.25)' stroke-width='.5'/%3E%3C/svg%3E");
+    }
+
+    /* ── TOPBAR ──────────────────────────────────────── */
+    .topbar{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      background:rgba(10,22,40,.95);backdrop-filter:blur(16px);
+      border-bottom:1px solid var(--navy-border);
+      padding:0 24px;
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      height:60px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;}
+    .brand-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--ecg),var(--steel));display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+    .brand-icon svg{width:18px;height:18px;}
+    .brand-title{font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+    .brand-sub{font-size:10px;color:var(--ink-muted);font-family:var(--mono);}
+    .topbar-right{display:flex;align-items:center;gap:8px;}
+    .stat-chip{display:flex;align-items:center;gap:6px;padding:5px 11px;border-radius:var(--radius-sm);border:1px solid var(--navy-border);background:rgba(22,42,80,.6);font-size:11.5px;color:var(--ink-muted);}
+    .stat-chip b{color:var(--ink);font-weight:600;}
+    .pulse-dot{width:6px;height:6px;border-radius:50%;background:var(--ecg);box-shadow:0 0 6px var(--ecg);animation:pdot 2s ease-in-out infinite;}
+    @keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+
+    /* ── PROGRESS STRIP ──────────────────────────────── */
+    .prog-strip{
+      position:fixed;top:60px;left:0;right:0;z-index:99;
+      height:3px;background:var(--navy-light);
+    }
+    .prog-fill{height:100%;background:linear-gradient(90deg,var(--ecg),var(--steel));transition:width .4s ease;box-shadow:0 0 8px rgba(0,201,160,.4);}
+
+    /* ── QUESTION DOTS NAV ───────────────────────────── */
+    .dots-bar{
+      position:fixed;top:63px;left:0;right:0;z-index:98;
+      background:rgba(10,22,40,.9);backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--navy-border);
+      padding:8px 24px;
+      display:flex;align-items:center;gap:4px;overflow-x:auto;
+      scrollbar-width:none;
+    }
+    .dots-bar::-webkit-scrollbar{display:none;}
+    .dot{
+      width:20px;height:20px;border-radius:50%;border:1px solid var(--navy-border);
+      background:rgba(22,42,80,.5);cursor:pointer;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;
+      font-size:8px;font-family:var(--mono);color:var(--ink-dim);
+      transition:all .18s;
+    }
+    .dot:hover{border-color:rgba(78,155,232,.5);background:rgba(78,155,232,.15);}
+    .dot.active{border-color:var(--steel);background:rgba(78,155,232,.25);color:var(--ink);}
+    .dot.done-ok{border-color:rgba(0,201,160,.6);background:rgba(0,201,160,.15);}
+    .dot.done-ng{border-color:rgba(232,72,85,.5);background:rgba(232,72,85,.1);}
+    .dot.done-ok.active{box-shadow:0 0 8px rgba(0,201,160,.4);}
+    .dot-sep{width:1px;height:16px;background:var(--navy-border);flex-shrink:0;margin:0 4px;}
+
+    /* ── MAIN AREA ───────────────────────────────────── */
+    .main{
+      padding-top:116px; /* topbar + prog + dots */
+      padding-bottom:100px;
+      min-height:100vh;
+      display:flex;align-items:flex-start;justify-content:center;
+    }
+    .q-wrap{
+      width:100%;max-width:780px;
+      padding:24px 24px 0;
+      animation:fadeUp .25s ease;
+    }
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ── SECTION LABEL ───────────────────────────────── */
+    .sec-label{
+      font-family:var(--mono);font-size:10px;letter-spacing:1.8px;text-transform:uppercase;
+      color:var(--ink-dim);margin-bottom:10px;
+    }
+
+    /* ── QUESTION CARD ───────────────────────────────── */
+    .qcard{
+      border-radius:var(--radius-lg);border:1px solid var(--card-border);
+      background:var(--card-bg);backdrop-filter:blur(10px);
+      box-shadow:var(--shadow);overflow:hidden;
+      transition:border-color .25s;
+    }
+    .qcard.ok{border-color:rgba(0,201,160,.4);}
+    .qcard.ng{border-color:rgba(232,72,85,.3);}
+
+    .qcard-hdr{
+      padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+      border-bottom:1px solid rgba(30,58,106,.5);background:rgba(10,22,40,.4);
+    }
+    .qcard-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .qnum-lbl{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--ink-dim);}
+    .qtag{font-size:10px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:3px 8px;border-radius:var(--radius-sm);border:1px solid;}
+    .tm{color:var(--steel);border-color:rgba(78,155,232,.3);background:rgba(78,155,232,.08);}
+    .ts{color:var(--amber);border-color:rgba(244,166,41,.3);background:rgba(244,166,41,.08);}
+    .tx{color:var(--ecg);border-color:rgba(0,201,160,.3);background:rgba(0,201,160,.08);}
+    .tc{color:#C084FC;border-color:rgba(192,132,252,.3);background:rgba(192,132,252,.08);}
+    .tb{color:#FB923C;border-color:rgba(251,146,60,.3);background:rgba(251,146,60,.08);}
+    .qid-badge{font-size:10px;font-family:var(--mono);color:var(--ink-muted);padding:3px 8px;border:1px solid var(--navy-border);border-radius:var(--radius-sm);background:rgba(22,42,80,.4);}
+
+    .qbody{padding:24px;}
+    .qstem{font-size:15px;line-height:1.7;color:var(--ink);margin-bottom:20px;}
+
+    /* ── OPTIONS ─────────────────────────────────────── */
+    .opts{display:flex;flex-direction:column;gap:9px;}
+    label.opt{
+      display:flex;align-items:flex-start;gap:12px;
+      padding:13px 16px;border-radius:var(--radius-md);
+      border:1px solid rgba(30,58,106,.7);background:rgba(10,22,40,.35);
+      cursor:pointer;transition:border-color .18s,background .18s,transform .1s;
+      font-size:14px;color:var(--ink-muted);line-height:1.5;
+    }
+    label.opt:hover{border-color:rgba(78,155,232,.5);background:rgba(78,155,232,.06);color:var(--ink);transform:translateX(3px);}
+    label.opt input{width:16px;height:16px;margin-top:2px;accent-color:var(--ecg);flex-shrink:0;}
+
+    /* ── MATRIX ──────────────────────────────────────── */
+    .mx-wrap{overflow-x:auto;border-radius:var(--radius-md);border:1px solid rgba(30,58,106,.7);}
+    .mx-tbl{width:100%;border-collapse:collapse;min-width:520px;}
+    .mx-tbl th{padding:10px 14px;font-family:var(--mono);font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:var(--ink-muted);background:rgba(10,22,40,.6);border-bottom:1px solid rgba(30,58,106,.8);font-weight:500;}
+    .mx-tbl td{padding:10px 14px;border-bottom:1px solid rgba(30,58,106,.4);font-size:13px;vertical-align:middle;}
+    .mx-tbl tr:last-child td{border-bottom:none;}
+    .mx-tbl td:first-child{color:var(--ink);background:rgba(10,22,40,.3);min-width:200px;border-right:1px solid rgba(30,58,106,.5);}
+    .mx-tbl th:first-child{min-width:200px;border-right:1px solid rgba(30,58,106,.5);}
+    .mx-tbl tr:hover td{background:rgba(78,155,232,.04);}
+    .mx-rl{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12px;color:var(--ink-muted);padding:5px 7px;border-radius:var(--radius-sm);transition:color .15s,background .15s;}
+    .mx-rl:hover{color:var(--ink);background:rgba(78,155,232,.08);}
+    .mx-rl input{accent-color:var(--ecg);}
+
+    /* ── BOWTIE ──────────────────────────────────────── */
+    .bt-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:start;gap:0;}
+    .bt-col{padding:14px;border-radius:var(--radius-md);border:1px solid rgba(30,58,106,.7);background:rgba(10,22,40,.35);}
+    .bt-col-lbl{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ecg);margin-bottom:10px;}
+    .bt-arr{display:flex;align-items:center;justify-content:center;padding:0 8px;color:var(--navy-border);font-size:20px;padding-top:34px;}
+    .bt-sel{width:100%;padding:9px 10px;border-radius:var(--radius-sm);border:1px solid rgba(30,58,106,.7);background:rgba(10,22,40,.6);color:var(--ink);font-family:var(--sans);font-size:13px;outline:none;appearance:none;cursor:pointer;transition:border-color .18s;}
+    .bt-sel:focus{border-color:var(--ecg);}
+
+    /* ── FEEDBACK ────────────────────────────────────── */
+    .fb{margin:0 20px 20px;border-radius:var(--radius-md);border:1px solid;overflow:hidden;}
+    .fb-ok{border-color:rgba(0,201,160,.35);background:rgba(0,201,160,.06);}
+    .fb-ng{border-color:rgba(232,72,85,.3);background:rgba(232,72,85,.05);}
+    .fb-lock{border-color:rgba(244,166,41,.2);background:rgba(244,166,41,.04);}
+    .fb-hdr{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid rgba(255,255,255,.06);}
+    .fb-badge{font-family:var(--mono);font-size:10px;letter-spacing:1.2px;text-transform:uppercase;font-weight:500;padding:3px 8px;border-radius:var(--radius-sm);}
+    .b-ok{background:rgba(0,201,160,.15);color:var(--ecg);}
+    .b-ng{background:rgba(232,72,85,.15);color:var(--crimson);}
+    .b-lk{background:rgba(244,166,41,.12);color:var(--amber);}
+    .fb-body{padding:14px;}
+    .rat{font-size:13.5px;line-height:1.7;color:rgba(232,240,255,.88);}
+    .akey{margin-top:12px;padding-top:12px;border-top:1px solid rgba(30,58,106,.5);font-family:var(--mono);font-size:11.5px;color:var(--ink-muted);line-height:1.7;}
+    .akey b{color:var(--ecg);}
+
+    /* ── BOTTOM NAV ──────────────────────────────────── */
+    .bottom-nav{
+      position:fixed;bottom:0;left:0;right:0;z-index:100;
+      background:rgba(10,22,40,.96);backdrop-filter:blur(16px);
+      border-top:1px solid var(--navy-border);
+      padding:12px 24px;
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+    }
+    .nav-left,.nav-right{display:flex;gap:8px;align-items:center;}
+    .nav-center{
+      display:flex;flex-direction:column;align-items:center;gap:2px;
+    }
+    .nav-counter{font-family:var(--mono);font-size:13px;color:var(--ink);font-weight:500;}
+    .nav-tag{font-family:var(--mono);font-size:10px;color:var(--ink-dim);}
+
+    /* ── BUTTONS ─────────────────────────────────────── */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--radius-md);border:1px solid;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:transform .1s,filter .18s,box-shadow .18s;letter-spacing:.2px;}
+    .btn:hover{transform:translateY(-1px);filter:brightness(1.1);}
+    .btn:active{transform:translateY(0);}
+    .btn-p{background:linear-gradient(135deg,rgba(0,201,160,.2),rgba(78,155,232,.15));border-color:rgba(0,201,160,.5);color:var(--ecg);}
+    .btn-p:hover{box-shadow:0 0 16px rgba(0,201,160,.2);}
+    .btn-g{background:rgba(22,42,80,.4);border-color:var(--navy-border);color:var(--ink-muted);}
+    .btn-g:hover{color:var(--ink);border-color:rgba(78,155,232,.4);}
+    .btn-nav{background:rgba(22,42,80,.5);border-color:var(--navy-border);color:var(--ink);padding:9px 14px;}
+    .btn-nav:disabled{opacity:.3;cursor:not-allowed;transform:none;filter:none;}
+    .btn-d{background:rgba(232,72,85,.08);border-color:rgba(232,72,85,.3);color:var(--crimson);}
+    .btn-sm{padding:6px 12px;font-size:11.5px;}
+
+    /* ── CARD FOOTER SUBMIT ROW ──────────────────────── */
+    .qftr{
+      padding:14px 20px;border-top:1px solid rgba(30,58,106,.5);
+      background:rgba(10,22,40,.3);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+    }
+    .ftr-l{display:flex;gap:8px;align-items:center;}
+    .ftr-r{font-size:11px;color:var(--ink-dim);font-family:var(--mono);}
+
+    /* ── CONTROLS DROPDOWN ───────────────────────────── */
+    .ctrl-btn{
+      position:relative;
+    }
+    .ctrl-menu{
+      position:absolute;bottom:calc(100% + 8px);right:0;
+      background:rgba(10,22,40,.98);backdrop-filter:blur(20px);
+      border:1px solid var(--navy-border);border-radius:var(--radius-md);
+      padding:6px;min-width:180px;
+      display:none;flex-direction:column;gap:2px;
+      box-shadow:0 20px 60px rgba(0,0,0,.6);
+    }
+    .ctrl-menu.open{display:flex;}
+    .ctrl-menu-item{
+      padding:8px 12px;border-radius:var(--radius-sm);font-size:12.5px;
+      color:var(--ink-muted);cursor:pointer;transition:background .15s,color .15s;
+      font-family:var(--sans);font-weight:500;background:none;border:none;text-align:left;
+    }
+    .ctrl-menu-item:hover{background:rgba(78,155,232,.1);color:var(--ink);}
+    .ctrl-menu-item.danger{color:var(--crimson);}
+    .ctrl-menu-item.danger:hover{background:rgba(232,72,85,.1);}
+    .ctrl-sep{height:1px;background:var(--navy-border);margin:4px 0;}
+
+    /* ── TOAST ───────────────────────────────────────── */
+    .toast{position:fixed;bottom:80px;right:24px;padding:11px 16px;border-radius:var(--radius-md);border:1px solid var(--navy-border);background:rgba(15,32,64,.98);backdrop-filter:blur(16px);color:var(--ink);font-size:12.5px;font-family:var(--mono);box-shadow:0 20px 60px rgba(0,0,0,.6);z-index:999;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;}
+    .toast.show{opacity:1;transform:translateY(0);}
+
+    /* ── SUMMARY PANEL ───────────────────────────────── */
+    .summary{display:none;flex-direction:column;gap:16px;width:100%;max-width:780px;padding:24px;}
+    .summary.visible{display:flex;}
+    .sum-card{border-radius:var(--radius-lg);border:1px solid var(--card-border);background:var(--card-bg);padding:28px;text-align:center;}
+    .sum-title{font-family:var(--serif);font-size:26px;margin-bottom:6px;}
+    .sum-title em{color:var(--ecg);font-style:italic;}
+    .sum-score{font-size:52px;font-weight:700;color:var(--ecg);font-family:var(--mono);line-height:1;}
+    .sum-sub{font-size:13px;color:var(--ink-muted);margin-top:8px;}
+    .sum-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+    .sum-cell{border-radius:var(--radius-md);border:1px solid var(--navy-border);background:rgba(22,42,80,.4);padding:16px;text-align:center;}
+    .sum-cell-val{font-size:26px;font-weight:700;font-family:var(--mono);}
+    .sum-cell-lbl{font-size:11px;color:var(--ink-muted);font-family:var(--mono);text-transform:uppercase;letter-spacing:.8px;margin-top:4px;}
+
+    @media(max-width:640px){
+      .bt-grid{grid-template-columns:1fr;}.bt-arr{display:none;}
+      .dots-bar{padding:6px 12px;}
+      .qbody{padding:16px;}
+      .main{padding-top:110px;}
+      .sum-grid{grid-template-columns:1fr 1fr;}
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="brand">
+    <div class="brand-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 12 6 8 9 14 12 4 15 14 18 8 21 12"/>
+      </svg>
+    </div>
+    <div>
+      <div class="brand-title">Perfusion &amp; PathoPharm</div>
+      <div class="brand-sub">NCLEX Mock Exam · 60 Questions</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div class="stat-chip"><div class="pulse-dot"></div><span>Score</span><b id="scoreTop">—</b></div>
+    <div class="stat-chip"><span>Mode</span><b id="modeTop">Practice</b></div>
+  </div>
+</div>
+
+<!-- PROGRESS STRIP -->
+<div class="prog-strip"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+
+<!-- DOTS NAV -->
+<div class="dots-bar" id="dotsBar"></div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="q-wrap" id="qWrap"></div>
+  <div class="summary" id="summary">
+    <div class="sum-card">
+      <div class="sum-title">Exam <em>Complete</em></div>
+      <div class="sum-score" id="sumScore">—</div>
+      <div class="sum-sub" id="sumSub">—</div>
+    </div>
+    <div class="sum-grid">
+      <div class="sum-cell"><div class="sum-cell-val" id="sumCorrect" style="color:var(--ecg)">—</div><div class="sum-cell-lbl">Correct</div></div>
+      <div class="sum-cell"><div class="sum-cell-val" id="sumIncorrect" style="color:var(--crimson)">—</div><div class="sum-cell-lbl">Incorrect</div></div>
+      <div class="sum-cell"><div class="sum-cell-val" id="sumUnanswered" style="color:var(--amber)">—</div><div class="sum-cell-lbl">Unanswered</div></div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="btn btn-p" onclick="goTo(0)">Review from Q1</button>
+      <button class="btn btn-g" onclick="exportA('json')">↓ Export JSON</button>
+      <button class="btn btn-g" onclick="exportA('csv')">↓ Export CSV</button>
+      <button class="btn btn-d btn-sm" onclick="doReset()">Reset All</button>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <div class="nav-left">
+    <button class="btn btn-nav" id="btnPrev" onclick="prev()" disabled>← Prev</button>
+  </div>
+  <div class="nav-center">
+    <div class="nav-counter" id="navCounter">1 / 60</div>
+    <div class="nav-tag" id="navTag">Multiple Choice</div>
+  </div>
+  <div class="nav-right">
+    <div class="ctrl-btn">
+      <button class="btn btn-g btn-sm" id="menuBtn">⋯ Options</button>
+      <div class="ctrl-menu" id="ctrlMenu">
+        <button class="ctrl-menu-item" id="menuMode">Switch to Exam Mode</button>
+        <button class="ctrl-menu-item" id="menuGrade">Grade Exam</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-menu-item" onclick="goToSummary()">View Summary</button>
+        <button class="ctrl-menu-item" onclick="exportA('json')">↓ Export JSON</button>
+        <button class="ctrl-menu-item" onclick="exportA('csv')">↓ Export CSV</button>
+        <div class="ctrl-sep"></div>
+        <button class="ctrl-menu-item danger" onclick="doReset()">Reset All</button>
+      </div>
+    </div>
+    <button class="btn btn-nav" id="btnNext" onclick="next()">Next →</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SK="perf_exam_v4";
+let PM=true,GA=false,cur=0,SM={};
+
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),1600);}
+function shuffle(a){const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+function pct(n,d){return d?Math.round(n/d*100):0;}
+function load(){try{return JSON.parse(localStorage.getItem(SK)||"{}");}catch{return{};}}
+function save(s){localStorage.setItem(SK,JSON.stringify(s));}
+function H(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");}
+
+const exam=[
+  {id:1,type:"mcq",tag:"FIRST priority",stem:"A client arrives to the ED with crushing chest pain radiating to the left arm, diaphoresis, and nausea. SpO₂ is 88% on room air. Which action is the nurse FIRST priority?",options:["Administer oxygen via nasal cannula and reassess SpO₂","Start an IV and draw a troponin level","Prepare the client for PCI consent","Administer sublingual nitroglycerin"],answer:[0],rationale:"SpO₂ 88% = hypoxemia. Correct first priority is oxygenation to improve myocardial O₂ delivery. Labs/IV/PCI/NTG are important, but ABCs put oxygen first when saturation is <90%."},
+  {id:2,type:"mcq",tag:"Preload/Afterload",stem:"A client with acute STEMI is anxious and hypertensive. The provider orders IV nitroglycerin. Which explanation best matches how nitroglycerin helps?",options:["Vasodilates veins and arteries to decrease preload and afterload, lowering myocardial O₂ demand","Increases cardiac contractility to improve ejection fraction","Promotes platelet aggregation to stabilize the plaque","Directly increases heart rate to improve coronary perfusion"],answer:[0],rationale:"Nitroglycerin is a vasodilator that decreases venous return (↓preload) and systemic resistance (↓afterload), reducing myocardial workload and oxygen demand, and can also improve coronary blood flow."},
+  {id:3,type:"mcq",tag:"Assessment prior to med",stem:"A client with chest pain is prescribed sublingual nitroglycerin. What assessment is needed prior to administering this medication?",options:["Blood pressure and recent use of phosphodiesterase-5 inhibitor (e.g., sildenafil)","Serum potassium level and bowel sounds","Peak expiratory flow and temperature","Pupillary response and capillary refill"],answer:[0],rationale:"Nitroglycerin can cause significant hypotension, and it is contraindicated with recent PDE-5 inhibitor use due to profound hypotension risk. BP and med history are priority."},
+  {id:4,type:"mcq",tag:"Therapeutic response",stem:"A client with acute chest pain is prescribed nitroglycerin. Which evaluation would indicate a therapeutic response?",options:["Chest pain decreases and ECG ischemic changes improve","Heart rate increases by 25 bpm","Urine output decreases","New onset wheezing resolves"],answer:[0],rationale:"Therapeutic effect of nitroglycerin is relief of angina/ischemia via decreased preload/afterload and improved coronary flow—seen as decreased pain and improved ischemic ECG findings."},
+  {id:5,type:"mcq",tag:"Contraindication check",stem:"A client with suspected MI reports taking sildenafil this morning. Sublingual nitroglycerin is ordered. What is the nurse FIRST priority?",options:["Hold nitroglycerin and notify the provider immediately","Administer nitroglycerin but keep the client supine","Give morphine first, then nitroglycerin","Delay nitroglycerin for 5 minutes and reassess pain"],answer:[0],rationale:"Nitroglycerin + PDE-5 inhibitor can cause life-threatening hypotension. Hold and notify provider is the correct first action."},
+  {id:6,type:"mcq",tag:"Lab follow-up",stem:"The nurse administered unfractionated heparin to a client with ACS. What lab value requires follow-up to guide therapy?",options:["aPTT","Hemoglobin A1c","Calcium","Amylase"],answer:[0],rationale:"Unfractionated heparin is monitored with aPTT to ensure therapeutic anticoagulation and reduce bleeding risk."},
+  {id:7,type:"mcq",tag:"Adverse effect",stem:"A client receiving heparin develops a sudden platelet drop and new thrombosis. Which complication does the nurse suspect?",options:["Heparin-induced thrombocytopenia (HIT)","Stable angina progression","Hyperkalemia from RAAS blockade","Reflex tachycardia from nitrates"],answer:[0],rationale:"HIT is an immune reaction that causes thrombocytopenia AND paradoxical clotting risk. This requires immediate action (stop heparin, notify provider)."},
+  {id:8,type:"mcq",tag:"FIRST priority",stem:"A client with MI has BP 84/50, RR 10, is very sleepy after IV morphine for chest pain. What is the nurse FIRST priority?",options:["Support airway/breathing and prepare to administer naloxone","Reassure the client this is expected and recheck in 30 minutes","Encourage oral fluids to increase blood pressure","Apply nitroglycerin paste to reduce preload"],answer:[0],rationale:"Morphine can cause respiratory depression and hypotension. ABCs first: support ventilation and prepare naloxone."},
+  {id:9,type:"mcq",tag:"Pathopharm",stem:"What is the pathophysiology of myocardial infarction and how does aspirin work to treat it?",options:["Plaque rupture → platelet aggregation/thrombus; aspirin inhibits platelet activation by blocking COX-1","Coronary spasm only; aspirin directly dilates coronary arteries","Viral myocarditis; aspirin increases cardiac contractility","Valve stenosis; aspirin lowers afterload by vasodilation"],answer:[0],rationale:"MI commonly begins with plaque rupture leading to platelet aggregation and thrombus. Aspirin reduces platelet activation (COX-1 inhibition), lowering reinfarction and mortality risk."},
+  {id:10,type:"mcq",tag:"Teaching med",stem:"Stand-alone teaching: Which statement by a client prescribed aspirin after MI indicates the need for further teaching?",options:["\"I'll stop high-dose aspirin about a week before a scheduled procedure if told to.\"","\"Ringing in my ears could be a side effect I should report.\"","\"I can take ibuprofen daily for weeks to protect my heart along with aspirin.\"","\"I will watch for black tarry stools or coffee-ground vomit.\""],answer:[2],rationale:"Long-term NSAID use (like ibuprofen) can increase cardiovascular risk and GI bleeding when combined with aspirin; it can also interfere with aspirin's antiplatelet effect. That statement needs correction."},
+  {id:11,type:"mcq",tag:"Assessment prior to med",stem:"A client with STEMI is prescribed metoprolol. What assessment is needed prior to administering this medication?",options:["Heart rate, blood pressure, and signs of heart block or acute decompensated heart failure","Pupil size and gag reflex","Urine specific gravity and bowel sounds","Skin turgor and pain score only"],answer:[0],rationale:"Beta-blockers can worsen bradycardia, hypotension, AV block, and acute decompensated HF. HR/BP/rhythm and HF status are essential before giving."},
+  {id:12,type:"mcq",tag:"Therapeutic response",stem:"A client with MI is prescribed a beta-blocker. Which evaluation would indicate a therapeutic response?",options:["Reduced heart rate and decreased recurrent chest pain episodes","Increased respiratory rate and wheezing decreases","Increased platelet count","New onset edema resolves immediately"],answer:[0],rationale:"Beta-blockers decrease HR and contractility, reducing myocardial oxygen demand and recurrent ischemia—seen clinically as lower HR and less angina."},
+  {id:13,type:"mcq",tag:"BP regulation",stem:"A client with long-standing hypertension asks why high afterload can worsen heart failure. Which explanation is best?",options:["Higher systemic resistance makes the left ventricle work harder to eject blood, lowering stroke volume over time","Higher afterload increases venous return and boosts preload","Afterload only affects the right ventricle, not systemic circulation","Afterload reduces oxygen demand by slowing the heart"],answer:[0],rationale:"Afterload = resistance the ventricle must pump against. Chronic high afterload increases workload, can reduce stroke volume, and contributes to ventricular remodeling and HF."},
+  {id:14,type:"mcq",tag:"HF patho + med",stem:"What is the pathophysiology of heart failure and how does an ACE inhibitor help treat it?",options:["Pump failure → low cardiac output and fluid retention; ACE inhibitors reduce afterload and volume and improve remodeling","Valve infection → fever; ACE inhibitors lower fever by COX inhibition","Coronary spasm → pain; ACE inhibitors directly dissolve clots","Arrhythmia → bradycardia; ACE inhibitors increase AV conduction"],answer:[0],rationale:"HF is impaired pumping leading to low output and neurohormonal activation (RAAS), fluid retention, and remodeling. ACE inhibitors blunt RAAS, reduce afterload and volume, and improve remodeling outcomes."},
+  {id:15,type:"mcq",tag:"Adverse effect",stem:"A client started on captopril develops swelling of lips and tongue. What is the nurse FIRST priority?",options:["Treat as a medical emergency and prepare for airway support and epinephrine per protocol","Document the reaction and reassure it resolves on its own","Give potassium supplement to prevent hypokalemia","Hold all antiplatelet medications"],answer:[0],rationale:"ACE inhibitor angioedema can obstruct the airway and is an emergency. Airway management is priority; epinephrine may be required."},
+  {id:16,type:"mcq",tag:"Anaphylaxis",stem:"A client develops anaphylaxis after receiving an antibiotic: stridor, hypotension, hives. Which medication is the nurse prepared to administer FIRST?",options:["Epinephrine","Furosemide","Warfarin","Digoxin"],answer:[0],rationale:"Epinephrine is first-line for anaphylaxis to reverse airway edema/bronchospasm and support blood pressure."},
+  {id:17,type:"mcq",tag:"Cardiogenic shock",stem:"A client post-MI becomes restless, cool/clammy, BP 86/52, HR 124, UO 15 mL/hr. Which interpretation is BEST?",options:["Possible cardiogenic shock requiring immediate escalation of care","Expected response to morphine that can be observed","Stable angina pattern with good compensation","Early sepsis most likely because heart rate is elevated"],answer:[0],rationale:"Hypotension, tachycardia, low urine output, and cool clammy skin after MI are classic cardiogenic shock cues—requires immediate escalation."},
+  {id:18,type:"mcq",tag:"STEMI vs NSTEMI",stem:"Which finding is MOST consistent with STEMI rather than NSTEMI?",options:["ST elevation in two contiguous leads on a 12-lead ECG","Chest pain relieved completely with antacids","Normal ECG and normal troponin for 24 hours","Intermittent claudication after walking"],answer:[0],rationale:"STEMI classically shows ST elevation in contiguous leads and represents transmural infarction requiring rapid reperfusion."},
+  {id:19,type:"mcq",tag:"tPA indication",stem:"A client arrives with acute STEMI and PCI is not immediately available. Alteplase is ordered. Which statement best explains the goal of alteplase?",options:["Break down fibrin in the clot to restore coronary blood flow and limit infarct size","Block beta receptors to reduce heart rate","Inhibit COX-1 to prevent platelet aggregation","Increase urine output to reduce preload"],answer:[0],rationale:"Alteplase (tPA) converts plasminogen to plasmin to digest fibrin, restoring perfusion when timely PCI isn't available."},
+  {id:20,type:"mcq",tag:"Post-thrombolytic monitoring",stem:"After alteplase infusion for STEMI, which assessment finding requires the most urgent follow-up?",options:["Sudden severe headache and change in level of consciousness","Mild oozing at IV site","Slight decrease in chest pain","Heart rate decreases from 96 to 88"],answer:[0],rationale:"Intracranial hemorrhage is the most feared complication of fibrinolysis. Sudden severe headache/LOC change = emergency."},
+  {id:21,type:"mcq",tag:"PAD — cilostazol",stem:"A client has PAD with intermittent claudication. Which outcome best indicates effective therapy with cilostazol?",options:["Increased walking distance before pain starts","Immediate disappearance of varicose veins","Lower respiratory rate during sleep","Increased INR to 3.5"],answer:[0],rationale:"Cilostazol improves symptoms of intermittent claudication by vasodilation and inhibiting platelet aggregation—measured by improved walking distance."},
+  {id:22,type:"mcq",tag:"Teaching med",stem:"A client with PAD is prescribed cilostazol. Which client statement indicates understanding?",options:["\"I should avoid smoking because nicotine constricts blood vessels.\"","\"I should drink grapefruit juice daily to improve absorption.\"","\"If I bruise easily, that means the medicine isn't working.\"","\"This medication is mainly to treat bacterial infection in my leg.\""],answer:[0],rationale:"Teaching includes avoiding nicotine (vasoconstriction). Grapefruit can interact with many meds; cilostazol also carries bleeding risk—bruising should be reported, not normalized."},
+  {id:23,type:"mcq",tag:"PAD vs Venous",stem:"A client has a small round ulcer on the toe with well-defined borders and a cool pale foot. Which condition is most consistent?",options:["Peripheral arterial disease","Chronic venous insufficiency","Cellulitis without vascular disease","Asthma exacerbation"],answer:[0],rationale:"PAD ulcers are typically distal (toes/feet), small, round, well-defined, and associated with cool, pale/cyanotic skin. Venous ulcers are often inner ankle with irregular borders and edema."},
+  {id:24,type:"mcq",tag:"Acute arterial emergency",stem:"A client reports sudden severe leg pain; the leg is pale, cool, and pulseless with numbness. Which action is the nurse FIRST priority?",options:["Treat as acute arterial insufficiency and notify the provider immediately","Apply warm compresses and elevate the leg","Encourage the client to ambulate to improve circulation","Massage the calf to break up the clot"],answer:[0],rationale:"Acute arterial insufficiency is a limb-threatening emergency (six Ps). Immediate escalation is required; elevation/massage can worsen perfusion or dislodge clot."},
+  {id:25,type:"mcq",tag:"Preload/Afterload",stem:"Which medication most directly reduces BOTH preload and afterload in a client with MI-related pulmonary congestion and hypertension?",options:["Nitroglycerin","Heparin","Clopidogrel","Omeprazole"],answer:[0],rationale:"Nitroglycerin vasodilates veins (↓preload) and arteries (↓afterload). The others do not directly change preload/afterload."},
+  {id:26,type:"mcq",tag:"Condition teaching",stem:"A client with chronic stable angina asks what activities may trigger symptoms. Which teaching is most appropriate?",options:["Avoid heavy meals, smoking, extreme temperatures, strenuous exercise, and intense emotional stress","Avoid all fluid intake after 6 pm","Stay on strict bed rest permanently","Only avoid dairy products"],answer:[0],rationale:"Stable angina is triggered by increased myocardial oxygen demand. Avoiding common triggers helps reduce episodes; lifestyle modification is key."},
+  {id:27,type:"mcq",tag:"CAD risk factors",stem:"Which modifiable risk factor teaching is MOST relevant to reduce progression of CAD?",options:["Smoking cessation and control of hypertension, diabetes, and dyslipidemia","Changing family history","Becoming younger","Changing biologic sex"],answer:[0],rationale:"Modifiable factors (smoking, HTN, diabetes, dyslipidemia, obesity, inactivity) meaningfully reduce CAD risk; non-modifiable factors cannot be changed."},
+  {id:28,type:"mcq",tag:"BP physiology",stem:"A nurse explains systemic blood pressure as primarily determined by which two factors?",options:["Cardiac output and systemic vascular resistance","Platelet count and hemoglobin","Respiratory rate and tidal volume","Serum sodium and potassium only"],answer:[0],rationale:"BP ≈ CO × SVR. Meds and conditions in perfusion often act by changing CO (HR/SV) and/or SVR."},
+  {id:29,type:"mcq",tag:"CO factors",stem:"A client's ejection fraction decreases after an MI. What change is MOST expected?",options:["Decreased cardiac output from reduced contractility and stroke volume","Increased cardiac output from improved preload","No change because EF does not affect stroke volume","Immediate resolution of pulmonary congestion"],answer:[0],rationale:"EF reflects contractility. Lower EF usually means reduced stroke volume → decreased cardiac output, often worsening congestion and perfusion."},
+  {id:30,type:"mcq",tag:"Calcium channel blocker",stem:"A client with angina is prescribed a calcium channel blocker. Which assessment finding should the nurse monitor as a common adverse effect?",options:["Peripheral edema and hypotension","Severe hypernatremia","Hemoptysis","Seizure aura"],answer:[0],rationale:"CCBs can cause hypotension, bradycardia (some types), flushing, headache, and peripheral edema due to vasodilation."},
+  {id:31,type:"mcq",tag:"Beta blocker teaching",stem:"Which instruction is most appropriate for a client newly prescribed a beta-blocker for hypertension?",options:["Check pulse and blood pressure; do not stop the medication abruptly","Take extra doses if you feel anxious","Expect your heart rate to increase significantly","Use with decongestants to boost effect"],answer:[0],rationale:"Beta-blockers lower HR/BP; abrupt discontinuation can cause rebound effects. Clients should monitor pulse/BP and report symptoms of bradycardia or hypotension."},
+  {id:32,type:"mcq",tag:"ACE inhibitor monitoring",stem:"A client with heart failure is prescribed lisinopril. Which lab is most important to monitor for a common adverse effect?",options:["Serum potassium","Serum amylase","Serum calcium","Serum lipase only"],answer:[0],rationale:"ACE inhibitors can cause hyperkalemia by reducing aldosterone. Potassium monitoring is essential, especially with renal impairment or K-sparing meds."},
+  {id:33,type:"mcq",tag:"Teaching med",stem:"A client prescribed sublingual nitroglycerin for angina asks how to take it at home. Which teaching is most appropriate?",options:["Take one dose at onset of pain; call 911 if pain persists after the first dose per your plan and do not exceed the prescribed sequence","Chew the tablet for fastest action","Store tablets in a weekly pill organizer in sunlight","Take it daily on schedule even if no chest pain"],answer:[0],rationale:"Correct home teaching includes using at onset, following prescribed repeat dosing schedule, and seeking emergency care when pain persists. Tablets should be stored properly (original container)."},
+  {id:34,type:"mcq",tag:"Drug interaction",stem:"Which medication combination requires the nurse to intervene due to a high-risk interaction in a client with angina?",options:["Nitroglycerin and sildenafil","Aspirin and clopidogrel (as ordered post-PCI)","Oxygen and nasal cannula","Atorvastatin and lifestyle change"],answer:[0],rationale:"Nitrates + PDE-5 inhibitors can cause profound hypotension. Dual antiplatelet therapy is often intended post-PCI."},
+  {id:35,type:"mcq",tag:"Indicated care",stem:"A client with suspected ACS has ongoing chest pain despite three nitroglycerin doses and develops dyspnea. Which action is MOST indicated next?",options:["Prepare to administer morphine as ordered and monitor respiratory status closely","Encourage ambulation to distract from pain","Give a potassium supplement","Apply warm compresses to the chest"],answer:[0],rationale:"Morphine may be used when pain is unrelieved by nitrates; it also reduces preload/afterload but requires close monitoring for respiratory depression and hypotension."},
+  {id:36,type:"mcq",tag:"Condition teaching",stem:"A client with venous insufficiency asks why they have ankle discoloration and ulcers near the inner ankle. Which explanation is best?",options:["Valve damage causes blood pooling and venous hypertension leading to edema, skin changes, and stasis ulcers","Arterial spasm reduces blood flow causing small round toe ulcers","Platelet deficiency causes bruising and ulcers","It is caused by low oxygen therapy flow rates"],answer:[0],rationale:"Chronic venous insufficiency causes pooling/stasis and increased venous pressure, leading to edema, brown discoloration, and irregular stasis ulcers near the ankle."},
+  {id:37,type:"mcq",tag:"Diagnostic follow-up",stem:"The nurse administered aspirin and heparin to a client with suspected MI. Which diagnostic test is most important to follow for ongoing myocardial injury assessment?",options:["Troponin trend","Urinalysis specific gravity","Stool ova and parasites","Peak flow"],answer:[0],rationale:"Troponin is a key biomarker for myocardial injury and helps assess ongoing damage and trend after interventions."},
+  {id:38,type:"mcq",tag:"Perfusion priority",stem:"A client with heart failure reports sudden weight gain and increasing shortness of breath. Which nursing assessment best determines worsening preload-related congestion?",options:["Daily weight trend and lung sounds for crackles","Pupillary response and gait","Bowel sounds and appetite only","Skin turgor and hair distribution"],answer:[0],rationale:"Fluid retention increases preload and pulmonary congestion. Daily weights and lung assessment are high-yield indicators of worsening volume overload."},
+  {id:39,type:"mcq",tag:"Evaluation effectiveness",stem:"A client with hypertension is prescribed an ACE inhibitor. What assessment would be best to determine effectiveness?",options:["Blood pressure trend over time","Increase in respiratory rate","Increase in platelet count","Decrease in body temperature"],answer:[0],rationale:"Primary effectiveness for antihypertensives is improved BP control over time (and related symptom/target organ protection)."},
+  {id:40,type:"mcq",tag:"FIRST priority",stem:"A client with suspected MI becomes suddenly short of breath, has pink frothy sputum, and crackles throughout. What is the nurse FIRST priority?",options:["Position upright and support oxygenation/ventilation","Encourage oral fluids","Apply compression stockings","Administer potassium replacement"],answer:[0],rationale:"This suggests acute pulmonary edema. ABCs: position upright, oxygen/ventilation support, rapid escalation."},
+  {id:41,type:"sata",tag:"SATA med teaching",stem:"A client is discharged after PCI with prescriptions for aspirin and clopidogrel. Which teaching points are appropriate? (Select all that apply.)",options:["Report signs of bleeding such as black tarry stools or coffee-ground emesis","Do not stop the medication without provider guidance","Expect frequent nosebleeds and ignore them","Tell providers/dentists you are on antiplatelet therapy before procedures","Stop clopidogrel 5 days prior to surgery if instructed by the provider"],answer:[0,1,3,4],rationale:"Dual antiplatelet therapy reduces stent thrombosis risk but increases bleeding risk—teach bleeding precautions and coordination before procedures. Frequent nosebleeds should not be ignored."},
+  {id:42,type:"sata",tag:"SATA condition teaching",stem:"A client with chronic stable angina asks about non-pharmacologic measures to reduce episodes. Which instructions are appropriate? (Select all that apply.)",options:["Avoid heavy meals","Avoid smoking","Plan moderate exercise as tolerated with provider guidance","Sleep with legs elevated above the heart at all times","Use relaxation techniques to reduce emotional stress"],answer:[0,1,2,4],rationale:"Reducing triggers that increase myocardial oxygen demand helps prevent stable angina episodes. Constant leg elevation is not a standard angina prevention measure."},
+  {id:43,type:"sata",tag:"SATA med teaching",stem:"A client is prescribed an ACE inhibitor after MI. Which teaching is appropriate? (Select all that apply.)",options:["Change positions slowly to reduce risk of first-dose hypotension","Report swelling of face/lips/tongue immediately","Use salt substitutes freely to prevent low sodium","Monitor for a persistent dry cough","Avoid potassium supplements unless specifically prescribed"],answer:[0,1,3,4],rationale:"ACE inhibitors can cause first-dose hypotension, cough (bradykinin), angioedema, and hyperkalemia—teach safety, reporting, and potassium caution. Salt substitutes often contain potassium."},
+  {id:44,type:"sata",tag:"SATA med teaching",stem:"A client is prescribed sublingual nitroglycerin. Which instructions are appropriate? (Select all that apply.)",options:["Sit or lie down before taking a dose to reduce fall risk","Store tablets in the original container and check expiration dates","If dizziness occurs, stand quickly to improve blood flow to the brain","Do not use if you have taken sildenafil in the last 24 hours","Headache can occur due to vasodilation"],answer:[0,1,3,4],rationale:"Nitroglycerin can cause hypotension and headaches; safe use includes proper storage, fall prevention, and avoiding PDE-5 inhibitors."},
+  {id:45,type:"sata",tag:"SATA condition teaching",stem:"A client with PAD is learning symptom monitoring. Which findings should the client report promptly? (Select all that apply.)",options:["Sudden severe leg pain with numbness","Foot becomes cool and pale with absent pulses","Intermittent calf pain that resolves with rest (stable claudication pattern)","New non-healing toe ulcer","Sudden inability to move the foot"],answer:[0,1,3,4],rationale:"Sudden severe symptoms and the 'six Ps' suggest acute arterial occlusion (emergency). Nonhealing ulcers indicate poor perfusion. Stable claudication is expected but still should be managed."},
+  {id:46,type:"sata",tag:"SATA med teaching",stem:"A client is prescribed a beta-blocker after MI. Which instructions are appropriate? (Select all that apply.)",options:["Monitor heart rate and blood pressure","Report wheezing or shortness of breath","Stop the medication abruptly when you feel better","This medication can mask some symptoms of hypoglycemia","Rise slowly if you feel dizzy"],answer:[0,1,3,4],rationale:"Beta-blockers can cause bradycardia, hypotension, bronchospasm (esp. nonselective), and mask hypoglycemia symptoms. Do not stop abruptly."},
+  {id:47,type:"sata",tag:"SATA labs/diagnostics",stem:"The nurse administered heparin to a client with ACS. Which findings require follow-up or interventions? (Select all that apply.)",options:["aPTT is above the therapeutic range","New bruising and petechiae","Black tarry stool","Mild headache that resolves with hydration","Sudden severe back pain with hypotension"],answer:[0,1,2,4],rationale:"Over-anticoagulation and bleeding signs require action. Severe back pain with hypotension can indicate retroperitoneal bleeding—urgent."},
+  {id:48,type:"sata",tag:"SATA condition teaching",stem:"A client with hypertension asks what long-term uncontrolled blood pressure can cause. Which outcomes are appropriate to include? (Select all that apply.)",options:["Stroke","Renal failure","Heart failure","Improved retinal health","Coronary artery disease and myocardial infarction"],answer:[0,1,2,4],rationale:"Chronic uncontrolled HTN damages vessels and organs: stroke, renal failure, HF, CAD/MI, PAD, retinopathy (not improved retinal health)."},
+  {id:49,type:"sata",tag:"SATA med teaching",stem:"A client is prescribed a calcium channel blocker for angina/hypertension. Which teaching is appropriate? (Select all that apply.)",options:["Dizziness can occur—rise slowly","Report swelling in the feet/ankles","Expect blood pressure to increase as the medication works","Monitor for low blood pressure","Fatigue and flushing can occur"],answer:[0,1,3,4],rationale:"CCBs can cause hypotension, dizziness, flushing, fatigue, and peripheral edema. BP should decrease, not increase."},
+  {id:50,type:"sata",tag:"SATA med teaching",stem:"A client prescribed aspirin asks what to monitor for. Which teaching is appropriate? (Select all that apply.)",options:["Tinnitus (ringing in ears) can occur","Report blood in urine or stool","Take additional NSAIDs daily long-term unless contraindicated","Tell your provider about kidney disease history","Chew the first dose if instructed for rapid effect in acute MI settings"],answer:[0,1,3,4],rationale:"Aspirin can cause tinnitus and bleeding and should be used cautiously with renal impairment. In acute MI, chewing the initial dose speeds absorption when directed. Long-term NSAID stacking is unsafe."},
+  {id:51,type:"matrix",tag:"Matrix",stem:"Case: 62-year-old with STEMI, BP 92/58, HR 52, SpO₂ 89%, reports sildenafil 10 hours ago. Classify each nursing action.",columns:["Indicated","Contraindicated","Not essential (now)"],rows:[{text:"Administer oxygen via nasal cannula",correct:0},{text:"Administer sublingual nitroglycerin",correct:1},{text:"Assess airway/breathing and place on continuous pulse oximetry",correct:0},{text:"Give metoprolol now",correct:1},{text:"Notify provider about sildenafil use and hypotension/bradycardia",correct:0},{text:"Teach long-term diet/exercise changes right now",correct:2}],rationale:"Oxygen is indicated for SpO₂ <90%. Nitrates are contraindicated with recent sildenafil and hypotension. Beta-blocker is contraindicated with bradycardia/hypotension. Education is not the immediate priority during instability."},
+  {id:52,type:"matrix",tag:"Matrix",stem:"Classify each medication by its most accurate preload/afterload effect in acute MI care.",columns:["↓ Preload","↓ Afterload","↓ Both","Neither primarily"],rows:[{text:"Nitroglycerin",correct:2},{text:"Morphine (in MI)",correct:2},{text:"Heparin",correct:3},{text:"ACE inhibitor (e.g., captopril)",correct:2},{text:"Clopidogrel",correct:3},{text:"Beta-blocker (metoprolol)",correct:3}],rationale:"Nitrates and morphine reduce preload and afterload via vasodilation. ACE inhibitors reduce both. Antiplatelets/anticoagulants don't directly change preload/afterload. Beta-blockers mainly reduce HR/contractility."},
+  {id:53,type:"matrix",tag:"Matrix",stem:"Two clients present with lower-extremity ulcers. Classify each finding.",columns:["More consistent with PAD","More consistent with Venous Insufficiency"],rows:[{text:"Small, round ulcer on toe with well-defined borders",correct:0},{text:"Irregular ulcer near inner ankle with edema",correct:1},{text:"Cool, pale/cyanotic foot",correct:0},{text:"Reddish-brown discoloration around ankles",correct:1},{text:"Intermittent claudication",correct:0}],rationale:"PAD = cool extremity, claudication, distal toe/foot ulcers with well-defined borders. Venous insufficiency = edema, brown discoloration, irregular ulcers near inner ankle."},
+  {id:54,type:"matrix",tag:"Matrix",stem:"Client on heparin infusion for ACS. Classify each finding.",columns:["Requires urgent follow-up","Monitor closely","Expected/likely"],rows:[{text:"Black tarry stool",correct:0},{text:"aPTT 95 seconds (target 60–80 in many protocols)",correct:0},{text:"Small bruise at old IV site",correct:1},{text:"Sudden severe back pain with hypotension",correct:0},{text:"Mild oozing at venipuncture site",correct:1}],rationale:"Major bleeding signs (melena, retroperitoneal bleed suspicion, markedly high aPTT) require urgent action. Minor oozing/bruising can be monitored."},
+  {id:55,type:"matrix",tag:"Matrix",stem:"Classify each change as likely to Increase CO or Decrease CO.",columns:["Increase CO","Decrease CO"],rows:[{text:"Heart rate drops from 84 → 48 after beta-blocker",correct:1},{text:"Afterload increases from severe hypertension",correct:1},{text:"Contractility improves after reperfusion therapy",correct:0},{text:"Preload drops sharply from hypovolemia",correct:1},{text:"Stroke volume increases with improved ventricular filling",correct:0}],rationale:"CO depends on HR and SV. HR too low decreases CO. High afterload reduces SV. Improved contractility increases SV. Very low preload decreases SV. Increased SV increases CO."},
+  {id:56,type:"bowtie",tag:"Bow-tie",stem:"Identify (1) the most likely problem, (2) the highest priority concern, and (3) the best immediate nursing action.",leftLabel:"Most likely problem",midLabel:"Highest priority concern",rightLabel:"Best immediate action",left:["Acute coronary syndrome with possible MI","Chronic venous insufficiency flare","Asthma exacerbation"],mid:["Impaired oxygenation and decreased myocardial perfusion","Risk for dehydration","Risk for skin breakdown only"],right:["Apply oxygen if SpO₂ <90% and place on cardiac monitor","Encourage ambulation and fluids","Apply warm compresses and elevate legs"],answer:{left:0,mid:0,right:0},rationale:"ACS threatens perfusion and oxygenation. Immediate actions target ABCs + monitoring to prevent deterioration and support myocardial oxygen delivery."},
+  {id:57,type:"bowtie",tag:"Bow-tie",stem:"A client with chest pain is ordered sublingual nitroglycerin. Select (1) key risk, (2) priority assessment, (3) safest nursing action.",leftLabel:"Key risk",midLabel:"Priority assessment",rightLabel:"Safest action",left:["Severe hypotension","Hyperglycemia","Neutropenia"],mid:["BP and recent PDE-5 inhibitor use","Bowel sounds and urine color","Pupil response"],right:["Hold if hypotensive or recent sildenafil; notify provider","Give with the client standing to improve circulation","Give extra doses to prevent pain recurrence"],answer:{left:0,mid:0,right:0},rationale:"Nitroglycerin can drop BP and is dangerous with PDE-5 inhibitors. Safety = assess and hold/notify when contraindicated."},
+  {id:58,type:"bowtie",tag:"Bow-tie",stem:"A client on heparin has falling platelets and new thrombosis. Select (1) complication, (2) top risk, (3) best nursing action.",leftLabel:"Complication",midLabel:"Top risk",rightLabel:"Best nursing action",left:["Heparin-induced thrombocytopenia (HIT)","Rebound hypertension","ACE-inhibitor cough"],mid:["Paradoxical clotting and limb/organ ischemia","Constipation only","Hearing loss"],right:["Stop heparin and notify provider immediately","Increase heparin dose to raise platelets","Give NSAIDs for comfort and continue infusion"],answer:{left:0,mid:0,right:0},rationale:"HIT causes thrombocytopenia with clot risk. Correct response is to stop heparin and escalate care."},
+  {id:59,type:"chart",tag:"Chart",stem:"Case: 70-year-old with NSTEMI, BP 148/86, HR 92, SpO₂ 94%, active GI bleed history last week. Classify each therapy.",rows:[{text:"Aspirin therapy",correct:"Contraindicated"},{text:"Continuous ECG monitoring",correct:"Indicated"},{text:"Oxygen via nasal cannula routinely despite SpO₂ 94%",correct:"Not indicated"},{text:"Heparin infusion",correct:"Contraindicated"},{text:"Pain assessment and nitroglycerin if not hypotensive and no PDE-5 inhibitor use",correct:"Indicated"}],rationale:"Active/recent significant GI bleed raises bleeding risk—antiplatelets/anticoagulants may be contraindicated. Monitoring is indicated. Oxygen is not routine when saturation is adequate."},
+  {id:60,type:"chart",tag:"Chart",stem:"Case: Client with acute pulmonary edema from heart failure: severe dyspnea, crackles, SpO₂ 86%, BP 172/98. Classify each nursing intervention.",rows:[{text:"Position upright with legs dependent if tolerated",correct:"Indicated"},{text:"Administer oxygen and prepare for escalation per protocol",correct:"Indicated"},{text:"Encourage large oral fluid intake",correct:"Contraindicated"},{text:"Teach long-term low-sodium diet immediately before stabilizing breathing",correct:"Not indicated"},{text:"Assess response to preload/afterload-reducing meds as ordered while monitoring BP",correct:"Indicated"}],rationale:"Acute pulmonary edema is an airway/oxygenation emergency. Upright positioning and oxygenation are priorities. Fluids worsen overload. Teaching is important but not first during instability."},
+];
+
+const AT=load();GA=AT.__gradedAll||false;
+if(AT.__cur!=null)cur=AT.__cur;
+
+const TL={mcq:"MCQ",sata:"SATA",matrix:"Matrix",chart:"Chart",bowtie:"Bow-tie"};
+const TC={mcq:"tm",sata:"ts",matrix:"tx",chart:"tc",bowtie:"tb"};
+const TN={mcq:"Multiple Choice",sata:"Select All That Apply",matrix:"Matrix Reasoning",chart:"Clinical Chart",bowtie:"Bow-Tie"};
+
+function norm(id){if(!AT[id])AT[id]={submitted:false,correct:false,response:null,ts:null,order:null};}
+
+// ── SHUFFLE MAP (stable per session per question) ──────
+function getOrder(q){
+  if(!SM[q.id]){
+    if(AT[q.id]?.order){SM[q.id]=AT[q.id].order;}
+    else{const o=shuffle([...q.options.keys()]);SM[q.id]=o;AT[q.id].order=o;save(AT);}
+  }
+  return SM[q.id];
+}
+
+function updateStats(){
+  const tot=exam.length;
+  const ans=exam.filter(q=>AT[q.id]?.submitted).length;
+  const cor=exam.filter(q=>AT[q.id]?.submitted&&AT[q.id]?.correct).length;
+  document.getElementById("scoreTop").textContent=ans?`${pct(cor,ans)}%`:"—";
+  document.getElementById("modeTop").textContent=PM?"Practice":"Exam";
+  const pf=document.getElementById("pf");if(pf)pf.style.width=`${pct(ans,tot)}%`;
+}
+
+function buildDots(){
+  const bar=document.getElementById("dotsBar");bar.innerHTML="";
+  let lastType=null;
+  exam.forEach((q,i)=>{
+    if(q.type!==lastType&&lastType!==null){const sep=document.createElement("div");sep.className="dot-sep";bar.appendChild(sep);}
+    lastType=q.type;
+    const d=document.createElement("div");
+    norm(q.id);
+    let cls="dot";
+    if(i===cur)cls+=" active";
+    if(AT[q.id].submitted)cls+=AT[q.id].correct?" done-ok":" done-ng";
+    d.className=cls;d.title=`Q${i+1}: ${q.tag}`;
+    d.textContent=i+1;
+    d.onclick=()=>goTo(i);
+    bar.appendChild(d);
+  });
+  // scroll active into view
+  const activeDot=bar.querySelector(".active");
+  if(activeDot)activeDot.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+}
+
+function renderQ(){
+  const wrap=document.getElementById("qWrap");
+  const sum=document.getElementById("summary");
+  wrap.style.display="";sum.classList.remove("visible");
+
+  const q=exam[cur];norm(q.id);
+  wrap.innerHTML="";
+
+  // Section label
+  const sl=document.createElement("div");sl.className="sec-label";sl.textContent=TN[q.type]||q.type;wrap.appendChild(sl);
+
+  const card=document.createElement("div");
+  card.className="qcard"+(AT[q.id].submitted?(AT[q.id].correct?" ok":" ng"):"");
+  card.id=`q_${q.id}`;
+
+  // Header
+  card.innerHTML=`<div class="qcard-hdr"><div class="qcard-meta"><span class="qnum-lbl">Q${cur+1} of ${exam.length}</span><span class="qtag ${TC[q.type]}">${TL[q.type]}</span><span style="font-size:10px;color:var(--ink-dim);font-family:var(--mono);">${H(q.tag)}</span></div><span class="qid-badge">ID ${q.id}</span></div>`;
+
+  const body=document.createElement("div");body.className="qbody";
+  body.innerHTML=`<p class="qstem">${H(q.stem)}</p>`;
+
+  if(q.type==="mcq"||q.type==="sata"){
+    const isSata=q.type==="sata";
+    const opts=document.createElement("div");opts.className="opts";
+    const order=getOrder(q);
+    const saved=AT[q.id].response;
+    order.forEach((oi,di)=>{
+      const id2=`q${q.id}o${di}`;
+      const chk=saved==null?false:isSata?(Array.isArray(saved)&&saved.includes(oi)):saved===oi;
+      const lab=document.createElement("label");lab.className="opt";lab.setAttribute("for",id2);
+      lab.innerHTML=`<input type="${isSata?"checkbox":"radio"}" id="${id2}" name="q_${q.id}" value="${oi}" ${chk?"checked":""}><span>${H(q.options[oi])}</span>`;
+      opts.appendChild(lab);
+    });
+    body.appendChild(opts);
+
+  }else if(q.type==="matrix"){
+    const wrap2=document.createElement("div");wrap2.className="mx-wrap";
+    const tbl=document.createElement("table");tbl.className="mx-tbl";
+    tbl.innerHTML=`<thead><tr><th>Clinical Item</th>${q.columns.map(c=>`<th>${H(c)}</th>`).join("")}</tr></thead>`;
+    const tb=document.createElement("tbody");const saved=AT[q.id].response||[];
+    q.rows.forEach((r,ri)=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td>${H(r.text)}</td>`+q.columns.map((c,ci)=>`<td><label class="mx-rl"><input type="radio" name="q${q.id}_r${ri}" value="${ci}" ${saved[ri]===ci?"checked":""} style="accent-color:var(--ecg)">${H(c)}</label></td>`).join("");
+      tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);wrap2.appendChild(tbl);body.appendChild(wrap2);
+
+  }else if(q.type==="chart"){
+    const wrap2=document.createElement("div");wrap2.className="mx-wrap";
+    const tbl=document.createElement("table");tbl.className="mx-tbl";
+    const ch=["Indicated","Contraindicated","Not indicated"];
+    tbl.innerHTML=`<thead><tr><th>Intervention</th>${ch.map(c=>`<th>${H(c)}</th>`).join("")}</tr></thead>`;
+    const tb=document.createElement("tbody");const saved=AT[q.id].response||[];
+    q.rows.forEach((r,ri)=>{
+      const tr=document.createElement("tr");
+      tr.innerHTML=`<td>${H(r.text)}</td>`+ch.map(c=>`<td><label class="mx-rl"><input type="radio" name="q${q.id}_r${ri}" value="${H(c)}" ${saved[ri]===c?"checked":""} style="accent-color:var(--ecg)">${H(c)}</label></td>`).join("");
+      tb.appendChild(tr);
+    });
+    tbl.appendChild(tb);wrap2.appendChild(tbl);body.appendChild(wrap2);
+
+  }else if(q.type==="bowtie"){
+    const saved=AT[q.id].response||{left:null,mid:null,right:null};
+    const bt=document.createElement("div");bt.className="bt-grid";
+    bt.appendChild(mkBT(q.id,"left",q.leftLabel,q.left,saved.left));
+    const a1=document.createElement("div");a1.className="bt-arr";a1.textContent="→";bt.appendChild(a1);
+    bt.appendChild(mkBT(q.id,"mid",q.midLabel,q.mid,saved.mid));
+    const a2=document.createElement("div");a2.className="bt-arr";a2.textContent="→";bt.appendChild(a2);
+    bt.appendChild(mkBT(q.id,"right",q.rightLabel,q.right,saved.right));
+    body.appendChild(bt);
+  }
+
+  card.appendChild(body);
+
+  // Submit row
+  const ftr=document.createElement("div");ftr.className="qftr";
+  ftr.innerHTML=`<div class="ftr-l"><button class="btn btn-p" id="btnSub">Submit Answer</button><button class="btn btn-g btn-sm" id="btnClr">Clear</button></div><div class="ftr-r">${PM?"Rationale unlocks on submit":"Rationale unlocks after Grade Exam"}</div>`;
+  card.appendChild(ftr);
+
+  // Feedback
+  const canShow=PM?AT[q.id].submitted:(GA&&AT[q.id].submitted);
+  const fb=document.createElement("div");
+  if(canShow){
+    const ok=AT[q.id].correct;
+    fb.className=`fb ${ok?"fb-ok":"fb-ng"}`;
+    fb.innerHTML=`<div class="fb-hdr"><span class="fb-badge ${ok?"b-ok":"b-ng"}">${ok?"✓ Correct":"✗ Incorrect"}</span><span style="font-size:11px;color:var(--ink-dim);font-family:var(--mono);">Clinical Rationale</span></div><div class="fb-body"><p class="rat">${H(q.rationale)}</p><div class="akey">${rKey(q)}</div></div>`;
+  }else{
+    fb.className="fb fb-lock";
+    fb.innerHTML=`<div class="fb-hdr"><span class="fb-badge b-lk">⊘ Rationale Locked</span></div><div class="fb-body"><p class="rat" style="color:var(--ink-dim);">${PM?"Submit your answer to unlock the clinical rationale.":"Complete the exam and click Grade Exam to unlock all rationales."}</p></div>`;
+  }
+  card.appendChild(fb);
+  wrap.appendChild(card);
+
+  // Wire submit/clear
+  document.getElementById("btnSub").onclick=()=>subQ(q.id);
+  document.getElementById("btnClr").onclick=()=>clrQ(q.id);
+
+  // Nav controls
+  document.getElementById("btnPrev").disabled=(cur===0);
+  document.getElementById("btnNext").textContent=cur===exam.length-1?"Summary →":"Next →";
+  document.getElementById("navCounter").textContent=`${cur+1} / ${exam.length}`;
+  document.getElementById("navTag").textContent=TN[q.type]||q.type;
+
+  buildDots();
+  updateStats();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function mkBT(qid,part,label,options,sv){
+  const col=document.createElement("div");col.className="bt-col";
+  col.innerHTML=`<div class="bt-col-lbl">${H(label)}</div>`;
+  const sel=document.createElement("select");sel.id=`bt_${qid}_${part}`;sel.className="bt-sel";
+  sel.innerHTML=`<option value="" disabled ${sv==null?"selected":""}>Select…</option>`+options.map((t,i)=>`<option value="${i}" ${sv===i?"selected":""}>${H(t)}</option>`).join("");
+  col.appendChild(sel);return col;
+}
+
+function rKey(q){
+  if(q.type==="mcq")return`Correct: <b>${H(q.options[q.answer[0]])}</b>`;
+  if(q.type==="sata")return`Correct selections: <b>${q.answer.map(i=>H(q.options[i])).join(" &nbsp;·&nbsp; ")}</b>`;
+  if(q.type==="matrix")return"Key: "+q.rows.map(r=>`${H(r.text)} → <b>${H(q.columns[r.correct])}</b>`).join("<br>");
+  if(q.type==="chart")return"Key: "+q.rows.map(r=>`${H(r.text)} → <b>${H(r.correct)}</b>`).join("<br>");
+  if(q.type==="bowtie")return`Key: <b>${H(q.left[q.answer.left])}</b> → <b>${H(q.mid[q.answer.mid])}</b> → <b>${H(q.right[q.answer.right])}</b>`;
+  return"";
+}
+
+function colResp(q){
+  const card=document.getElementById(`q_${q.id}`);if(!card)return null;
+  if(q.type==="mcq"){const p=card.querySelector(`input[name="q_${q.id}"]:checked`);return p?Number(p.value):null;}
+  if(q.type==="sata"){const p=[...card.querySelectorAll(`input[name="q_${q.id}"]:checked`)].map(x=>Number(x.value));return p.length?p:null;}
+  if(q.type==="matrix"){const out=q.rows.map((_,r)=>{const p=card.querySelector(`input[name="q${q.id}_r${r}"]:checked`);return p?Number(p.value):null;});return out.some(v=>v==null)?null:out;}
+  if(q.type==="chart"){const out=q.rows.map((_,r)=>{const p=card.querySelector(`input[name="q${q.id}_r${r}"]:checked`);return p?p.value:null;});return out.some(v=>v==null)?null:out;}
+  if(q.type==="bowtie"){const l=document.getElementById(`bt_${q.id}_left`)?.value,m=document.getElementById(`bt_${q.id}_mid`)?.value,r=document.getElementById(`bt_${q.id}_right`)?.value;return(l&&m&&r)?{left:Number(l),mid:Number(m),right:Number(r)}:null;}
+  return null;
+}
+
+function chkOk(q,resp){
+  if(resp==null)return false;
+  if(q.type==="mcq")return resp===q.answer[0];
+  if(q.type==="sata"){const a=[...q.answer].sort((x,y)=>x-y),r=[...resp].sort((x,y)=>x-y);return a.length===r.length&&a.every((v,i)=>v===r[i]);}
+  if(q.type==="matrix")return q.rows.every((r,i)=>resp[i]===r.correct);
+  if(q.type==="chart")return q.rows.every((r,i)=>resp[i]===r.correct);
+  if(q.type==="bowtie")return resp.left===q.answer.left&&resp.mid===q.answer.mid&&resp.right===q.answer.right;
+  return false;
+}
+
+function subQ(id){
+  const q=exam.find(x=>x.id===id);const resp=colResp(q);
+  if(resp==null){toast("⚠ Answer all parts before submitting.");return;}
+  AT[id].submitted=true;AT[id].correct=chkOk(q,resp);AT[id].response=resp;AT[id].ts=new Date().toISOString();
+  save(AT);toast(AT[id].correct?"✓ Correct":"✍ Submitted");renderQ();
+}
+
+function clrQ(id){
+  AT[id].submitted=false;AT[id].correct=false;AT[id].response=null;AT[id].ts=null;
+  save(AT);toast("Cleared.");renderQ();
+}
+
+function goTo(i){cur=i;AT.__cur=cur;save(AT);renderQ();}
+function prev(){if(cur>0)goTo(cur-1);}
+function next(){
+  if(cur<exam.length-1){goTo(cur+1);}
+  else{goToSummary();}
+}
+
+function goToSummary(){
+  const wrap=document.getElementById("qWrap");
+  const sum=document.getElementById("summary");
+  wrap.style.display="none";sum.classList.add("visible");
+  const tot=exam.length;
+  const ans=exam.filter(q=>AT[q.id]?.submitted).length;
+  const cor=exam.filter(q=>AT[q.id]?.submitted&&AT[q.id]?.correct).length;
+  const inc=exam.filter(q=>AT[q.id]?.submitted&&!AT[q.id]?.correct).length;
+  const una=tot-ans;
+  document.getElementById("sumScore").textContent=ans?`${pct(cor,ans)}%`:"—";
+  document.getElementById("sumSub").textContent=`${cor} correct out of ${ans} answered`;
+  document.getElementById("sumCorrect").textContent=cor;
+  document.getElementById("sumIncorrect").textContent=inc;
+  document.getElementById("sumUnanswered").textContent=una;
+  document.getElementById("navCounter").textContent="Summary";
+  document.getElementById("navTag").textContent="Exam Overview";
+  document.getElementById("btnNext").textContent="Next →";
+  document.getElementById("btnPrev").disabled=false;
+  buildDots();updateStats();window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function exportA(fmt){
+  const payload={meta:{title:"Perfusion Mock Exam 60Q",mode:PM?"Practice":"Exam",exportedAt:new Date().toISOString()},answers:exam.map(q=>({id:q.id,type:q.type,tag:q.tag,submitted:!!AT[q.id]?.submitted,correct:!!AT[q.id]?.correct,response:AT[q.id]?.response??null}))};
+  if(fmt==="json"){dl(new Blob([JSON.stringify(payload,null,2)],{type:"application/json"}),"Perfusion_MockExam.json");toast("Exported JSON.");return;}
+  const rows=[["id","type","tag","submitted","correct","response"].join(","),...payload.answers.map(r=>[r.id,r.type,csv(r.tag),r.submitted,r.correct,csv(JSON.stringify(r.response))].join(","))];
+  dl(new Blob([rows.join("\n")],{type:"text/csv"}),"Perfusion_MockExam.csv");toast("Exported CSV.");
+}
+function dl(blob,name){const u=URL.createObjectURL(blob),a=Object.assign(document.createElement("a"),{href:u,download:name});a.click();URL.revokeObjectURL(u);}
+function csv(s){const t=String(s??"");return/[,"\n]/.test(t)?`"${t.replace(/"/g,'""')}"`:""+t;}
+function doReset(){localStorage.removeItem(SK);location.reload();}
+
+// Ctrl menu
+const menuBtn=document.getElementById("menuBtn");
+const ctrlMenu=document.getElementById("ctrlMenu");
+menuBtn.onclick=(e)=>{e.stopPropagation();ctrlMenu.classList.toggle("open");};
+document.addEventListener("click",()=>ctrlMenu.classList.remove("open"));
+
+document.getElementById("menuMode").onclick=()=>{
+  PM=!PM;
+  document.getElementById("menuMode").textContent=PM?"Switch to Exam Mode":"Switch to Practice Mode";
+  toast(PM?"Practice Mode":"Exam Mode");renderQ();ctrlMenu.classList.remove("open");
+};
+
+document.getElementById("menuGrade").onclick=()=>{
+  GA=true;AT.__gradedAll=true;save(AT);
+  toast("Exam graded — rationales unlocked.");renderQ();ctrlMenu.classList.remove("open");
+};
+
+// Keyboard nav
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT"||e.target.tagName==="SELECT"||e.target.tagName==="TEXTAREA")return;
+  if(e.key==="ArrowRight"||e.key==="ArrowDown")next();
+  if(e.key==="ArrowLeft"||e.key==="ArrowUp")prev();
+});
+
+// Init
+exam.forEach(q=>norm(q.id));
+renderQ();
+</script>
+</body>
+</html>

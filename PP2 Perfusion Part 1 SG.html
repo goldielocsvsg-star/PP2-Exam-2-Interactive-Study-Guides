@@ -1,0 +1,2130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfusion Part 1 — Cardiac Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;0,700&family=JetBrains+Mono:wght@400;500&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --heart-red: #8B1A1A;
+    --arterial: #C0392B;
+    --venous: #2C3E7B;
+    --oxygen-blue: #3B6FA0;
+    --parchment: #F5F0E8;
+    --parchment-dark: #EDE5D5;
+    --ink: #2A1F1A;
+    --ink-light: #5C4A3A;
+    --gold: #B8860B;
+    --gold-light: #D4A934;
+    --alert-red: #A93226;
+    --safe-green: #1E6B45;
+    --warn-amber: #B7791F;
+    --ecg-green: #2D8B5E;
+    --shadow: rgba(42, 31, 26, 0.12);
+    --border: #C9B99A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Crimson Pro', 'Source Serif 4', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    font-size: 17px;
+    line-height: 1.78;
+    min-height: 100vh;
+  }
+
+  /* === ECG BACKGROUND PATTERN === */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(139,26,26,0.03) 39px, rgba(139,26,26,0.03) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(139,26,26,0.03) 39px, rgba(139,26,26,0.03) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* === HEADER === */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, var(--heart-red) 0%, #5C1616 50%, var(--venous) 100%);
+    color: #F5F0E8;
+    padding: 60px 40px 50px;
+    text-align: center;
+    overflow: hidden;
+    border-bottom: 4px solid var(--gold);
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: url("data:image/svg+xml,%3Csvg width='200' height='60' viewBox='0 0 200 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 L30 30 L35 30 L40 28 L45 32 L50 10 L55 50 L60 25 L65 35 L70 30 L100 30 L130 30 L135 30 L140 28 L145 32 L150 10 L155 50 L160 25 L165 35 L170 30 L200 30' fill='none' stroke='rgba(245,240,232,0.06)' stroke-width='1.5'/%3E%3C/svg%3E") repeat;
+    animation: ecg-scroll 8s linear infinite;
+    z-index: 1;
+  }
+
+  @keyframes ecg-scroll {
+    from { background-position: 0 0; }
+    to { background-position: 200px 0; }
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; }
+
+  .hero-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    background: rgba(245,240,232,0.12);
+    border: 1px solid rgba(245,240,232,0.25);
+    padding: 6px 20px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.8rem);
+    font-weight: 900;
+    letter-spacing: 1px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .hero h1 .accent { color: var(--gold-light); }
+
+  .hero-sub {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.15rem;
+    font-style: italic;
+    opacity: 0.85;
+    max-width: 600px;
+    margin: 0 auto 20px;
+  }
+
+  .hero-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.55;
+  }
+
+  /* === HEART SVG DECORATION === */
+  .heart-icon {
+    display: inline-block;
+    width: 28px;
+    height: 28px;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+
+  /* === NAV / TOC === */
+  .toc-bar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: linear-gradient(180deg, #2A1F1A, #3A2E24);
+    border-bottom: 2px solid var(--gold);
+    padding: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .toc-inner {
+    display: flex;
+    gap: 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 10px;
+    min-width: max-content;
+  }
+
+  .toc-bar a {
+    display: block;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.6);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+
+  .toc-bar a:hover {
+    color: var(--gold-light);
+    border-bottom-color: var(--gold-light);
+    background: rgba(245,240,232,0.05);
+  }
+
+  /* === MAIN LAYOUT === */
+  .guide-container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 30px 80px;
+  }
+
+  /* === SECTION HEADERS === */
+  .section {
+    margin-bottom: 56px;
+    scroll-margin-top: 60px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--heart-red);
+  }
+
+  .section-num {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--heart-red);
+    color: var(--parchment);
+    font-family: 'Playfair Display', serif;
+    font-weight: 900;
+    font-size: 1.3rem;
+    border-radius: 50%;
+    border: 2px solid var(--gold);
+  }
+
+  .section-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--heart-red);
+    line-height: 1.2;
+  }
+
+  .section-header h2 small {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.55rem;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-top: 2px;
+  }
+
+  /* === SUBSECTION HEADERS === */
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--venous);
+    margin: 40px 0 18px;
+    padding-left: 14px;
+    border-left: 3px solid var(--venous);
+  }
+
+  h4 {
+    font-family: 'Source Serif 4', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 32px 0 14px;
+  }
+
+  p { margin-bottom: 16px; line-height: 1.82; }
+
+  /* === CONTENT CARDS === */
+  .card {
+    background: #FFFDF8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 30px;
+    margin: 22px 0;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #E8DFD0;
+  }
+
+  .card-header .icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+  }
+
+  .card-header h4 {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--heart-red);
+  }
+
+  /* Drug card internal section labels */
+  .drug-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin: 22px 0 8px;
+    padding-top: 16px;
+    border-top: 1px dashed #DDD5C5;
+  }
+
+  .drug-label:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  /* Better paragraph spacing within cards */
+  .card p {
+    margin-bottom: 12px;
+    line-height: 1.82;
+  }
+
+  .card p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* === SPECIAL CARDS === */
+  .clinical-pearl {
+    background: linear-gradient(135deg, #FFF8F0, #FFF3E6);
+    border-left: 4px solid var(--gold);
+    border-color: var(--gold);
+  }
+
+  .red-flag {
+    background: linear-gradient(135deg, #FFF5F5, #FFEDED);
+    border-left: 4px solid var(--alert-red);
+    border-color: var(--alert-red);
+  }
+
+  .red-flag .card-header h4 { color: var(--alert-red); }
+
+  .nurse-tip {
+    background: linear-gradient(135deg, #F0F8F4, #E8F5EC);
+    border-left: 4px solid var(--safe-green);
+    border-color: var(--safe-green);
+  }
+
+  .nurse-tip .card-header h4 { color: var(--safe-green); }
+
+  .key-formula {
+    background: linear-gradient(135deg, #F0F3F8, #E8ECF5);
+    border-left: 4px solid var(--venous);
+    border-color: var(--venous);
+    text-align: center;
+    padding: 20px;
+  }
+
+  .formula {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--venous);
+    letter-spacing: 1px;
+    margin: 8px 0;
+  }
+
+  .formula-sub {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    font-style: italic;
+  }
+
+  /* === DEFINITION TAGS === */
+  .def {
+    background: rgba(139,26,26,0.06);
+    border: 1px solid rgba(139,26,26,0.15);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.95em;
+    white-space: nowrap;
+  }
+
+  .def-block {
+    background: #FFFDF8;
+    border-left: 3px solid var(--gold);
+    padding: 12px 18px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .def-block strong {
+    color: var(--heart-red);
+    font-family: 'Source Serif 4', serif;
+  }
+
+  /* === TABLES === */
+  .table-wrap {
+    overflow-x: auto;
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    background: #FFFDF8;
+  }
+
+  thead {
+    background: linear-gradient(135deg, var(--heart-red), #6B1515);
+    color: var(--parchment);
+  }
+
+  thead th {
+    padding: 12px 16px;
+    font-family: 'Source Serif 4', serif;
+    font-weight: 700;
+    text-align: left;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid #E8DFD0;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) { background: rgba(139,26,26,0.02); }
+  tbody tr:hover { background: rgba(184,134,11,0.06); }
+
+  .drug-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 500;
+    font-size: 0.88rem;
+    color: var(--heart-red);
+  }
+
+  .moa-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  .tag-preload { background: #EDE3F5; color: #5B2C8A; }
+  .tag-afterload { background: #E3EEF8; color: #1E5A8A; }
+  .tag-contractility { background: #FCE8E8; color: #8B1A1A; }
+  .tag-hr { background: #E8F5EC; color: #1E6B45; }
+  .tag-volume { background: #FFF3E0; color: #B7791F; }
+
+  /* === TAKEAWAY BOXES === */
+  .takeaway {
+    background: linear-gradient(135deg, #2A1F1A, #3A2E24);
+    color: var(--parchment);
+    border-radius: 8px;
+    padding: 22px 26px;
+    margin: 28px 0;
+    border: 1px solid var(--gold);
+  }
+
+  .takeaway-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--gold-light);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .takeaway ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .takeaway li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .takeaway li::before {
+    content: '♥';
+    position: absolute;
+    left: 0;
+    color: var(--arterial);
+    font-size: 0.75rem;
+    top: 8px;
+  }
+
+  /* === CASE STUDY === */
+  .case-study {
+    background: #FFFDF8;
+    border: 2px solid var(--venous);
+    border-radius: 10px;
+    overflow: hidden;
+    margin: 24px 0;
+  }
+
+  .case-header {
+    background: linear-gradient(135deg, var(--venous), #1E2D5A);
+    color: var(--parchment);
+    padding: 16px 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .case-body { padding: 22px 26px; }
+
+  .case-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--venous);
+    margin: 16px 0 6px;
+    font-weight: 500;
+  }
+
+  .case-label:first-child { margin-top: 0; }
+
+  .reveal-btn {
+    display: inline-block;
+    background: var(--venous);
+    color: var(--parchment);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background 0.2s;
+  }
+
+  .reveal-btn:hover { background: var(--heart-red); }
+
+  .reveal-content {
+    display: none;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, #F8F5EE, #FFF8F0);
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    border-left: 3px solid var(--gold);
+    line-height: 1.82;
+  }
+
+  .reveal-content.show { display: block; }
+
+  .reveal-content p {
+    margin-bottom: 12px;
+    line-height: 1.82;
+  }
+
+  .reveal-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* === COMPARISON LAYOUT === */
+  .compare-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 18px 0;
+  }
+
+  @media (max-width: 700px) {
+    .compare-grid { grid-template-columns: 1fr; }
+  }
+
+  .compare-card {
+    background: #FFFDF8;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px 20px;
+    border-top: 3px solid var(--heart-red);
+  }
+
+  .compare-card.right-side { border-top-color: var(--venous); }
+
+  .compare-card h4 {
+    margin: 0 0 10px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+  }
+
+  /* === LISTS === */
+  .content-list {
+    padding-left: 22px;
+    margin: 12px 0 16px;
+  }
+
+  .content-list li {
+    margin-bottom: 8px;
+    line-height: 1.72;
+  }
+
+  /* === ECG DIVIDER === */
+  .ecg-divider {
+    height: 30px;
+    margin: 40px 0;
+    background: url("data:image/svg+xml,%3Csvg width='400' height='30' viewBox='0 0 400 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 15 L80 15 L90 15 L100 12 L110 18 L120 2 L130 28 L140 12 L150 18 L160 15 L240 15 L250 15 L260 12 L270 18 L280 2 L290 28 L300 12 L310 18 L320 15 L400 15' fill='none' stroke='%238B1A1A' stroke-width='1.5' opacity='0.2'/%3E%3C/svg%3E") repeat-x center;
+  }
+
+  /* === FOOTER === */
+  .guide-footer {
+    text-align: center;
+    padding: 40px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--ink-light);
+    border-top: 2px solid var(--border);
+    margin-top: 60px;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 600px) {
+    .guide-container { padding: 24px 16px 60px; }
+    .hero { padding: 40px 20px 35px; }
+    .card { padding: 18px 16px; }
+    thead th, tbody td { padding: 8px 10px; font-size: 0.82rem; }
+    .section-header h2 { font-size: 1.4rem; }
+  }
+
+  /* === PRINT === */
+  @media print {
+    .toc-bar { display: none; }
+    .hero { break-after: page; }
+    .section { break-inside: avoid; }
+    body::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- HERO -->
+<!-- ============================================================ -->
+<header class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">BSN Cohort — Pathophysiology &amp; Pharmacology II</div>
+    <h1>Perfusion <span class="accent">Part 1</span></h1>
+    <p class="hero-sub">Atherosclerosis · Hypertension · Heart Failure<br>A Clinical-Reasoning Study Guide for the Upper-Level Nursing Student</p>
+    <p class="hero-meta">Source: UWG PP2 Lecture &bull; Lehne Ch 44, 47–51, 53–54 &bull; Huether Ch 25–26 &bull; Ignatavicius Ch 27, 30, 32</p>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- TOC BAR -->
+<!-- ============================================================ -->
+<nav class="toc-bar">
+  <div class="toc-inner">
+    <a href="#s1">Physiology</a>
+    <a href="#s2">Atherosclerosis</a>
+    <a href="#s3">Hypertension</a>
+    <a href="#s4">Heart Failure</a>
+    <a href="#s5">Drug Reference</a>
+    <a href="#s6">Clinical Reasoning</a>
+    <a href="#s7">Case Studies</a>
+    <a href="#s8">NCLEX Question Bank</a>
+    <a href="#s9">Takeaways</a>
+  </div>
+</nav>
+
+<!-- ============================================================ -->
+<!-- MAIN CONTENT -->
+<!-- ============================================================ -->
+<main class="guide-container">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: NORMAL CV PHYSIOLOGY -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">1</div>
+    <h2>Normal Cardiovascular &amp; Perfusion Physiology<small>Foundation — Know What's Normal Before Identifying What's Wrong</small></h2>
+  </div>
+
+  <h3>Functions of the Heart &amp; Circulatory Systems</h3>
+
+  <p>The cardiovascular system exists for one essential purpose: <strong>perfusion</strong> — delivering oxygenated blood to every tissue in the body and returning deoxygenated blood for gas exchange. This is accomplished by three interdependent systems working in concert.</p>
+
+  <div class="def-block"><strong>Coronary circulation</strong> — the network of vessels that supply the heart muscle (myocardium) itself. When coronary perfusion fails, the muscle that pumps blood for the entire body becomes ischemic.</div>
+
+  <div class="def-block"><strong>Pulmonary circulation</strong> — carries deoxygenated blood from the right ventricle to the lungs for gas exchange (intake of O₂, release of CO₂), then returns oxygenated blood to the left atrium. Requires intact ventilation (air movement), respiration (alveolar–capillary gas exchange), and perfusion (blood passing through pulmonary capillaries).</div>
+
+  <div class="def-block"><strong>Systemic circulation</strong> — the left ventricle ejects oxygenated blood into the aorta; arteries distribute it to tissues; veins return deoxygenated blood to the right atrium. The circuit then repeats.</div>
+
+  <h3>Cardiac Output &amp; Performance</h3>
+
+  <div class="key-formula card">
+    <div class="formula">CO = SV × HR</div>
+    <div class="formula-sub">Cardiac Output (4–8 L/min) = Stroke Volume (~70 mL/beat) × Heart Rate (60–100 bpm)</div>
+  </div>
+
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>The Single Most Important Therapeutic Principle</h4></div>
+    <p><strong>The goal of medication therapy with any cardiac patient is to DECREASE cardiac workload</strong> by manipulating SV, HR, preload, afterload, and/or contractility. Every perfusion drug you learn works by reducing one or more of these factors to lighten the burden on a struggling heart.</p>
+  </div>
+
+  <div class="def-block"><strong>Cardiac cycle</strong> — one complete heartbeat consisting of systole (contraction/ejection) followed by diastole (relaxation/filling).</div>
+
+  <div class="def-block"><strong>Stroke volume (SV)</strong> — the volume of blood ejected from a ventricle with each contraction (~70 mL). SV is influenced by the amount of blood returning to the right atrium from venous circulation and to the left atrium from pulmonary veins. A higher SV increases workload of the heart (typically due to excess volume). Determined by three factors: preload, afterload, and contractility.</div>
+
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🚩</span><h4>Why Tachycardia Hurts Cardiac Output</h4></div>
+    <p>Tachycardia <strong>increases</strong> myocardial oxygen demand and workload, but it actually <strong>decreases</strong> stroke volume because the ventricles have less time to fill during the shortened diastole. So while the heart is beating faster and working harder, each beat ejects less blood — a vicious cycle that worsens perfusion, especially in patients with existing heart disease.</p>
+  </div>
+
+  <div class="def-block"><strong>Ejection fraction (EF)</strong> — the percentage of blood ejected from the ventricle during systole, measured on echocardiogram. Normal = 60–70%. As EF drops, it reflects progressive loss of cardiac contractility and worsening heart failure.</div>
+
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Ejection Fraction</th><th>Clinical Significance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>60–70%</strong></td><td>Normal — adequate perfusion</td></tr>
+        <tr><td><strong>40–59%</strong></td><td>Mildly reduced — early HF; monitor closely</td></tr>
+        <tr><td><strong>30–35%</strong></td><td>Approximately half of normal CO — significant systolic HF</td></tr>
+        <tr><td><strong>Below 40%</strong></td><td>HFrEF — high risk for cardiac death; impaired perfusion</td></tr>
+        <tr><td><strong>10–15%</strong></td><td><strong>End-stage heart failure — terminal</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>The Four Determinants of Cardiac Output</h4>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Determinant</th><th>Definition</th><th>Normal Influence</th><th>Clinical Significance</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Preload</strong></td>
+          <td>End-diastolic volume/pressure — the stretch on ventricular muscle fibers at the end of filling. Influenced by how "full the tank is" (venous return and fluid volume). If monitored via central venous line, normal CVP = 2–6 mmHg.</td>
+          <td>↑ Preload → ↑ SV (Frank-Starling mechanism, up to a point). Fluid volume overload → ↑ SV → ↑ workload.</td>
+          <td>Excess preload → volume overload → pulmonary or systemic congestion. Drugs that ↓ preload: venodilators (nitrates), diuretics.</td>
+        </tr>
+        <tr>
+          <td><strong>Afterload</strong></td>
+          <td>The resistance the LV must overcome to open the aortic valve and eject blood. <strong>Correlates directly with SBP</strong> — think of afterload as "how much pressure is needed to push blood out of the LV into systemic circulation." Influenced by whether arteries are dilated or constricted.</td>
+          <td>↑ Afterload → heart works harder → ↓ SV if muscle cannot compensate. Arterial vasoconstriction ↑ afterload and ↑ workload.</td>
+          <td>Chronic ↑ afterload (HTN) → ventricular hypertrophy → eventual failure. Arterial vasodilators (ACEIs, CCBs) ↓ afterload and ↓ workload.</td>
+        </tr>
+        <tr>
+          <td><strong>Contractility</strong></td>
+          <td>The inherent force of ventricular contraction independent of preload/afterload. Directly influenced by intracellular Ca²⁺ during the cardiac action potential — this is why calcium channel blockers ↓ contractility.</td>
+          <td>↑ Contractility → ↑ SV. ↓ Contractility → ↓ O₂ demand and workload (can be therapeutic OR pathological).</td>
+          <td>Damaged myocardium (post-MI) → ↓ contractility → ↓ CO. <strong>Negative inotropes</strong> (↓ contractility): CCBs, beta blockers. <strong>Positive inotropes</strong> (↑ contractility): digoxin, dobutamine, dopamine, epinephrine.</td>
+        </tr>
+        <tr>
+          <td><strong>Heart Rate</strong></td>
+          <td>Number of contractions per minute (60–100 bpm at rest)</td>
+          <td>↑ HR → ↑ CO (up to a point; very high HR ↓ filling time → ↓ SV)</td>
+          <td>Tachycardia may be compensatory (shock, HF) but eventually worsens CO</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Regulation of Heart Rate &amp; Blood Pressure</h3>
+
+  <h4>Neurological Regulation</h4>
+  <p>The <strong>autonomic nervous system (ANS)</strong> provides moment-to-moment control. Sympathetic stimulation releases <span class="def">norepinephrine</span> and <span class="def">epinephrine</span>, increasing HR, contractility, and vasoconstriction (↑ CO and ↑ BP). Parasympathetic (vagal) input slows HR.</p>
+
+  <h4>Baroreceptors</h4>
+  <p>Stretch receptors in the <strong>aortic arch</strong> and <strong>carotid sinus</strong> sense arterial pressure. When BP is high, they signal the <strong>vasomotor center</strong> in the medulla to promote vasodilation (↓ afterload). When BP drops, the medulla triggers vasoconstriction (↑ afterload).</p>
+
+  <h4>Hormonal Regulation — The RAAS</h4>
+  <p>The <strong>renin-angiotensin-aldosterone system (RAAS)</strong> is the body's primary long-term compensatory mechanism for maintaining BP and renal perfusion:</p>
+  <p><strong>Decreased renal perfusion → juxtaglomerular cells release renin → renin converts angiotensinogen to angiotensin I → ACE converts angiotensin I to angiotensin II (a potent vasoconstrictor) → angiotensin II stimulates aldosterone release → aldosterone promotes Na⁺ and water retention → ↑ blood volume (↑ preload) and ↑ vascular resistance (↑ afterload) → ↑ BP.</strong></p>
+
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>Clinical Pearl — Why RAAS Matters Everywhere</h4></div>
+    <p>RAAS is the physiologic rationale behind ACE inhibitors, ARBs, aldosterone antagonists, and beta blockers (which reduce renin release). Understanding this single pathway explains the mechanism of nearly half the drugs on the perfusion exam.</p>
+  </div>
+
+  <h3>Frank-Starling Law of the Heart</h3>
+  <p><em>"The greater the blood volume (preload) entering the ventricle during diastole, the greater the volume ejected during systole — up to a physiological limit, beyond which the overstretched muscle loses contractile force."</em></p>
+  <p>The greatest force of contraction occurs when cardiac muscle fibers are stretched to approximately <strong>2.5 times their resting length</strong>. Beyond this point, further stretching actually <em>decreases</em> contractility — like an <strong>overstretched rubber band</strong> that loses its snap. This is exactly what happens in chronic heart failure: the dilated, overstretched ventricle becomes increasingly inefficient. This is why an enlarged heart on imaging is a bad sign, not a sign of strength.</p>
+
+  <div class="takeaway">
+    <div class="takeaway-title">♥ High-Yield Takeaways — Normal Physiology</div>
+    <ul>
+      <li>CO = SV × HR; anything that alters preload, afterload, contractility, or HR can change perfusion status.</li>
+      <li>EF 60–70% is normal; below 40% = systolic HF with significantly impaired perfusion.</li>
+      <li>RAAS is compensatory short-term but pathological long-term — it is the target of ACEIs, ARBs, aldosterone blockers, and beta blockers.</li>
+      <li>Frank-Starling law: stretching helps contractility up to a point, then the heart decompensates — this is the transition from compensated to decompensated HF.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: ATHEROSCLEROSIS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">2</div>
+    <h2>Atherosclerosis<small>The Root Cause of Most Cardiovascular Disease</small></h2>
+  </div>
+
+  <h3>Definitions &amp; Distinction</h3>
+  <div class="def-block"><strong>Arteriosclerosis</strong> — a general term for thickening and hardening of the arterial wall, often age-related.</div>
+  <div class="def-block"><strong>Atherosclerosis</strong> — a specific type of arteriosclerosis involving plaque formation within the arterial wall. It is the <em>leading risk factor</em> for cardiovascular disease (CVD) and affects large arteries: coronary, aorta, carotid, vertebral, renal, iliac, and femoral beds.</div>
+
+  <h3>Risk Factors</h3>
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h4>Modifiable</h4>
+      <ul class="content-list">
+        <li>Smoking &amp; tobacco use</li>
+        <li>Hypertension</li>
+        <li>Hyperlipidemia (↑ LDL-C, ↑ triglycerides)</li>
+        <li>Diabetes mellitus</li>
+        <li>Obesity / overweight</li>
+        <li>Physical inactivity</li>
+        <li>Unhealthy diet</li>
+        <li>Excessive alcohol intake</li>
+        <li>Chronic inflammatory conditions</li>
+        <li>Mental / psychosocial stress</li>
+      </ul>
+    </div>
+    <div class="compare-card right-side">
+      <h4>Non-Modifiable</h4>
+      <ul class="content-list">
+        <li><strong>Age:</strong> Men &gt; 45; Women &gt; 55</li>
+        <li><strong>Family history:</strong> Premature CVD in first-degree relative (men &lt; 55, women &lt; 65)</li>
+        <li><strong>Genetics:</strong> Inherited predispositions (e.g., familial hypercholesterolemia)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Pathophysiology — Cause-and-Effect Sequence</h3>
+  <p>The progression of atherosclerosis follows a predictable inflammatory cascade:</p>
+
+  <div class="card">
+    <div class="card-header"><span class="icon">🔬</span><h4>Step-by-Step Disease Progression</h4></div>
+    <p><strong>Step 1 — Endothelial injury.</strong> The process begins when the inner lining of the blood vessel is damaged. Triggers include smoking, hypertension, diabetes (which elevates LDL-C and triglycerides), and chemical injury from elevated LDL-C or decreased HDL-C.</p>
+    <p><strong>Step 2 — Inflammation and fatty-streak formation.</strong> The damaged endothelium attracts monocytes and lipids. Macrophages engulf LDL cholesterol, becoming foam cells that form fatty streaks along the vessel intima.</p>
+    <p><strong>Step 3 — Fibrous plaque development.</strong> Collagen and smooth muscle proliferate over the fatty streak, forming a fibrous cap. The plaque narrows the vessel lumen, reducing blood flow.</p>
+    <p><strong>Step 4 — Advanced or complicated lesions.</strong> Plaques become calcified, hemorrhagic, ulcerated, or thrombosed, affecting all layers of the vessel wall.</p>
+    <p><strong>Step 5 — Acute event.</strong> Plaque rupture exposes subendothelial tissue, triggering rapid platelet adhesion and thrombus formation. The resulting sudden vessel occlusion causes <strong>ischemia and infarction</strong> — this is the mechanism behind MI, stroke, and acute limb ischemia.</p>
+  </div>
+
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🚩</span><h4>Red Flag — The Lipid Link</h4></div>
+    <p><strong>Elevated LDL-C</strong> ("bad cholesterol") and <strong>decreased HDL-C</strong> ("good cholesterol") directly cause chemical injury to the vessel wall and accelerate plaque formation. Diabetes further worsens this by promoting ↑ LDL-C and ↑ triglycerides. This is the pathophysiologic rationale for statin therapy.</p>
+  </div>
+
+  <h3>Pharmacology — Atherosclerosis</h3>
+
+  <h4>Statins — HMG-CoA Reductase Inhibitors</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>atorvastatin (Lipitor) — Prototype</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Inhibits <span class="def">HMG-CoA reductase</span>, the rate-limiting enzyme in cholesterol synthesis, and decreases apolipoprotein B-100 production. With less cholesterol being manufactured in the liver, the liver compensates by upregulating LDL receptors on its surface, which pulls more LDL-C out of the bloodstream — effectively lowering circulating cholesterol levels.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Hypercholesterolemia; risk reduction for MI, angina, and stroke.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Generally well tolerated. Common side effects include headache, memory changes, and GI upset. The most serious adverse effect is <strong>rhabdomyolysis</strong>, a rare but life-threatening breakdown of skeletal muscle tissue that releases myoglobin into the blood and can cause kidney damage.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>If discontinued, lipid levels return to baseline — this is a lifelong medication. Statins are <em>ineffective</em> in patients genetically unable to synthesize LDL receptors (homozygous familial hypercholesterolemia). <strong>Teach the patient to report unexplained muscle pain, tenderness, or weakness and tea-colored urine</strong> — these are signs of rhabdomyolysis. Monitor liver function tests and lipid panels regularly.</p>
+
+    <span class="drug-label">Non-Pharmacologic Adjuncts</span>
+    <p>Low-fat diet, regular exercise, and tobacco cessation. Others in class include lovastatin, simvastatin, and pitavastatin.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Lowered LDL-C levels on fasting lipid panel; reduced cardiovascular risk.</p>
+  </div>
+
+  <h4>Antiplatelet Agents</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>aspirin (ASA)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Irreversibly inhibits <span class="def">COX-1</span> in platelets, which blocks thromboxane A₂ production. Without thromboxane A₂, platelets cannot aggregate effectively, which prevents arterial thrombus formation. Because the inhibition is irreversible, the antiplatelet effect lasts the entire lifespan of the platelet (about 7–10 days).</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Suppression of platelet aggregation; secondary prevention of MI, stroke, and PAD complications.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Bleeding</strong> is the primary concern. GI ulceration can lead to significant GI bleeding, so H. pylori testing is recommended before long-term therapy and a proton pump inhibitor (PPI) should be considered for GI protection. Aspirin is contraindicated in patients with bleeding disorders.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Discontinue high-dose ASA <strong>one week prior to surgical procedures</strong>. Monitor renal function. <strong>Teach the patient to recognize signs of bleeding:</strong> blood in urine, black tarry stools, coffee-ground emesis, and tinnitus. Use cautiously with any other agents that increase bleeding risk. Drug-drug interactions include other anticoagulants, antiplatelet agents, and NSAIDs.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>No signs of MI, PAD complications, or stroke.</p>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>clopidogrel (Plavix)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Blocks <span class="def">P2Y12 ADP receptors</span> on platelets, which prevents ADP-stimulated platelet aggregation. This is a different antiplatelet pathway than aspirin, which is why the two drugs are often used together (dual antiplatelet therapy) — they complement each other by blocking two separate triggers for clot formation.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Coronary artery stents (to prevent stent thrombosis), MI, ischemic stroke, and PAD.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>GI symptoms, bleeding, and bruising are the main concerns.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Discontinue <strong>5 days prior to surgery</strong> (compared to aspirin's 7-day window). Teach the same bleeding signs as aspirin: blood in urine, black tarry stools, coffee-ground emesis. Avoid combining with other drugs that increase bleeding risk without provider guidance.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Prevention of thrombotic events.</p>
+  </div>
+
+  <h4>Anticoagulant</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>heparin (unfractionated)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Binds to <span class="def">antithrombin</span>, which dramatically accelerates the inactivation of clotting factor Xa and thrombin. This suppresses the coagulation cascade. Important: heparin does NOT dissolve existing clots — it prevents clot extension and the formation of new clots.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>MI, PAD, PE, DVT, and post-operative DVT prophylaxis.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Hemorrhage</strong> is the primary concern. Heparin-induced thrombocytopenia (HIT) is a serious immune-mediated complication where platelet counts drop significantly, paradoxically increasing thrombosis risk.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Contraindicated in active bleeding disorders. Monitor <strong>aPTT every 4–6 hours</strong> — the therapeutic goal is 1.5–2× normal (normal aPTT is approximately 40 seconds, so therapeutic range is <strong>60–80 seconds</strong>). Administer SubQ or IV only — never IM. Monitor closely for signs of bleeding: decreased BP, tachycardia, bruises, petechiae, hematomas, red or black tarry stool, discolored urine, pelvic pain, headache, and lumbar pain. Discontinue immediately if significant bleeding develops. <strong>Antidote: protamine sulfate.</strong></p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Prevention of thrombosis without hemorrhagic complications.</p>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">♥ High-Yield Takeaways — Atherosclerosis</div>
+    <ul>
+      <li>Atherosclerosis = inflammation + lipid deposition → plaque → rupture → thrombosis → ischemia/infarction.</li>
+      <li>Statins ↓ cholesterol production; lifelong therapy; watch for rhabdomyolysis (tea-colored urine, muscle pain).</li>
+      <li>Aspirin (COX-1) and clopidogrel (P2Y12) block platelets via different pathways — know the distinct drug-drug and pre-surgical timelines.</li>
+      <li>Heparin → monitor aPTT (60–80 sec therapeutic); antidote = protamine sulfate.</li>
+      <li>All anti-clotting agents share one universal nursing priority: <strong>assess for and teach signs of bleeding.</strong></li>
+    </ul>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: HYPERTENSION -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">3</div>
+    <h2>Hypertension<small>The "Silent Killer" — Pathophysiology &amp; Pharmacologic Management</small></h2>
+  </div>
+
+  <h3>Definition &amp; Significance</h3>
+  <p><strong>Hypertension (HTN)</strong> is persistently elevated systemic blood pressure. The AHA goal is <strong>BP &lt; 130/80 mmHg</strong> for all adults. HTN is called the "silent killer" because it is often asymptomatic until it causes end-organ damage: stroke, MI, heart failure, chronic kidney disease, and retinopathy.</p>
+
+  <div class="key-formula card">
+    <div class="formula">BP = CO × PVR</div>
+    <div class="formula-sub">Blood Pressure = Cardiac Output × Peripheral Vascular Resistance</div>
+    <div class="formula-sub" style="margin-top:6px;">Therefore: any factor that ↑ CO (via ↑ SV or ↑ HR) or ↑ PVR can ↑ BP and impair perfusion.</div>
+  </div>
+
+  <h3>Pathophysiology — How HTN Develops</h3>
+  <p>Blood pressure is maintained by the interplay of the ANS, circulating catecholamines (NE, epi), the RAAS, baroreceptors, and the vasomotor center. In chronic HTN, these regulatory systems become maladaptive:</p>
+
+  <div class="card">
+    <div class="card-header"><span class="icon">🔬</span><h4>Mechanism of Sustained HTN</h4></div>
+    <p><strong>RAAS over-activation</strong> is the central driver. Excessive angiotensin II causes persistent vasoconstriction, increasing afterload. Aldosterone promotes chronic sodium and water retention, increasing preload and circulating volume. Over time, the elevated pressures damage vessel walls, trigger arteriosclerosis, and create a self-perpetuating cycle of increasing resistance.</p>
+    <p><strong>Baroreceptor resetting</strong> compounds the problem. Chronically high pressures "reset" the baroreceptors to accept the new elevated baseline as normal, so the reflex that should correct high BP no longer kicks in.</p>
+    <p><strong>Vasomotor center dysfunction</strong> maintains the cycle. Sustained sympathetic tone keeps arteries constricted even when the body needs them to relax.</p>
+  </div>
+
+  <h3>Pharmacology — Antihypertensive Classes</h3>
+  <p>All HTN drugs work by reducing one or more components of the BP equation: CO (via ↓ HR, ↓ SV, or ↓ volume) or PVR (via vasodilation). Understanding <em>where</em> each class acts is the key to mastering this content.</p>
+
+  <h4>Loop Diuretics</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>furosemide (Lasix) &amp; bumetanide (Bumex) — Most Potent Diuretics</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Blocks the Na⁺/K⁺/2Cl⁻ cotransporter (chloride pump) in the ascending <span class="def">loop of Henle</span>, preventing reabsorption of Na⁺, Cl⁻, and water. This produces <strong>rapid, large-volume diuresis</strong> — which is why these are called "high-ceiling" diuretics. They produce greater diuresis than any other class. <span class="moa-tag tag-preload">↓ PRELOAD</span> <span class="moa-tag tag-volume">↓ VOLUME</span>. Because of their potency, loops are not typically used for maintenance — they are the go-to when rapid, aggressive diuresis is needed, such as in acute HF exacerbation.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>HTN not controlled with milder diuretics; HF (edema); acute pulmonary edema.</p>
+
+    <span class="drug-label">Adverse Effects &amp; Lab Changes</span>
+    <p><strong>Electrolyte losses</strong> are the primary concern: <strong>hypokalemia</strong> (watch for inverted T waves on ECG), hyponatremia, hypocalcemia, hypomagnesemia, and hypochloremia. Metabolic effects include hyperglycemia (use caution in DM), hyperuricemia, elevated BUN/creatinine, and elevated lipids. Other adverse effects include hypotension with dizziness, dehydration (dry mouth, thirst, oliguria), and <strong>ototoxicity</strong>.</p>
+
+    <span class="drug-label">Critical Drug Interaction</span>
+    <p><strong>Digoxin + loop-induced hypokalemia → digoxin toxicity</strong> (bradycardia, N/V, visual disturbances). This is one of the most commonly tested drug interactions in nursing pharmacology.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Obtain BP before administering — hold if SBP &lt; 90.</strong> Monitor I&O, daily weights, lung sounds, and electrolytes (especially K⁺, Na⁺, Mg²⁺). Monitor GFR and creatinine. Withhold and notify the provider for significant electrolyte imbalances or hypotension. Furosemide and bumetanide are <strong>sulfonamides</strong>, so always assess for sulfa allergy. <strong>Never combine two loop diuretics together.</strong> Change positions slowly in elderly patients to prevent orthostatic changes. Loop diuretics may also increase anticoagulation effects.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>BP ≤ 130/80; reduced edema (documented by daily weight); increased UOP.</p>
+  </div>
+
+  <h4>Thiazide Diuretics</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>hydrochlorothiazide (HCTZ)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Blocks Na⁺/Cl⁻ reabsorption in the <span class="def">distal convoluted tubule</span>, producing moderate diuresis <span class="moa-tag tag-preload">↓ PRELOAD</span> <span class="moa-tag tag-volume">↓ VOLUME</span>. Thiazides produce less dramatic diuresis than loops, making them the <strong>most common maintenance diuretic</strong> for ongoing blood pressure management.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>First-line HTN; HF (especially in older adults).</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Similar electrolyte profile to loops with one critical difference: thiazides cause <strong>hypercalcemia</strong> (loops cause hypocalcemia). Also expect hypokalemia, hyponatremia, hypochloremia, hyperuricemia, hyperglycemia, and hyperlipidemia.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Same digoxin toxicity risk via hypokalemia. Monitor electrolytes, I&O, and daily weight. Withhold and notify the provider for electrolyte abnormalities or hypotension.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>BP ≤ 130/80; reduced edema; increased UOP.</p>
+  </div>
+
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>Exam Pearl — Loop vs. Thiazide Calcium Effect</h4></div>
+    <p><strong>Loops → hypo</strong>calcemia (calcium is Lost in the Loop). <strong>Thiazides → hyper</strong>calcemia (Thiazides hoard — they retain calcium). Both cause hypokalemia. This distinction is frequently tested.</p>
+  </div>
+
+  <h4>Potassium-Sparing Diuretics</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>spironolactone (Aldactone) — Prototype</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Blocks <span class="def">aldosterone</span> receptors in the distal nephron, which promotes Na⁺ and water excretion while <strong>retaining K⁺</strong> <span class="moa-tag tag-preload">↓ PRELOAD</span> <span class="moa-tag tag-volume">↓ VOLUME</span>. This is the <strong>weakest class of diuretics</strong> because it does not directly block sodium reabsorption. It is used primarily when the patient is at risk for developing hypokalemia, not when aggressive diuresis is needed.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>HTN, edema from HF, counteracting K⁺ loss from loop or thiazide diuretics, and lowering digoxin toxicity risk.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Hyperkalemia</strong> is the primary concern — watch for lethargy, confusion, muscle cramps, ECG changes, and arrhythmias. Gynecomastia (breast tissue growth) is an endocrine side effect unique to this drug.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Monitor serum K⁺ closely — <strong>withhold if K⁺ &gt; 5 mEq/L</strong>. Patients must avoid K⁺ supplements and salt substitutes (which contain KCl). <strong>Do NOT combine with ACEIs or ARBs</strong> because all three raise K⁺, creating a risk of life-threatening hyperkalemia. If ACEI or ARB therapy is started, discontinue the K⁺-sparing diuretic first; it may be resumed later if needed. Spironolactone <em>can</em> be given alongside a loop or thiazide to balance K⁺ levels — this is a common combination. Monitor UOP and report output &lt; 30 mL/hr or &lt; 600 mL/day.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>BP ≤ 130/80; reduced edema; balanced K⁺ levels.</p>
+  </div>
+
+  <h4>Combination Diuretics (Know These Names)</h4>
+  <p>Combining a K⁺-sparing agent with a loop or thiazide intensifies diuresis while preventing K⁺ loss:</p>
+  <div class="def-block">
+    <strong>Aldactazide</strong> = spironolactone + HCTZ &nbsp;|&nbsp;
+    <strong>Moduretic</strong> = amiloride + HCTZ &nbsp;|&nbsp;
+    <strong>Dyazide / Maxzide</strong> = triamterene + HCTZ
+  </div>
+
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>Diuretic Potency at a Glance</h4></div>
+    <div class="table-wrap" style="box-shadow:none;margin:0">
+      <table>
+        <thead><tr><th>Class</th><th>Prototype</th><th>Potency</th><th>Site of Action</th><th>K⁺ Effect</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Loop</strong></td><td>Furosemide, Bumetanide</td><td>Most potent (high-ceiling)</td><td>Loop of Henle</td><td>↓ K⁺ (depletes)</td></tr>
+          <tr><td><strong>Thiazide</strong></td><td>HCTZ</td><td>Moderate (maintenance)</td><td>Distal convoluted tubule</td><td>↓ K⁺ (depletes)</td></tr>
+          <tr><td><strong>K⁺-Sparing</strong></td><td>Spironolactone</td><td>Weakest (mild)</td><td>Distal nephron (blocks aldosterone)</td><td>↑ K⁺ (retains)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:12px;font-style:italic">Loops are for acute situations needing rapid diuresis (acute HF exacerbation). Thiazides are the everyday maintenance diuretic. K⁺-sparing agents are added to counteract K⁺ loss from the other two.</p>
+  </div>
+
+  <h4>ACE Inhibitors (ACEIs)</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>lisinopril / enalapril / captopril — ACE Inhibitors (end in "-pril")</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Inhibits <span class="def">angiotensin-converting enzyme (ACE)</span>, blocking the conversion of angiotensin I to angiotensin II. To understand why this matters, follow the full RAAS pathway: when BP falls, the <strong>kidneys</strong> secrete renin → renin converts angiotensinogen (an inactive protein from the <strong>liver</strong>) into angiotensin I → <strong>ACE</strong> (produced in the <strong>lungs</strong>) converts angiotensin I into angiotensin II, one of the most potent vasoconstrictors in the body.</p>
+    <p>Angiotensin II causes three harmful effects in HF patients: (1) vasoconstriction of arterioles and veins, which increases afterload; (2) SNS stimulation, which increases cardiac workload; and (3) aldosterone-mediated water retention, which increases preload. <strong>In heart failure, every one of these effects worsens the underlying failure</strong> — this is why ACEIs are the first medication used in HF.</p>
+    <p>By blocking ACE, the drug causes vasodilation <span class="moa-tag tag-afterload">↓ AFTERLOAD</span>, reduces aldosterone-driven Na⁺/H₂O retention <span class="moa-tag tag-preload">↓ PRELOAD</span>, and increases bradykinin levels (which promotes further vasodilation but also causes the cough and angioedema risk).</p>
+
+    <span class="drug-label">Indications</span>
+    <p>HTN, HF, acute MI, prevention of MI and CVA.</p>
+
+    <span class="drug-label">Adverse Effects — The "ACEI Triad" Plus</span>
+    <p><strong>First-dose hypotension</strong> is common — teach patients to rise slowly from sitting or lying positions. A <strong>persistent dry cough</strong> develops in many patients due to increased bradykinin, and this is the most common reason patients are switched to an ARB instead. <strong>Angioedema</strong> is a medical emergency involving swelling of the tongue, glottis, pharynx, lips, or eyes — also caused by increased bradykinin — and requires immediate treatment with epinephrine. Facial swelling is an early warning sign and a clinical red flag. <strong>Hyperkalemia</strong> can occur because less aldosterone means less K⁺ excretion — patients should limit K⁺ supplements, salt substitutes, and K⁺-sparing diuretics. ACEIs can also cause <strong>renal failure</strong> in patients with renal artery stenosis.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Obtain BP before administering — hold if SBP &lt; 90.</strong> Monitor BP carefully after the first dose, and also monitor K⁺, renal function (BUN/Cr), liver function, and WBC count. Teach the patient all adverse effects listed above and when to seek emergency care (any swelling of face, lips, or tongue). Change positions slowly, especially in elderly patients, to prevent orthostatic hypotension.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Lower BP; reduced volume in HF; myocardial remodeling protection post-MI; prevention of MI and CVA.</p>
+  </div>
+
+  <h4>Angiotensin II Receptor Blockers (ARBs)</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>losartan (Cozaar) / valsartan (Diovan) / irbesartan (Avapro) — ARBs (end in "-sartan")</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Blocks <span class="def">angiotensin II receptors</span> directly in the tissues, preventing angiotensin II from binding and causing its usual effects. This results in vasodilation <span class="moa-tag tag-afterload">↓ AFTERLOAD</span> and decreased aldosterone release, which reduces Na⁺ and water retention <span class="moa-tag tag-preload">↓ PRELOAD</span>.</p>
+
+    <span class="drug-label">Key Difference from ACEIs</span>
+    <p>ARBs do NOT increase bradykinin — which means <strong>no cough and lower angioedema risk</strong> (though angioedema can still rarely occur). This makes ARBs the go-to alternative for patients who cannot tolerate ACEIs due to cough. However, because ARBs do not raise bradykinin, their cardioprotective remodeling effects in HF are somewhat less favorable than ACEIs.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>First-dose hypotension, angioedema (rare), hyperkalemia, renal failure with renal artery stenosis, headache, dizziness, and GI complaints.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Do NOT use with an ACEI</strong> — the mechanisms overlap, increasing adverse effects without added benefit. Same K⁺ and renal monitoring as ACEIs.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Lower BP; reduced volume in HF; MI and CVA prevention.</p>
+  </div>
+
+  <h4>Beta-Adrenergic Blockers</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>metoprolol / atenolol / propranolol / labetalol — Beta Blockers (end in "-lol")</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Selectively inhibits <span class="def">beta-1 adrenergic receptors</span> — the sympathetic "fight or flight" receptors primarily located in the heart. Normally, SNS stimulation causes increased HR, increased BP, and increased contractility — <strong>all of which increase cardiac workload.</strong> By blocking these beta-1 receptors, the drug produces the opposite effects: <span class="moa-tag tag-hr">↓ HR</span> <span class="moa-tag tag-contractility">↓ CONTRACTILITY</span> → decreased CO and decreased O₂ demand.</p>
+    <p>Beta blockers also block beta-1 on juxtaglomerular cells in the kidney, reducing renin release and decreasing RAAS activation. With prolonged use, peripheral vascular resistance drops <span class="moa-tag tag-afterload">↓ AFTERLOAD</span>. In HF, excessive SNS activation is a compensatory mechanism that actually worsens failure over time — this is why beta blockers are commonly used alongside ACEIs in HF management, despite seeming counterintuitive.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>First-line for exertional angina; HTN; acute MI; CAD; ventricular dysrhythmias; HF (specific agents only — carvedilol, bisoprolol, metoprolol XL).</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Bradycardia</strong> is the primary concern. Beta blockers also mask hypoglycemia symptoms in diabetic patients by blocking the SNS response — the patient won't experience the usual shaking and tachycardia that normally warn of low blood glucose. Other effects include fatigue, weakness, hypotension, and bronchoconstriction (especially with non-selective agents like propranolol).</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Obtain BP and HR before administering — hold if SBP &lt; 90 or HR &lt; 60.</strong> Contraindicated in worsening HF, bradycardia, and heart block. Use with caution in diabetes and liver disease. Caution with asthma, especially with higher doses of metoprolol or non-selective agents like propranolol. <strong>Never discontinue abruptly</strong> — always taper to avoid rebound tachycardia and HTN. Change positions slowly in elderly patients. Teach the patient to monitor their own pulse daily.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Lower BP and HR; angina control.</p>
+  </div>
+
+  <h4>Calcium Channel Blockers (CCBs)</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>amlodipine (Norvasc) / diltiazem (Cardizem) / verapamil (Calan) / nifedipine (Procardia)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Inhibits or "blocks" the influx of extracellular calcium ions into the membranes of cardiac and vascular smooth muscle cells. Since contractility depends on intracellular Ca²⁺, blocking its entry produces three key effects: (1) dilation of coronary and systemic arteries, which lowers BP and improves coronary O₂ supply <span class="moa-tag tag-afterload">↓ AFTERLOAD</span>; (2) decreased myocardial contractility, which reduces cardiac workload and O₂ demand; and (3) slowed SA and AV node conduction <span class="moa-tag tag-hr">↓ HR</span>.</p>
+    <p><strong>Diltiazem</strong> is most commonly used specifically to slow HR and AV node conduction in atrial fibrillation and SVT. <strong>Because CCBs decrease contractility, they must be used with caution in HF</strong> — they can worsen an already-failing pump.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Angina (especially coronary vasospasm); HTN (second-line); controlling rapid HR in SVT or atrial fibrillation (except nifedipine, which is primarily a vasodilator).</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Constipation</strong> is very common (decreased Ca²⁺ in GI smooth muscle slows motility). Other effects include bradycardia, hypotension (which creates a fall risk), and <strong>peripheral edema</strong> secondary to vasodilation.</p>
+
+    <span class="drug-label">Critical Drug Interactions</span>
+    <p><strong>Digoxin:</strong> CCBs suppress the AV node and increase plasma digoxin levels — together this creates a high risk of severe bradycardia and digoxin toxicity. <strong>Beta blockers:</strong> Additive bradycardia and decreased contractility when combined. <strong>Grapefruit juice:</strong> Inhibits CYP3A4 enzymes, raising CCB drug levels — patients must be taught to avoid grapefruit.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Obtain BP and HR before administering — hold if SBP &lt; 90 or HR &lt; 60.</strong> Increase dietary fiber and fluids to manage constipation. Measure I&O closely and assess fluid status due to potential for peripheral edema. Monitor liver and kidney function (metabolized in liver, excreted by kidneys). Change positions slowly, especially in elderly patients.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Lower BP and HR; angina control.</p>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">♥ High-Yield Takeaways — Hypertension Pharmacology</div>
+    <ul>
+      <li>Diuretics ↓ preload (volume); ACEIs/ARBs ↓ afterload + preload (RAAS block); beta blockers ↓ HR + contractility + renin; CCBs ↓ afterload + HR.</li>
+      <li>Loop vs. thiazide calcium distinction: Loops Lose calcium; Thiazides hoard it.</li>
+      <li>K⁺-sparing diuretics + ACEIs/ARBs = hyperkalemia risk — do not combine without careful monitoring.</li>
+      <li>ACEI cough → switch to ARB. Angioedema with either → emergency; treat with epinephrine.</li>
+      <li>Digoxin interacts dangerously with loop diuretics (hypokalemia → toxicity) AND CCBs (AV suppression + elevated levels).</li>
+    </ul>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: HEART FAILURE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">4</div>
+    <h2>Heart Failure<small>From Compensated Pump Failure to Cardiogenic Shock</small></h2>
+  </div>
+
+  <h3>Definition &amp; Etiology</h3>
+  <p><strong>Heart failure (HF)</strong> is a clinical syndrome in which the heart is unable to pump sufficient blood to meet the metabolic demands of the body. It represents decreased cardiac output due to impaired myocardial function. HF can be acute (post-MI) or chronic (progressive). The most severe form of acute HF is <strong>cardiogenic shock</strong>.</p>
+  <p><strong>Common causes of chronic HF:</strong> hypertension, coronary artery disease, and valvular disease.</p>
+
+  <h3>Left Ventricular Heart Failure</h3>
+  <p>Left-sided HF produces <strong>poor systemic perfusion</strong> (↓ CO) and <strong>pulmonary congestion</strong> (blood backs up into pulmonary vasculature). It has two subtypes:</p>
+
+  <div class="compare-grid">
+    <div class="compare-card">
+      <h4>Systolic HF (HFrEF)</h4>
+      <p><em>HF with Reduced Ejection Fraction</em></p>
+      <p>The problem is <strong>weak contraction</strong> — the ventricle cannot squeeze forcefully enough during systole. The body compensates by increasing preload (more volume) and afterload (higher PVR/SBP), but ejection remains poor. <strong>EF drops below 40%</strong> (normal 50–70%), meaning less than half the blood in the ventricle is being pumped out. Blood accumulates in pulmonary vessels, decreasing effective CO. Patients with HFrEF are at <strong>high risk for sudden cardiac death.</strong></p>
+    </div>
+    <div class="compare-card right-side">
+      <h4>Diastolic HF (HFpEF)</h4>
+      <p><em>HF with Preserved Ejection Fraction</em></p>
+      <p>The problem is <strong>stiff filling</strong> — the LV cannot relax adequately during diastole, so the stiff ventricle prevents proper filling. Even though the heart squeezes normally (EF is preserved), CO drops because less blood enters the chamber in the first place. More pressure is needed to move the same volume. This type is especially common in <strong>older adults, women, patients with chronic HTN, and those with undetected CAD</strong>. Signs and symptoms are identical to systolic HF.</p>
+    </div>
+  </div>
+
+  <h4>Signs &amp; Symptoms — Left-Sided HF (Pulmonary Congestion)</h4>
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🫁</span><h4>Assessment Findings — Think "Lungs"</h4></div>
+    <p>Because the left ventricle cannot pump blood forward effectively, blood backs up into the pulmonary vasculature. You will hear <strong>crackles (rales) in the lung bases bilaterally</strong> and possibly wheezes. The patient will be <strong>tachycardic and tachypneic</strong> as the body compensates. As pulmonary edema worsens, you may see <strong>frothy, pink-tinged sputum</strong> — this is a late, ominous sign that fluid is flooding the alveoli. On auscultation, listen for an <strong>S3 heart sound</strong> (the pathological "gallop"), which indicates ventricular volume overload. Patients often report <strong>orthopnea</strong> (difficulty breathing when lying flat — they need extra pillows) and <strong>paroxysmal nocturnal dyspnea (PND)</strong>, where they wake up suddenly at night gasping for air.</p>
+  </div>
+
+  <h3>Right Ventricular Heart Failure</h3>
+  <p>When the right ventricle fails, it cannot empty completely. Blood backs up into the venous system, causing <strong>systemic congestion</strong>. Causes include left ventricular failure (most common), right ventricular MI, or pulmonary hypertension.</p>
+
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🩸</span><h4>Assessment Findings — Think "Systemic / Venous Congestion"</h4></div>
+    <p>When the right ventricle fails, blood backs up into the systemic venous circulation rather than the lungs. Look for <strong>jugular venous distention (JVD)</strong> — a visible sign that venous pressure is elevated. The liver and spleen become engorged (<strong>hepatomegaly and splenomegaly</strong>), which can cause anorexia and nausea. Fluid leaks into tissues, producing <strong>dependent edema</strong> in the legs and sacrum, swollen hands and fingers, and <strong>ascites</strong> (a distended, fluid-filled abdomen). <strong>Weight gain</strong> is one of the most reliable indicators of fluid retention — the patient should be weighed daily. Patients may also notice <strong>polyuria at night (nocturia)</strong> as fluid redistributes when they lie down. Blood pressure may be elevated from excess volume or decreased if the heart is too weak to pump effectively.</p>
+  </div>
+
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>Exam Pearl — Left vs. Right HF</h4></div>
+    <p><strong>Left = Lungs</strong> (pulmonary congestion: crackles, dyspnea, pink frothy sputum, orthopnea, PND, S3).<br>
+    <strong>Right = Rest of the body</strong> (systemic venous congestion: JVD, hepatomegaly, peripheral edema, ascites, weight gain).<br>
+    Left-sided failure is the most common cause of right-sided failure.</p>
+  </div>
+
+  <h3>Cardiogenic Shock</h3>
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🚨</span><h4>Report Immediately — Life-Threatening Emergency</h4></div>
+    <p>Cardiogenic shock is the most severe form of acute HF. <strong>Early detection is essential because undiagnosed cardiogenic shock has a very high mortality rate.</strong></p>
+    <p>The classic presentation includes <strong>tachycardia</strong> with <strong>hypotension</strong> (SBP &lt; 90 mmHg, or more than 30 mmHg below the patient's baseline). Renal perfusion drops, causing <strong>oliguria</strong> (UOP &lt; 0.5–1 mL/kg/hr). The skin becomes <strong>cold and clammy with poor peripheral pulses</strong> as blood is shunted to vital organs. Cerebral perfusion decreases, leading to <strong>agitation, restlessness, or confusion</strong>. The patient also develops pulmonary congestion with tachypnea and may have continuing chest discomfort. If you see this cluster of findings in a post-MI patient, notify the provider immediately.</p>
+  </div>
+
+  <h3>HF Compensatory Mechanisms — Why They Eventually Fail</h3>
+  <div class="card">
+    <div class="card-header"><span class="icon">🔬</span><h4>Compensatory Cascade → Decompensation</h4></div>
+
+    <p><strong>1. Sympathetic nervous system (SNS) stimulation.</strong> The body detects falling CO and responds by increasing HR and vasoconstriction, temporarily boosting cardiac output. However, sustained SNS activation increases myocardial O₂ demand, and over time, CO actually declines because the heart is working harder but not more effectively.</p>
+
+    <p><strong>2. RAAS activation.</strong> The kidneys sense decreased perfusion and trigger the renin-angiotensin-aldosterone system, retaining sodium and water to increase preload and afterload. This initially supports CO, but over time the resulting volume overload and increased resistance worsen heart failure further.</p>
+
+    <p><strong>3. Natriuretic peptides (BNP).</strong> Stretched ventricles release BNP as a counter-regulatory attempt to promote natriuresis (sodium excretion by the kidneys). <strong>BNP level is a key diagnostic lab for heart failure</strong> — elevated BNP correlates with ventricular stretch and HF severity.</p>
+
+    <p><strong>4. ADH (vasopressin) release.</strong> This causes additional water retention, compounding the volume overload that is already worsening the failing heart.</p>
+
+    <p>All four of these mechanisms are initially compensatory but ultimately pathological — and they are the exact targets of HF pharmacologic therapy. ACEIs block RAAS, beta blockers block SNS over-activation, diuretics remove the excess volume, and inotropes address the contractility deficit.</p>
+  </div>
+
+  <h3>Diagnostic Labs for HF</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Lab</th><th>Significance</th></tr></thead>
+      <tbody>
+        <tr><td><strong>BNP (B-type natriuretic peptide)</strong></td><td>Elevated = HF; correlates with severity of ventricular stretch. Primary diagnostic marker.</td></tr>
+        <tr><td><strong>Microalbuminuria</strong></td><td>Early indicator of ↓ cardiac compliance; may rise <em>before</em> BNP elevates.</td></tr>
+        <tr><td>Electrolytes (Na⁺, K⁺, Mg²⁺, Ca²⁺)</td><td>Baseline and monitoring for diuretic therapy effects.</td></tr>
+        <tr><td>BUN &amp; Creatinine</td><td>Assess renal perfusion and function (often ↓ in HF).</td></tr>
+        <tr><td>Hgb &amp; Hct</td><td>Rule out anemia as contributing factor to ↓ O₂ delivery.</td></tr>
+        <tr><td>Urinalysis</td><td>Proteinuria and ↑ specific gravity suggest poor renal perfusion.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Pharmacology — Heart Failure</h3>
+
+  <p><em>Diuretics (furosemide, HCTZ, spironolactone), ACEIs (enalapril), and ARBs (losartan) are used in HF with the same mechanisms and considerations as described in the HTN section above. Refer to Section 3 for full drug details. The following entries cover HF-specific agents.</em></p>
+
+  <h4>Beta Blockers for Chronic HF</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>carvedilol (Coreg) / bisoprolol / metoprolol XL (Toprol XL)</h4></div>
+
+    <span class="drug-label">Mechanism of Action (in HF)</span>
+    <p>Protects the heart from excessive sympathetic stimulation and dysrhythmias. In HF, the SNS is chronically over-activated as a compensatory mechanism — but over time this excess stimulation worsens the failing heart. Beta blockers counteract this by blocking beta-1 receptors, which improves LV function, increases exercise tolerance, and slows HF progression.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Fluid retention and worsening of HF may occur paradoxically during the first weeks of therapy (the heart initially relies on that sympathetic support). Other side effects include fatigue, hypotension, and bradycardia or heart block.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>The patient <strong>must be euvolemic</strong> (volume-stable) and hemodynamically stable before starting a beta blocker for HF — do not initiate during acute decompensation. Start at the lowest dose and titrate slowly ("start low, go slow"). Monitor closely for worsening HF symptoms, especially early in therapy.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Improved LVEF, increased exercise tolerance, slowed HF progression, reduced hospitalization, and most importantly — <strong>prolonged survival</strong>.</p>
+  </div>
+
+  <h4>Cardiac Glycoside</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>digoxin (Lanoxin)</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>A <span class="def">positive inotrope</span> that works by inhibiting the Na⁺/K⁺-ATPase pump on cardiac cells. This increases intracellular Na⁺, which in turn increases intracellular Ca²⁺, resulting in a stronger contraction <span class="moa-tag tag-contractility">↑ CONTRACTILITY</span>. Digoxin also slows HR through vagal stimulation <span class="moa-tag tag-hr">↓ HR</span>, which decreases cardiac workload.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Chronic HF (second-line treatment when symptoms persist despite first-line therapy); atrial fibrillation (rate control).</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Bradycardia is the most common cardiac effect. The most dangerous adverse effect is <strong>digoxin toxicity</strong>, which is dramatically potentiated by hypokalemia. Signs of toxicity include bradycardia, nausea and vomiting, visual disturbances (yellow-green halos, blurred vision), anorexia, fatigue, and potentially lethal dysrhythmias.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p><strong>Check apical pulse for a full 60 seconds before every dose — hold if HR &lt; 60 bpm and notify the provider.</strong> Monitor serum digoxin levels regularly (therapeutic range: 0.5–2.0 ng/mL). Monitor K⁺ closely, because hypokalemia allows digoxin to bind more aggressively to cardiac Na⁺/K⁺ pumps, triggering toxicity — even at "normal" digoxin levels. K⁺ monitoring becomes especially critical when the patient is also taking diuretics that deplete K⁺. <strong>Antidote: digoxin immune Fab (Digibind).</strong></p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Increased contractility and improved cardiac output.</p>
+  </div>
+
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">🚩</span><h4>Critical Connection — The Digoxin-Diuretic-Potassium Triangle</h4></div>
+    <p>Many HF patients take digoxin + a loop or thiazide diuretic simultaneously. The diuretic depletes K⁺; low K⁺ amplifies digoxin's effects on the heart → toxicity (bradycardia, dysrhythmias, visual changes, GI symptoms). <strong>Always monitor potassium when a patient is on digoxin and a K⁺-wasting diuretic.</strong> A K⁺-sparing diuretic (spironolactone) may be added specifically to prevent this complication.</p>
+  </div>
+
+  <h4>Sympathomimetic Inotrope</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>dobutamine</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>A selective <span class="def">beta-1 receptor agonist</span> that directly stimulates the heart to contract more forcefully <span class="moa-tag tag-contractility">↑ CONTRACTILITY</span>, improving cardiac performance and CO. Unlike digoxin (which works on ion pumps), dobutamine mimics sympathetic stimulation at the receptor level for rapid effect.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Short-term IV management of acute or decompensated HF (e.g., post-STEMI with HF requiring immediate CO support).</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Tachycardia (the heart is being stimulated) and phlebitis at the IV site.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Must be given <strong>IV only</strong> — this is a critical-care medication. Beta blockers will antagonize its effect (they block the same receptors dobutamine is trying to activate), while nitroprusside has a synergistic effect. Monitor BP, HR, UOP, and peripheral pulses continuously. Monitor labs: K⁺, BUN, creatinine.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Increased CO without excessive tachycardia; increased UOP; improved HF symptoms (decreased SOB, decreased orthopnea, enhanced exercise tolerance).</p>
+  </div>
+
+  <h4>Vasodilator</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>nitroglycerin (NTG) — Short &amp; Long-Acting Nitrate Forms</h4></div>
+
+    <span class="drug-label">Available Forms</span>
+    <p>Nitroglycerin sublingual / Nitrostat — <em>short-acting</em>. Isosorbide mononitrate / Imdur, isosorbide dinitrate / Isordil, Nitrodur transdermal patches — <em>long-acting</em>.</p>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Relaxes and dilates both coronary arterial vessels and systemic venous smooth muscle. The venodilation decreases the amount of blood returning to the heart <span class="moa-tag tag-preload">↓ PRELOAD</span> — with less blood to pump, cardiac output demands drop and workload decreases. The arteriolar dilation reduces systemic resistance <span class="moa-tag tag-afterload">↓ AFTERLOAD</span>. Additionally, dilation of the coronary arteries improves blood flow to the heart and relieves vasospasm-related angina. In ACS, nitroglycerin can limit infarct size and improve LV function.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Angina (primary use); HF related to MI; HTN associated with ACS.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p><strong>Headache</strong> is the most common side effect — nitrates dilate cerebral blood vessels, causing what is essentially a mini-migraine. This is a sign the drug is pharmacologically active, not an allergic reaction. Other effects include orthostatic hypotension and reflex tachycardia.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>For acute chest pain, give <strong>sublingual 0.4 mg every 5 minutes for a maximum of 3 doses.</strong> If pain persists, determine whether IV NTG should be initiated. For IV administration, use a vented glass bottle with the manufacturer's tubing. <strong>Withhold if hypotensive, HR &lt; 50, or HR &gt; 100.</strong></p>
+    <p><strong>Withhold if the patient has taken any erectile dysfunction medication (sildenafil/Viagra, tadalafil/Cialis) within 24 hours</strong> — these are also nitrate-type vasodilators, and the synergistic effect can cause dramatic, life-threatening hypotension.</p>
+    <p><strong>Tolerance is a common and serious problem with long-acting nitrates.</strong> The drug loses effectiveness if transdermal patches remain on continuously. Teach the patient to remove patches at bedtime and reapply in the morning, maintaining a 10–12 hour nitrate-free interval. At home, teach: take SL × 1 dose for chest pain, and if not relieved, call 911. Store SL tablets in the original dark glass container at room temperature and note the expiration date.</p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Angina relieved; cardiac muscle damage prevented or limited.</p>
+  </div>
+
+  <h4>Opioid for Acute HF</h4>
+  <div class="card">
+    <div class="card-header"><span class="icon">💊</span><h4>morphine sulfate</h4></div>
+
+    <span class="drug-label">Mechanism of Action</span>
+    <p>Binds to opioid receptors, producing generalized CNS depression that decreases O₂ demand by lowering HR and BP <span class="moa-tag tag-afterload">↓ AFTERLOAD</span>. Morphine also causes venodilation, which reduces the amount of blood returning to the heart <span class="moa-tag tag-preload">↓ PRELOAD</span>. The anxiolytic effect reduces sympathetic drive, further decreasing cardiac workload.</p>
+
+    <span class="drug-label">Indications</span>
+    <p>Dyspnea relief in acute HF; chest pain management in acute MI.</p>
+
+    <span class="drug-label">Adverse Effects</span>
+    <p>Hypotension, bradycardia, constipation, sedation, and most critically — <strong>respiratory depression</strong>. This is the primary safety concern with opioid administration.</p>
+
+    <span class="drug-label">Nursing Considerations</span>
+    <p>Monitor respirations closely — <strong>withhold if respiratory rate is below 12 breaths per minute.</strong> Also monitor BP and HR. Change positions slowly to prevent orthostatic hypotension. <strong>Antidote: naloxone (Narcan).</strong></p>
+
+    <span class="drug-label">Expected Outcome</span>
+    <p>Dyspnea relief; reduced anxiety and cardiac workload.</p>
+  </div>
+
+  <h4>Drugs That Worsen Heart Failure</h4>
+  <div class="card red-flag">
+    <div class="card-header"><span class="icon">⚠️</span><h4>Avoid in HF Patients</h4></div>
+    <p><strong>NSAIDs</strong> (ibuprofen, diclofenac) promote sodium retention and peripheral vasoconstriction, which directly worsens heart failure. They also intensify the toxicity of diuretics and ACEIs and increase the risk of thrombosis. NSAIDs are contraindicated in HF, ischemic heart disease, PVD, and cerebrovascular disease.</p>
+    <p><strong>Calcium channel blockers</strong> decrease contractility, which can worsen pump failure in most HF patients. Because contractility depends on intracellular Ca²⁺, blocking its entry reduces the already-weakened heart's ability to contract effectively.</p>
+    <p><strong>Most antidysrhythmic agents</strong> have negative inotropic effects that further depress cardiac function.</p>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">♥ High-Yield Takeaways — Heart Failure</div>
+    <ul>
+      <li>Left HF = Lungs (crackles, pink frothy sputum, S3, orthopnea, PND). Right HF = venous congestion (JVD, edema, ascites, weight gain).</li>
+      <li>HFrEF = EF &lt; 40% (systolic failure). HFpEF = preserved EF (diastolic — stiff ventricle can't fill).</li>
+      <li>Cardiogenic shock = SBP &lt; 90, tachycardia, oliguria, cold/clammy, confusion. Report immediately.</li>
+      <li>The digoxin-diuretic-potassium triangle is the single most tested drug interaction in HF pharmacology.</li>
+      <li>Digoxin: hold if HR &lt; 60; antidote = digoxin immune Fab. NTG: withhold if sildenafil in last 24h. Morphine: antidote = naloxone.</li>
+      <li>NSAIDs are contraindicated in HF — they worsen fluid retention and oppose diuretic/ACEI effects.</li>
+    </ul>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: CONSOLIDATED DRUG REFERENCE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">5</div>
+    <h2>Quick-Reference Drug Table<small>Consolidated Pharmacology for Perfusion Part 1</small></h2>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:14%">Drug</th>
+          <th style="width:12%">Class</th>
+          <th style="width:20%">Mechanism (Key Action)</th>
+          <th style="width:12%">Hemodynamic Effect</th>
+          <th style="width:18%">Priority Adverse Effects</th>
+          <th style="width:24%">Critical Nursing Considerations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="drug-name">atorvastatin</span></td>
+          <td>HMG-CoA reductase inhibitor (statin)</td>
+          <td>Inhibits cholesterol synthesis → ↓ LDL-C</td>
+          <td>Indirect (↓ plaque progression)</td>
+          <td>Rhabdomyolysis; HA; GI; memory changes</td>
+          <td>Lifelong therapy; teach tea-colored urine &amp; muscle pain; monitor LFTs &amp; lipids</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">aspirin</span></td>
+          <td>Antiplatelet (COX-1 inhibitor)</td>
+          <td>Irreversibly blocks COX-1 → ↓ platelet aggregation</td>
+          <td>None direct</td>
+          <td>Bleeding; GI ulceration</td>
+          <td>D/C 7 days pre-surgery; teach bleeding signs; PPI for GI protection; tinnitus; H. pylori test</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">clopidogrel</span></td>
+          <td>Antiplatelet (P2Y12 blocker)</td>
+          <td>Blocks ADP receptors → ↓ platelet aggregation</td>
+          <td>None direct</td>
+          <td>Bleeding; bruising; GI</td>
+          <td>D/C 5 days pre-surgery; teach bleeding signs</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">heparin</span></td>
+          <td>Anticoagulant</td>
+          <td>Binds antithrombin → inactivates factor Xa</td>
+          <td>None direct</td>
+          <td>Hemorrhage; HIT</td>
+          <td>aPTT 60–80 sec (1.5–2× normal); SubQ/IV only; antidote: <strong>protamine sulfate</strong></td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">furosemide / bumetanide</span></td>
+          <td>Loop diuretic</td>
+          <td>Blocks Na⁺/K⁺/2Cl⁻ in loop of Henle → rapid, large-volume diuresis</td>
+          <td><span class="moa-tag tag-preload">↓ Preload</span></td>
+          <td>Hypo-K⁺/Na⁺/Ca²⁺/Mg²⁺; ototoxicity; hypotension</td>
+          <td>Hold if SBP &lt;90; never combine 2 loops; sulfa allergy; <strong>digoxin + hypoK = toxicity</strong>; monitor I&O, wt, lytes, GFR</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">HCTZ</span></td>
+          <td>Thiazide diuretic</td>
+          <td>Blocks Na⁺/Cl⁻ in DCT → moderate diuresis</td>
+          <td><span class="moa-tag tag-preload">↓ Preload</span></td>
+          <td>Hypo-K⁺/Na⁺; <strong>hyperCa²⁺</strong>; hypotension</td>
+          <td>Same digoxin interaction; distinguish from loop (Ca effect); monitor lytes</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">spironolactone</span></td>
+          <td>K⁺-sparing diuretic (aldosterone antagonist)</td>
+          <td>Blocks aldosterone → Na⁺/H₂O loss, K⁺ retention</td>
+          <td><span class="moa-tag tag-preload">↓ Preload</span></td>
+          <td><strong>Hyperkalemia</strong>; gynecomastia</td>
+          <td>Hold if K⁺ &gt; 5; no K⁺ suppl/salt substitutes; <strong>avoid with ACEI/ARB</strong>; may pair with loop/thiazide</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">lisinopril / enalapril / captopril</span></td>
+          <td>ACE inhibitor</td>
+          <td>Blocks ACE → ↓ angiotensin II → vasodilation; ↓ aldosterone; ↑ bradykinin</td>
+          <td><span class="moa-tag tag-afterload">↓ Afterload</span> <span class="moa-tag tag-preload">↓ Preload</span></td>
+          <td>Cough; angioedema; hyperK⁺; 1st-dose hypotension; renal failure (RAS)</td>
+          <td>Hold if SBP &lt;90; angioedema = emergency (epi); monitor K⁺, renal, WBC, LFTs; rise slowly</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">losartan / valsartan</span></td>
+          <td>ARB</td>
+          <td>Blocks angiotensin II receptors → vasodilation; ↓ aldosterone</td>
+          <td><span class="moa-tag tag-afterload">↓ Afterload</span> <span class="moa-tag tag-preload">↓ Preload</span></td>
+          <td>Angioedema (rare); hyperK⁺; 1st-dose hypotension</td>
+          <td>No cough (no bradykinin ↑); do NOT combine with ACEI; same K⁺/renal monitoring</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">metoprolol / atenolol / propranolol / labetalol</span></td>
+          <td>Beta blocker</td>
+          <td>Blocks β₁ → ↓ HR, ↓ contractility, ↓ renin</td>
+          <td><span class="moa-tag tag-hr">↓ HR</span> <span class="moa-tag tag-afterload">↓ Afterload</span></td>
+          <td>Bradycardia; masks hypoglycemia; fatigue</td>
+          <td>Hold if SBP &lt;90 or HR &lt;60/AV block; no abrupt D/C; masks hypoglycemia in DM; caution in asthma</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">carvedilol</span></td>
+          <td>Beta blocker (for HF)</td>
+          <td>Same + α-block → vasodilation</td>
+          <td><span class="moa-tag tag-hr">↓ HR</span> <span class="moa-tag tag-afterload">↓ Afterload</span></td>
+          <td>Fluid retention; fatigue; hypotension; bradycardia</td>
+          <td><strong>Start only when euvolemic &amp; stable</strong>; start low, go slow; prolongs survival in HF</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">diltiazem (Cardizem) / verapamil (Calan) / amlodipine (Norvasc) / nifedipine (Procardia)</span></td>
+          <td>Calcium channel blocker</td>
+          <td>Blocks Ca²⁺ channels → vasodilation, ↓ HR, ↓ contractility</td>
+          <td><span class="moa-tag tag-afterload">↓ Afterload</span> <span class="moa-tag tag-hr">↓ HR</span></td>
+          <td>Constipation; bradycardia; hypotension; edema</td>
+          <td>Hold if SBP &lt;90 or HR &lt;60; ↑ Fiber/fluids; I&O; <strong>↑ digoxin levels</strong>; no grapefruit; <strong>caution in HF (↓ contractility)</strong></td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">digoxin</span></td>
+          <td>Cardiac glycoside (inotrope)</td>
+          <td>Inhibits Na⁺/K⁺ pump → ↑ intracellular Ca²⁺ → ↑ contractility; ↓ HR</td>
+          <td><span class="moa-tag tag-contractility">↑ Contractility</span> <span class="moa-tag tag-hr">↓ HR</span></td>
+          <td><strong>Digoxin toxicity</strong> (↑ risk with hypoK⁺); bradycardia</td>
+          <td>Hold HR &lt; 60; monitor levels (0.5–2 ng/mL); <strong>monitor K⁺</strong>; antidote: <strong>digoxin immune Fab</strong></td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">dobutamine</span></td>
+          <td>Sympathomimetic (β₁ agonist)</td>
+          <td>Selective β₁ activation → ↑ contractility</td>
+          <td><span class="moa-tag tag-contractility">↑ Contractility</span></td>
+          <td>Tachycardia; phlebitis</td>
+          <td><strong>IV only</strong>; short-term use; beta blockers antagonize; monitor BP/HR/UOP/pulses</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">nitroglycerin (SL, IV) / isosorbide (PO) / Nitrodur (patch)</span></td>
+          <td>Vasodilator (nitrate)</td>
+          <td>Relaxes venous &amp; arterial smooth muscle → veno &amp; arteriolar dilation</td>
+          <td><span class="moa-tag tag-preload">↓ Preload</span> <span class="moa-tag tag-afterload">↓ Afterload</span></td>
+          <td>HA; orthostatic hypotension; reflex tachycardia</td>
+          <td>SL q5min ×3; <strong>withhold if ED meds (sildenafil, tadalafil) in 24h</strong>; tolerance → nitrate-free interval; IV in glass bottle</td>
+        </tr>
+        <tr>
+          <td><span class="drug-name">morphine sulfate</span></td>
+          <td>Opioid analgesic</td>
+          <td>CNS depression; venodilation; ↓ O₂ demand</td>
+          <td><span class="moa-tag tag-preload">↓ Preload</span> <span class="moa-tag tag-afterload">↓ Afterload</span></td>
+          <td>Respiratory depression; hypotension; bradycardia</td>
+          <td>Monitor resp (hold &lt; 12); antidote: <strong>naloxone</strong>; position changes slowly</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Antidote Quick Reference</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Drug</th><th>Antidote</th></tr></thead>
+      <tbody>
+        <tr><td><span class="drug-name">Heparin</span></td><td><strong>Protamine sulfate</strong></td></tr>
+        <tr><td><span class="drug-name">Digoxin</span></td><td><strong>Digoxin immune Fab (Digibind)</strong></td></tr>
+        <tr><td><span class="drug-name">Morphine / opioids</span></td><td><strong>Naloxone (Narcan)</strong></td></tr>
+        <tr><td><span class="drug-name">ACEIs / ARBs (angioedema)</span></td><td><strong>Epinephrine</strong> (emergency treatment)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 6: CLINICAL REASONING -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">6</div>
+    <h2>Clinical Reasoning Patterns<small>Think Like a Nurse — Prioritization, Red Flags, Decision-Making</small></h2>
+  </div>
+
+  <h3>Assessment vs. Intervention — "What Should the Nurse Do First?"</h3>
+  <div class="card nurse-tip">
+    <div class="card-header"><span class="icon">🩺</span><h4>Decision Framework</h4></div>
+    <p><strong>Rule 1 — Assess before you act</strong> (unless the patient is in immediate danger). If the question asks "what should the nurse do first?" and one option is an assessment and another is an intervention, choose the assessment — unless the patient is coding, in shock, or having an anaphylactic reaction.</p>
+    <p><strong>Rule 2 — ABC prioritization.</strong> Airway → Breathing → Circulation. A patient with pulmonary edema (frothy pink sputum, crackles, dyspnea) is a breathing priority. A patient in cardiogenic shock (hypotension, tachycardia, oliguria) is a circulation priority.</p>
+    <p><strong>Rule 3 — Unstable vital signs trump everything.</strong> If BP &lt; 90 systolic, HR &lt; 50 or &gt; 150, RR &lt; 12, or O₂ sat &lt; 90%, intervene immediately and notify the provider.</p>
+  </div>
+
+  <h3>Red Flag Recognition Patterns</h3>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>If You See This...</th><th>Think This...</th><th>Nurse Does This...</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Patient on furosemide + digoxin has K⁺ of 3.0</td>
+          <td>Hypokalemia → ↑ digoxin toxicity risk</td>
+          <td>Hold digoxin, hold furosemide, notify provider, anticipate K⁺ replacement</td>
+        </tr>
+        <tr>
+          <td>Patient on ACEI develops swelling of lips and tongue</td>
+          <td>Angioedema — medical emergency. Facial swelling is a concerning precursor and clinical RED FLAG even before full tongue/glottis involvement.</td>
+          <td>Stop ACEI, call rapid response, anticipate epinephrine, maintain airway</td>
+        </tr>
+        <tr>
+          <td>Patient on heparin has aPTT of 120 seconds</td>
+          <td>Supratherapeutic anticoagulation → hemorrhage risk</td>
+          <td>Hold heparin, notify provider, assess for bleeding, have protamine sulfate available</td>
+        </tr>
+        <tr>
+          <td>HF patient gains 3 lbs overnight</td>
+          <td>Fluid retention → worsening HF</td>
+          <td>Assess lungs, JVD, edema; notify provider; anticipate diuretic adjustment</td>
+        </tr>
+        <tr>
+          <td>Post-MI patient: SBP 82, HR 118, cold/clammy, confused</td>
+          <td>Cardiogenic shock</td>
+          <td>Notify provider STAT; anticipate IV fluids cautiously, dobutamine, oxygen; monitor UOP</td>
+        </tr>
+        <tr>
+          <td>Patient on NTG requests sildenafil</td>
+          <td>Severe hypotension risk</td>
+          <td>Do NOT administer; educate patient; notify provider</td>
+        </tr>
+        <tr>
+          <td>Patient on digoxin: HR 52, "seeing yellow halos," nauseous</td>
+          <td>Digoxin toxicity</td>
+          <td>Hold digoxin, check digoxin level and K⁺, notify provider, anticipate digoxin immune Fab</td>
+        </tr>
+        <tr>
+          <td>Patient on beta blocker with new wheezing</td>
+          <td>Beta-blocker–induced bronchoconstriction</td>
+          <td>Assess respiratory status; notify provider; do not administer next dose without guidance</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Preload vs. Afterload — Linking Drugs to Hemodynamics</h3>
+  <div class="card clinical-pearl">
+    <div class="card-header"><span class="icon">💡</span><h4>The Exam Loves This Connection</h4></div>
+    <p><strong>↓ Preload drugs</strong> (reduce venous return / blood volume): diuretics, nitroglycerin (venodilation), morphine, ACEIs, ARBs.</p>
+    <p><strong>↓ Afterload drugs</strong> (reduce systemic vascular resistance): ACEIs, ARBs, CCBs, beta blockers (long-term), nitroglycerin (arteriolar dilation), morphine.</p>
+    <p><strong>↑ Contractility drugs</strong> (positive inotropes): digoxin, dobutamine.</p>
+    <p>When a question asks "which drug decreases preload?" — think volume reduction and venodilation. When it asks "which drug decreases afterload?" — think arterial vasodilation. When it asks "which drug increases contractility?" — think inotropes.</p>
+  </div>
+
+  <h3>NCLEX-Style Question Strategy</h3>
+  <div class="card nurse-tip">
+    <div class="card-header"><span class="icon">📋</span><h4>Template Questions to Practice</h4></div>
+    <p>Use these stems from the lecture to create your own practice questions:</p>
+    <p><em>"A client with <strong>[disease]</strong> is prescribed <strong>[drug]</strong>. What assessment is needed prior to administering this medication?"</em> → Think: vital signs that contraindicate administration (HR for digoxin/beta blockers, BP for ACEIs/NTG, K⁺ for digoxin/diuretics/spironolactone).</p>
+    <p><em>"Which evaluation would indicate a therapeutic response?"</em> → Think: the expected outcome (BP ≤ 130/80 for HTN drugs, ↓ edema/weight for HF drugs, ↓ angina for NTG, ↑ UOP for diuretics).</p>
+    <p><em>"What lab values require follow-up?"</em> → Think: drug-specific monitoring (aPTT for heparin, K⁺ for diuretics/digoxin, BNP for HF, digoxin levels, renal function for ACEIs).</p>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 7: CASE STUDIES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <div class="section-num">7</div>
+    <h2>Application &amp; Case-Study Section<small>Putting It All Together — Realistic Patient Scenarios</small></h2>
+  </div>
+
+  <!-- CASE 1 -->
+  <div class="case-study">
+    <div class="case-header">Case 1 — The Post-MI Patient with New Heart Failure</div>
+    <div class="case-body">
+      <div class="case-label">SCENARIO</div>
+      <p>Mr. R., 62, was admitted 48 hours ago for a STEMI. He is now complaining of increasing SOB, especially when lying flat. Assessment reveals: HR 108, BP 98/68, RR 28, O₂ sat 90% on room air, bilateral crackles in lung bases, S3 heart sound, frothy sputum. Current medications: atorvastatin, aspirin, heparin drip, metoprolol.</p>
+
+      <div class="case-label">QUESTIONS</div>
+      <p><strong>1.</strong> What type of heart failure is Mr. R. developing, and what assessment findings support this?</p>
+      <p><strong>2.</strong> What is the nurse's priority action?</p>
+      <p><strong>3.</strong> What medications would you anticipate the provider to order?</p>
+      <p><strong>4.</strong> Which current medication should the nurse question and why?</p>
+
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Clinical Reasoning</button>
+      <div class="reveal-content">
+        <p><strong>1.</strong> <strong>Left-sided (ventricular) heart failure</strong> — specifically acute systolic HF (HFrEF) post-MI. Supporting findings: bilateral crackles (pulmonary congestion), S3 gallop (volume overload), orthopnea (SOB when flat), frothy sputum (pulmonary edema), tachycardia and tachypnea (compensatory), hypotension (↓ CO).</p>
+        <p><strong>2.</strong> <strong>Priority: Position upright (high Fowler's) to reduce preload and ease breathing; apply supplemental O₂; notify provider immediately.</strong> With SBP of 98, this patient is approaching cardiogenic shock territory. Continuous monitoring is essential.</p>
+        <p><strong>3.</strong> Anticipated orders: <strong>IV furosemide</strong> (acute diuresis to ↓ pulmonary congestion); <strong>IV nitroglycerin</strong> (↓ preload/afterload if BP tolerates); <strong>morphine</strong> (dyspnea relief, ↓ preload); <strong>dobutamine</strong> (if CO continues to decline — ↑ contractility). <strong>IV enalapril</strong> may follow for afterload reduction and remodeling.</p>
+        <p><strong>4.</strong> <strong>Question metoprolol.</strong> Beta blockers should only be initiated in HF when the patient is euvolemic and hemodynamically stable. Mr. R. is hypotensive (SBP 98), tachycardic (compensatory), and in acute decompensation. Metoprolol could further ↓ HR, ↓ contractility, and ↓ BP, worsening his condition. Hold and notify the provider.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2 -->
+  <div class="case-study">
+    <div class="case-header">Case 2 — The Hypertensive Patient with Medication Complications</div>
+    <div class="case-body">
+      <div class="case-label">SCENARIO</div>
+      <p>Mrs. T., 74, has a history of HTN and chronic HF. Medications: furosemide 40 mg daily, digoxin 0.125 mg daily, lisinopril 10 mg daily, KCl supplement. Today's labs: K⁺ 3.1 mEq/L, Na⁺ 132 mEq/L, BUN 32, Cr 1.6, digoxin level 2.4 ng/mL. She reports nausea, seeing "halos around lights," and feeling "not right." HR: 48 bpm.</p>
+
+      <div class="case-label">QUESTIONS</div>
+      <p><strong>1.</strong> What is the primary problem, and what caused it?</p>
+      <p><strong>2.</strong> What medications should the nurse hold?</p>
+      <p><strong>3.</strong> What is the priority intervention?</p>
+      <p><strong>4.</strong> What teaching would you provide upon discharge to prevent recurrence?</p>
+
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Clinical Reasoning</button>
+      <div class="reveal-content">
+        <p><strong>1.</strong> <strong>Digoxin toxicity</strong>, triggered by hypokalemia from furosemide. The classic triad is present: bradycardia (HR 48), GI symptoms (nausea), and visual disturbances (halos). Digoxin level is 2.4 ng/mL (therapeutic 0.5–2.0). The mechanism: furosemide depleted K⁺ despite KCl supplement → low K⁺ allows digoxin to bind more aggressively to cardiac Na⁺/K⁺ pumps → toxicity.</p>
+        <p><strong>2.</strong> <strong>Hold digoxin</strong> (supratherapeutic level + toxic symptoms). <strong>Hold furosemide</strong> (contributing to hypokalemia). Hold lisinopril if BP is low. Continue KCl or anticipate increased K⁺ replacement.</p>
+        <p><strong>3.</strong> <strong>Notify provider STAT.</strong> Place on continuous cardiac monitoring. Anticipate: IV potassium replacement (carefully — monitor cardiac rhythm); <strong>digoxin immune Fab</strong> if dysrhythmias develop or toxicity is severe. Monitor I&O.</p>
+        <p><strong>4.</strong> Teach: Take KCl as prescribed and eat K⁺-rich foods (bananas, oranges, potatoes). Check pulse daily before taking digoxin — hold and call provider if HR &lt; 60. Report nausea, visual changes, or "feeling off." Keep all lab appointments (K⁺, digoxin levels, renal function). Weigh daily; report &gt; 2 lb gain in 24 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 3 -->
+  <div class="case-study">
+    <div class="case-header">Case 3 — Application-Level Exam Questions</div>
+    <div class="case-body">
+      <div class="case-label">QUESTION 1</div>
+      <p>A patient taking furosemide 40 mg daily for HF and HTN presents for a routine visit. Which electrolyte imbalances should the nurse anticipate?</p>
+      <p>A) Low K⁺, Na⁺, Mg²⁺; elevated Ca²⁺<br>
+         B) Low K⁺, Na⁺; elevated Mg²⁺ and Ca²⁺<br>
+         C) Low K⁺, Na⁺, Mg²⁺, and Ca²⁺<br>
+         D) Low K⁺, Na⁺; Mg²⁺ and Ca²⁺ remain normal</p>
+
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> Loop diuretics cause loss of potassium, sodium, magnesium, AND calcium (loops Lose calcium). This distinguishes them from thiazides, which cause hypercalcemia. Option A describes the thiazide electrolyte pattern. Options B and D are incorrect combinations.</p>
+      </div>
+
+      <div class="case-label" style="margin-top:20px">QUESTION 2</div>
+      <p>A nurse is caring for a patient with chronic HF who takes digoxin and furosemide. The morning K⁺ level is 2.9 mEq/L and the HR is 54 bpm. What should the nurse do first?</p>
+      <p>A) Administer the morning dose of furosemide<br>
+         B) Administer the morning dose of digoxin<br>
+         C) Hold both medications and notify the provider<br>
+         D) Encourage the patient to eat a banana</p>
+
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> K⁺ is critically low (normal 3.5–5.0) and the patient is bradycardic (HR 54 &lt; 60 = hold digoxin threshold). Hypokalemia potentiates digoxin toxicity, and bradycardia is a sign toxicity may already be occurring. Hold both drugs: digoxin (for low HR and toxicity risk) and furosemide (contributing to K⁺ loss). Notify the provider for K⁺ replacement orders and digoxin level check. Eating a banana (D) addresses long-term K⁺ but is not the priority acute intervention.</p>
+      </div>
+
+      <div class="case-label" style="margin-top:20px">QUESTION 3</div>
+      <p>A patient with HTN and a history of persistent cough on lisinopril is switched to losartan. Which statement by the patient indicates understanding of the new medication?</p>
+      <p>A) "I should avoid eating grapefruit."<br>
+         B) "I should rise slowly from a sitting position."<br>
+         C) "I should take a potassium supplement with this medication."<br>
+         D) "I can stop taking this once my blood pressure is normal."</p>
+
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> ARBs (losartan) can cause first-dose hypotension → orthostatic precautions are essential. (A) is a CCB concern, not ARBs. (C) is incorrect — ARBs cause hyperkalemia, so K⁺ supplements should be limited, not added. (D) is incorrect — antihypertensives are lifelong therapy.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 8: NCLEX QUESTION BANK -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <div class="section-num">8</div>
+    <h2>NCLEX-Style Question Bank<small>Test Yourself — Answers Hidden Until You're Ready</small></h2>
+  </div>
+
+  <div class="card nurse-tip" style="margin-bottom:30px">
+    <div class="card-header"><span class="icon">📋</span><h4>How to Use This Section</h4></div>
+    <p>These questions use the exact clinical-reasoning stems from your lecture. <strong>Read each question, commit to your answer, and work through your rationale BEFORE clicking the reveal button.</strong> Challenge yourself: for each question, also ask yourself — <em>What is the pathophysiology of this disease, and how does the medication work to treat it? How does the drug affect preload and afterload?</em></p>
+  </div>
+
+  <!-- ===== THERAPEUTIC RESPONSE QUESTIONS ===== -->
+  <h3>Stem: "Which evaluation would indicate a therapeutic response?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 1 — Therapeutic Response</div>
+    <div class="case-body">
+      <p>A client with <strong>heart failure</strong> is prescribed <strong>furosemide (Lasix) 40 mg IV</strong>. Which evaluation would indicate a therapeutic response to the medication?</p>
+      <p>A) Heart rate increases from 88 to 102 bpm<br>
+         B) Serum potassium decreases from 4.2 to 3.1 mEq/L<br>
+         C) The client reports decreased dyspnea and crackles resolve bilaterally<br>
+         D) Blood pressure increases from 128/78 to 156/92 mmHg</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> Furosemide is a loop diuretic that decreases preload by removing excess fluid volume. In HF, fluid backs up into the pulmonary vasculature causing crackles and dyspnea. A therapeutic response means the drug is doing its job — resolving pulmonary congestion. (A) Tachycardia is an adverse sign, possibly from dehydration or worsening HF. (B) Dropping K⁺ is an adverse effect, not a therapeutic response. (D) Increased BP opposes the therapeutic goal.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 2 — Therapeutic Response</div>
+    <div class="case-body">
+      <p>A client with <strong>chronic heart failure (EF 30%)</strong> is prescribed <strong>digoxin 0.125 mg daily</strong>. Which evaluation would indicate a therapeutic response to the medication?</p>
+      <p>A) Heart rate of 56 bpm<br>
+         B) Serum digoxin level of 2.6 ng/mL<br>
+         C) Decreased peripheral edema and improved exercise tolerance<br>
+         D) Serum potassium of 3.0 mEq/L</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> Digoxin is a positive inotrope that increases contractility, thereby increasing CO. Improved exercise tolerance and decreased edema reflect improved cardiac output — this is the therapeutic goal. (A) HR 56 is below the 60 bpm hold threshold — this is an adverse effect, not a desired response. (B) Dig level 2.6 is supratherapeutic (normal 0.5–2.0 ng/mL) — this is toxicity. (D) K⁺ 3.0 is hypokalemia and increases dig toxicity risk.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 3 — Therapeutic Response</div>
+    <div class="case-body">
+      <p>A client with <strong>hypertension</strong> is prescribed <strong>lisinopril 10 mg daily</strong>. Which evaluation would indicate a therapeutic response to the medication?</p>
+      <p>A) The client develops a persistent dry cough<br>
+         B) Blood pressure reading of 124/76 mmHg<br>
+         C) Serum potassium of 5.8 mEq/L<br>
+         D) The client reports swelling of the lips and tongue</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> The therapeutic goal of lisinopril (ACEI) for HTN is BP below 130/80 mmHg. A reading of 124/76 meets this target. (A) Dry cough is a common side effect from increased bradykinin — it's expected but not a therapeutic response. (C) K⁺ 5.8 is dangerously elevated — hyperkalemia is an adverse effect of ACEIs. (D) Lip/tongue swelling is angioedema, a life-threatening emergency requiring immediate ACEI discontinuation and epinephrine.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== EFFECTIVENESS ASSESSMENT QUESTIONS ===== -->
+  <h3>Stem: "What assessment would best determine medication effectiveness?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 4 — Determining Effectiveness</div>
+    <div class="case-body">
+      <p>A client with <strong>right-sided heart failure</strong> is prescribed <strong>spironolactone (Aldactone) 25 mg daily</strong>. What assessment would be best to determine the effectiveness of this medication?</p>
+      <p>A) Auscultate lung sounds for crackles bilaterally<br>
+         B) Monitor daily weights and assess for decreased peripheral edema<br>
+         C) Check for the presence of an S3 heart sound<br>
+         D) Obtain a serum BNP level</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> Right-sided HF causes systemic venous congestion — peripheral edema, ascites, weight gain. Spironolactone is a K⁺-sparing diuretic that reduces fluid volume (decreases preload). The best way to assess diuretic effectiveness in right-sided HF is daily weight and peripheral edema assessment. Weight is the most reliable indicator of fluid status change. (A) Crackles are a left-sided HF finding. (C) S3 reflects volume overload but is not the most practical ongoing assessment. (D) BNP is useful diagnostically but not the best day-to-day effectiveness measure for a single diuretic.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 5 — Determining Effectiveness</div>
+    <div class="case-body">
+      <p>A client with <strong>atherosclerosis and hyperlipidemia</strong> is prescribed <strong>atorvastatin (Lipitor) 40 mg daily</strong>. What assessment would be best to determine the effectiveness of this medication?</p>
+      <p>A) Monitor the client's blood pressure weekly<br>
+         B) Assess for muscle pain and dark urine<br>
+         C) Review fasting lipid panel results for decreased LDL-C levels<br>
+         D) Monitor the client's heart rate and rhythm</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> Atorvastatin inhibits HMG-CoA reductase to decrease LDL-C production. The best way to determine effectiveness is to check whether lipid levels have improved — specifically decreased LDL-C on a fasting lipid panel. (A) Statins do not directly lower BP. (B) Muscle pain and dark urine are signs of rhabdomyolysis — this assesses for adverse effects, not effectiveness. (D) HR and rhythm are not directly affected by statins.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 6 — Determining Effectiveness</div>
+    <div class="case-body">
+      <p>A client with <strong>stable angina</strong> is prescribed <strong>sublingual nitroglycerin PRN</strong>. What assessment would be best to determine the effectiveness of this medication?</p>
+      <p>A) Blood pressure decreases by 20 mmHg after administration<br>
+         B) The client reports headache onset within 2 minutes<br>
+         C) The client states chest pain has resolved after taking the medication<br>
+         D) Heart rate increases from 72 to 96 bpm</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> Nitroglycerin dilates coronary arteries (improving O₂ supply) and reduces preload via venodilation (decreasing O₂ demand). The purpose of SL NTG is to relieve angina — so pain relief is the therapeutic response. (A) BP drop is an expected side effect, not the measure of effectiveness. (B) Headache is the most common side effect (cerebral vasodilation) — it tells you the drug is pharmacologically active, but it is not the therapeutic goal. (D) Reflex tachycardia is a side effect, not effectiveness.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRE-ADMINISTRATION ASSESSMENT QUESTIONS ===== -->
+  <h3>Stem: "What assessment is needed prior to administering?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 7 — Pre-Administration Assessment</div>
+    <div class="case-body">
+      <p>A client with <strong>chronic heart failure</strong> is prescribed <strong>metoprolol succinate (Toprol XL) 25 mg daily</strong>. What assessment is needed prior to administering this medication?</p>
+      <p>A) Serum potassium level<br>
+         B) Heart rate and blood pressure<br>
+         C) Lung sounds for wheezing<br>
+         D) Serum digoxin level</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> Metoprolol is a beta blocker that decreases HR and BP by blocking sympathetic beta-1 receptors. You must check HR and BP before every dose — <strong>hold if HR &lt; 60 or SBP &lt; 90</strong> and notify the provider. (A) K⁺ is critical for digoxin and diuretics, not beta blockers primarily. (C) Lung sounds for wheezing are important to assess (beta blockers can cause bronchoconstriction), but HR and BP are the priority hold parameters. (D) Digoxin level is unrelated to metoprolol administration.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 8 — Pre-Administration Assessment</div>
+    <div class="case-body">
+      <p>A client with <strong>heart failure</strong> is prescribed <strong>digoxin 0.125 mg daily</strong>. What assessment is needed prior to administering this medication?</p>
+      <p>A) Blood pressure and respiratory rate<br>
+         B) Apical heart rate for a full 60 seconds<br>
+         C) Bowel sounds in all four quadrants<br>
+         D) Peripheral pulse oximetry reading</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> Digoxin slows heart rate and increases contractility. The critical pre-administration assessment is an <strong>apical pulse for a full 60 seconds</strong> — hold the medication and notify the provider if HR &lt; 60 bpm. Apical (not radial) is used because it is the most accurate for detecting irregular rhythms and bradycardia. (A) BP and RR are important general assessments but are not the specific hold parameter for digoxin. (C) Bowel sounds are unrelated. (D) Pulse oximetry does not guide digoxin administration.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 9 — Pre-Administration Assessment</div>
+    <div class="case-body">
+      <p>A client with <strong>acute coronary syndrome</strong> is prescribed <strong>sublingual nitroglycerin 0.4 mg</strong>. What assessment is needed prior to administering this medication?</p>
+      <p>A) Serum troponin level<br>
+         B) Blood pressure and whether the client has taken erectile dysfunction medication in the past 24 hours<br>
+         C) Serum potassium and magnesium levels<br>
+         D) Apical heart rate for 60 seconds</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> Nitroglycerin causes vasodilation that lowers BP — <strong>withhold if SBP &lt; 90 or HR &lt; 50 or &gt; 100.</strong> Additionally, nitroglycerin is absolutely contraindicated if the patient has taken any erectile dysfunction medication (sildenafil, tadalafil) within 24 hours, as the synergistic vasodilation can cause life-threatening hypotension. This is a critical safety check that must happen before every dose. (A) Troponin confirms MI but does not determine whether NTG can be given safely. (C) Electrolytes are more relevant to diuretics and digoxin. (D) While HR is considered, BP and ED-medication history are the priority NTG assessments.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LAB FOLLOW-UP QUESTIONS ===== -->
+  <h3>Stem: "What lab values or diagnostic tests require follow-up?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 10 — Lab Follow-Up</div>
+    <div class="case-body">
+      <p>The nurse administered <strong>heparin IV</strong> to a client with <strong>deep vein thrombosis</strong>. Four hours later, the lab results return: aPTT 108 seconds, platelets 142,000/mm³, Hgb 10.2 g/dL. What lab values require follow-up or intervention?</p>
+      <p>A) The platelet count of 142,000/mm³<br>
+         B) The aPTT of 108 seconds<br>
+         C) The hemoglobin of 10.2 g/dL<br>
+         D) All of the above require follow-up</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> The therapeutic aPTT for heparin is 60–80 seconds (1.5–2× normal of ~40 seconds). An aPTT of 108 seconds is supratherapeutic — the patient is at significant risk for hemorrhage. The nurse should hold the heparin infusion and notify the provider immediately. Have protamine sulfate (heparin antidote) available. (A) Platelets of 142,000 are within normal range (150,000–400,000 is normal, but mild decreases can occur; concern for HIT is typically &lt;100,000 or &gt;50% drop). (C) Hgb of 10.2 is mildly low but not acutely critical in this context. The aPTT is the most urgent finding.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 11 — Lab Follow-Up</div>
+    <div class="case-body">
+      <p>The nurse administered <strong>furosemide 40 mg IV</strong> to a client with <strong>acute decompensated heart failure</strong>. The following labs return: K⁺ 2.8 mEq/L, Na⁺ 131 mEq/L, BUN 34, Cr 1.8, digoxin level 1.8 ng/mL. The client also takes digoxin. Which lab value requires the most <em>urgent</em> follow-up?</p>
+      <p>A) Na⁺ of 131 mEq/L<br>
+         B) Digoxin level of 1.8 ng/mL<br>
+         C) K⁺ of 2.8 mEq/L<br>
+         D) BUN of 34</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: C.</strong> K⁺ 2.8 is critically low (normal 3.5–5.0). In a patient also taking digoxin, hypokalemia is the most dangerous finding because it dramatically increases the risk of digoxin toxicity — even though the digoxin level itself (1.8 ng/mL) is technically within therapeutic range. Low K⁺ allows digoxin to bind more aggressively to cardiac Na⁺/K⁺ pumps, causing toxicity at "normal" levels. The nurse should hold both furosemide and digoxin, notify the provider, and anticipate IV potassium replacement with cardiac monitoring. (A) Na⁺ 131 is mildly low but less immediately dangerous. (B) Dig level 1.8 is technically therapeutic, but unsafe with this K⁺ level. (D) BUN 34 reflects reduced renal perfusion — expected in HF but not the most urgent finding here.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 12 — Lab Follow-Up</div>
+    <div class="case-body">
+      <p>The nurse administered <strong>enalapril 5 mg IV</strong> to a client with <strong>acute heart failure</strong>. The following labs return: K⁺ 5.6 mEq/L, BUN 38, Cr 2.1, Na⁺ 136 mEq/L. Which lab value requires follow-up?</p>
+      <p>A) Na⁺ of 136 mEq/L<br>
+         B) BUN of 38<br>
+         C) Cr of 2.1<br>
+         D) K⁺ of 5.6 mEq/L</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: D.</strong> ACE inhibitors decrease aldosterone, which means the kidneys retain potassium. K⁺ 5.6 is hyperkalemia (normal 3.5–5.0) and can cause lethal cardiac dysrhythmias. The nurse should hold enalapril, notify the provider, place the patient on cardiac monitoring, and anticipate treatment. Also note: BUN 38 and Cr 2.1 are elevated and suggest renal impairment — ACEIs can worsen renal function, especially in patients with renal artery stenosis. These values also warrant follow-up. (A) Na⁺ 136 is normal (135–145). However, the K⁺ is the most dangerous and requires the most urgent intervention.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DISCHARGE TEACHING QUESTIONS ===== -->
+  <h3>Stem: "What teaching is needed prior to discharge?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 13 — Discharge Teaching</div>
+    <div class="case-body">
+      <p>A client with <strong>heart failure</strong> is prescribed <strong>carvedilol (Coreg) 6.25 mg twice daily</strong>. What teaching is needed prior to being discharged on this medication?</p>
+      <p>A) "Take your pulse each morning. If it is below 60, hold the medication and call your doctor."<br>
+         B) "You can stop this medication once you feel better."<br>
+         C) "Increase your potassium intake with bananas and orange juice."<br>
+         D) "Take this medication on an empty stomach for best absorption."</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: A.</strong> Carvedilol is a beta blocker that decreases HR and BP. Patients must be taught to check their pulse daily and hold the medication if HR drops below 60, then notify the provider. They should also rise slowly (orthostatic hypotension risk) and never stop the medication abruptly (rebound tachycardia and HTN). (B) HF medications are lifelong — stopping when "feeling better" can cause acute decompensation. (C) K⁺ supplementation is for patients on K⁺-wasting diuretics, not beta blockers. (D) Carvedilol should actually be taken with food to slow absorption and reduce orthostatic effects.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 14 — Discharge Teaching</div>
+    <div class="case-body">
+      <p>A client with <strong>coronary artery disease</strong> is prescribed <strong>nitroglycerin sublingual tablets PRN</strong> and <strong>isosorbide mononitrate (Imdur) daily</strong>. What teaching is needed prior to being discharged on these medications?</p>
+      <p>A) "Place the SL tablet under your tongue, and if pain persists after one dose, call 911."<br>
+         B) "Store your NTG tablets in a clear plastic pill organizer for convenience."<br>
+         C) "The Imdur patch should remain on 24 hours a day for continuous protection."<br>
+         D) "If you experience a headache, this means you are allergic to the medication."</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: A.</strong> Current teaching for SL NTG at home: take one dose, and if chest pain is not relieved, call 911 immediately. (B) NTG must be stored in its original dark glass container at room temperature — light, heat, and moisture degrade the drug. A plastic pill organizer would reduce potency. (C) Imdur is an oral long-acting nitrate (not a patch), but the principle still applies: tolerance develops with continuous nitrate use. A nitrate-free interval (typically removing patches at bedtime) is essential for all long-acting forms. (D) Headache is the most common side effect of all nitrates — it occurs because the drug dilates cerebral blood vessels (a "mini migraine"). It is NOT an allergic reaction and is actually a sign the drug is pharmacologically active.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 15 — Discharge Teaching</div>
+    <div class="case-body">
+      <p>A client with <strong>hypertension and edema</strong> is prescribed <strong>spironolactone (Aldactone) 25 mg daily</strong>. What teaching is needed prior to being discharged on this medication?</p>
+      <p>A) "You should increase your potassium intake by eating more bananas."<br>
+         B) "Weigh yourself daily and report a gain of more than 2 pounds in 24 hours."<br>
+         C) "This medication may cause you to cough. Let your doctor know if it bothers you."<br>
+         D) "Avoid salt substitutes and potassium supplements while taking this medication."</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: D.</strong> Spironolactone is a K⁺-sparing diuretic that blocks aldosterone, retaining potassium. Patients must avoid additional potassium sources — including potassium-based salt substitutes (like "lite salt" or "No Salt," which contain KCl) and K⁺ supplements — to prevent dangerous hyperkalemia. (A) is the opposite of what's needed — increasing K⁺ intake with a K⁺-sparing diuretic risks hyperkalemia. (B) is good general HF teaching and applies to all diuretics, but the question asks what is needed specifically for spironolactone — the K⁺ restriction teaching is the priority unique to this drug. (C) Cough is associated with ACE inhibitors (from increased bradykinin), not spironolactone.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PATHOPHYSIOLOGY-TO-DRUG REASONING ===== -->
+  <h3>Stem: "How does the disease pathophysiology connect to the drug's mechanism?"</h3>
+
+  <div class="case-study">
+    <div class="case-header">Question 16 — Pathophysiology &amp; Drug Connection</div>
+    <div class="case-body">
+      <p>A client with <strong>chronic left-sided systolic heart failure (EF 28%)</strong> is prescribed <strong>enalapril, carvedilol, furosemide, and digoxin</strong>. The student nurse asks: "Why does this patient need so many different medications?"</p>
+      <p>Which response by the nurse best explains the rationale for this combination?</p>
+      <p>A) "Each medication treats a different symptom of heart failure independently."<br>
+         B) "The combination targets the compensatory mechanisms that initially help but ultimately worsen heart failure — RAAS over-activation, excessive sympathetic stimulation, volume overload, and decreased contractility."<br>
+         C) "The provider prescribes multiple drugs to ensure at least one of them works."<br>
+         D) "All of these drugs increase the heart's contractility through different pathways."</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> This question tests your understanding of HF pathophysiology and why each drug class is used. In HF, the body activates compensatory mechanisms that eventually become maladaptive: <strong>Enalapril</strong> (ACEI) blocks RAAS → ↓ afterload and ↓ preload by preventing angiotensin II–mediated vasoconstriction and aldosterone-driven fluid retention. <strong>Carvedilol</strong> (beta blocker) blocks excessive SNS stimulation → protects the heart from increased workload, reduces HR, and slows HF progression. <strong>Furosemide</strong> (loop diuretic) removes excess fluid → ↓ preload, relieving pulmonary congestion and edema. <strong>Digoxin</strong> (positive inotrope) increases contractility → improves the heart's ability to eject blood. Together, they target every component of the CO equation. (A) is oversimplified. (C) is incorrect reasoning. (D) is factually wrong — only digoxin increases contractility; the others work on different targets.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 17 — Preload &amp; Afterload Application</div>
+    <div class="case-body">
+      <p>A nursing student is reviewing medications for a client with <strong>acute decompensated heart failure</strong>. The student needs to identify which drugs will reduce the client's preload and which will reduce afterload.</p>
+      <p>Which grouping correctly categorizes these drugs?</p>
+      <p>A) Preload: furosemide, enalapril. Afterload: metoprolol, nitroglycerin.<br>
+         B) Preload: furosemide, nitroglycerin, morphine. Afterload: enalapril, amlodipine, metoprolol.<br>
+         C) Preload: digoxin, dobutamine. Afterload: furosemide, spironolactone.<br>
+         D) Preload: amlodipine, metoprolol. Afterload: furosemide, morphine.</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> <strong>Preload reducers</strong> decrease blood volume returning to the heart: furosemide (removes fluid), nitroglycerin (venodilation → blood pools in veins → less returns to heart), and morphine (venodilation + decreased sympathetic drive). <strong>Afterload reducers</strong> decrease systemic vascular resistance so the LV can eject more easily: enalapril (blocks angiotensin II vasoconstriction), amlodipine (CCB → arterial vasodilation), and metoprolol (long-term ↓ PVR). Note: some drugs affect both — enalapril and NTG both reduce preload AND afterload. The question asks for the <em>primary</em> categorization. (C) is wrong because digoxin and dobutamine are inotropes (↑ contractility), not preload drugs. (D) reverses the categories.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="case-study">
+    <div class="case-header">Question 18 — Comprehensive Application</div>
+    <div class="case-body">
+      <p>A client with <strong>hypertension</strong> is prescribed <strong>diltiazem (Cardizem) 120 mg daily</strong>. The client also takes <strong>digoxin</strong> for atrial fibrillation and reports drinking grapefruit juice every morning. The nurse reviews the medication list.</p>
+      <p>Which concern should the nurse prioritize?</p>
+      <p>A) Diltiazem may cause constipation requiring dietary fiber supplementation<br>
+         B) Diltiazem and digoxin together increase the risk of severe bradycardia and AV block, and grapefruit juice raises diltiazem levels — both interactions need to be addressed<br>
+         C) The client should switch from grapefruit juice to orange juice for more potassium<br>
+         D) Diltiazem will increase the effectiveness of digoxin, which is beneficial</p>
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('show')">Reveal Answer &amp; Rationale</button>
+      <div class="reveal-content">
+        <p><strong>Answer: B.</strong> Two critical drug interactions exist here. First: diltiazem (CCB) suppresses AV node conduction AND increases plasma digoxin levels — combined with digoxin's own HR-lowering effect, this creates a high risk for severe bradycardia, AV block, and digoxin toxicity. Second: grapefruit juice inhibits CYP3A4 enzymes → raises diltiazem blood levels → amplifies all CCB effects. The nurse must notify the provider about the drug-drug interaction and teach the patient to avoid grapefruit. (A) Constipation is a real CCB side effect but is not the priority safety concern here. (C) switches juice type without addressing the actual problem. (D) is incorrect — the "increased effectiveness" is actually increased toxicity risk, which is harmful.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<div class="ecg-divider"></div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- SECTION 9: FINAL TAKEAWAYS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <div class="section-num">9</div>
+    <h2>Master Review — High-Yield Takeaways<small>The "If You Remember Nothing Else" Section</small></h2>
+  </div>
+
+  <div class="takeaway" style="margin-bottom:20px">
+    <div class="takeaway-title">♥ Physiology Fundamentals</div>
+    <ul>
+      <li>CO = SV × HR; BP = CO × PVR. These two equations explain every drug mechanism and every disease process in this unit.</li>
+      <li>Preload = volume/stretch; Afterload = resistance; Contractility = force; HR = rate. Know which drugs affect which.</li>
+      <li>RAAS exists to maintain BP and renal perfusion — but chronic over-activation causes HTN, volume overload, and HF progression.</li>
+      <li>Frank-Starling: stretching helps contractility until the heart is overstretched — this is the point of decompensation.</li>
+    </ul>
+  </div>
+
+  <div class="takeaway" style="margin-bottom:20px">
+    <div class="takeaway-title">♥ Pathophysiology Connections</div>
+    <ul>
+      <li>Atherosclerosis → plaque rupture → thrombosis → MI/stroke. It is the upstream cause of nearly all perfusion disorders.</li>
+      <li>HTN ↑ afterload chronically → LV hypertrophy → eventually HF. HTN also accelerates atherosclerosis.</li>
+      <li>Left HF = LUNGS (crackles, orthopnea, S3, pink frothy sputum). Right HF = BODY (JVD, edema, ascites, hepatomegaly).</li>
+      <li>Cardiogenic shock = the end of the HF spectrum — SBP &lt; 90, tachycardia, oliguria, cold/clammy. Report immediately.</li>
+    </ul>
+  </div>
+
+  <div class="takeaway" style="margin-bottom:20px">
+    <div class="takeaway-title">♥ Pharmacology Must-Knows</div>
+    <ul>
+      <li><strong>Digoxin-Diuretic-Potassium Triangle:</strong> Loop/thiazide depletes K⁺ → ↑ digoxin toxicity. Always check K⁺.</li>
+      <li><strong>ACEI cough → switch to ARB.</strong> Both can cause angioedema (treat with epinephrine) and hyperkalemia.</li>
+      <li><strong>Never combine:</strong> two loops; ACEI + ARB; K⁺-sparing diuretic + ACEI/ARB (without careful monitoring).</li>
+      <li><strong>Nitroglycerin + sildenafil within 24h = severe hypotension.</strong> Always ask.</li>
+      <li><strong>Antidotes:</strong> Heparin → protamine sulfate. Digoxin → digoxin immune Fab. Opioids → naloxone. Angioedema → epinephrine.</li>
+    </ul>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">♥ Nursing Priority Patterns</div>
+    <ul>
+      <li>Assess before you intervene (unless life-threatening). ABC always applies.</li>
+      <li>Daily weights are the most reliable indicator of fluid status in HF (more reliable than I&O).</li>
+      <li>Hold and notify: digoxin if HR &lt; 60; beta blockers if HR low or AV block; any antihypertensive if SBP &lt; 90.</li>
+      <li>Every anticoagulant and antiplatelet question comes back to one thing: <strong>monitor for and teach signs of bleeding.</strong></li>
+      <li>HF patients: restrict Na⁺, weigh daily, report &gt; 2 lb/day or 5 lb/week gain, avoid NSAIDs.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<footer class="guide-footer">
+  <p>PERFUSION PART 1 — STUDY GUIDE &bull; UWG BSN COHORT</p>
+  <p style="opacity:0.5;margin-top:6px;">Compiled from PP2 lecture materials &bull; Lehne, Huether, Ignatavicius</p>
+</footer>
+
+</main>
+
+<script>
+// Smooth scrolling for TOC links
+document.querySelectorAll('.toc-bar a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2002 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PP2 Perfusion — Clinical Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════════════ */
+:root {
+  --navy:        #0d2340;
+  --navy-mid:    #1a3a5c;
+  --navy-light:  #2a5280;
+  --navy-pale:   #e8f0f8;
+  --navy-faint:  #f0f5fb;
+
+  --crimson:     #b91c1c;
+  --crimson-mid: #dc2626;
+  --crimson-pale:#fef2f2;
+  --crimson-faint:#fff5f5;
+
+  --cobalt:      #1d4ed8;
+  --cobalt-mid:  #3b82f6;
+  --cobalt-pale: #eff6ff;
+
+  --slate:       #334155;
+  --slate-mid:   #64748b;
+  --slate-light: #94a3b8;
+  --border:      #e2e8f0;
+  --border-dark: #cbd5e1;
+
+  --white:       #ffffff;
+  --bg:          #f1f5f9;
+  --bg-warm:     #f8fafc;
+
+  --green:       #166534;
+  --green-mid:   #16a34a;
+  --green-pale:  #f0fdf4;
+  --amber:       #92400e;
+  --amber-pale:  #fffbeb;
+  --amber-mid:   #d97706;
+  --teal:        #0f766e;
+  --teal-pale:   #f0fdfa;
+
+  --shadow-sm:   0 1px 3px rgba(13,35,64,0.08), 0 1px 2px rgba(13,35,64,0.06);
+  --shadow:      0 4px 16px rgba(13,35,64,0.10), 0 2px 6px rgba(13,35,64,0.07);
+  --shadow-lg:   0 10px 32px rgba(13,35,64,0.14), 0 4px 12px rgba(13,35,64,0.08);
+
+  --radius:      8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--slate);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ── ECG LINE BG ─────────────────────────────── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(29,78,216,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,78,216,0.028) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════════ */
+header {
+  position: relative;
+  z-index: 10;
+  background: var(--navy);
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(185,28,28,0.55) 0%, transparent 60%),
+    linear-gradient(225deg, rgba(29,78,216,0.4) 0%, transparent 55%);
+}
+/* ECG waveform decorative line */
+header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--crimson), var(--cobalt-mid), var(--crimson));
+}
+.header-inner {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem 2.2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+}
+.header-left {}
+.header-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(185,28,28,0.25);
+  border: 1px solid rgba(185,28,28,0.4);
+  color: #fca5a5;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  margin-bottom: 0.7rem;
+}
+h1.title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.75rem, 4vw, 2.9rem);
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.5rem;
+}
+h1.title span { color: #93c5fd; }
+.subtitle {
+  color: rgba(255,255,255,0.65);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+.header-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  align-items: flex-end;
+}
+@media(max-width:600px){
+  .header-inner { grid-template-columns: 1fr; }
+  .header-stats { flex-direction: row; align-items: flex-start; flex-wrap: wrap; }
+}
+.stat-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.8);
+  font-size: 0.77rem;
+  font-weight: 600;
+  padding: 0.3rem 0.85rem;
+  border-radius: 4px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════════ */
+.tab-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+}
+.tabs {
+  display: flex;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  min-width: max-content;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: var(--slate-mid);
+  padding: 0.85rem 1.1rem;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.15s;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+.tab-btn:hover {
+  color: var(--navy);
+  background: var(--navy-faint);
+}
+.tab-btn.active {
+  color: var(--crimson);
+  border-bottom-color: var(--crimson);
+}
+
+/* ═══════════════════════════════════════════════
+   LAYOUT
+═══════════════════════════════════════════════ */
+.content {
+  position: relative;
+  z-index: 5;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.75rem 1rem 5rem;
+}
+.section { display: none; animation: fadeIn 0.25s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
+
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  color: var(--navy);
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  letter-spacing: -0.01em;
+}
+.section-title .icon {
+  width: 34px; height: 34px;
+  background: var(--crimson);
+  color: white;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════ */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.1rem;
+  border: 1px solid var(--border);
+}
+.card-navy  { background: var(--navy-faint); border-color: #bfdbfe; }
+.card-red   { background: var(--crimson-faint); border-color: #fecaca; }
+.card-green { background: var(--green-pale); border-color: #bbf7d0; }
+.card-amber { background: var(--amber-pale); border-color: #fde68a; }
+.card-teal  { background: var(--teal-pale); border-color: #99f6e4; }
+.card-cobalt{ background: var(--cobalt-pale); border-color: #bfdbfe; }
+
+.card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--navy);
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.01em;
+}
+.card h4 {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--navy-mid);
+  margin-bottom: 0.35rem;
+  margin-top: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.card p, .card li {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--slate);
+}
+.card ul { list-style: none; padding: 0; }
+.card ul li {
+  padding-left: 1.1rem;
+  position: relative;
+}
+.card ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--crimson);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════
+   FORMULA BOX
+═══════════════════════════════════════════════ */
+.formula-box {
+  background: var(--navy);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  margin: 0.75rem 0;
+}
+.formula-box .formula {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: white;
+  letter-spacing: 0.04em;
+}
+.formula-box .formula-sub {
+  color: rgba(255,255,255,0.6);
+  font-size: 0.82rem;
+  margin-top: 0.3rem;
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════════════
+   TABLES
+═══════════════════════════════════════════════ */
+.table-wrap { overflow-x: auto; border-radius: var(--radius); margin: 0.75rem 0; border: 1px solid var(--border); }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+thead tr { background: var(--navy); }
+thead th {
+  padding: 0.65rem 0.9rem;
+  font-weight: 700;
+  text-align: left;
+  color: rgba(255,255,255,0.92);
+  letter-spacing: 0.02em;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+thead th:first-child { border-radius: 0; }
+tbody tr:nth-child(even)  { background: var(--bg-warm); }
+tbody tr:nth-child(odd)   { background: var(--white); }
+tbody tr:hover { background: var(--navy-faint); }
+tbody td {
+  padding: 0.6rem 0.9rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--slate);
+  line-height: 1.55;
+}
+tbody td:first-child { font-weight: 600; color: var(--navy-mid); }
+
+/* ═══════════════════════════════════════════════
+   ALERTS
+═══════════════════════════════════════════════ */
+.alert {
+  border-radius: var(--radius);
+  padding: 0.9rem 1.1rem;
+  margin: 0.75rem 0;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  border-left: 4px solid;
+}
+.alert-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.alert-red    { background: var(--crimson-pale); border-color: var(--crimson); color: #7f1d1d; }
+.alert-blue   { background: var(--cobalt-pale); border-color: var(--cobalt); color: #1e3a8a; }
+.alert-green  { background: var(--green-pale); border-color: var(--green-mid); color: var(--green); }
+.alert-amber  { background: var(--amber-pale); border-color: var(--amber-mid); color: var(--amber); }
+.alert-navy   { background: var(--navy-faint); border-color: var(--navy-mid); color: var(--navy); }
+.alert-teal   { background: var(--teal-pale); border-color: var(--teal); color: var(--teal); }
+.alert b { font-weight: 700; }
+
+/* ═══════════════════════════════════════════════
+   PATHWAY / FLOW CHAIN
+═══════════════════════════════════════════════ */
+.pathway { display: flex; flex-direction: column; }
+.pathway-step {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--navy-light);
+  border-radius: var(--radius);
+  padding: 0.7rem 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+.pathway-step.highlight { border-left-color: var(--cobalt); background: var(--cobalt-pale); color: #1e3a8a; }
+.pathway-step.danger    { border-left-color: var(--crimson); background: var(--crimson-faint); color: #7f1d1d; }
+.pathway-step.terminal  { background: var(--navy); color: white; border-left-color: var(--crimson); }
+.pathway-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--slate-light);
+  font-size: 1.1rem;
+  padding: 0.15rem 0;
+  position: relative;
+}
+.pathway-arrow::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 0; bottom: 0;
+  width: 1px;
+  background: var(--border-dark);
+  z-index: 0;
+}
+.pathway-arrow span {
+  background: var(--bg);
+  padding: 0 0.3rem;
+  position: relative;
+  z-index: 1;
+  font-size: 0.75rem;
+  color: var(--slate-light);
+  font-weight: 600;
+}
+
+/* ═══════════════════════════════════════════════
+   6 Ps
+═══════════════════════════════════════════════ */
+.six-ps {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.65rem;
+  margin: 0.8rem 0;
+}
+.p-box {
+  background: var(--white);
+  border: 1px solid #fecaca;
+  border-top: 3px solid var(--crimson);
+  border-radius: var(--radius);
+  padding: 0.85rem 0.5rem 0.7rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.p-letter { font-family: 'DM Serif Display', serif; font-size: 2rem; color: var(--crimson); line-height: 1; }
+.p-word   { font-size: 0.75rem; font-weight: 700; color: var(--navy-mid); margin-top: 0.25rem; letter-spacing: 0.02em; }
+
+/* ═══════════════════════════════════════════════
+   COMPARE GRID (PAD vs Venous)
+═══════════════════════════════════════════════ */
+.compare-wrap { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); }
+.compare-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.cg-header {
+  padding: 0.75rem 1rem;
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.cg-header.art { background: var(--crimson); color: white; }
+.cg-header.ven { background: var(--cobalt); color: white; }
+.cg-label {
+  grid-column: 1/-1;
+  background: var(--navy-faint);
+  padding: 0.4rem 1rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--navy-mid);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.cg-cell {
+  padding: 0.6rem 1rem;
+  font-size: 0.86rem;
+  border-bottom: 1px solid var(--border);
+  line-height: 1.5;
+  color: var(--slate);
+}
+.cg-cell.art { background: rgba(185,28,28,0.03); }
+.cg-cell.ven { background: rgba(29,78,216,0.03); }
+
+/* ═══════════════════════════════════════════════
+   MNEMONIC
+═══════════════════════════════════════════════ */
+.mnemonic { display: flex; flex-direction: column; gap: 0.4rem; }
+.mnem-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.mnem-row:nth-child(odd)  { border-left: 3px solid var(--crimson); }
+.mnem-row:nth-child(even) { border-left: 3px solid var(--cobalt); }
+.mnem-letter {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.5rem;
+  line-height: 1;
+  width: 26px;
+  flex-shrink: 0;
+  color: var(--crimson);
+}
+.mnem-row:nth-child(even) .mnem-letter { color: var(--cobalt); }
+.mnem-text { font-size: 0.88rem; line-height: 1.5; }
+.mnem-text strong { color: var(--navy); }
+.mnem-text small { color: var(--slate-mid); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════
+   PRIORITY STEPS
+═══════════════════════════════════════════════ */
+.priority-list { display: flex; flex-direction: column; gap: 0.5rem; }
+.priority-item {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+}
+.priority-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 0.82rem;
+  flex-shrink: 0;
+  color: white;
+}
+.p1 { background: var(--crimson); }
+.p2 { background: #ea580c; }
+.p3 { background: var(--cobalt); }
+.p4 { background: var(--navy-mid); }
+.priority-content { font-size: 0.88rem; line-height: 1.55; }
+.priority-content strong { color: var(--navy); font-weight: 700; }
+.priority-content small { color: var(--slate-mid); display: block; margin-top: 0.15rem; }
+
+/* ═══════════════════════════════════════════════
+   TAKEAWAY
+═══════════════════════════════════════════════ */
+.takeaway {
+  background: var(--navy);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem 1.4rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.takeaway-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: #93c5fd;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.takeaway ul { list-style: none; padding: 0; }
+.takeaway ul li {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+  padding-left: 1.2rem;
+  position: relative;
+  margin-bottom: 0.3rem;
+}
+.takeaway ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--crimson-mid);
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════════════
+   DRUG FLASHCARDS
+═══════════════════════════════════════════════ */
+.drugs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 1rem;
+}
+.drug-card { perspective: 1000px; cursor: pointer; height: 270px; }
+.drug-card-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  transition: transform 0.45s cubic-bezier(0.4,0,0.2,1);
+  transform-style: preserve-3d;
+}
+.drug-card.flipped .drug-card-inner { transform: rotateY(180deg); }
+.drug-front, .drug-back {
+  position: absolute; inset: 0;
+  border-radius: var(--radius-lg);
+  backface-visibility: hidden;
+  padding: 1.3rem;
+  display: flex; flex-direction: column;
+}
+.drug-front {
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+.drug-front::after {
+  content: '';
+  position: absolute;
+  bottom: -20px; right: -20px;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.07);
+}
+.drug-front-kicker {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  margin-bottom: 0.4rem;
+}
+.drug-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.35rem;
+  color: white;
+  line-height: 1.2;
+  margin-bottom: 0.35rem;
+}
+.drug-class-pill {
+  display: inline-block;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.85);
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 0.2rem;
+}
+.drug-emoji { font-size: 1.8rem; margin-bottom: 0.5rem; }
+.flip-hint {
+  position: absolute;
+  bottom: 1rem; right: 1rem;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+.drug-back {
+  background: var(--white);
+  transform: rotateY(180deg);
+  border: 1px solid var(--border);
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+.drug-back-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: var(--navy);
+  margin-bottom: 0.7rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.drug-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.79rem;
+  line-height: 1.45;
+}
+.drug-label {
+  color: var(--navy-mid);
+  font-weight: 700;
+  min-width: 72px;
+  flex-shrink: 0;
+  font-size: 0.73rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-top: 0.05rem;
+}
+.drug-val { color: var(--slate); }
+.drug-val.danger { color: var(--crimson); font-weight: 700; }
+.drug-val.good   { color: var(--green); font-weight: 700; }
+
+/* ═══════════════════════════════════════════════
+   QUIZ
+═══════════════════════════════════════════════ */
+.quiz-progress-bar-wrap {
+  background: var(--border);
+  border-radius: 99px;
+  height: 4px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.quiz-progress-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--crimson), var(--cobalt));
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.quiz-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.4rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+.quiz-q {
+  font-size: 0.93rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 1rem;
+  line-height: 1.55;
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+}
+.q-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 26px; height: 26px;
+  background: var(--navy);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  font-family: 'JetBrains Mono', monospace;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 0.45rem; }
+.quiz-opt {
+  background: var(--bg-warm);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.87rem;
+  font-weight: 500;
+  color: var(--slate);
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: left;
+  width: 100%;
+}
+.quiz-opt:hover { background: var(--navy-faint); border-color: var(--navy-light); color: var(--navy); }
+.quiz-opt.correct { background: var(--green-pale); border-color: var(--green-mid); color: var(--green); font-weight: 600; }
+.quiz-opt.wrong   { background: var(--crimson-pale); border-color: var(--crimson); color: var(--crimson); font-weight: 600; }
+.quiz-opt.revealed.not-selected { opacity: 0.45; }
+.opt-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; height: 24px;
+  border-radius: 4px;
+  background: var(--border);
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--slate-mid);
+}
+.quiz-opt.correct .opt-letter { background: var(--green-mid); color: white; }
+.quiz-opt.wrong   .opt-letter { background: var(--crimson); color: white; }
+.rationale {
+  display: none;
+  margin-top: 0.8rem;
+  background: var(--navy-faint);
+  border-left: 3px solid var(--cobalt);
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: var(--slate);
+}
+.rationale.show { display: block; animation: fadeIn 0.25s ease; }
+.rationale strong { color: var(--navy); }
+.quiz-score {
+  background: var(--navy);
+  color: white;
+  border-radius: var(--radius-xl);
+  padding: 1.5rem 2rem;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  display: none;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.quiz-score.show { display: block; }
+.score-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 0.3rem; }
+.score-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 3.5rem;
+  color: white;
+  line-height: 1;
+}
+.score-num span { font-size: 2rem; color: rgba(255,255,255,0.4); }
+.score-feedback { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--crimson);
+  color: white;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.6rem 1.4rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.15s;
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover { background: #991b1b; transform: translateY(-1px); box-shadow: var(--shadow); }
+
+/* ═══════════════════════════════════════════════
+   CHIPS / BADGES
+═══════════════════════════════════════════════ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 4px;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.chip-red   { background: var(--crimson-pale); color: var(--crimson); border: 1px solid #fecaca; }
+.chip-green { background: var(--green-pale); color: var(--green); border: 1px solid #bbf7d0; }
+.chip-blue  { background: var(--cobalt-pale); color: var(--cobalt); border: 1px solid #bfdbfe; }
+.chip-amber { background: var(--amber-pale); color: var(--amber); border: 1px solid #fde68a; }
+.chip-navy  { background: var(--navy-faint); color: var(--navy-mid); border: 1px solid #bfdbfe; }
+
+/* ═══════════════════════════════════════════════
+   TWO-COL
+═══════════════════════════════════════════════ */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media(max-width:620px){ .two-col { grid-template-columns: 1fr; } }
+
+/* ═══════════════════════════════════════════════
+   SCROLL TOP
+═══════════════════════════════════════════════ */
+#scrollTop {
+  position: fixed;
+  bottom: 1.5rem; right: 1.5rem;
+  z-index: 99;
+  background: var(--navy);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 40px; height: 40px;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+#scrollTop.show { opacity: 1; }
+#scrollTop:hover { transform: translateY(-2px); background: var(--navy-mid); }
+
+/* ── MONO code ── */
+code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82em;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.1rem 0.35rem;
+  color: var(--crimson);
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-dark); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: var(--slate-light); }
+
+/* ── Drug card color variants ── */
+.dc-crimson .drug-front { background: linear-gradient(135deg, #7f1d1d, #b91c1c); }
+.dc-navy    .drug-front { background: linear-gradient(135deg, #0d2340, #1d4ed8); }
+.dc-cobalt  .drug-front { background: linear-gradient(135deg, #1e3a8a, #2563eb); }
+.dc-slate   .drug-front { background: linear-gradient(135deg, #1e293b, #334155); }
+.dc-crimson2 .drug-front { background: linear-gradient(135deg, #991b1b, #dc2626); }
+.dc-teal    .drug-front { background: linear-gradient(135deg, #134e4a, #0f766e); }
+.dc-green   .drug-front { background: linear-gradient(135deg, #14532d, #15803d); }
+.dc-amber   .drug-front { background: linear-gradient(135deg, #78350f, #b45309); }
+.dc-indigo  .drug-front { background: linear-gradient(135deg, #312e81, #4338ca); }
+.dc-rose    .drug-front { background: linear-gradient(135deg, #881337, #be123c); }
+.dc-sky     .drug-front { background: linear-gradient(135deg, #075985, #0284c7); }
+.dc-emerald .drug-front { background: linear-gradient(135deg, #064e3b, #059669); }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="header-left">
+      <div class="header-kicker">♥ Clinical Reference · PP2 Pathophysiology & Pharmacology</div>
+      <h1 class="title">Perfusion <span>Study Guide</span></h1>
+      <div class="subtitle">Myocardial Infarction · Angina · Heart Failure · Peripheral Vascular Disease</div>
+    </div>
+    <div class="header-stats">
+      <span class="stat-pill">UWG BSN May 2027</span>
+      <span class="stat-pill">NCLEX-Level Content</span>
+      <span class="stat-pill">12 Drug Flashcards</span>
+      <span class="stat-pill">12-Question Quiz</span>
+    </div>
+  </div>
+</header>
+
+<!-- TABS -->
+<div class="tab-wrapper">
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="showSection('physio')" data-tab="physio">🫀 Physiology</button>
+    <button class="tab-btn" onclick="showSection('pvd')" data-tab="pvd">🦵 PVD</button>
+    <button class="tab-btn" onclick="showSection('acs')" data-tab="acs">⚡ ACS / MI</button>
+    <button class="tab-btn" onclick="showSection('angina')" data-tab="angina">💊 Angina</button>
+    <button class="tab-btn" onclick="showSection('drugs')" data-tab="drugs">🃏 Drug Cards</button>
+    <button class="tab-btn" onclick="showSection('quiz')" data-tab="quiz">🧠 Quiz</button>
+    <button class="tab-btn" onclick="showSection('cheatsheet')" data-tab="cheatsheet">📋 Cheat Sheet</button>
+  </div>
+</div>
+
+<div class="content">
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PHYSIOLOGY -->
+<!-- ══════════════════════════════════════════ -->
+<div id="physio" class="section active">
+  <div class="section-title"><span class="icon">🫀</span> Normal Cardiovascular Physiology</div>
+
+  <div class="card">
+    <h3>Cardiac Output — The Foundational Formula</h3>
+    <div class="formula-box">
+      <div class="formula">CO = HR × SV</div>
+      <div class="formula-sub">Cardiac Output = Heart Rate × Stroke Volume &nbsp;|&nbsp; Normal: 4–8 L/min</div>
+    </div>
+    <p style="margin-top:0.6rem; font-size:0.88rem; color:var(--slate-mid);">Every intervention in cardiac care either affects HR or SV (or both). Understanding which drugs alter which component is the foundation of cardiac pharmacology.</p>
+  </div>
+
+  <div class="card">
+    <h3>The Five Determinants of Cardiac Output</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Determinant</th><th>Definition</th><th>If ↑</th><th>If ↓</th></tr></thead>
+        <tbody>
+          <tr><td>Preload</td><td>Ventricular stretch before contraction; end-diastolic volume (EDV)</td><td>↑SV via Starling's Law — to a point</td><td>↓SV → ↓CO → inadequate perfusion</td></tr>
+          <tr><td>Afterload</td><td>Resistance the ventricle overcomes to eject blood (SVR)</td><td>↓SV — harder to pump against resistance</td><td>↑SV — less work required to eject</td></tr>
+          <tr><td>Contractility</td><td>Intrinsic myocardial force independent of preload (inotropy)</td><td>↑SV regardless of fill volume</td><td>↓SV → HF, cardiogenic shock</td></tr>
+          <tr><td>Heart Rate</td><td>Beats per minute (normal 60–100 bpm)</td><td>↑CO initially; beyond ~150 bpm diastolic fill time too short</td><td>↓CO → fatigue, hypoperfusion</td></tr>
+          <tr><td>Ejection Fraction (EF)</td><td>% of end-diastolic volume ejected per beat</td><td>Normal ≥55% = adequate pump function</td><td>&lt;40% = systolic heart failure; &lt;55% = reduced function</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-navy">
+    <h3>Starling's Law — The Critical Concept</h3>
+    <p>The greater the myocardial stretch (↑ preload), the stronger the subsequent contraction — <strong>up to an optimal point</strong>. Beyond the optimal stretch, the overstretched muscle generates less force.</p>
+    <div class="alert alert-amber" style="margin-top:0.8rem;">
+      <span class="alert-icon">⚠</span>
+      <div><b>Clinical application:</b> IV fluids ↑ preload → ↑ CO in hypovolemia. In heart failure, the ventricle is already overstretched — adding fluids worsens failure. This is why we give diuretics (↓ preload) in HF, not fluids.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Drug Effects on Preload and Afterload</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Drug / Class</th><th>Preload Effect</th><th>Afterload Effect</th><th>Net Result</th></tr></thead>
+        <tbody>
+          <tr><td>Nitroglycerin (low dose)</td><td>↓↓ Venodilation</td><td>↓ Mild</td><td>↓ Cardiac workload</td></tr>
+          <tr><td>Nitroglycerin (IV / high dose)</td><td>↓↓</td><td>↓↓</td><td>↓↓ Workload — used in STEMI</td></tr>
+          <tr><td>ACE Inhibitors / ARBs</td><td>↓ (↓ fluid retention)</td><td>↓↓ Vasodilation</td><td>Reduces both preload + afterload — cornerstone of HF therapy</td></tr>
+          <tr><td>Loop Diuretics (furosemide)</td><td>↓↓ (↓ volume)</td><td>Minimal</td><td>Reduces pulmonary edema; core HF treatment</td></tr>
+          <tr><td>Beta-Blockers</td><td>Neutral</td><td>↓ Mild</td><td>↓ HR + contractility = ↓ O₂ demand; antidysrhythmic</td></tr>
+          <tr><td>Morphine</td><td>↓ Venodilation</td><td>↓ Arterial dilation</td><td>↓ O₂ demand; useful in STEMI + pulmonary edema</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Neurohormonal Regulation</h3>
+    <div class="two-col">
+      <div>
+        <h4>Sympathetic (Adrenergic)</h4>
+        <ul>
+          <li>Releases epinephrine + norepinephrine</li>
+          <li>↑ HR, ↑ contractility, ↑ vasoconstriction → ↑ BP and CO</li>
+          <li><strong>Beta-blockers antagonize this system</strong></li>
+        </ul>
+        <h4>Parasympathetic (Vagal)</h4>
+        <ul>
+          <li>Acetylcholine → ↓ HR, vasodilation</li>
+          <li>Dominant at rest; protects against excessive tachycardia</li>
+        </ul>
+      </div>
+      <div>
+        <h4>RAAS (Long-term BP Control)</h4>
+        <ul>
+          <li>Angiotensin II → vasoconstriction → ↑ BP</li>
+          <li>Aldosterone → Na/H₂O retention → ↑ preload + ↑ BP</li>
+          <li>ADH → ↑ water reabsorption → ↑ blood volume</li>
+          <li><strong>ACE inhibitors and ARBs block this system</strong></li>
+        </ul>
+        <h4>Blood Pressure Formula</h4>
+        <div style="background:var(--navy-faint); border-radius:6px; padding:0.5rem 0.75rem; margin-top:0.4rem; font-family:'JetBrains Mono',monospace; font-size:0.82rem; color:var(--navy); font-weight:600;">
+          BP = CO × SVR
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">↗ High-Yield Takeaways — Physiology</div>
+    <ul>
+      <li>CO = HR × SV. Memorize this. Every cardiac drug affects one or both components.</li>
+      <li>Preload = filling (stretch). Afterload = resistance. Reduce both in HF to reduce myocardial workload.</li>
+      <li>EF ≥55% = normal. EF &lt;40% = systolic heart failure. EF &lt;55% = borderline/reduced.</li>
+      <li>Starling's Law: more stretch = stronger contraction, until the muscle is overstretched — then force drops.</li>
+      <li>RAAS = long-term BP. Sympathetic = acute BP. Both are targets for cardiac pharmacology.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- PVD -->
+<!-- ══════════════════════════════════════════ -->
+<div id="pvd" class="section">
+  <div class="section-title"><span class="icon">🦵</span> Peripheral Vascular Disease</div>
+
+  <div class="alert alert-red">
+    <span class="alert-icon">⚠</span>
+    <div><b>Acute Arterial Insufficiency = Limb-Threatening Emergency.</b> The 6 Ps must be recognized immediately. Every minute of delay risks irreversible ischemic damage and amputation.</div>
+  </div>
+
+  <div class="card card-red">
+    <h3>The 6 Ps of Acute Arterial Ischemia</h3>
+    <p style="font-size:0.85rem; margin-bottom:0.8rem; color:#7f1d1d; font-weight:600;">All 6 together → heparin anticoagulation + emergent thrombectomy or embolectomy</p>
+    <div class="six-ps">
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Pain</div></div>
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Pallor</div></div>
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Pulselessness</div></div>
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Paresthesia</div></div>
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Paralysis</div></div>
+      <div class="p-box"><div class="p-letter">P</div><div class="p-word">Polar (cold)</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>PAD vs. Venous Insufficiency — High-Yield Comparison</h3>
+    <p style="font-size:0.83rem; color:var(--slate-mid); margin-bottom:0.8rem;">This comparison is consistently tested on the NCLEX. Know every distinguishing feature.</p>
+    <div class="compare-wrap">
+      <div class="compare-grid">
+        <div class="cg-header art">Arterial (PAD)</div>
+        <div class="cg-header ven">Venous Insufficiency</div>
+        <div class="cg-label">Etiology</div>
+        <div class="cg-cell art">Atherosclerosis → partial or total arterial occlusion → ↓ perfusion to extremities</div>
+        <div class="cg-cell ven">Incompetent venous valves + weakened muscle pump → venous hypertension → edema</div>
+        <div class="cg-label">Pulses</div>
+        <div class="cg-cell art">Diminished or <strong>absent</strong> distal pulses</div>
+        <div class="cg-cell ven">Usually <strong>present</strong> — arterial system intact</div>
+        <div class="cg-label">Skin Color</div>
+        <div class="cg-cell art">Pale, cyanotic; <strong>dependent rubor</strong> (red when hanging, pale when elevated)</div>
+        <div class="cg-cell ven"><strong>Reddish-brown hemosiderin staining</strong> along ankles extending up calf</div>
+        <div class="cg-label">Temperature</div>
+        <div class="cg-cell art"><strong>Cold</strong> extremity — ↓ perfusion</div>
+        <div class="cg-cell ven"><strong>Warm</strong>; pitting edema present</div>
+        <div class="cg-label">Skin / Hair</div>
+        <div class="cg-cell art">Hairless, dry, scaly, thickened nails</div>
+        <div class="cg-cell ven">Edematous; may have cellulitis with chronic disease</div>
+        <div class="cg-label">Ulcer Location</div>
+        <div class="cg-cell art"><strong>Toes and feet</strong> (most distal)</div>
+        <div class="cg-cell ven"><strong>Inner ankle</strong> (medial malleolus)</div>
+        <div class="cg-label">Ulcer Character</div>
+        <div class="cg-cell art">Small, round, <strong>well-defined</strong> borders; hollow appearance; deep; painful</div>
+        <div class="cg-cell ven">Large, shallow, <strong>irregular</strong> borders; may be less painful</div>
+        <div class="cg-label">Pain Pattern</div>
+        <div class="cg-cell art"><strong>Intermittent claudication</strong> — reproducible with exertion, relieved by rest</div>
+        <div class="cg-cell ven">Dull aching/heaviness; worsens with prolonged standing; not claudication</div>
+        <div class="cg-label">Treatment</div>
+        <div class="cg-cell art">Cilostazol; anticoagulants; surgical revascularization</div>
+        <div class="cg-cell ven">Compression therapy; wound care; leg elevation; treat underlying cause</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-cobalt">
+    <h3>Cilostazol (Pletal) — PAD Pharmacotherapy</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Category</th><th>Details</th></tr></thead>
+        <tbody>
+          <tr><td>Drug Class</td><td>Phosphodiesterase-3 (PDE3) inhibitor</td></tr>
+          <tr><td>Dual Mechanism</td><td>Inhibits platelet aggregation <em>and</em> causes vasodilation — improves peripheral blood flow via both pathways</td></tr>
+          <tr><td>Indication</td><td>Symptomatic intermittent claudication in PAD</td></tr>
+          <tr><td>Adverse Effects</td><td>Headache (very common — from vasodilation), palpitations, diarrhea, bleeding risk</td></tr>
+          <tr><td>Nursing Considerations</td><td>Avoid grapefruit juice (CYP3A4 inhibition → ↑ drug levels). Instruct patient to stop smoking — nicotine causes vasoconstriction, directly counteracting the vasodilatory mechanism</td></tr>
+          <tr><td>Expected Outcome</td><td>↑ walking distance before onset of claudication symptoms</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert alert-red" style="margin-top:0.8rem;">
+      <span class="alert-icon">⛔</span>
+      <div><b>FDA BLACK BOX WARNING:</b> Cilostazol is CONTRAINDICATED in any degree of heart failure. Studies showed increased mortality in HF patients. Never administer to a patient with HF regardless of severity.</div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">↗ High-Yield Takeaways — PVD</div>
+    <ul>
+      <li>6 Ps present → limb-threatening emergency → heparin + surgical intervention STAT. Report all 6 Ps immediately.</li>
+      <li>PAD ulcers: toes, well-defined borders. Venous ulcers: inner ankle, irregular borders. Know this cold.</li>
+      <li>PAD = cold, pulseless, pale. Venous = warm, reddish-brown staining, edema.</li>
+      <li>Dependent rubor (red when hanging, pale when elevated) = severe PAD sign.</li>
+      <li>Cilostazol: no grapefruit, no smoking. Absolute CI in heart failure (Black Box).</li>
+      <li>Intermittent claudication: pain with walking, relieved by rest. Rest pain = critical ischemia = emergency.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- ACS / MI -->
+<!-- ══════════════════════════════════════════ -->
+<div id="acs" class="section">
+  <div class="section-title"><span class="icon">⚡</span> Acute Coronary Syndrome & Myocardial Infarction</div>
+
+  <div class="card">
+    <h3>Key Terminology</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+        <tbody>
+          <tr><td>CAD</td><td>Coronary artery disease — atherosclerosis of arteries supplying the myocardium</td></tr>
+          <tr><td>ACS</td><td>Acute coronary syndrome — spectrum from unstable angina to MI; results from ruptured plaque</td></tr>
+          <tr><td>Ischemia</td><td>↓ blood flow → O₂ deficit to tissue; <em>reversible</em> if treated promptly</td></tr>
+          <tr><td>Infarction</td><td>Necrosis (cell death) from prolonged ischemia; <em>irreversible</em></td></tr>
+          <tr><td>Ejection Fraction</td><td>% of end-diastolic volume ejected per beat; normal ≥55%</td></tr>
+          <tr><td>Cardiogenic Shock</td><td>Post-MI heart failure when &gt;40% of LV is necrotic; pump fails to maintain perfusion; Class IV HF</td></tr>
+          <tr><td>STEMI</td><td>ST-elevation MI — 100% coronary occlusion; transmural necrosis; PCI ≤90 min or tPA ≤30 min</td></tr>
+          <tr><td>NSTEMI</td><td>Non-ST-elevation MI — partial occlusion; subendocardial ischemia; troponin rises 3–12 hrs</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-navy">
+    <h3>ACS Pathophysiology — Sequential Cause and Effect</h3>
+    <div class="pathway">
+      <div class="pathway-step highlight">Atherosclerotic plaque ruptures in a coronary artery</div>
+      <div class="pathway-arrow"><span>triggers</span></div>
+      <div class="pathway-step">Platelet aggregation ("clumping") at the rupture site</div>
+      <div class="pathway-arrow"><span>leads to</span></div>
+      <div class="pathway-step">Thrombus (clot) formation + coronary vasoconstriction</div>
+      <div class="pathway-arrow"><span>results in</span></div>
+      <div class="pathway-step danger">Abrupt O₂ deprivation to myocardial tissue → ISCHEMIA</div>
+      <div class="pathway-arrow"><span>if untreated</span></div>
+      <div class="pathway-step danger">Prolonged ischemia → INFARCTION (irreversible necrosis)</div>
+      <div class="pathway-arrow"><span>consequences</span></div>
+      <div class="pathway-step terminal">↓ EF · ↓ Stroke Volume · ↑ LVEDP · Dysrhythmias · Heart Failure · Cardiogenic Shock</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>STEMI vs. NSTEMI — Critical Comparison</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>STEMI</th><th>NSTEMI</th></tr></thead>
+        <tbody>
+          <tr><td>Occlusion</td><td><strong>100% complete</strong></td><td>Partial</td></tr>
+          <tr><td>Myocardial depth</td><td>Transmural (full thickness)</td><td>Subendocardial (under endocardium)</td></tr>
+          <tr><td>ECG</td><td><span class="chip chip-red">ST Elevation</span> ≥2 contiguous leads</td><td>ST depression + T-wave inversion; no ST elevation</td></tr>
+          <tr><td>Troponin</td><td>Elevated early</td><td>Normal initially; elevates 3–12 hrs later</td></tr>
+          <tr><td>Necrosis</td><td>Yes — significant</td><td>Primarily ischemia; less necrosis</td></tr>
+          <tr><td>% of MIs</td><td>~30%</td><td>~70%</td></tr>
+          <tr><td>Alteplase (tPA)</td><td><span class="chip chip-green">✓ Indicated</span> if PCI unavailable in 90 min</td><td><span class="chip chip-red">✗ Never — contraindicated</span></td></tr>
+          <tr><td>PCI target</td><td><span class="chip chip-red">≤ 90 min (door-to-balloon)</span></td><td>Risk-stratified; not a fixed target</td></tr>
+          <tr><td>tPA target</td><td><span class="chip chip-amber">≤ 30 min (door-to-needle)</span></td><td>N/A</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="alert alert-red">
+      <span class="alert-icon">⏱</span>
+      <div><b>Time Targets (STEMI):</b><br>Door-to-Balloon (PCI): ≤ 90 minutes<br>Door-to-Needle (tPA): ≤ 30 minutes<br><small style="opacity:0.8;">If PCI unavailable within 90 min → give alteplase for STEMI ONLY</small></div>
+    </div>
+    <div class="alert alert-blue">
+      <span class="alert-icon">📋</span>
+      <div><b>tPA Rule:</b> STEMI only. NEVER for NSTEMI. The 100% occlusion requires clot dissolution. Partial occlusion is managed medically with antiplatelet/anticoagulant therapy first.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Risk Factors for CAD / ACS</h3>
+    <div class="two-col">
+      <div>
+        <h4>Modifiable</h4>
+        <ul>
+          <li>Dyslipidemia (↑LDL, ↓HDL)</li>
+          <li>Hypertension</li>
+          <li>Cigarette smoking</li>
+          <li>Diabetes mellitus / insulin resistance</li>
+          <li>Obesity / metabolic syndrome</li>
+          <li>Sedentary lifestyle</li>
+          <li>Atherogenic diet (high salt, saturated fat, trans-fat)</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Non-Modifiable</h4>
+        <ul>
+          <li>Advanced age</li>
+          <li>Male sex or women post-menopause</li>
+          <li>Family history of premature CAD</li>
+        </ul>
+        <h4>Target Lipid Values</h4>
+        <ul>
+          <li>Total cholesterol: &lt;200 mg/dL</li>
+          <li>LDL: &lt;130 mg/dL (post-MI: &lt;70)</li>
+          <li>HDL: men &gt;45; women &gt;55 mg/dL</li>
+          <li>Triglycerides: men 40–160 / women 35–135</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-red">
+    <h3>Cardiogenic Shock — Report Immediately</h3>
+    <p style="font-size:0.86rem; margin-bottom:0.8rem; color:#7f1d1d; font-weight:600;">Occurs when &gt;40% of the left ventricle is necrotic → pump failure → end-organ hypoperfusion. Carries high mortality if unrecognized.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Sign / Symptom</th><th>Clinical Threshold</th></tr></thead>
+        <tbody>
+          <tr><td>Hypotension</td><td>SBP &lt;90 mmHg OR &gt;30 mmHg below patient's baseline</td></tr>
+          <tr><td>Tachycardia</td><td>HR &gt;100 bpm (compensatory response)</td></tr>
+          <tr><td>Urine output</td><td>&lt;0.5–1 mL/kg/hr (renal hypoperfusion)</td></tr>
+          <tr><td>Skin perfusion</td><td>Cold, clammy; poor peripheral pulses</td></tr>
+          <tr><td>Neurologic</td><td>Agitation, confusion, restlessness (cerebral hypoperfusion)</td></tr>
+          <tr><td>Respiratory</td><td>Tachypnea; pulmonary congestion (↑ LVEDP backing up)</td></tr>
+          <tr><td>Chest</td><td>Continuing chest discomfort despite treatment</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>ACS Priority Problems — In Clinical Order</h3>
+    <div class="priority-list">
+      <div class="priority-item">
+        <div class="priority-num p1">1</div>
+        <div class="priority-content"><strong>Acute Pain</strong> — O₂ supply/demand imbalance<br><small>→ Oxygen if SpO₂ &lt;90%, NTG SL, morphine if unresponsive to NTG, aspirin</small></div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p2">2</div>
+        <div class="priority-content"><strong>↓ Myocardial Tissue Perfusion</strong> — arterial flow interrupted<br><small>→ PCI or tPA; heparin, aspirin, clopidogrel (dual antiplatelet)</small></div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p3">3</div>
+        <div class="priority-content"><strong>Potential Dysrhythmias</strong> — ischemia + ventricular irritability<br><small>→ Continuous cardiac monitoring, correct electrolytes, antidysrhythmics as ordered</small></div>
+      </div>
+      <div class="priority-item">
+        <div class="priority-num p4">4</div>
+        <div class="priority-content"><strong>Potential Heart Failure</strong> — left ventricular dysfunction<br><small>→ Beta-blockers within 24 hrs, ACEIs within 24 hrs, diuretics if fluid overloaded</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card-cobalt">
+    <h3>THROMBINS² Mnemonic — Complete MI Treatment</h3>
+    <div class="mnemonic">
+      <div class="mnem-row"><span class="mnem-letter">T</span><div class="mnem-text"><strong>Thienopyridines</strong> (clopidogrel) <small>— P2Y12 ADP receptor blockade; antiplatelet; combined with aspirin post-stent</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">H</span><div class="mnem-text"><strong>Heparin</strong> <small>— prevents extension of clot; therapeutic aPTT 60–80 sec; antidote = protamine sulfate</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">R</span><div class="mnem-text"><strong>RAAS Blockade</strong> (ACEI or ARB) <small>— promotes ventricular remodeling; start within 24 hrs of symptom onset</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">O</span><div class="mnem-text"><strong>Oxygen</strong> <small>— supplement only if SpO₂ &lt;90%; 2 L/min via nasal cannula; titrate to SpO₂ ≥90%</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">M</span><div class="mnem-text"><strong>Morphine</strong> <small>— pain relief; venodilation (↓ preload) + arterial dilation (↓ afterload); antidote = naloxone</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">B</span><div class="mnem-text"><strong>Beta-Blockers</strong> <small>— ↓ HR + contractility = ↓ O₂ demand; start within 24 hrs if no HF, AV block, or severe bradycardia</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">I</span><div class="mnem-text"><strong>Interventions</strong> (PCI) <small>— percutaneous coronary intervention; gold standard for STEMI; door-to-balloon ≤90 min</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">N</span><div class="mnem-text"><strong>Nitroglycerin</strong> <small>— vasodilation → ↓ preload + ↓ afterload; hold if SBP &lt;90, HR &lt;50 or &gt;100, or sildenafil within 24 hrs</small></div></div>
+      <div class="mnem-row"><span class="mnem-letter">S²</span><div class="mnem-text"><strong>Statins + Aspirin</strong> <small>— statins: ↓ LDL + plaque stabilization (take at bedtime); aspirin: ↓ platelet aggregation (chew first dose 162–325 mg)</small></div></div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">↗ High-Yield Takeaways — ACS / MI</div>
+    <ul>
+      <li>Pathophysiology sequence: plaque rupture → platelet aggregation → clot → ischemia → necrosis.</li>
+      <li>STEMI = 100% occlusion + ST elevation. NSTEMI = partial occlusion + ST depression/T-wave changes.</li>
+      <li>tPA (alteplase) is ONLY for STEMI. Giving it to an NSTEMI patient = contraindicated medication error.</li>
+      <li>Time targets are survival targets: PCI ≤90 min, tPA ≤30 min. These are not flexible guidelines.</li>
+      <li>Cardiogenic shock: SBP &lt;90, cold clammy, UO &lt;0.5 mL/kg/hr, confusion. REPORT IMMEDIATELY.</li>
+      <li>LVEDP↑ = ventricle can't empty → blood backs up into pulmonary circulation → dyspnea/crackles.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- ANGINA -->
+<!-- ══════════════════════════════════════════ -->
+<div id="angina" class="section">
+  <div class="section-title"><span class="icon">💊</span> Angina Pectoris — Types & Treatment</div>
+
+  <div class="card">
+    <h3>Types of Angina</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Type</th><th>Pattern</th><th>Relieved By</th><th>Clinical Significance</th></tr></thead>
+        <tbody>
+          <tr><td>Chronic Stable Angina</td><td>Predictable; with moderate-to-prolonged exertion; familiar pattern to patient</td><td>Rest + NTG within 5–15 min</td><td>Manageable outpatient; not immediately life-threatening</td></tr>
+          <tr><td>Unstable Angina</td><td>Rest pain; new onset; changing/worsening pattern; unpredictable</td><td>NOT relieved by rest</td><td><span class="chip chip-red">ACS — Emergency Department NOW</span></td></tr>
+          <tr><td>Atypical Angina</td><td>Jaw pain, indigestion, shoulder aching, choking sensation with exertion</td><td>Variable</td><td>Common in women, elderly, diabetics — frequently missed</td></tr>
+          <tr><td>Variant (Prinzmetal)</td><td>Coronary artery spasm (not fixed plaque); occurs at rest, often nocturnal</td><td>CCBs + Nitrates</td><td>Not from atherosclerosis; treat the spasm, not the plaque</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert alert-red" style="margin-top:0.8rem;">
+      <span class="alert-icon">⚠</span>
+      <div><b>Exam Critical Point:</b> Unstable angina = rest pain = ACS. Do not send the patient home. This is a medical emergency requiring immediate evaluation and hospitalization.</div>
+    </div>
+  </div>
+
+  <div class="card card-navy">
+    <h3>Antianginal Drug Classes — Mechanism Comparison</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Class</th><th>Mechanism of Action</th><th>Key Agents</th><th>Primary Side Effects</th></tr></thead>
+        <tbody>
+          <tr><td>Nitrates</td><td>Dilate veins and arteries → ↓ preload + ↓ afterload → ↓ cardiac workload and O₂ demand</td><td>Nitroglycerin (SL, spray, IV, patch, paste)</td><td>Headache, orthostatic hypotension, reflex tachycardia</td></tr>
+          <tr><td>Beta-Blockers</td><td>Block epinephrine → ↓ HR + ↓ contractility → ↓ O₂ demand; ↑ diastolic fill time → ↑ coronary perfusion</td><td>Metoprolol, atenolol, propranolol, nadolol</td><td>Bradycardia, fatigue, bronchospasm, mask hypoglycemia</td></tr>
+          <tr><td>Calcium Channel Blockers</td><td>Block Ca²⁺ entry → ↓ contractility → ↓ cardiac workload; relax arterial smooth muscle → ↓ afterload; stop coronary spasm</td><td>Amlodipine, nifedipine, verapamil, diltiazem</td><td>Headache, flushing, peripheral edema, hypotension, bradycardia</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Nitroglycerin SL Protocol — At Home and In Hospital</h3>
+    <div class="two-col">
+      <div>
+        <h4>At Home Protocol</h4>
+        <div class="pathway">
+          <div class="pathway-step highlight">Angina begins → 1 SL NTG (0.4 mg)</div>
+          <div class="pathway-arrow"><span>wait 5 min</span></div>
+          <div class="pathway-step">Pain persists → 2nd SL NTG</div>
+          <div class="pathway-arrow"><span>wait 5 min</span></div>
+          <div class="pathway-step">Pain persists → 3rd SL NTG</div>
+          <div class="pathway-arrow"><span>wait 5 min</span></div>
+          <div class="pathway-step danger">Still no relief → CALL 911. Do NOT drive yourself.</div>
+        </div>
+      </div>
+      <div>
+        <h4>In-Hospital Protocol</h4>
+        <ul>
+          <li>NTG 0.4 mg SL q5 min × 3 doses</li>
+          <li>Assess for IV NTG if discomfort, HTN, or pulmonary congestion persist</li>
+          <li>IV NTG: use glass bottle + manufacturer tubing</li>
+        </ul>
+        <h4>Hold NTG If:</h4>
+        <ul>
+          <li>SBP &lt;90 mmHg</li>
+          <li>HR &lt;50 bpm or &gt;100 bpm</li>
+          <li>Sildenafil (Viagra), tadalafil, or vardenafil within 24 hours</li>
+        </ul>
+        <h4>Storage</h4>
+        <ul>
+          <li>Original dark glass container; room temperature</li>
+          <li>Check expiration dates; replace regularly</li>
+          <li>Remove transdermal patches at bedtime (prevents tolerance)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Non-Pharmacologic Angina Management</h3>
+    <div class="two-col">
+      <div>
+        <h4>Avoid Triggers</h4>
+        <ul>
+          <li>Heavy meals (↑ cardiac demand post-prandially)</li>
+          <li>Smoking (nicotine causes vasoconstriction)</li>
+          <li>Extreme temperature changes</li>
+          <li>Unaccustomed or strenuous exercise</li>
+          <li>Emotional stress and anger</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Promote Cardiovascular Health</h4>
+        <ul>
+          <li>Heart-healthy diet (low salt, low saturated fat)</li>
+          <li>Regular moderate exercise (as tolerated)</li>
+          <li>Adequate sleep and stress management</li>
+          <li>Strict medication adherence</li>
+          <li>Cardiac rehabilitation program</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-title">↗ High-Yield Takeaways — Angina</div>
+    <ul>
+      <li>Stable angina: exertion-induced, relieved by rest/NTG. Unstable: rest pain = ACS = ED immediately.</li>
+      <li>All three antianginal classes reduce cardiac workload — through different but complementary mechanisms.</li>
+      <li>NTG + sildenafil (Viagra/Cialis/Levitra) = absolute contraindication. Always ask before administering NTG.</li>
+      <li>At home: NTG ×1 → 5 min wait → ×2 → 5 min → ×3 → 5 min → call 911. Do not take 3 and then call.</li>
+      <li>Atypical symptoms (jaw, shoulder, indigestion) are the presentation in women, elderly, and diabetics. Do not miss them.</li>
+      <li>Do NOT combine verapamil or diltiazem with beta-blockers — compounding bradycardia and AV block risk.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- DRUG CARDS -->
+<!-- ══════════════════════════════════════════ -->
+<div id="drugs" class="section">
+  <div class="section-title"><span class="icon">🃏</span> Drug Flashcards</div>
+  <p style="font-size:0.88rem; color:var(--slate-mid); margin-bottom:1.2rem; font-weight:500;">Click any card to flip and review the full clinical profile. Study the hold parameters and antidotes especially carefully.</p>
+
+  <div class="drugs-grid">
+
+    <div class="drug-card dc-crimson" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Antiplatelet · NSAIDs</div>
+          <div class="drug-emoji">💊</div>
+          <div class="drug-name">Aspirin (ASA)</div>
+          <div class="drug-class-pill">325 mg initial → 81–162 mg/day</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Aspirin (ASA)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Inhibits COX-1 irreversibly → blocks thromboxane A₂ → ↓ platelet aggregation</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">STEMI/NSTEMI (immediate); long-term MI prevention; ischemic stroke</span></div>
+          <div class="drug-row"><span class="drug-label">Dose</span><span class="drug-val">162–325 mg CHEWED initially; then 81–162 mg/day indefinitely</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">GI bleeding, tinnitus (toxicity), peptic ulcer, Reye's syndrome (children)</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">CHEW first dose for rapid buccal absorption. No NSAIDs concurrently. Hold 1 week before surgery.</span></div>
+          <div class="drug-row"><span class="drug-label">CI</span><span class="drug-val danger">Active GI bleed, aspirin allergy, children (Reye's risk)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-navy" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Nitrate · Vasodilator</div>
+          <div class="drug-emoji">💛</div>
+          <div class="drug-name">Nitroglycerin (NTG)</div>
+          <div class="drug-class-pill">SL · IV · Patch · Paste · Spray</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Nitroglycerin (NTG)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Relaxes vascular smooth muscle → ↓ preload (veins) + ↓ afterload (arteries) → ↓ O₂ demand; ↑ collateral coronary flow</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">Angina, STEMI, HF from MI, hypertension from STEMI anxiety</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Headache (very common), orthostatic hypotension, reflex tachycardia (if given too rapidly)</span></div>
+          <div class="drug-row"><span class="drug-label">Hold if</span><span class="drug-val danger">SBP &lt;90, HR &lt;50 or &gt;100, sildenafil/tadalafil within 24 hrs</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">IV: glass bottle + manufacturer tubing. Remove patch at bedtime (tolerance prevention). Store SL in dark glass, original container.</span></div>
+          <div class="drug-row"><span class="drug-label">Abs CI</span><span class="drug-val danger">Sildenafil (Viagra), tadalafil (Cialis), vardenafil (Levitra) within 24 hours</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-slate" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Opioid Analgesic</div>
+          <div class="drug-emoji">🩹</div>
+          <div class="drug-name">Morphine Sulfate</div>
+          <div class="drug-class-pill">CNS Depressant · Venodilator</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Morphine Sulfate</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Opiate receptor binding → CNS depression → pain relief + venodilation (↓ preload) + arterial dilation (↓ afterload)</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">Chest pain unresponsive to NTG; STEMI; dyspnea; acute pulmonary edema</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Respiratory depression, hypotension, bradycardia, sedation, constipation, nausea</span></div>
+          <div class="drug-row"><span class="drug-label">Hold if</span><span class="drug-val danger">RR &lt;12, low BP — do not administer</span></div>
+          <div class="drug-row"><span class="drug-label">Antidote</span><span class="drug-val good">Naloxone (Narcan) — keep at bedside in high-acuity settings</span></div>
+          <div class="drug-row"><span class="drug-label">Monitor</span><span class="drug-val">BP, HR, RR, LOC q1hr. Change positions slowly (orthostatic hypotension).</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-cobalt" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Beta-Adrenergic Blocker</div>
+          <div class="drug-emoji">🫀</div>
+          <div class="drug-name">Beta-Blockers</div>
+          <div class="drug-class-pill">Metoprolol · Atenolol · Carvedilol</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Beta-Blockers</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Block beta receptors → ↓ HR + ↓ contractility → ↓ O₂ demand; ↑ diastolic filling → ↑ coronary blood flow; antidysrhythmic</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">Acute STEMI (within 24 hrs); angina; HTN; dysrhythmias; compensated HF</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Bradycardia, hypotension, fatigue, bronchospasm, masks hypoglycemia symptoms (except diaphoresis)</span></div>
+          <div class="drug-row"><span class="drug-label">Hold if</span><span class="drug-val danger">HR &lt;60 bpm, SBP &lt;90, 2nd/3rd degree AV block</span></div>
+          <div class="drug-row"><span class="drug-label">CI ⚠</span><span class="drug-val danger">Asthma/bronchospasm → use selective BB (metoprolol, atenolol). NEVER abruptly discontinue.</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">Assess VS before every dose. Taper to discontinue — abrupt cessation causes rebound ischemia.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-crimson2" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Anticoagulant · Indirect Thrombin Inhibitor</div>
+          <div class="drug-emoji">🩸</div>
+          <div class="drug-name">Heparin</div>
+          <div class="drug-class-pill">Unfractionated · IV or SC</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Heparin (Unfractionated)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Binds antithrombin III → inactivates Factor Xa + thrombin → prevents clot formation/extension (does NOT lyse existing clots)</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">PCI post-STEMI; DVT/PE treatment/prevention; adjunct to fibrinolytic therapy</span></div>
+          <div class="drug-row"><span class="drug-label">Lab ✓</span><span class="drug-val good">aPTT therapeutic = 60–80 sec (1.5–2× normal of 40 sec). Check q4–6 hrs.</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Hemorrhage; HIT (heparin-induced thrombocytopenia — paradoxical thrombosis)</span></div>
+          <div class="drug-row"><span class="drug-label">HIT</span><span class="drug-val danger">Platelets drop &gt;50% → STOP heparin immediately → notify provider → use argatroban</span></div>
+          <div class="drug-row"><span class="drug-label">Antidote</span><span class="drug-val good">Protamine Sulfate</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-amber" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">P2Y12 ADP Receptor Blocker · Thienopyridine</div>
+          <div class="drug-emoji">🔶</div>
+          <div class="drug-name">Clopidogrel (Plavix)</div>
+          <div class="drug-class-pill">Antiplatelet — Irreversible</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Clopidogrel (Plavix)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Blocks P2Y12 ADP receptors on platelets → prevents ADP-stimulated aggregation (irreversible platelet inhibition)</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">All MI patients post-PCI; coronary stents (prevents stent thrombosis); ischemic stroke; PAD</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Bleeding, bruising, GI upset</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">Given WITH aspirin (dual antiplatelet therapy standard post-PCI). Hold 5 days before any surgery.</span></div>
+          <div class="drug-row"><span class="drug-label">Drug-Drug</span><span class="drug-val danger">Omeprazole reduces efficacy (CYP2C19 interaction) — consider pantoprazole instead</span></div>
+          <div class="drug-row"><span class="drug-label">Teach</span><span class="drug-val">Signs of bleeding: black tarry stools, hematuria, coffee-ground emesis. Report immediately.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-teal" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">RAAS Inhibitor · Cardioprotective</div>
+          <div class="drug-emoji">🫁</div>
+          <div class="drug-name">ACE Inhibitors</div>
+          <div class="drug-class-pill">Captopril · Lisinopril · Enalapril</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">ACE Inhibitors</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Blocks Ang I→Ang II conversion → vasodilation (↓ afterload); ↑ bradykinin; ↓ aldosterone → ↓ Na/H₂O; ventricular remodeling post-MI</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">STEMI within 24 hrs; HF; HTN; diabetic nephropathy</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">1st-dose hypotension; dry cough (bradykinin); angioedema (emergency!); hyperkalemia; renal failure</span></div>
+          <div class="drug-row"><span class="drug-label">Angioedema</span><span class="drug-val danger">Tongue/lip/throat swelling → STOP ACEI, epinephrine STAT, airway management. Switch to ARB permanently.</span></div>
+          <div class="drug-row"><span class="drug-label">Cough</span><span class="drug-val">Expected — bradykinin effect. Switch to ARB if intolerable. Do NOT stop abruptly.</span></div>
+          <div class="drug-row"><span class="drug-label">Labs</span><span class="drug-val">Monitor K⁺, creatinine/BUN, BP every visit</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-rose" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Fibrinolytic · Thrombolytic</div>
+          <div class="drug-emoji">⚡</div>
+          <div class="drug-name">Alteplase (tPA)</div>
+          <div class="drug-class-pill">STEMI ONLY · ≤30 min</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Alteplase / Tenecteplase (tPA)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Converts plasminogen → plasmin → digests fibrin → actively dissolves existing coronary thrombus</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">STEMI ONLY when PCI unavailable within 90 min. Target: ≤30 min door-to-needle. NEVER for NSTEMI.</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Bleeding everywhere; ICH (intracranial hemorrhage) = greatest feared complication</span></div>
+          <div class="drug-row"><span class="drug-label">ICH Signs</span><span class="drug-val danger">Sudden severe headache, focal neuro deficits → STOP infusion IMMEDIATELY → CT head STAT</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">Also give ASA + clopidogrel + heparin (start heparin BEFORE fibrinolytic). No IM injections during therapy. Verify contraindications.</span></div>
+          <div class="drug-row"><span class="drug-label">Abs CI</span><span class="drug-val danger">Active bleeding, recent surgery/trauma, stroke history, severe uncontrolled HTN, NSTEMI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-green" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">HMG-CoA Reductase Inhibitor · Antilipemic</div>
+          <div class="drug-emoji">🌿</div>
+          <div class="drug-name">Statins</div>
+          <div class="drug-class-pill">Atorvastatin · Rosuvastatin · Simvastatin</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Statins</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Inhibits HMG-CoA reductase → ↓ hepatic cholesterol synthesis → ↓ LDL; also stabilizes atherosclerotic plaques</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">ALL post-MI patients regardless of cholesterol level; hyperlipidemia; primary/secondary CAD prevention</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Myopathy/myalgia (muscle pain); rhabdomyolysis (severe — CK elevation + dark urine); hepatotoxicity</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">Take at BEDTIME (cholesterol synthesis peaks nocturnally). Monitor LFTs. Report unexplained muscle pain immediately.</span></div>
+          <div class="drug-row"><span class="drug-label">Drug-Drug</span><span class="drug-val danger">Grapefruit with simvastatin/lovastatin (CYP3A4 → ↑ drug levels → ↑ toxicity risk)</span></div>
+          <div class="drug-row"><span class="drug-label">Rhabdo</span><span class="drug-val danger">Muscle pain + dark urine + ↑ CK → STOP statin; IV hydration; monitor renal function</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-sky" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Calcium Channel Blocker · Antianginal</div>
+          <div class="drug-emoji">🔷</div>
+          <div class="drug-name">Calcium Channel Blockers</div>
+          <div class="drug-class-pill">Amlodipine · Verapamil · Diltiazem</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Calcium Channel Blockers (CCBs)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Block Ca²⁺ entry → ↓ contractility → ↓ cardiac workload; relax arterial smooth muscle → ↓ afterload; stop coronary artery spasm (Prinzmetal)</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">Angina (esp. Prinzmetal/vasospasm); HTN; rate control in A-fib/flutter (verapamil, diltiazem)</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Headache, flushing, peripheral edema, dizziness, hypotension, bradycardia (esp. verapamil/diltiazem)</span></div>
+          <div class="drug-row"><span class="drug-label">Caution</span><span class="drug-val danger">Do NOT combine verapamil or diltiazem with beta-blockers → compounding bradycardia + AV block</span></div>
+          <div class="drug-row"><span class="drug-label">Monitor</span><span class="drug-val">BP and HR before each dose. Peripheral edema: elevate extremities. Monitor LFTs + renal function.</span></div>
+          <div class="drug-row"><span class="drug-label">Teach</span><span class="drug-val">Report dizziness, significant edema. Rise slowly from sitting/lying position.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-indigo" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">PDE-3 Inhibitor · PAD Treatment</div>
+          <div class="drug-emoji">🦵</div>
+          <div class="drug-name">Cilostazol (Pletal)</div>
+          <div class="drug-class-pill">Antiplatelet + Vasodilator</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Cilostazol (Pletal)</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Inhibits PDE-3 → ↑ cAMP → dual effect: inhibits platelet aggregation AND vasodilates peripheral vessels</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">Symptomatic intermittent claudication in PAD</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val danger">Headache (very common — vasodilation), palpitations, diarrhea, bleeding risk</span></div>
+          <div class="drug-row"><span class="drug-label">⛔ Black Box</span><span class="drug-val danger">CONTRAINDICATED in ANY degree of heart failure — FDA Black Box Warning for ↑ mortality</span></div>
+          <div class="drug-row"><span class="drug-label">Key NC</span><span class="drug-val">Avoid grapefruit juice (CYP3A4). Patient must STOP SMOKING — nicotine vasoconstricts, counteracts drug effect.</span></div>
+          <div class="drug-row"><span class="drug-label">Outcome</span><span class="drug-val good">↑ walking distance before claudication; ↓ symptom severity</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="drug-card dc-emerald" onclick="this.classList.toggle('flipped')">
+      <div class="drug-card-inner">
+        <div class="drug-front">
+          <div class="drug-front-kicker">Proton Pump Inhibitor · GI Protection</div>
+          <div class="drug-emoji">🛡</div>
+          <div class="drug-name">Omeprazole (Prilosec)</div>
+          <div class="drug-class-pill">Gastric Acid Suppression</div>
+          <div class="flip-hint">Click to flip →</div>
+        </div>
+        <div class="drug-back">
+          <div class="drug-back-title">Omeprazole — PPI</div>
+          <div class="drug-row"><span class="drug-label">Action</span><span class="drug-val">Irreversibly inhibits H⁺/K⁺-ATPase (proton pump) → ↓ gastric acid → prevents GI bleeding from dual antiplatelet therapy</span></div>
+          <div class="drug-row"><span class="drug-label">Use</span><span class="drug-val">GI protection in patients on aspirin + clopidogrel (dual antiplatelet) at risk for GI bleed</span></div>
+          <div class="drug-row"><span class="drug-label">SE ⚠</span><span class="drug-val">GI upset, HA; long-term: ↓ Mg²⁺, ↓ Ca²⁺ (↑ fracture risk), C. difficile risk</span></div>
+          <div class="drug-row"><span class="drug-label">Drug-Drug</span><span class="drug-val danger">Reduces clopidogrel efficacy (CYP2C19 competition) — consider pantoprazole as alternative</span></div>
+          <div class="drug-row"><span class="drug-label">NC</span><span class="drug-val">Take before meals. Flag clopidogrel interaction to prescriber. Monitor Mg²⁺ with prolonged use.</span></div>
+          <div class="drug-row"><span class="drug-label">Outcome</span><span class="drug-val good">Prevention of GI hemorrhage in dual antiplatelet therapy</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- QUIZ -->
+<!-- ══════════════════════════════════════════ -->
+<div id="quiz" class="section">
+  <div class="section-title"><span class="icon">🧠</span> NCLEX-Style Practice Quiz</div>
+
+  <div class="quiz-score" id="quizScore">
+    <div class="score-label">Final Score</div>
+    <div class="score-num" id="scoreNum">0<span>/12</span></div>
+    <div class="score-feedback" id="scoreFeedback"></div>
+    <button class="btn-primary" onclick="resetQuiz()">↺ Reset Quiz</button>
+  </div>
+
+  <div class="quiz-progress-bar-wrap">
+    <div class="quiz-progress-bar" id="quizProgressBar"></div>
+  </div>
+
+  <div id="quizContainer"></div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- CHEAT SHEET -->
+<!-- ══════════════════════════════════════════ -->
+<div id="cheatsheet" class="section">
+  <div class="section-title"><span class="icon">📋</span> Master Cheat Sheet</div>
+
+  <div class="card card-red">
+    <h3>Critical Findings — Report Immediately</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Assessment Finding</th><th>Probable Problem</th><th>Immediate Nursing Action</th></tr></thead>
+        <tbody>
+          <tr><td>SBP &lt;90 mmHg (cardiac patient)</td><td>Cardiogenic shock / medication-induced hypotension</td><td>Hold medications; call provider; continuous VS monitoring; supine positioning</td></tr>
+          <tr><td>HR &lt;60 on beta-blocker</td><td>Medication-induced bradycardia</td><td>HOLD beta-blocker; notify provider before next dose</td></tr>
+          <tr><td>All 6 Ps present in a limb</td><td>Acute arterial occlusion — limb-threatening emergency</td><td>Heparin anticoagulation; vascular surgery consultation STAT</td></tr>
+          <tr><td>Tongue/lip/throat swelling on ACEI</td><td>Angioedema (bradykinin excess)</td><td>STOP ACEI; epinephrine STAT; airway management; intubation preparation</td></tr>
+          <tr><td>Sudden severe headache + neuro deficits during alteplase</td><td>Intracranial hemorrhage (ICH)</td><td>STOP infusion immediately; CT head STAT; neurosurgery consult</td></tr>
+          <tr><td>Platelet drop &gt;50% on heparin (day 4–10)</td><td>HIT — paradoxical thrombosis risk</td><td>STOP heparin; use argatroban; document and report</td></tr>
+          <tr><td>aPTT &gt;100 sec on heparin infusion</td><td>Supratherapeutic anticoagulation → hemorrhage risk</td><td>Hold infusion; reassess per weight-based protocol; notify provider</td></tr>
+          <tr><td>SpO₂ &lt;90% in MI patient</td><td>Hypoxemia → ↑ myocardial ischemia</td><td>Apply O₂ 2 L/min nasal cannula; titrate; escalate if unresponsive</td></tr>
+          <tr><td>UO &lt;0.5 mL/kg/hr post-MI</td><td>Cardiogenic shock / renal hypoperfusion</td><td>Assess for other shock signs; notify provider; strict I&O</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Key Laboratory Values — Cardiac Perfusion</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Lab Test</th><th>Normal Value</th><th>Clinical Significance</th></tr></thead>
+        <tbody>
+          <tr><td>Troponin I</td><td>&lt;0.04 ng/mL</td><td>Most specific cardiac marker; peaks 10–24 hrs post-MI; stays elevated 7–10 days; preferred over CK-MB</td></tr>
+          <tr><td>CK-MB</td><td>&lt;5% total CK</td><td>Rises 3–6 hrs; peaks 12–24 hrs; normalizes 24–36 hrs; less specific than troponin</td></tr>
+          <tr><td>aPTT (on heparin)</td><td>Normal 25–40 sec; Therapeutic 60–80 sec</td><td>Therapeutic = 1.5–2× normal. Check q4–6 hrs. Antidote = protamine sulfate.</td></tr>
+          <tr><td>Platelet count</td><td>150,000–400,000/μL</td><td>Monitor on heparin. &gt;50% drop = HIT → STOP heparin immediately</td></tr>
+          <tr><td>Total Cholesterol</td><td>&lt;200 mg/dL</td><td>Major CAD risk factor; statin therapy if elevated</td></tr>
+          <tr><td>LDL</td><td>&lt;130 mg/dL; post-MI &lt;70</td><td>Primary atherogenic lipoprotein; target lower in high-risk patients</td></tr>
+          <tr><td>HDL</td><td>Men &gt;45; Women &gt;55 mg/dL</td><td>Cardioprotective; low HDL = ↑ CAD risk</td></tr>
+          <tr><td>Serum K⁺</td><td>3.5–5.0 mEq/L</td><td>ACEIs → hyperkalemia; diuretics → hypokalemia; both affect dysrhythmia risk</td></tr>
+          <tr><td>BNP / NT-proBNP</td><td>&lt;100 pg/mL</td><td>Elevated in heart failure — marker of ventricular wall stress and volume overload</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card card-navy">
+    <h3>Drug Safety Quick Reference — Hold Parameters & Antidotes</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Drug</th><th>Hold / Contraindicate If...</th><th>Antidote / Emergency Response</th></tr></thead>
+        <tbody>
+          <tr><td>Nitroglycerin</td><td>SBP &lt;90, HR &lt;50 or &gt;100, sildenafil/tadalafil within 24 hrs</td><td>No specific antidote; IV fluid bolus for hypotension; supine positioning</td></tr>
+          <tr><td>Morphine</td><td>RR &lt;12, significant hypotension</td><td>Naloxone (Narcan) IV/IM/intranasal</td></tr>
+          <tr><td>Beta-Blockers</td><td>HR &lt;60, SBP &lt;90, 2nd/3rd AV block, severe acute HF</td><td>Atropine for bradycardia; glucagon for overdose; never abrupt discontinuation</td></tr>
+          <tr><td>Heparin</td><td>Active hemorrhage, HIT diagnosed, bleeding disorder</td><td>Protamine sulfate (1 mg per 100 units heparin)</td></tr>
+          <tr><td>Alteplase (tPA)</td><td>Active bleeding, recent surgery, stroke history, severe HTN, NSTEMI</td><td>STOP infusion; fresh frozen plasma; cryoprecipitate; neurosurgery for ICH</td></tr>
+          <tr><td>ACE Inhibitors</td><td>Angioedema, bilateral renal artery stenosis, pregnancy (teratogenic)</td><td>Epinephrine for angioedema; airway management; switch to ARB permanently</td></tr>
+          <tr><td>Cilostazol</td><td>Any degree of heart failure (FDA Black Box Warning)</td><td>Discontinue; monitor cardiac function; notify provider</td></tr>
+          <tr><td>Aspirin</td><td>Active GI hemorrhage, aspirin allergy, pediatric patients (Reye's syndrome)</td><td>Discontinue; PPI; GI consult; monitor hemoglobin</td></tr>
+          <tr><td>Statins</td><td>Unexplained severe muscle pain (rhabdomyolysis risk), active liver disease</td><td>Discontinue; aggressive IV hydration; monitor CK and renal function</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card card-red" style="margin:0;">
+      <h3>STEMI — At a Glance</h3>
+      <ul>
+        <li>100% coronary occlusion</li>
+        <li>ST elevation ≥2 contiguous leads</li>
+        <li>Transmural necrosis (full thickness)</li>
+        <li>Troponin elevated early</li>
+        <li>PCI ≤90 min (door-to-balloon)</li>
+        <li>tPA ≤30 min if PCI unavailable</li>
+        <li>~30% of all MIs</li>
+      </ul>
+    </div>
+    <div class="card card-cobalt" style="margin:0;">
+      <h3>NSTEMI — At a Glance</h3>
+      <ul>
+        <li>Partial coronary occlusion</li>
+        <li>ST depression / T-wave inversion</li>
+        <li>Subendocardial ischemia</li>
+        <li>Troponin rises 3–12 hrs later</li>
+        <li>Medical management first; PCI risk-stratified</li>
+        <li>tPA NEVER indicated</li>
+        <li>~70% of all MIs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:1rem;">
+    <h3>Chest Pain — Clinical Decision Algorithm</h3>
+    <div class="pathway">
+      <div class="pathway-step highlight">1. Assess: VS, SpO₂, pain (OPQRST), diaphoresis, radiation. Obtain 12-lead ECG STAT.</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step highlight">2. Notify provider. Activate STEMI protocol if ST elevation present in ≥2 contiguous leads.</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step">3. Establish IV access. Prepare: Morphine · Oxygen · Nitroglycerin · Aspirin (MONA)</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step">4. Aspirin 162–325 mg CHEWED immediately (unless contraindicated)</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step">5. O₂ via NC if SpO₂ &lt;90%. NTG SL if BP allows (SBP &gt;90, no sildenafil). Morphine if pain persists after NTG.</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step danger">6. STEMI confirmed → PCI within 90 min. If PCI unavailable in 90 min → alteplase within 30 min.</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step">7. Continue: Heparin · Clopidogrel · Beta-blocker (within 24 hrs) · ACEI (within 24 hrs) · Statin</div>
+      <div class="pathway-arrow"><span></span></div>
+      <div class="pathway-step terminal">8. Monitor: Continuous cardiac rhythm · BP · HR · UO · Neurologic status · Troponin trends · aPTT</div>
+    </div>
+  </div>
+
+  <div class="takeaway" style="margin-top:1rem;">
+    <div class="takeaway-title">↗ The Clinical Nurse's Principle</div>
+    <ul>
+      <li>Assess → Prioritize → Act → Evaluate. Every clinical decision follows this cycle.</li>
+      <li>Know your baselines. Know your hold thresholds. Know your antidotes.</li>
+      <li>Time is muscle — every minute of coronary occlusion is irreversible myocardium.</li>
+      <li>When in doubt: assess first, report second, document everything.</li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<button id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Scroll to top">↑</button>
+
+<script>
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelector(`[data-tab="${id}"]`).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── SCROLL TO TOP ─────────────────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 400);
+});
+
+// ── QUIZ DATA ─────────────────────────────────────────────────────────────────
+const quizData = [
+  {
+    q: "A patient arrives with crushing chest pain and a 12-lead ECG shows ST elevation in leads II, III, and aVF. The FIRST priority nursing action is:",
+    opts: ["Apply supplemental oxygen at 4 L/min via nasal cannula","Administer aspirin 325 mg and have the patient CHEW it","Obtain IV access and draw cardiac enzymes","Prepare the patient for emergent echocardiogram"],
+    correct: 1,
+    rationale: "<strong>Aspirin 325 mg chewed</strong> is the first pharmacologic priority in STEMI. Chewing (not swallowing whole) allows rapid absorption through the buccal mucosa for immediate antiplatelet effect. Oxygen is important but only if SpO₂ &lt;90%. IV access and labs occur simultaneously but aspirin must not be delayed."
+  },
+  {
+    q: "A nurse is preparing to give sublingual nitroglycerin to a patient with chest pain. Which assessment finding is an ABSOLUTE CONTRAINDICATION to administration?",
+    opts: ["SpO₂ 94% on room air","The patient reports taking sildenafil (Viagra) last night","Heart rate of 88 bpm","Blood pressure of 118/76 mmHg"],
+    correct: 1,
+    rationale: "<strong>Sildenafil (Viagra), tadalafil (Cialis), and vardenafil (Levitra) within 24 hours</strong> are absolute contraindications for nitroglycerin. Both medications cause vasodilation through different mechanisms — combined, they produce profound, potentially fatal hypotension. The other assessment findings are within safe parameters for NTG administration."
+  },
+  {
+    q: "A patient on heparin infusion for 7 days has a platelet count of 95,000/μL, down from 220,000/μL yesterday. The nurse suspects:",
+    opts: ["Normal expected variation in platelet counts during anticoagulation","Heparin-induced thrombocytopenia (HIT) — stop heparin immediately","The patient requires a higher heparin infusion rate","Thrombocytopenia secondary to the primary cardiac condition"],
+    correct: 1,
+    rationale: "<strong>HIT (Heparin-Induced Thrombocytopenia)</strong> is the diagnosis. A platelet drop &gt;50% from baseline occurring 5–10 days after initiating heparin is the hallmark. The nurse must STOP heparin immediately, notify the provider, and prepare for alternative anticoagulation (argatroban). Paradoxically, HIT CAUSES thrombosis — patients are at higher clot risk, not lower."
+  },
+  {
+    q: "A patient with PAD reports leg pain when walking two blocks that resolves completely with rest. The nurse correctly documents this as:",
+    opts: ["Rest pain — a medical emergency requiring immediate intervention","Intermittent claudication — expected symptom of PAD","Neuropathic pain from peripheral neuropathy","Deep vein thrombosis requiring immediate anticoagulation"],
+    correct: 1,
+    rationale: "<strong>Intermittent claudication</strong> is the classic PAD symptom — reproducible leg muscle pain with exertion that relieves with rest. This occurs because ischemic muscles cannot meet O₂ demand during activity but recover at rest. REST PAIN (occurring without activity) indicates critical limb ischemia and is a true emergency requiring urgent intervention."
+  },
+  {
+    q: "A post-STEMI patient develops: BP 78/50 mmHg, HR 118 bpm, urine output 15 mL/hr, cool clammy skin, and confusion. The nurse recognizes:",
+    opts: ["Expected hemodynamic changes in the post-procedural period","Nitroglycerin overdose requiring reversal","Cardiogenic shock — notify provider IMMEDIATELY","Pulmonary embolism — prepare for anticoagulation"],
+    correct: 2,
+    rationale: "<strong>Cardiogenic shock</strong> is the diagnosis. Key findings: SBP &lt;90 mmHg, tachycardia, UO &lt;0.5 mL/kg/hr, cold clammy skin, altered mentation. This occurs when &gt;40% of the LV is necrotic. It carries HIGH MORTALITY if unrecognized. Immediate notification of the provider and preparation for escalation of care are required."
+  },
+  {
+    q: "An NSTEMI patient is admitted. The provider orders alteplase (tPA). The nurse should:",
+    opts: ["Administer it immediately — all MI patients benefit from fibrinolytics","QUESTION the order — alteplase is contraindicated in NSTEMI","Administer only if the troponin has risen above 10 ng/mL","Hold until PCI is formally confirmed as unavailable"],
+    correct: 1,
+    rationale: "<strong>Alteplase is NOT indicated for NSTEMI</strong> — this is a critical patient safety issue. tPA is indicated ONLY for STEMI (100% occlusion with ST elevation). NSTEMI involves partial occlusion; fibrinolytics carry significant bleeding risk (especially ICH) with no demonstrated benefit in NSTEMI. The nurse has both the right and the professional obligation to question this order."
+  },
+  {
+    q: "A patient on lisinopril calls the nurse reporting 'my tongue feels swollen and I'm having trouble swallowing.' The nurse's FIRST action is:",
+    opts: ["Reassure the patient — dry cough and mild swelling are common ACE inhibitor effects","Stop lisinopril, administer epinephrine STAT, and prepare for airway management","Switch to an ARB immediately and observe closely for 2 hours","Administer diphenhydramine and reassess in one hour"],
+    correct: 1,
+    rationale: "<strong>Angioedema</strong> from ACE inhibitors (caused by excess bradykinin) is a life-threatening emergency. Tongue/lip/throat swelling can rapidly progress to complete airway obstruction. Immediate actions: STOP lisinopril → administer epinephrine STAT → prepare for intubation. This patient should NEVER receive an ACE inhibitor again; switch permanently to an ARB. Antihistamines are inadequate — epinephrine is the treatment."
+  },
+  {
+    q: "A nurse is caring for a patient with PAD and known heart failure (EF 30%). The provider orders cilostazol for intermittent claudication. The nurse should:",
+    opts: ["Administer as ordered — cilostazol is the standard of care for all PAD patients","Question the order — cilostazol carries an FDA Black Box Warning in heart failure","Administer a reduced dose to account for the patient's cardiac status","Give it only if the patient's claudication severity score exceeds 7/10"],
+    correct: 1,
+    rationale: "<strong>Cilostazol is CONTRAINDICATED in heart failure</strong> (any severity) — this is an FDA Black Box Warning for increased mortality. The nurse must question this order before administering. The prescriber should be notified and an alternative PAD/claudication management strategy should be discussed. Administering it would constitute a medication safety error."
+  },
+  {
+    q: "A STEMI patient received alteplase 30 minutes ago. The patient suddenly reports 'the worst headache of my life' and the nurse notes new left arm weakness. The nurse's FIRST action is:",
+    opts: ["Administer morphine sulfate 4 mg IV for pain management","Increase the alteplase infusion rate to complete thrombolysis","STOP the alteplase infusion immediately and notify provider STAT","Obtain a 12-lead ECG and assess for ST-elevation recurrence"],
+    correct: 2,
+    rationale: "<strong>Intracranial Hemorrhage (ICH)</strong> is the most feared complication of fibrinolytic therapy. Sudden severe headache + focal neurological deficits during tPA infusion = ICH until proven otherwise. ACTION: STOP the infusion IMMEDIATELY → notify provider STAT → emergency CT head → neurosurgery consult. Every second matters. Continuing the infusion would be catastrophic and constitutes a patient safety error."
+  },
+  {
+    q: "A patient's morning metoprolol dose is due. The nurse's assessment reveals: HR 54 bpm, BP 122/78 mmHg, patient alert and oriented. The nurse should:",
+    opts: ["Administer the dose — HR 54 is within acceptable parameters for this drug","Hold the metoprolol and notify the provider — HR is below the threshold","Administer a half dose and reassess HR in 30 minutes","Give the dose but place the patient on continuous cardiac monitoring"],
+    correct: 1,
+    rationale: "The standard threshold for holding beta-blockers is <strong>HR &lt;60 bpm</strong>. With an HR of 54, the nurse should HOLD metoprolol and notify the provider. While the patient is currently hemodynamically stable, administering a beta-blocker at this HR could produce clinically significant bradycardia. The provider must be informed to reassess the medication order and timing."
+  },
+  {
+    q: "Which assessment finding best distinguishes a venous stasis ulcer from an arterial (PAD) ulcer?",
+    opts: ["The venous ulcer is located on the toes with sharply defined borders","The venous ulcer is on the inner ankle with irregular borders and reddish-brown surrounding skin","The venous ulcer is associated with pulselessness and a cold extremity","The venous ulcer appears small, round, and deeply excavated"],
+    correct: 1,
+    rationale: "<strong>Venous stasis ulcers</strong> characteristically appear on the inner ankle (medial malleolus), have IRREGULAR borders, and are surrounded by reddish-brown hemosiderin skin discoloration. PAD/arterial ulcers are located on the toes/feet, have WELL-DEFINED borders, are small and round, and occur with pulselessness and cold skin — reflecting the arterial insufficiency."
+  },
+  {
+    q: "The therapeutic aPTT range for a patient receiving a heparin infusion is:",
+    opts: ["25–40 seconds (normal reference range)","45–55 seconds (slightly elevated)","60–80 seconds (1.5–2× the normal value)","90–120 seconds (supratherapeutic)"],
+    correct: 2,
+    rationale: "<strong>60–80 seconds</strong> is the therapeutic aPTT range for heparin — representing 1.5 to 2 times the normal value of approximately 40 seconds. Below therapeutic range → patient remains at clotting risk; above (especially &gt;100 seconds) → hemorrhage risk. aPTT should be checked every 4–6 hours and the infusion rate adjusted per the weight-based heparin protocol."
+  }
+];
+
+// ── BUILD QUIZ ─────────────────────────────────────────────────────────────────
+let answered = 0, correctCount = 0;
+const letters = ['A','B','C','D'];
+
+function buildQuiz(){
+  const container = document.getElementById('quizContainer');
+  container.innerHTML = '';
+  answered = 0; correctCount = 0;
+  document.getElementById('quizScore').classList.remove('show');
+  document.getElementById('quizProgressBar').style.width = '0%';
+
+  quizData.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = `qcard-${qi}`;
+    card.innerHTML = `
+      <div class="quiz-q"><span class="q-num">${qi+1}</span><span>${q.q}</span></div>
+      <div class="quiz-options">
+        ${q.opts.map((opt,oi)=>`
+          <button class="quiz-opt" onclick="handleAnswer(${qi},${oi})" id="opt-${qi}-${oi}">
+            <span class="opt-letter">${letters[oi]}</span>${opt}
+          </button>
+        `).join('')}
+      </div>
+      <div class="rationale" id="rat-${qi}"><strong>Rationale:</strong> ${q.rationale}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function handleAnswer(qi, selected){
+  const q = quizData[qi];
+  const opts = document.querySelectorAll(`#qcard-${qi} .quiz-opt`);
+  opts.forEach(o => { o.classList.add('revealed'); o.onclick = null; });
+
+  if(selected === q.correct){
+    opts[selected].classList.add('correct');
+    correctCount++;
+  } else {
+    opts[selected].classList.add('wrong');
+    opts[q.correct].classList.add('correct');
+  }
+  opts.forEach((o,i) => { if(i !== selected && i !== q.correct) o.classList.add('not-selected'); });
+
+  document.getElementById(`rat-${qi}`).classList.add('show');
+  answered++;
+
+  const pct = Math.round((answered / quizData.length) * 100);
+  document.getElementById('quizProgressBar').style.width = pct + '%';
+
+  if(answered === quizData.length) showScore();
+}
+
+function showScore(){
+  const scoreEl = document.getElementById('quizScore');
+  const pct = Math.round((correctCount / quizData.length) * 100);
+  document.getElementById('scoreNum').innerHTML = `${correctCount}<span>/${quizData.length}</span>`;
+  const feedbacks = [
+    [90, 'Excellent performance. You are well-prepared for this examination.'],
+    [75, 'Strong work. Review the items you missed before the exam.'],
+    [60, 'Good effort. Focus your study on the missed content areas.'],
+    [0,  'Keep reviewing. Return to the content sections and try again.']
+  ];
+  const fb = feedbacks.find(([threshold]) => pct >= threshold);
+  document.getElementById('scoreFeedback').textContent = `${pct}% — ${fb[1]}`;
+  scoreEl.classList.add('show');
+  scoreEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function resetQuiz(){
+  buildQuiz();
+  window.scrollTo({ top: document.getElementById('quiz').offsetTop - 80, behavior: 'smooth' });
+}
+
+buildQuiz();
+</script>
+</body>
+</html>
