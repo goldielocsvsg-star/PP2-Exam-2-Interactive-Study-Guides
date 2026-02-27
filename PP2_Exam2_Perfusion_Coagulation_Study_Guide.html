@@ -1,0 +1,1832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfusion & Coagulation Mastery — Nursing Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --crimson: #C0392B;
+  --crimson-light: #E74C3C;
+  --coral: #FF6B6B;
+  --amber: #F39C12;
+  --amber-light: #FFC107;
+  --teal: #1ABC9C;
+  --teal-dark: #16A085;
+  --navy: #1a1a2e;
+  --navy-mid: #16213e;
+  --slate: #0f3460;
+  --ink: #2d3436;
+  --smoke: #636e72;
+  --mist: #b2bec3;
+  --cloud: #dfe6e9;
+  --white: #ffffff;
+  --cream: #fef9f0;
+  --gold: #FFD700;
+  --purple: #6C5CE7;
+  --pink: #fd79a8;
+  --card-bg: rgba(255,255,255,0.06);
+  --glass: rgba(255,255,255,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--navy);
+  color: var(--white);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── HERO ── */
+.hero {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 60px 40px 80px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; left: -100px; right: -100px; bottom: -100px;
+  background: radial-gradient(circle at 20% 50%, rgba(192,57,43,0.25) 0%, transparent 60%),
+              radial-gradient(circle at 80% 20%, rgba(26,188,156,0.2) 0%, transparent 50%),
+              radial-gradient(circle at 60% 80%, rgba(108,92,231,0.15) 0%, transparent 40%);
+  animation: pulse-bg 8s ease-in-out infinite alternate;
+}
+@keyframes pulse-bg { from { transform: scale(1); } to { transform: scale(1.05); } }
+.hero-content { position: relative; z-index: 2; }
+.hero-badge {
+  display: inline-block;
+  background: rgba(192,57,43,0.3);
+  border: 1px solid rgba(231,76,60,0.5);
+  color: var(--coral);
+  padding: 6px 20px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.hero h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1.1;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #fff 0%, var(--coral) 50%, var(--teal) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero p {
+  color: var(--mist);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+}
+.nav-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.nav-pill {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: var(--white);
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.nav-pill:hover { background: var(--crimson); border-color: var(--crimson); transform: translateY(-2px); }
+
+/* ── LAYOUT ── */
+.section-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 2rem;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-subtitle { color: var(--mist); font-size: 1rem; margin-bottom: 40px; }
+.section-divider {
+  height: 3px;
+  background: linear-gradient(90deg, var(--crimson), var(--teal), transparent);
+  border-radius: 2px;
+  margin: 8px 0 40px;
+}
+
+/* ── CONCEPT CARDS ── */
+.concept-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+.concept-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, border-color 0.3s;
+}
+.concept-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.25); }
+.concept-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.card-red::before { background: linear-gradient(90deg, var(--crimson), var(--coral)); }
+.card-teal::before { background: linear-gradient(90deg, var(--teal), #00b894); }
+.card-amber::before { background: linear-gradient(90deg, var(--amber), var(--amber-light)); }
+.card-purple::before { background: linear-gradient(90deg, var(--purple), #a29bfe); }
+.card-pink::before { background: linear-gradient(90deg, var(--pink), #fab1d3); }
+.card-navy::before { background: linear-gradient(90deg, #74b9ff, #0984e3); }
+
+.concept-icon { font-size: 2rem; margin-bottom: 12px; }
+.concept-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+.concept-body { color: var(--cloud); font-size: 0.92rem; line-height: 1.75; }
+.tag-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 50px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.tag-red { background: rgba(192,57,43,0.3); color: var(--coral); border: 1px solid rgba(231,76,60,0.4); }
+.tag-teal { background: rgba(26,188,156,0.2); color: var(--teal); border: 1px solid rgba(26,188,156,0.4); }
+.tag-amber { background: rgba(243,156,18,0.2); color: var(--amber-light); border: 1px solid rgba(243,156,18,0.4); }
+.tag-purple { background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.4); }
+
+.red-flag {
+  background: rgba(192,57,43,0.15);
+  border-left: 3px solid var(--crimson-light);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  margin-top: 14px;
+  font-size: 0.88rem;
+  color: var(--coral);
+}
+.red-flag strong { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; opacity: 0.8; }
+
+.action-box {
+  background: rgba(26,188,156,0.1);
+  border: 1px solid rgba(26,188,156,0.25);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-top: 14px;
+  font-size: 0.88rem;
+  color: var(--teal);
+}
+.action-box strong { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; opacity: 0.8; }
+
+/* ── FLIP CARDS ── */
+.meds-section { background: linear-gradient(180deg, var(--navy) 0%, #0d1b2a 100%); }
+.med-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+.flip-card {
+  height: 260px;
+  perspective: 1200px;
+  cursor: pointer;
+}
+.flip-card:hover .flip-inner { transform: rotateY(180deg); }
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.4, 0.2, 0.2, 1);
+  transform-style: preserve-3d;
+}
+.flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.flip-front {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  text-align: center;
+  align-items: center;
+}
+.flip-back {
+  background: var(--slate);
+  border: 1px solid rgba(255,255,255,0.15);
+  transform: rotateY(180deg);
+  overflow-y: auto;
+}
+.flip-front .drug-icon { font-size: 2.5rem; margin-bottom: 12px; }
+.flip-front .drug-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.4rem;
+  margin-bottom: 6px;
+}
+.flip-front .drug-class { color: var(--mist); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; }
+.flip-hint { color: var(--smoke); font-size: 0.72rem; margin-top: 16px; }
+.flip-back .drug-name-small {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: var(--amber-light);
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.drug-detail { font-size: 0.8rem; margin-bottom: 8px; line-height: 1.5; color: var(--cloud); }
+.drug-detail .label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--teal);
+  display: block;
+  margin-bottom: 2px;
+}
+.drug-detail .danger { color: var(--coral); }
+.memory-trick {
+  background: rgba(255,215,0,0.1);
+  border: 1px solid rgba(255,215,0,0.3);
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.78rem;
+  color: var(--gold);
+  margin-top: 10px;
+}
+.memory-trick::before { content: '💡 '; }
+
+/* ── GAMES ── */
+.games-section { background: #0d1b2a; }
+.game-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.game-tab {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--mist);
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.game-tab.active { background: var(--crimson); border-color: var(--crimson); color: white; }
+.game-tab:hover:not(.active) { border-color: rgba(255,255,255,0.3); color: white; }
+.game-panel { display: none; }
+.game-panel.active { display: block; }
+
+/* Quiz */
+.quiz-question {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.quiz-q-text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-weight: 500;
+}
+.quiz-options { display: grid; gap: 12px; }
+.quiz-opt {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-size: 0.92rem;
+  text-align: left;
+  color: var(--white);
+}
+.quiz-opt:hover { border-color: var(--teal); background: rgba(26,188,156,0.1); }
+.quiz-opt.correct { background: rgba(26,188,156,0.2); border-color: var(--teal); color: var(--teal); }
+.quiz-opt.wrong { background: rgba(192,57,43,0.2); border-color: var(--crimson); color: var(--coral); }
+.quiz-opt.disabled { cursor: not-allowed; pointer-events: none; }
+.rationale {
+  margin-top: 16px;
+  padding: 16px;
+  background: rgba(26,188,156,0.08);
+  border-radius: 10px;
+  border-left: 3px solid var(--teal);
+  font-size: 0.88rem;
+  color: var(--cloud);
+  display: none;
+}
+.rationale.show { display: block; }
+.quiz-score { text-align: center; font-size: 1.1rem; font-weight: 600; color: var(--amber-light); margin-bottom: 24px; }
+.btn {
+  background: var(--crimson);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s;
+  font-family: 'DM Sans', sans-serif;
+}
+.btn:hover { background: var(--crimson-light); transform: translateY(-2px); }
+.btn-teal { background: var(--teal-dark); }
+.btn-teal:hover { background: var(--teal); }
+.btn-amber { background: #d68910; }
+.btn-amber:hover { background: var(--amber); }
+
+/* Scenario Game */
+.scenario-box {
+  background: linear-gradient(135deg, rgba(108,92,231,0.15) 0%, rgba(108,92,231,0.05) 100%);
+  border: 1px solid rgba(108,92,231,0.3);
+  border-radius: 16px;
+  padding: 32px;
+  margin-bottom: 24px;
+}
+.scenario-patient {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.patient-avatar {
+  width: 56px; height: 56px;
+  background: rgba(108,92,231,0.3);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+}
+.patient-info h3 { font-size: 1.1rem; font-weight: 700; }
+.patient-info p { font-size: 0.85rem; color: var(--mist); }
+.vitals-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 16px 0;
+}
+.vital-chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-size: 0.8rem;
+}
+.vital-chip.alert { background: rgba(192,57,43,0.2); border-color: rgba(231,76,60,0.4); color: var(--coral); }
+.scenario-text { color: var(--cloud); line-height: 1.8; margin-bottom: 20px; font-size: 0.95rem; }
+.scenario-choices { display: grid; gap: 12px; }
+.scenario-choice {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--white);
+  text-align: left;
+  transition: all 0.25s;
+}
+.scenario-choice:hover { border-color: var(--purple); background: rgba(108,92,231,0.15); }
+.scenario-result {
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 16px;
+  display: none;
+}
+.scenario-result.show { display: block; }
+.result-correct { background: rgba(26,188,156,0.15); border: 1px solid rgba(26,188,156,0.4); }
+.result-wrong { background: rgba(192,57,43,0.15); border: 1px solid rgba(192,57,43,0.4); }
+.result-title { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.result-body { font-size: 0.88rem; color: var(--cloud); line-height: 1.7; }
+
+/* Matching Game */
+.match-container { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.match-col h3 { font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--mist); margin-bottom: 16px; font-weight: 700; }
+.match-item {
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  transition: all 0.25s;
+  user-select: none;
+}
+.match-item:hover { border-color: rgba(255,255,255,0.35); }
+.match-item.selected { border-color: var(--amber-light); background: rgba(243,156,18,0.15); }
+.match-item.matched-correct { border-color: var(--teal); background: rgba(26,188,156,0.15); color: var(--teal); cursor: default; }
+.match-item.matched-wrong { border-color: var(--crimson); background: rgba(192,57,43,0.15); color: var(--coral); }
+.match-score { text-align: center; font-size: 1.1rem; color: var(--amber-light); font-weight: 700; margin: 20px 0; }
+
+/* Priority Game */
+.priority-patients { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.priority-patient {
+  background: var(--card-bg);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.priority-patient:hover { border-color: var(--amber-light); transform: translateY(-3px); }
+.priority-patient.selected { border-color: var(--amber-light); background: rgba(243,156,18,0.1); }
+.priority-patient.correct-choice { border-color: var(--teal); background: rgba(26,188,156,0.15); }
+.priority-patient.wrong-choice { border-color: var(--crimson); background: rgba(192,57,43,0.1); }
+.pp-name { font-weight: 700; font-size: 1rem; margin-bottom: 8px; }
+.pp-detail { font-size: 0.82rem; color: var(--mist); line-height: 1.6; }
+.pp-flag { font-size: 0.75rem; margin-top: 10px; padding: 4px 10px; border-radius: 50px; display: inline-block; }
+.flag-critical { background: rgba(192,57,43,0.25); color: var(--coral); }
+.flag-stable { background: rgba(26,188,156,0.2); color: var(--teal); }
+.flag-monitor { background: rgba(243,156,18,0.2); color: var(--amber-light); }
+
+/* Clot Builder */
+.clot-steps { display: flex; flex-wrap: wrap; gap: 10px; min-height: 60px; padding: 16px; background: rgba(255,255,255,0.04); border-radius: 12px; margin-bottom: 16px; border: 2px dashed rgba(255,255,255,0.15); }
+.clot-step-bank { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+.clot-chip {
+  background: rgba(108,92,231,0.2);
+  border: 1px solid rgba(108,92,231,0.4);
+  color: #a29bfe;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.clot-chip:hover { background: rgba(108,92,231,0.4); }
+.clot-chip.placed { background: rgba(26,188,156,0.2); border-color: rgba(26,188,156,0.4); color: var(--teal); cursor: default; }
+.clot-chip.wrong-pos { background: rgba(192,57,43,0.2); border-color: rgba(192,57,43,0.4); color: var(--coral); }
+
+/* ── LAB VALUES ── */
+.labs-section { background: linear-gradient(180deg, #0d1b2a 0%, var(--navy) 100%); }
+.lab-case {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 24px;
+}
+.lab-results { display: flex; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.lab-value {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 14px 18px;
+  min-width: 120px;
+  text-align: center;
+}
+.lab-name { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--mist); margin-bottom: 6px; }
+.lab-num { font-size: 1.5rem; font-weight: 700; font-family: 'DM Serif Display', serif; }
+.lab-ref { font-size: 0.68rem; color: var(--smoke); margin-top: 4px; }
+.lab-num.high { color: var(--coral); }
+.lab-num.low { color: var(--amber-light); }
+.lab-num.normal { color: var(--teal); }
+.lab-actions { display: grid; gap: 10px; }
+.lab-action {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  font-size: 0.88rem;
+  text-align: left;
+  color: var(--white);
+  transition: all 0.2s;
+}
+.lab-action:hover { border-color: var(--purple); background: rgba(108,92,231,0.1); }
+.lab-action.selected-correct { border-color: var(--teal); background: rgba(26,188,156,0.15); color: var(--teal); }
+.lab-action.selected-wrong { border-color: var(--crimson); background: rgba(192,57,43,0.15); color: var(--coral); }
+.lab-explain { margin-top: 14px; padding: 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 0.85rem; color: var(--cloud); line-height: 1.7; display: none; border-left: 3px solid var(--teal); }
+.lab-explain.show { display: block; }
+
+/* ── NCLEX TRAINER ── */
+.nclex-section { background: var(--navy); }
+.framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
+.framework-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 24px;
+  border-top: 3px solid;
+}
+.fw-red { border-top-color: var(--crimson); }
+.fw-teal { border-top-color: var(--teal); }
+.fw-amber { border-top-color: var(--amber); }
+.fw-purple { border-top-color: var(--purple); }
+.fw-icon { font-size: 2rem; margin-bottom: 12px; }
+.fw-question { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; }
+.fw-cues { font-size: 0.82rem; color: var(--mist); line-height: 1.7; }
+
+/* ── MEMORY BOOSTERS ── */
+.memory-section { background: linear-gradient(180deg, var(--navy) 0%, #0d1b2a 100%); }
+.memory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.memory-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 24px;
+}
+.memory-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 14px; }
+.mnemonic-box {
+  background: rgba(255,215,0,0.08);
+  border: 1px solid rgba(255,215,0,0.25);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.88rem;
+  line-height: 1.8;
+  color: var(--gold);
+}
+.trap-item {
+  display: flex;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.88rem;
+}
+.trap-item:last-child { border-bottom: none; }
+.trap-icon { color: var(--crimson-light); flex-shrink: 0; }
+.chain {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.chain-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+}
+.chain-arrow { color: var(--mist); font-size: 0.8rem; }
+
+/* ── CONFIDENCE CHECK ── */
+.confidence-check {
+  background: linear-gradient(135deg, rgba(108,92,231,0.15) 0%, rgba(26,188,156,0.1) 100%);
+  border: 1px solid rgba(108,92,231,0.3);
+  border-radius: 16px;
+  padding: 28px;
+  text-align: center;
+  margin-top: 40px;
+}
+.confidence-check h3 { font-family: 'DM Serif Display', serif; font-size: 1.5rem; margin-bottom: 8px; }
+.confidence-check p { color: var(--mist); font-size: 0.9rem; margin-bottom: 20px; }
+.confidence-stars { display: flex; gap: 12px; justify-content: center; margin-bottom: 16px; }
+.conf-star {
+  font-size: 2rem;
+  cursor: pointer;
+  transition: transform 0.2s;
+  filter: grayscale(1);
+}
+.conf-star:hover, .conf-star.lit { filter: none; transform: scale(1.2); }
+.conf-msg { font-size: 0.9rem; color: var(--teal); font-style: italic; min-height: 24px; }
+
+/* ── PROGRESS ── */
+.progress-banner {
+  background: rgba(26,188,156,0.1);
+  border: 1px solid rgba(26,188,156,0.25);
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.progress-bar-wrap { flex: 1; background: rgba(255,255,255,0.1); border-radius: 50px; height: 8px; }
+.progress-bar-fill { height: 100%; border-radius: 50px; background: linear-gradient(90deg, var(--teal), var(--amber-light)); transition: width 0.5s; }
+.progress-label { font-size: 0.82rem; color: var(--teal); font-weight: 700; white-space: nowrap; }
+
+/* ── SECTION BG ALTERNATION ── */
+.bg-alt { background: #0d1b2a; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .match-container { grid-template-columns: 1fr; }
+  .concept-grid, .med-grid { grid-template-columns: 1fr; }
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.5s ease forwards; }
+
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.section-badge {
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.badge-red { background: rgba(192,57,43,0.25); color: var(--coral); border: 1px solid rgba(231,76,60,0.4); }
+.badge-teal { background: rgba(26,188,156,0.2); color: var(--teal); border: 1px solid rgba(26,188,156,0.4); }
+.badge-amber { background: rgba(243,156,18,0.2); color: var(--amber-light); border: 1px solid rgba(243,156,18,0.4); }
+.badge-purple { background: rgba(108,92,231,0.2); color: #a29bfe; border: 1px solid rgba(108,92,231,0.4); }
+.badge-pink { background: rgba(253,121,168,0.2); color: var(--pink); border: 1px solid rgba(253,121,168,0.4); }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">PP2 Exam 2 • Study Guide</div>
+    <h1>Perfusion & Coagulation<br>Mastery Guide</h1>
+    <p>Everything you need to conquer your exam — built for your brain, not a textbook. Color-coded, interactive, clinically accurate.</p>
+    <div class="nav-pills">
+      <a class="nav-pill" href="#section1">🫀 Core Concepts</a>
+      <a class="nav-pill" href="#section2">💊 Medications</a>
+      <a class="nav-pill" href="#section3">🎮 Games</a>
+      <a class="nav-pill" href="#section4">🩸 Lab Values</a>
+      <a class="nav-pill" href="#section5">🎯 NCLEX Thinking</a>
+      <a class="nav-pill" href="#section6">💡 Memory Boosters</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: CORE CONCEPTS -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section1" class="section-wrapper">
+  <div class="progress-banner">
+    <span>📍</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:16%"></div></div>
+    <span class="progress-label">Section 1 of 6</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-red">Section 1</div>
+    <div class="section-title">🫀 Core Concepts — How the Body Works</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">Understand the pathophysiology first. When you know why things happen, the symptoms and interventions make perfect sense.</p>
+  </div>
+
+  <div class="concept-grid">
+
+    <!-- PERFUSION -->
+    <div class="concept-card card-red">
+      <div class="concept-icon">🩺</div>
+      <div class="concept-title">Perfusion & Oxygen Delivery</div>
+      <div class="concept-body">
+        Perfusion is the body's ability to deliver oxygenated blood to every tissue and organ. Think of your heart as the engine and your blood vessels as the highway. When that highway is blocked or the engine is weak, cells don't get oxygen — and without oxygen, organs fail.<br><br>
+        Nurses assess perfusion by checking <strong>mental status</strong> (confused = brain hypoxia), <strong>skin color/temperature</strong>, <strong>capillary refill</strong> (&lt;3 sec is normal), <strong>pulses</strong>, <strong>urine output</strong> (&gt;30 mL/hr = adequate kidney perfusion), and <strong>SpO₂</strong>.
+      </div>
+      <div class="red-flag"><strong>🚨 Red Flag</strong>Confusion + cool clammy skin + weak pulses + decreased UO = perfusion crisis → immediate intervention</div>
+      <div class="tag-row">
+        <span class="tag tag-red">Priority</span>
+        <span class="tag tag-teal">Assess First</span>
+      </div>
+    </div>
+
+    <!-- CARDIAC OUTPUT -->
+    <div class="concept-card card-teal">
+      <div class="concept-icon">💓</div>
+      <div class="concept-title">Cardiac Output (CO = HR × SV)</div>
+      <div class="concept-body">
+        Cardiac output is how much blood the heart pumps per minute. It depends on heart rate and stroke volume — and stroke volume depends on three things:<br><br>
+        <strong>Preload:</strong> How full the ventricle is before it squeezes. Too much = fluid overload. Too little = not enough to pump.<br>
+        <strong>Afterload:</strong> The resistance the heart must pump against. High BP = high afterload = heart works harder and eventually fails.<br>
+        <strong>Contractility:</strong> How forcefully the heart squeezes. Digoxin increases this.<br><br>
+        <strong>Ejection fraction (EF):</strong> % of blood ejected per beat. Normal ≥55%. Low EF = systolic heart failure.
+      </div>
+      <div class="action-box"><strong>🧠 Think This Way</strong>Low CO → reduced organ perfusion → all the failure symptoms you'll see on the exam</div>
+      <div class="tag-row">
+        <span class="tag tag-teal">CO = HR × SV</span>
+        <span class="tag tag-amber">EF ≥55%</span>
+      </div>
+    </div>
+
+    <!-- HYPERTENSION -->
+    <div class="concept-card card-amber">
+      <div class="concept-icon">📈</div>
+      <div class="concept-title">Hypertension</div>
+      <div class="concept-body">
+        BP = Cardiac Output × Systemic Vascular Resistance. When vessels stay constricted (high SVR), blood pressure rises chronically. The RAAS system makes it worse — angiotensin II causes vasoconstriction AND aldosterone release → sodium/water retention → even more pressure.<br><br>
+        The insidious part: HTN is called the "silent killer" because it causes <em>no symptoms</em> until organ damage occurs. Over time, it damages the heart (LVH, HF), kidneys (CKD), eyes (retinopathy), and brain (stroke).
+      </div>
+      <div class="red-flag"><strong>🚨 Hypertensive Emergency</strong>BP >180/120 with end-organ damage signs = call provider immediately. Assess neuro, cardiac, renal status.</div>
+      <div class="tag-row">
+        <span class="tag tag-amber">Silent Killer</span>
+        <span class="tag tag-red">Organ Damage</span>
+      </div>
+    </div>
+
+    <!-- CAD / MI -->
+    <div class="concept-card card-red">
+      <div class="concept-icon">💔</div>
+      <div class="concept-title">CAD & Myocardial Infarction</div>
+      <div class="concept-body">
+        Coronary artery disease = atherosclerotic plaque buildup inside coronary arteries → narrowing → reduced O₂ to heart muscle → ischemia (chest pain/angina).<br><br>
+        In an <strong>MI</strong>, that plaque ruptures. A clot forms at the rupture site → complete occlusion → prolonged ischemia → myocardial cell death (necrosis) → permanent loss of contractility.<br><br>
+        Classic symptoms: chest pain radiating to jaw/left arm, diaphoresis, dyspnea, nausea. Women often present atypically: fatigue, nausea, jaw pain without classic chest pain.<br><br>
+        <strong>Troponin</strong> rises within 3-6 hours of injury → diagnostic gold standard.
+      </div>
+      <div class="red-flag"><strong>🚨 STEMI Emergency</strong>MONA = Morphine, Oxygen, Nitroglycerin, Aspirin. Prioritize reperfusion (PCI/thrombolytics) within 90 min of door arrival.</div>
+      <div class="tag-row">
+        <span class="tag tag-red">Troponin ↑</span>
+        <span class="tag tag-amber">90 Min Window</span>
+      </div>
+    </div>
+
+    <!-- HEART FAILURE -->
+    <div class="concept-card card-purple">
+      <div class="concept-icon">🫀</div>
+      <div class="concept-title">Heart Failure — Left vs Right</div>
+      <div class="concept-body">
+        <strong>Left-sided HF:</strong> The left ventricle can't pump blood forward efficiently → blood backs up into the pulmonary circulation → fluid leaks into lung tissue → pulmonary edema. Symptoms: dyspnea, orthopnea, crackles, pink frothy sputum.<br><br>
+        <strong>Right-sided HF:</strong> Right ventricle fails → blood backs up into systemic venous system → JVD (jugular vein distention), peripheral edema (legs/ankles), ascites, hepatomegaly.<br><br>
+        <em>Most common cause of right-sided HF? Left-sided HF that has progressed.</em><br><br>
+        <strong>Daily weight</strong> is the #1 most sensitive indicator of fluid status. 1 kg = ~1 liter of fluid.
+      </div>
+      <div class="action-box"><strong>💡 Left = Lungs, Right = Rest of body</strong></div>
+      <div class="tag-row">
+        <span class="tag tag-purple">Daily Weight</span>
+        <span class="tag tag-red">JVD = Right HF</span>
+        <span class="tag tag-teal">Crackles = Left HF</span>
+      </div>
+    </div>
+
+    <!-- PAD -->
+    <div class="concept-card card-navy">
+      <div class="concept-icon">🦵</div>
+      <div class="concept-title">Peripheral Arterial Disease (PAD)</div>
+      <div class="concept-body">
+        PAD = atherosclerosis in peripheral arteries (usually legs) → reduced blood flow to extremities. The hallmark symptom is <strong>intermittent claudication</strong> — cramping leg pain that occurs with activity and is relieved by rest (because muscles can't get enough O₂ under demand).<br><br>
+        Advanced PAD: rest pain, non-healing wounds, pale/cool skin, decreased or absent pulses. Assess with ankle-brachial index (ABI) — normal ≥0.9.<br><br>
+        <strong>Positioning:</strong> Keep legs dependent (gravity aids perfusion). Do NOT elevate legs — this worsens arterial flow.
+      </div>
+      <div class="red-flag"><strong>🚨 6 P's of Acute Limb Ischemia</strong>Pain, Pallor, Pulselessness, Paresthesia, Paralysis, Poikilothermia (cold) → surgical emergency</div>
+      <div class="tag-row">
+        <span class="tag tag-amber">ABI &lt;0.9</span>
+        <span class="tag tag-red">Legs Dependent</span>
+      </div>
+    </div>
+
+    <!-- CLOTTING -->
+    <div class="concept-card card-teal">
+      <div class="concept-icon">🧬</div>
+      <div class="concept-title">Normal Clotting Process</div>
+      <div class="concept-body">
+        Hemostasis = the body's process of stopping bleeding. It occurs in 3 phases:<br><br>
+        <strong>1. Vascular Spasm:</strong> Injured vessel constricts immediately to limit blood loss.<br>
+        <strong>2. Platelet Plug:</strong> Platelets adhere to injured vessel, activate, and aggregate to form a temporary plug.<br>
+        <strong>3. Coagulation Cascade:</strong> A chain of clotting factor reactions produces <strong>fibrin</strong>, which reinforces the platelet plug into a stable clot.<br><br>
+        <strong>Intrinsic pathway → monitored by aPTT</strong> (used for heparin monitoring)<br>
+        <strong>Extrinsic pathway → monitored by PT/INR</strong> (used for warfarin monitoring)
+      </div>
+      <div class="tag-row">
+        <span class="tag tag-teal">aPTT = Heparin</span>
+        <span class="tag tag-amber">INR = Warfarin</span>
+      </div>
+    </div>
+
+    <!-- DVT / PE -->
+    <div class="concept-card card-red">
+      <div class="concept-icon">🩸</div>
+      <div class="concept-title">DVT & Pulmonary Embolism</div>
+      <div class="concept-body">
+        <strong>Virchow's Triad</strong> explains why clots form: Blood stasis + Endothelial injury + Hypercoagulability.<br><br>
+        <strong>DVT:</strong> Clot in deep vein (usually leg) → calf pain, warmth, redness, swelling. Often asymptomatic! Do NOT rub or massage — can dislodge clot.<br><br>
+        <strong>PE:</strong> DVT clot breaks off → travels to pulmonary artery → blocks blood flow through lungs → can't oxygenate → sudden onset dyspnea, chest pain, tachycardia, hemoptysis, hypoxia. Life-threatening emergency.<br><br>
+        Risk factors: immobility, surgery, cancer, pregnancy, obesity, oral contraceptives.
+      </div>
+      <div class="red-flag"><strong>🚨 PE Alert</strong>Sudden dyspnea + chest pain + tachycardia = presumed PE until proven otherwise. O₂, call provider, prep for CT angiography.</div>
+      <div class="tag-row">
+        <span class="tag tag-red">No Massage DVT</span>
+        <span class="tag tag-purple">Virchow's Triad</span>
+      </div>
+    </div>
+
+    <!-- THROMBOCYTOPENIA -->
+    <div class="concept-card card-pink">
+      <div class="concept-icon">💧</div>
+      <div class="concept-title">Thrombocytopenia</div>
+      <div class="concept-body">
+        Thrombocytopenia = low platelet count → impaired platelet plug formation → bleeding risk.<br><br>
+        Normal platelets: 150,000–400,000/mm³. Critical: &lt;50,000 = spontaneous bleeding risk. &lt;20,000 = severe, may need transfusion.<br><br>
+        Causes: bone marrow suppression, chemotherapy, heparin-induced thrombocytopenia (HIT — paradoxically causes clotting too!), autoimmune destruction.<br><br>
+        Signs: petechiae (tiny red dots), purpura, easy bruising, prolonged bleeding, bleeding gums, internal hemorrhage (hematuria, melena).
+      </div>
+      <div class="action-box"><strong>🛡️ Nursing: Bleeding Precautions</strong>Soft toothbrush, electric razor, avoid injections/IM meds, fall precautions, monitor for occult bleeding.</div>
+      <div class="tag-row">
+        <span class="tag tag-pink">Petechiae</span>
+        <span class="tag tag-red">&lt;50k = Danger</span>
+        <span class="tag tag-amber">HIT Watch</span>
+      </div>
+    </div>
+
+  </div><!-- end concept-grid -->
+
+  <!-- Confidence Check -->
+  <div class="confidence-check" id="conf1">
+    <h3>🎓 Section 1 Check-In</h3>
+    <p>How confident do you feel about these core concepts?</p>
+    <div class="confidence-stars">
+      <span class="conf-star" onclick="rate('conf1',1,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf1',2,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf1',3,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf1',4,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf1',5,this)">⭐</span>
+    </div>
+    <div class="conf-msg" id="conf1-msg"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: MEDICATIONS -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section2" class="section-wrapper bg-alt">
+  <div class="progress-banner">
+    <span>💊</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:33%"></div></div>
+    <span class="progress-label">Section 2 of 6</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-teal">Section 2</div>
+    <div class="section-title">💊 Medication Master Cards</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">Hover (or click on mobile) to flip each card and reveal full nursing knowledge. Click again to flip back.</p>
+  </div>
+
+  <div class="med-grid" id="medGrid">
+    <!-- Cards generated by JS -->
+  </div>
+
+  <div class="confidence-check" id="conf2" style="margin-top:40px">
+    <h3>💊 Med Check-In</h3>
+    <p>Rate your medication confidence:</p>
+    <div class="confidence-stars">
+      <span class="conf-star" onclick="rate('conf2',1,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf2',2,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf2',3,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf2',4,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf2',5,this)">⭐</span>
+    </div>
+    <div class="conf-msg" id="conf2-msg"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: GAMES -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section3" class="section-wrapper games-section">
+  <div class="progress-banner">
+    <span>🎮</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:50%"></div></div>
+    <span class="progress-label">Section 3 of 6</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-amber">Section 3</div>
+    <div class="section-title">🎮 Interactive Learning Games</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">Apply what you know. Choose a game mode and test your clinical reasoning.</p>
+  </div>
+
+  <div class="game-tabs">
+    <button class="game-tab active" onclick="showGame('quiz')">🧠 NCLEX Quiz</button>
+    <button class="game-tab" onclick="showGame('scenario')">🩺 Clinical Scenario</button>
+    <button class="game-tab" onclick="showGame('match')">⚖️ Matching</button>
+    <button class="game-tab" onclick="showGame('priority')">🚨 Priority Decision</button>
+    <button class="game-tab" onclick="showGame('clot')">🧬 Build-A-Clot</button>
+  </div>
+
+  <!-- QUIZ GAME -->
+  <div class="game-panel active" id="game-quiz">
+    <div class="quiz-score">Score: <span id="quizScore">0</span> / <span id="quizTotal">0</span></div>
+    <div id="quizContainer"></div>
+    <button class="btn" onclick="nextQuestion()">Next Question →</button>
+  </div>
+
+  <!-- SCENARIO GAME -->
+  <div class="game-panel" id="game-scenario">
+    <div id="scenarioContainer"></div>
+    <button class="btn btn-teal" onclick="nextScenario()" style="margin-top:20px">Next Scenario →</button>
+  </div>
+
+  <!-- MATCH GAME -->
+  <div class="game-panel" id="game-match">
+    <div class="match-score">Matches: <span id="matchScore">0</span>/5</div>
+    <div class="match-container">
+      <div>
+        <h3>Condition / Drug</h3>
+        <div id="matchLeft"></div>
+      </div>
+      <div>
+        <h3>Effect / Monitoring</h3>
+        <div id="matchRight"></div>
+      </div>
+    </div>
+    <button class="btn btn-amber" onclick="resetMatch()" style="margin-top:20px">🔄 Reset</button>
+  </div>
+
+  <!-- PRIORITY GAME -->
+  <div class="game-panel" id="game-priority">
+    <p style="color:var(--mist);margin-bottom:20px;font-size:0.9rem;">You have 4 patients. Who do you see FIRST? Click your answer.</p>
+    <div class="priority-patients" id="priorityPatients"></div>
+    <div id="priorityResult" style="display:none;padding:20px;border-radius:12px;margin-top:16px;font-size:0.9rem;line-height:1.7;"></div>
+    <button class="btn btn-amber" onclick="resetPriority()" style="margin-top:20px">🔄 New Scenario</button>
+  </div>
+
+  <!-- CLOT BUILDER -->
+  <div class="game-panel" id="game-clot">
+    <p style="color:var(--mist);margin-bottom:16px;font-size:0.9rem;">Arrange the hemostasis steps in the correct order. Click steps from the bank to place them.</p>
+    <div class="clot-steps" id="clotSequence">
+      <span style="color:var(--smoke);font-size:0.82rem;align-self:center">Click steps from the bank below to build the clot cascade →</span>
+    </div>
+    <div class="clot-step-bank" id="clotBank"></div>
+    <div style="display:flex;gap:12px;margin-top:16px">
+      <button class="btn" onclick="checkClot()">✓ Check Order</button>
+      <button class="btn btn-teal" onclick="resetClot()">🔄 Reset</button>
+    </div>
+    <div id="clotResult" style="margin-top:16px;padding:16px;border-radius:10px;display:none;font-size:0.88rem;line-height:1.7;"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: LAB VALUES -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section4" class="section-wrapper labs-section">
+  <div class="progress-banner">
+    <span>🩸</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:66%"></div></div>
+    <span class="progress-label">Section 4 of 6</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-purple">Section 4</div>
+    <div class="section-title">🩸 Lab Value Interpreter</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">Review the lab results, then choose the best nursing action. Click to reveal the explanation.</p>
+  </div>
+  <div id="labCases"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: NCLEX THINKING -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section5" class="section-wrapper nclex-section">
+  <div class="progress-banner">
+    <span>🎯</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:83%"></div></div>
+    <span class="progress-label">Section 5 of 6</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-pink">Section 5</div>
+    <div class="section-title">🎯 NCLEX Thinking Framework</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">NCLEX doesn't test memorization — it tests clinical reasoning. Use this 4-question framework on every question.</p>
+  </div>
+
+  <div class="framework-grid">
+    <div class="framework-card fw-red">
+      <div class="fw-icon">🩸</div>
+      <div class="fw-question">1. Is perfusion decreased?</div>
+      <div class="fw-cues">Cues: confusion, cool skin, weak pulse, low UO, hypotension, pallor, cyanosis → Intervene to restore circulation. Position supine, O₂, notify provider.</div>
+    </div>
+    <div class="framework-card fw-teal">
+      <div class="fw-icon">🫁</div>
+      <div class="fw-question">2. Is oxygen delivery impaired?</div>
+      <div class="fw-cues">Cues: low SpO₂, dyspnea, restlessness, tachycardia, cyanosis → O₂ therapy, positioning (HOB 45°), monitor ABGs, assess for PE/HF.</div>
+    </div>
+    <div class="framework-card fw-amber">
+      <div class="fw-icon">🩺</div>
+      <div class="fw-question">3. Is patient clotting or bleeding?</div>
+      <div class="fw-cues">Clotting signs: swollen warm extremity, dyspnea, chest pain. Bleeding signs: petechiae, hematuria, hematoma, hypotension → Anticoagulants vs. bleeding precautions — opposite actions!</div>
+    </div>
+    <div class="framework-card fw-purple">
+      <div class="fw-icon">💊</div>
+      <div class="fw-question">4. Is this a medication safety issue?</div>
+      <div class="fw-cues">Always check: HR before digoxin/beta-blockers (hold if &lt;60), BP before antihypertensives (hold if hypotensive), INR/aPTT before anticoagulants, K⁺ with diuretics.</div>
+    </div>
+  </div>
+
+  <div style="background:var(--card-bg);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:28px;margin-top:32px">
+    <h3 style="font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:16px">📝 Framework Practice Cases</h3>
+    <div id="nclexCases"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 6: MEMORY BOOSTERS -->
+<!-- ═══════════════════════════════════════════ -->
+<div id="section6" class="section-wrapper memory-section">
+  <div class="progress-banner">
+    <span>🏆</span>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:100%"></div></div>
+    <span class="progress-label">Section 6 of 6 — Final Stretch!</span>
+  </div>
+  <div class="section-header">
+    <div class="section-badge badge-red">Section 6</div>
+    <div class="section-title">💡 Memory Boosters & Exam Traps</div>
+    <div class="section-divider"></div>
+    <p class="section-subtitle">Mnemonics, cause-effect chains, and the classic traps professors love to test.</p>
+  </div>
+
+  <div class="memory-grid">
+
+    <div class="memory-card">
+      <h3>🔑 Drug Class Mnemonics</h3>
+      <div class="mnemonic-box">
+        <strong>ACE inhibitors end in "-pril":</strong><br>
+        lisinopril, captopril, enalapril<br><br>
+        <strong>ARBs end in "-sartan":</strong><br>
+        losartan, valsartan<br><br>
+        <strong>Beta blockers end in "-olol":</strong><br>
+        metoprolol, propranolol, atenolol<br><br>
+        <strong>CCBs end in "-dipine" (or verapamil):</strong><br>
+        nifedipine, amlodipine<br><br>
+        <strong>For WARFARIN think "W-INR"</strong><br>
+        Warfarin → INR → 2–3 = therapeutic
+      </div>
+    </div>
+
+    <div class="memory-card">
+      <h3>🔗 Cause → Effect Chains</h3>
+      <div class="chain">
+        <div class="chain-step">HTN <span class="chain-arrow">→</span> Increased afterload <span class="chain-arrow">→</span> LV hypertrophy <span class="chain-arrow">→</span> HF</div>
+        <div class="chain-step">HF <span class="chain-arrow">→</span> Low CO <span class="chain-arrow">→</span> RAAS activation <span class="chain-arrow">→</span> Fluid retention <span class="chain-arrow">→</span> Worse HF</div>
+        <div class="chain-step">Immobility <span class="chain-arrow">→</span> Stasis <span class="chain-arrow">→</span> DVT <span class="chain-arrow">→</span> PE <span class="chain-arrow">→</span> Hypoxia</div>
+        <div class="chain-step">Plaque <span class="chain-arrow">→</span> Rupture <span class="chain-arrow">→</span> Thrombus <span class="chain-arrow">→</span> Occlusion <span class="chain-arrow">→</span> MI</div>
+        <div class="chain-step">Furosemide <span class="chain-arrow">→</span> Diuresis <span class="chain-arrow">→</span> K⁺ loss <span class="chain-arrow">→</span> Hypokalemia <span class="chain-arrow">→</span> Digoxin toxicity ↑</div>
+        <div class="chain-step">Heparin <span class="chain-arrow">→</span> HIT <span class="chain-arrow">→</span> Platelets ↓ <span class="chain-arrow">→</span> Paradoxical clotting</div>
+      </div>
+    </div>
+
+    <div class="memory-card">
+      <h3>🪤 Exam Traps — Classic Gotchas</h3>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>DVT massage trap:</strong> Never massage a suspected DVT — emboli risk. Students think massage helps. Wrong!</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>PAD leg position:</strong> Keep legs dependent, NOT elevated. Opposite of venous insufficiency!</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>Nitroglycerin:</strong> Patient MUST be seated/lying before giving — causes sudden hypotension.</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>Spironolactone + ACE inhibitor:</strong> Both raise K⁺ → hyperkalemia risk — watch potassium closely!</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>Warfarin food trap:</strong> Consistent vitamin K, not zero vitamin K. Teach consistency, not avoidance.</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>HIT paradox:</strong> Heparin causes thrombocytopenia that INCREASES clotting risk — it's counterintuitive!</span>
+      </div>
+      <div class="trap-item">
+        <span class="trap-icon">⚠️</span>
+        <span><strong>Daily weight = fluid status:</strong> 1 kg overnight = ~1 L fluid retained. Report >2 lb gain in 24 hrs to provider.</span>
+      </div>
+    </div>
+
+    <div class="memory-card">
+      <h3>⭐ Professor Favorites</h3>
+      <div class="mnemonic-box">
+        ✔ Digoxin apical pulse check is ALWAYS required before administration<br><br>
+        ✔ ACE inhibitors → cough is expected — switch to ARB if intolerable<br><br>
+        ✔ Alteplase = thrombolytic (DISSOLVES clots); anticoagulants PREVENT clots — different mechanisms!<br><br>
+        ✔ Ejection fraction &lt;40% = reduced EF = systolic heart failure = digoxin helps<br><br>
+        ✔ Furosemide → potassium depletes → increases digoxin toxicity risk<br><br>
+        ✔ Beta blockers: do NOT stop abruptly — rebound tachycardia/hypertension<br><br>
+        ✔ Left HF = wet lungs (SOB). Right HF = wet body (edema, JVD)
+      </div>
+    </div>
+
+    <div class="memory-card">
+      <h3>🔢 Critical Lab Numbers</h3>
+      <div style="display:grid;gap:10px">
+        <div style="background:rgba(26,188,156,0.1);border:1px solid rgba(26,188,156,0.25);border-radius:8px;padding:10px;font-size:0.85rem">
+          <strong style="color:var(--teal)">INR therapeutic: 2–3</strong><br>
+          <span style="color:var(--mist)">INR &gt;3.5 = hold warfarin, assess bleeding</span>
+        </div>
+        <div style="background:rgba(243,156,18,0.1);border:1px solid rgba(243,156,18,0.25);border-radius:8px;padding:10px;font-size:0.85rem">
+          <strong style="color:var(--amber-light)">aPTT therapeutic on heparin: 60–100 sec</strong><br>
+          <span style="color:var(--mist)">Normal aPTT: 25–35 sec</span>
+        </div>
+        <div style="background:rgba(192,57,43,0.15);border:1px solid rgba(231,76,60,0.3);border-radius:8px;padding:10px;font-size:0.85rem">
+          <strong style="color:var(--coral)">Platelets: 150,000–400,000/mm³</strong><br>
+          <span style="color:var(--mist)">&lt;50,000 = bleeding risk; &lt;20,000 = critical</span>
+        </div>
+        <div style="background:rgba(108,92,231,0.1);border:1px solid rgba(108,92,231,0.25);border-radius:8px;padding:10px;font-size:0.85rem">
+          <strong style="color:#a29bfe">Troponin: should be undetectable</strong><br>
+          <span style="color:var(--mist)">Any elevation = myocardial injury</span>
+        </div>
+        <div style="background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.25);border-radius:8px;padding:10px;font-size:0.85rem">
+          <strong style="color:var(--gold)">K⁺ normal: 3.5–5.0 mEq/L</strong><br>
+          <span style="color:var(--mist)">&lt;3.5 = hypokalemia (furosemide risk) → digoxin toxicity ↑</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="memory-card">
+      <h3>📍 MONA for MI</h3>
+      <div class="mnemonic-box">
+        <strong>M</strong> — Morphine (pain relief, reduce SNS demand)<br>
+        <strong>O</strong> — Oxygen (if SpO₂ &lt;94%)<br>
+        <strong>N</strong> — Nitroglycerin (vasodilate coronaries, ↓ preload)<br>
+        <strong>A</strong> — Aspirin 325 mg (antiplatelet — chew, don't swallow)<br><br>
+        <em>Always sit patient up and give aspirin ASAP</em>
+      </div>
+    </div>
+
+  </div><!-- end memory-grid -->
+
+  <!-- Final Confidence -->
+  <div class="confidence-check" id="conf6" style="margin-top:40px">
+    <h3>🏆 You Made It!</h3>
+    <p>How confident are you feeling for your exam?</p>
+    <div class="confidence-stars">
+      <span class="conf-star" onclick="rate('conf6',1,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf6',2,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf6',3,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf6',4,this)">⭐</span>
+      <span class="conf-star" onclick="rate('conf6',5,this)">⭐</span>
+    </div>
+    <div class="conf-msg" id="conf6-msg"></div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// MEDICATIONS DATA
+// ══════════════════════════════════════════
+const meds = [
+  {
+    icon: '🫀', name: 'ACE Inhibitors', classLabel: 'Captopril · Enalapril · Lisinopril',
+    color: '#E74C3C',
+    mechanism: 'Block angiotensin-converting enzyme → no angiotensin II → vasodilation + reduced aldosterone → less Na/water retention.',
+    why: 'Hypertension, heart failure, post-MI protection, diabetic nephropathy.',
+    assess: 'BP before giving. Renal function (BUN/creatinine). Serum potassium.',
+    se: 'Persistent dry cough (very common), hyperkalemia, hypotension, angioedema (rare but life-threatening).',
+    serious: 'Angioedema — stop immediately, airway management. Angioedema = NEVER give ACE again.',
+    teaching: 'Report swelling of lips/face/throat immediately. Rise slowly. Avoid K+ supplements unless directed. Avoid NSAIDs.',
+    memory: '"ACE = Annoying Cough Everyday" — cough is the classic side effect! If intolerable → switch to ARB.'
+  },
+  {
+    icon: '🐢', name: 'Beta Blockers', classLabel: 'Metoprolol · Propranolol · Atenolol · Labetalol',
+    color: '#16A085',
+    mechanism: 'Block beta-1 (and beta-2 for non-selective) receptors → decreased HR, contractility, renin release → lower CO and BP.',
+    why: 'HTN, angina, post-MI protection, heart failure, dysrhythmias.',
+    assess: 'Apical HR before giving — HOLD if <60 bpm. BP. Blood glucose in diabetics (masks hypoglycemia signs).',
+    se: 'Bradycardia, fatigue, hypotension, bronchoconstriction (nonselective). Some patients have urinary frequency due to hemodynamic shifts — implement toileting schedule to prevent falls.',
+    serious: 'Severe bradycardia, bronchospasm in asthmatics. NEVER stop abruptly — rebound tachycardia/hypertension.',
+    teaching: 'Do NOT skip doses. Do NOT stop without talking to provider. Rise slowly. Report dizziness/fainting.',
+    memory: 'Beta blockers SLOW the heart — "they put on the BRAKES" (-olol = olol slow). Hold if HR <60!'
+  },
+  {
+    icon: '💧', name: 'Calcium Channel Blockers', classLabel: 'Nifedipine · Amlodipine',
+    color: '#8E44AD',
+    mechanism: 'Block calcium entry into vascular smooth muscle → can\'t contract → vasodilation → reduced afterload and SVR.',
+    why: 'Hypertension, angina (especially vasospastic).',
+    assess: 'BP and HR before giving. Do not crush extended-release tablets.',
+    se: 'Headache, flushing, peripheral edema (especially ankles), reflex tachycardia, hypotension.',
+    serious: 'Severe hypotension. Peripheral edema can be mistaken for worsening HF.',
+    teaching: 'Rise slowly. Report ankle swelling. Don\'t crush ER tablets. Grapefruit juice can increase drug levels — avoid.',
+    memory: 'CCBs = "Calm Contracted Blood vessels" — they relax vessels. Ankle swelling is a giveaway side effect!'
+  },
+  {
+    icon: '🛡️', name: 'ARBs', classLabel: 'Losartan · Valsartan',
+    color: '#2980B9',
+    mechanism: 'Block angiotensin II AT1 receptors directly → vasodilation + reduced aldosterone → similar to ACE inhibitors but NO cough.',
+    why: 'HTN, heart failure, diabetic nephropathy — especially when ACE inhibitor cough is intolerable.',
+    assess: 'BP, renal function, potassium.',
+    se: 'Hyperkalemia, hypotension, dizziness. Key advantage: NO cough.',
+    serious: 'Angioedema (rare, less than ACE). Avoid in pregnancy (teratogenic).',
+    teaching: 'Same as ACE inhibitors minus cough concern. Monitor K+. Rise slowly.',
+    memory: '"ARBs = ACE without the Annoying cough" — ARBs end in -sartan. They Block the receptor instead of blocking the enzyme.'
+  },
+  {
+    icon: '💛', name: 'Nitroglycerin', classLabel: 'Nitrostat · IV Nitroglycerin',
+    color: '#F39C12',
+    mechanism: 'Converts to nitric oxide → venous dilation → reduced preload → less cardiac workload. Also dilates coronary arteries → more O₂ to heart.',
+    why: 'Acute angina, NSTEMI/STEMI, hypertensive emergencies.',
+    assess: 'BP BEFORE giving — hold if SBP <90 mmHg. HR. Ask about recent phosphodiesterase inhibitor use (Viagra/Cialis) — deadly combination.',
+    se: 'Headache (very common — vasodilation), hypotension, dizziness, flushing.',
+    serious: 'Severe hypotension → syncope. Contraindicated with PDE5 inhibitors (sildenafil) → life-threatening hypotension.',
+    teaching: 'Sit or lie down before taking. May repeat every 5 min x3 — if no relief, call 911. Store in dark glass, room temp. Tablets expire quickly.',
+    memory: '"Nitro = NO going anywhere" — patient must be seated/lying or they\'ll pass out from hypotension!'
+  },
+  {
+    icon: '🚿', name: 'Furosemide', classLabel: 'Loop Diuretic — Lasix',
+    color: '#1ABC9C',
+    mechanism: 'Blocks Na/K/2Cl transporter in loop of Henle → massive sodium and water excretion → reduces preload and volume overload.',
+    why: 'Heart failure (fluid overload), pulmonary edema, hypertension, edema.',
+    assess: 'BP, HR, weight, I&O. Electrolytes — especially POTASSIUM (depletes it!). BUN/creatinine.',
+    se: 'Hypokalemia (critical — affects heart rhythm and digoxin toxicity), dehydration, hypotension, ototoxicity (high doses), increased uric acid.',
+    serious: 'Hypokalemia → dysrhythmias → especially dangerous with digoxin. Dehydration → hypotension → falls.',
+    teaching: 'Take in morning (avoids nighttime urination/falls). Daily weights — report >2 lb/day gain. Eat K+ rich foods unless on K+-sparing diuretic.',
+    memory: '"Furosemide FLushes everything including K+" — give in morning, watch potassium!'
+  },
+  {
+    icon: '♟️', name: 'Spironolactone', classLabel: 'K+-sparing diuretic — Aldactone',
+    color: '#6C5CE7',
+    mechanism: 'Blocks aldosterone receptors in distal tubule → sodium excreted, potassium retained. Less fluid retention without K+ loss.',
+    why: 'Heart failure (reduces mortality), HTN, hyperaldosteronism, edema when K+ preservation needed.',
+    assess: 'Potassium! Renal function. BP. (Danger when combined with ACE inhibitors or ARBs — all raise K+).',
+    se: 'Hyperkalemia (opposite of furosemide!), gynecomastia (men), menstrual irregularities, dizziness.',
+    serious: 'Hyperkalemia → cardiac dysrhythmias. Avoid K+ supplements.',
+    teaching: 'Avoid K+ supplements and salt substitutes (K+ based). Avoid NSAIDs. Take with food.',
+    memory: '"Spiro SPARES potassium" — K+-sparing = potassium stays! Danger = hyperkalemia especially with ACE inhibitors.'
+  },
+  {
+    icon: '💚', name: 'Digoxin', classLabel: 'Cardiac Glycoside — Lanoxin',
+    color: '#27AE60',
+    mechanism: 'Inhibits Na/K ATPase pump → increases intracellular calcium → stronger, slower contractions. Also slows AV conduction.',
+    why: 'Heart failure (systolic), atrial fibrillation (rate control).',
+    assess: 'APICAL HR for 1 full minute — HOLD if <60 bpm. Serum digoxin level (therapeutic: 0.5-2 ng/mL). Potassium (hypokalemia = toxicity risk).',
+    se: 'Bradycardia, nausea/vomiting/anorexia, yellow-green visual halos, fatigue.',
+    serious: 'Toxicity: bradycardia + N/V + visual changes. Narrow therapeutic window. Hypokalemia (from furosemide) dramatically increases toxicity risk.',
+    teaching: 'Take same time daily. Count pulse before taking — hold if <60. Report N/V, vision changes, irregular heartbeat. Avoid high-fiber foods close to dose (decreases absorption).',
+    memory: '"Dig the yellow-GREEN" — green halos = digoxin toxicity. Always check APICAL pulse, never radial!'
+  },
+  {
+    icon: '🔬', name: 'Heparin', classLabel: 'Unfractionated Heparin (UFH)',
+    color: '#E17055',
+    mechanism: 'Enhances antithrombin III activity → rapidly inactivates thrombin and factor Xa → prevents fibrin clot formation and growth.',
+    why: 'DVT, PE, acute coronary syndrome, prevention of clot extension. Used IV/SQ for rapid anticoagulation.',
+    assess: 'aPTT (therapeutic: 60-100 sec). Platelet count (watch for HIT!). Signs of bleeding. Baseline neuro status.',
+    se: 'Bleeding (most common and serious), bruising at injection site, HIT (immune destruction of platelets → paradoxical clotting risk).',
+    serious: 'Heparin-Induced Thrombocytopenia (HIT): platelets drop + thrombosis risk rises = stop heparin immediately. Antidote = Protamine Sulfate.',
+    teaching: 'IV: no rubbing injection sites. Report any bleeding signs. No IM injections while anticoagulated. Soft toothbrush.',
+    memory: '"Heparin Hurries (acts fast), monitored by aPTT, Antidote = Protamine" — H-A-P → Heparin aPTT Protamine'
+  },
+  {
+    icon: '🍃', name: 'Warfarin', classLabel: 'Vitamin K Antagonist — Coumadin',
+    color: '#00B894',
+    mechanism: 'Inhibits vitamin K–dependent synthesis of clotting factors II, VII, IX, X in the liver → clotting ability decreases over days.',
+    why: 'Long-term prevention of thrombosis: AFib, mechanical heart valves, DVT/PE treatment/prevention.',
+    assess: 'INR before giving (therapeutic 2-3). Look for bleeding. Drug interactions (warfarin has hundreds!). Dietary vitamin K consistency.',
+    se: 'Bleeding (major concern). Bruising. Drug and food interactions are extensive.',
+    serious: 'Major hemorrhage. INR >4 = very high bleeding risk. Antidote = Vitamin K (slow) or Fresh Frozen Plasma (fast).',
+    teaching: 'Consistent vitamin K intake (not zero — just consistent). Avoid injury. Many drug interactions — tell ALL providers you take warfarin. Regular INR checks. Wear medical alert.',
+    memory: '"Warfarin = Weeks to work, monitored by INR, Vitamin K is antidote" — W-I-V! Consistent diet, not restricted.'
+  },
+  {
+    icon: '🎯', name: 'Apixaban', classLabel: 'Direct Oral Anticoagulant (DOAC) — Eliquis',
+    color: '#0984E3',
+    mechanism: 'Directly inhibits Factor Xa → blocks conversion of prothrombin to thrombin → no fibrin, no clot. Predictable effect, no routine monitoring needed.',
+    why: 'DVT/PE treatment and prevention, stroke prevention in non-valvular AFib.',
+    assess: 'Signs of bleeding. Renal function (renally cleared). No routine INR/aPTT needed.',
+    se: 'Bleeding remains the major risk. Bruising. May cause anemia.',
+    serious: 'Major hemorrhage. No widely available specific reversal agent (Andexanet alfa exists but limited use). Must be held before procedures.',
+    teaching: 'Do not skip doses or double up. Report any unusual bleeding. Tell all providers/dentists you take this medication. Do not crush tablets.',
+    memory: '"Apixaban = A(pTT not needed) — no routine labs! But bleeding risk is REAL!" Factor Xa inhibitor → think X = 10 → Eliquis.'
+  },
+  {
+    icon: '💥', name: 'Alteplase', classLabel: 'Thrombolytic (tPA) — Activase',
+    color: '#D63031',
+    mechanism: 'Converts plasminogen → plasmin, which breaks down fibrin mesh of existing clots → dissolves the clot. Unlike anticoagulants which prevent clots, tPA DESTROYS existing ones.',
+    why: 'Acute STEMI, massive PE, acute ischemic stroke (within time window), massive DVT.',
+    assess: 'Bleeding risk assessment CRITICAL before giving. Recent surgery, trauma, stroke, BP, INR, time of symptom onset. NO: recent surgery, bleeding, uncontrolled HTN.',
+    se: 'Severe hemorrhage (systemic fibrinolysis destroys ALL clots including protective ones). Intracranial hemorrhage (most feared for stroke use).',
+    serious: 'Life-threatening bleeding anywhere. Intracranial hemorrhage = most feared complication. Avoid all invasive procedures during and after infusion.',
+    teaching: 'Patient/family: this medication dissolves the clot but increases bleeding risk significantly. Report any headache, confusion, extremity weakness (ICH signs) immediately.',
+    memory: '"Alteplase = Attack the clot (active lysis). Anticoagulants PREVENT. Alteplase DISSOLVES." HIGH ALERT medication — monitor continuously!'
+  }
+];
+
+function buildMedCards() {
+  const grid = document.getElementById('medGrid');
+  meds.forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-front" style="border-top:3px solid ${m.color}">
+          <div class="drug-icon">${m.icon}</div>
+          <div class="drug-name">${m.name}</div>
+          <div class="drug-class">${m.classLabel}</div>
+          <div class="flip-hint">Hover or tap to flip</div>
+        </div>
+        <div class="flip-back">
+          <div class="drug-name-small">${m.name}</div>
+          <div class="drug-detail"><span class="label">⚙️ Mechanism</span>${m.mechanism}</div>
+          <div class="drug-detail"><span class="label">❓ Why Give It</span>${m.why}</div>
+          <div class="drug-detail"><span class="label">🩺 Assess Before</span>${m.assess}</div>
+          <div class="drug-detail"><span class="label">⚠️ Side Effects</span>${m.se}</div>
+          <div class="drug-detail"><span class="label danger">🚨 Serious</span><span class="danger">${m.serious}</span></div>
+          <div class="drug-detail"><span class="label">📋 Teach Patient</span>${m.teaching}</div>
+          <div class="memory-trick">${m.memory}</div>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => card.classList.toggle('flipped'));
+    grid.appendChild(card);
+  });
+}
+
+// ══════════════════════════════════════════
+// QUIZ GAME
+// ══════════════════════════════════════════
+const quizData = [
+  {
+    q: 'A patient on furosemide is also receiving digoxin. Which lab value should the nurse monitor most carefully?',
+    opts: ['Sodium', 'Potassium', 'Calcium', 'Magnesium'],
+    ans: 1,
+    rat: 'Furosemide depletes potassium. Hypokalemia significantly increases digoxin toxicity because low K+ makes digoxin bind more effectively to Na/K ATPase — potentially causing dangerous bradycardia and dysrhythmias.'
+  },
+  {
+    q: 'A patient with DVT asks the nurse to massage their leg because it is painful. What is the best response?',
+    opts: ['Massage gently for 5 minutes only', 'Massage is contraindicated — it can dislodge the clot causing a PE', 'Apply heat before massaging', 'Massage promotes circulation and is encouraged'],
+    ans: 1,
+    rat: 'Massaging a DVT can dislodge the thrombus, allowing it to travel to the pulmonary circulation as a pulmonary embolism — a potentially fatal complication. Never massage a suspected DVT.'
+  },
+  {
+    q: 'The nurse is preparing to give digoxin to a patient with heart failure. The apical pulse is 54 bpm. What is the correct action?',
+    opts: ['Give digoxin as ordered', 'Hold digoxin and notify the provider', 'Give half the dose', 'Recheck the pulse in 30 minutes then give'],
+    ans: 1,
+    rat: 'Digoxin slows heart rate (negative chronotropy). An apical pulse <60 bpm is the threshold to hold digoxin and notify the provider, as administering it could cause dangerous bradycardia.'
+  },
+  {
+    q: 'A patient is on warfarin for atrial fibrillation. Their INR result is 4.8. What is the priority nursing action?',
+    opts: ['Give the scheduled dose of warfarin', 'Hold warfarin, assess for bleeding, notify provider', 'Give vitamin K immediately without checking', 'Encourage green vegetables to lower INR'],
+    ans: 1,
+    rat: 'An INR of 4.8 is above the therapeutic range of 2–3 and indicates the patient is at high risk for bleeding. The nurse should hold the warfarin, assess for any signs of active bleeding, and notify the provider. The antidote is vitamin K or FFP.'
+  },
+  {
+    q: 'Which of the following findings is consistent with LEFT-sided heart failure?',
+    opts: ['Jugular venous distention', 'Bilateral ankle edema', 'Crackles in the lung bases', 'Hepatomegaly'],
+    ans: 2,
+    rat: 'Left-sided HF causes blood to back up into the pulmonary circulation, resulting in pulmonary edema manifested as crackles (especially at lung bases). JVD, ankle edema, and hepatomegaly are signs of RIGHT-sided HF where blood backs up into the systemic venous circulation.'
+  },
+  {
+    q: 'A patient develops sudden onset dyspnea, chest pain, tachycardia, and hypoxia 3 days post-operatively. What complication does the nurse suspect?',
+    opts: ['Atelectasis', 'Pneumonia', 'Pulmonary embolism', 'Pleural effusion'],
+    ans: 2,
+    rat: 'Sudden onset dyspnea, chest pain, tachycardia, and hypoxia in a post-operative patient strongly suggests pulmonary embolism. Post-surgical immobility leads to DVT via Virchow\'s triad, and a clot can embolize to the lungs. This is a medical emergency.'
+  },
+  {
+    q: 'Before administering nitroglycerin to a patient with chest pain, which is the priority nursing assessment?',
+    opts: ['Heart rate', 'Blood pressure', 'Respiratory rate', 'Temperature'],
+    ans: 1,
+    rat: 'Nitroglycerin causes venous dilation that can rapidly drop blood pressure. Before administration, the nurse must ensure SBP ≥90 mmHg. Also ask about phosphodiesterase inhibitor use (Viagra/Cialis) — concurrent use is contraindicated due to severe hypotension risk.'
+  },
+  {
+    q: 'A patient on heparin infusion has a platelet count that dropped from 220,000 to 68,000 in 4 days. What does the nurse suspect?',
+    opts: ['Normal response to heparin', 'Heparin-Induced Thrombocytopenia (HIT)', 'Disseminated intravascular coagulation', 'Thrombocytosis'],
+    ans: 1,
+    rat: 'A 50%+ drop in platelets after heparin initiation (especially days 4-10) is a classic presentation of HIT. Paradoxically, HIT causes a hypercoagulable state despite low platelets — the patient is at high risk for thrombosis, not bleeding. Stop heparin immediately and use an alternative anticoagulant.'
+  },
+  {
+    q: 'Which intervention is the nurse\'s PRIORITY for a patient with peripheral arterial disease (PAD) of the lower extremities?',
+    opts: ['Elevate legs to reduce edema', 'Keep legs in a dependent position to promote perfusion', 'Apply compression stockings', 'Encourage bed rest'],
+    ans: 1,
+    rat: 'In PAD, the problem is arterial insufficiency — not enough blood getting TO the extremities. Keeping legs dependent uses gravity to assist blood flow to the extremities. Elevating legs works against arterial flow and worsens ischemia. Note: this is OPPOSITE of venous insufficiency management.'
+  },
+  {
+    q: 'The most sensitive indicator of fluid status in a patient with heart failure is:',
+    opts: ['Blood pressure', 'Urine output', 'Daily weight', 'Presence of edema'],
+    ans: 2,
+    rat: 'Daily weight is the most sensitive indicator of fluid status. 1 kg of weight gain ≈ 1 liter of fluid retained. Patients should be weighed daily at the same time, same scale, same clothing, before breakfast. Edema is visible only after significant fluid accumulation. Report >2 lb/day weight gain to the provider.'
+  }
+];
+
+let currentQ = 0, quizScoreCount = 0;
+function buildQuizQuestion() {
+  if (currentQ >= quizData.length) {
+    document.getElementById('quizContainer').innerHTML = `<div class="quiz-question" style="text-align:center"><h2 style="font-family:'DM Serif Display',serif;font-size:1.8rem;margin-bottom:12px">Quiz Complete! 🎉</h2><p style="color:var(--mist)">Final Score: ${quizScoreCount}/${quizData.length}</p><p style="margin-top:12px;color:${quizScoreCount>=8?'var(--teal)':'var(--amber-light)'}">${quizScoreCount>=8?'Excellent! You\'re ready for exam day! 💪':'Review the sections where you struggled and try again.'}</p></div>`;
+    document.querySelector('[onclick="nextQuestion()"]').style.display = 'none';
+    return;
+  }
+  const d = quizData[currentQ];
+  document.getElementById('quizTotal').textContent = quizData.length;
+  document.getElementById('quizScore').textContent = quizScoreCount;
+  const html = `<div class="quiz-question fade-in">
+    <div style="font-size:0.75rem;color:var(--mist);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Question ${currentQ+1} of ${quizData.length}</div>
+    <div class="quiz-q-text">${d.q}</div>
+    <div class="quiz-options">${d.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(${i})" data-idx="${i}">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div class="rationale" id="rationale">✅ <strong>Rationale:</strong> ${d.rat}</div>
+  </div>`;
+  document.getElementById('quizContainer').innerHTML = html;
+}
+
+function answerQ(chosen) {
+  const d = quizData[currentQ];
+  const opts = document.querySelectorAll('.quiz-opt');
+  opts.forEach((o,i) => {
+    o.classList.add('disabled');
+    if(i === d.ans) o.classList.add('correct');
+    else if(i === chosen) o.classList.add('wrong');
+  });
+  if(chosen === d.ans) quizScoreCount++;
+  document.getElementById('quizScore').textContent = quizScoreCount;
+  document.getElementById('rationale').classList.add('show');
+}
+function nextQuestion() { currentQ++; buildQuizQuestion(); }
+
+// ══════════════════════════════════════════
+// SCENARIO GAME
+// ══════════════════════════════════════════
+const scenarios = [
+  {
+    name: 'Mr. Johnson, 68', detail: 'Heart failure patient',
+    vitals: [{l:'BP',v:'88/54',a:true},{l:'HR',v:'112',a:true},{l:'SpO₂',v:'91%',a:true},{l:'RR',v:'28',a:true}],
+    story: 'Mr. Johnson called the nurse reporting he "can\'t breathe." You find him sitting upright, using accessory muscles, and his lips are dusky. He has crackles throughout all lung fields. He gained 6 lbs since yesterday. His furosemide was held due to his BP being 88/54 earlier.',
+    choices: ['Lay patient flat to improve venous return', 'Position patient in high Fowler\'s, call provider, prepare for IV furosemide', 'Give furosemide as ordered without consulting provider', 'Apply supplemental oxygen only and wait for physician'],
+    correct: 1,
+    results: [
+      'Incorrect. Lying flat increases venous return and worsens pulmonary edema — the patient would drown in their own fluid. Position of choice is High Fowler\'s (head of bed 45-90°).',
+      'Correct! High Fowler\'s uses gravity to reduce venous return to the heart, easing pulmonary congestion. The provider must be notified because BP is low (88/54) — you cannot give furosemide without orders given the hypotension, but fluid overload is causing respiratory failure. Oxygen also addresses the hypoxia.',
+      'Incorrect. Furosemide was previously held due to BP of 88/54. Giving a diuretic with that BP could cause dangerous hypotension. Always notify provider first.',
+      'Partially correct — oxygen is needed, but you must also position the patient upright and call the provider immediately. Waiting passively is inadequate in this emergency.'
+    ]
+  },
+  {
+    name: 'Ms. Rivera, 45', detail: 'Day 2 post-knee replacement',
+    vitals: [{l:'BP',v:'126/78',a:false},{l:'HR',v:'98',a:false},{l:'SpO₂',v:'96%',a:false},{l:'Temp',v:'99.1°F',a:false}],
+    story: 'Ms. Rivera reports sudden onset of "sharp, stabbing" right calf pain when you walk in for morning assessment. She says it started overnight. Her right calf is noticeably warmer and more swollen than her left. She rated pain 7/10.',
+    choices: ['Massage the calf to promote circulation', 'Elevate the leg and apply warm compresses', 'Do not massage, notify provider, apply compression stockings', 'Do not massage, keep leg still/at rest, notify provider and prepare for imaging'],
+    correct: 3,
+    results: [
+      'Incorrect and dangerous! NEVER massage a suspected DVT. Massaging can dislodge the clot → pulmonary embolism → life-threatening.',
+      'Incorrect. Elevation and heat may feel helpful but the priority is immobilizing the extremity and notifying the provider. Compression stockings should NOT be applied on an active DVT leg without an order.',
+      'Incorrect. Compression stockings are contraindicated on a suspected DVT — they could dislodge the clot. Do not massage.',
+      'Correct! Keep the affected leg at rest (immobilize), do NOT massage, notify the provider immediately, and prepare for Doppler ultrasound to confirm DVT. She will likely need anticoagulation therapy.'
+    ]
+  }
+];
+
+let scenIdx = 0;
+function buildScenario() {
+  const s = scenarios[scenIdx % scenarios.length];
+  const html = `<div class="scenario-box fade-in">
+    <div class="scenario-patient">
+      <div class="patient-avatar">👤</div>
+      <div class="patient-info"><h3>${s.name}</h3><p>${s.detail}</p></div>
+    </div>
+    <div class="vitals-row">${s.vitals.map(v=>`<div class="vital-chip ${v.a?'alert':''}">${v.l}: ${v.v}</div>`).join('')}</div>
+    <div class="scenario-text">${s.story}</div>
+    <div class="scenario-choices" id="scChoices">
+      ${s.choices.map((c,i)=>`<button class="scenario-choice" onclick="answerScenario(${i})" data-i="${i}">${String.fromCharCode(65+i)}. ${c}</button>`).join('')}
+    </div>
+    <div class="scenario-result" id="scResult"></div>
+  </div>`;
+  document.getElementById('scenarioContainer').innerHTML = html;
+}
+
+function answerScenario(chosen) {
+  const s = scenarios[scenIdx % scenarios.length];
+  const btns = document.querySelectorAll('.scenario-choice');
+  btns.forEach(b => b.disabled = true);
+  btns[chosen].style.borderColor = chosen === s.correct ? 'var(--teal)' : 'var(--crimson)';
+  const res = document.getElementById('scResult');
+  const correct = chosen === s.correct;
+  res.className = `scenario-result show ${correct?'result-correct':'result-wrong'}`;
+  res.innerHTML = `<div class="result-title">${correct?'✅ Correct!':'❌ Not quite.'}</div><div class="result-body">${s.results[chosen]}</div>`;
+}
+function nextScenario() { scenIdx++; buildScenario(); }
+
+// ══════════════════════════════════════════
+// MATCHING GAME
+// ══════════════════════════════════════════
+const matchPairs = [
+  { left: 'Warfarin', right: 'Monitor INR (goal 2–3)' },
+  { left: 'Heparin', right: 'Monitor aPTT (goal 60–100 sec)' },
+  { left: 'Digoxin Toxicity', right: 'Yellow-green halos + N/V + bradycardia' },
+  { left: 'Furosemide', right: 'Hypokalemia + increased urination' },
+  { left: 'ACE Inhibitor', right: 'Dry cough + hyperkalemia risk' }
+];
+
+let selectedLeft = null, selectedRight = null;
+let matchScoreCount = 0;
+function buildMatch() {
+  const lDiv = document.getElementById('matchLeft'), rDiv = document.getElementById('matchRight');
+  lDiv.innerHTML = ''; rDiv.innerHTML = '';
+  const shuffledR = [...matchPairs].sort(() => Math.random()-0.5);
+  matchPairs.forEach((p,i) => {
+    const li = document.createElement('div');
+    li.className = 'match-item'; li.textContent = p.left; li.dataset.idx = i; li.dataset.side='left';
+    li.onclick = () => selectMatch(li, 'left');
+    lDiv.appendChild(li);
+  });
+  shuffledR.forEach(p => {
+    const ri = document.createElement('div');
+    const origIdx = matchPairs.findIndex(x=>x.right===p.right);
+    ri.className = 'match-item'; ri.textContent = p.right; ri.dataset.idx = origIdx; ri.dataset.side='right';
+    ri.onclick = () => selectMatch(ri, 'right');
+    rDiv.appendChild(ri);
+  });
+}
+
+function selectMatch(el, side) {
+  if(el.classList.contains('matched-correct')) return;
+  if(side === 'left') {
+    if(selectedLeft) selectedLeft.classList.remove('selected');
+    selectedLeft = el; el.classList.add('selected');
+  } else {
+    if(selectedRight) selectedRight.classList.remove('selected');
+    selectedRight = el; el.classList.add('selected');
+  }
+  if(selectedLeft && selectedRight) {
+    if(selectedLeft.dataset.idx === selectedRight.dataset.idx) {
+      selectedLeft.classList.remove('selected'); selectedRight.classList.remove('selected');
+      selectedLeft.classList.add('matched-correct'); selectedRight.classList.add('matched-correct');
+      selectedLeft.onclick = null; selectedRight.onclick = null;
+      matchScoreCount++;
+      document.getElementById('matchScore').textContent = matchScoreCount;
+    } else {
+      selectedLeft.classList.add('matched-wrong'); selectedRight.classList.add('matched-wrong');
+      setTimeout(()=>{
+        selectedLeft.classList.remove('selected','matched-wrong');
+        selectedRight.classList.remove('selected','matched-wrong');
+      }, 800);
+    }
+    selectedLeft = null; selectedRight = null;
+  }
+}
+function resetMatch() { matchScoreCount = 0; document.getElementById('matchScore').textContent = 0; buildMatch(); }
+
+// ══════════════════════════════════════════
+// PRIORITY GAME
+// ══════════════════════════════════════════
+const priorityScenarios = [
+  {
+    patients: [
+      { name: 'Patient A — Mrs. Chen', detail: 'BP 190/110, headache. Stable, awaiting antihypertensive.', flag: 'monitor', flagLabel: '⚡ Monitor' },
+      { name: 'Patient B — Mr. Davis', detail: 'Sudden onset chest pain 9/10, diaphoresis, jaw pain, BP 88/50.', flag: 'critical', flagLabel: '🚨 Critical' },
+      { name: 'Patient C — Ms. Park', detail: 'Asking for pain meds. Post-op day 2, pain 4/10, stable vitals.', flag: 'stable', flagLabel: '✅ Stable' },
+      { name: 'Patient D — Mr. Kim', detail: 'Waiting for discharge teaching. Heart failure, stable on meds.', flag: 'stable', flagLabel: '✅ Stable' }
+    ],
+    correct: 1,
+    explanation: 'Mr. Davis (Patient B) has classic MI signs: severe chest pain, diaphoresis, jaw radiation, AND hypotension (BP 88/50 = cardiogenic shock). This is a life-threatening emergency requiring immediate intervention — call rapid response, prepare for 12-lead EKG, give aspirin, contact provider stat. ABCs first: airway, breathing, CIRCULATION.'
+  }
+];
+
+let priorityIdx = 0;
+function buildPriority() {
+  const s = priorityScenarios[priorityIdx % priorityScenarios.length];
+  const container = document.getElementById('priorityPatients');
+  container.innerHTML = '';
+  s.patients.forEach((p,i) => {
+    const div = document.createElement('div');
+    div.className = 'priority-patient';
+    div.innerHTML = `<div class="pp-name">${p.name}</div><div class="pp-detail">${p.detail}</div><span class="pp-flag flag-${p.flag}">${p.flagLabel}</span>`;
+    div.onclick = () => choosePriority(i, s);
+    container.appendChild(div);
+  });
+  document.getElementById('priorityResult').style.display = 'none';
+}
+
+function choosePriority(chosen, s) {
+  const patients = document.querySelectorAll('.priority-patient');
+  patients.forEach((p,i) => {
+    p.onclick = null;
+    if(i === s.correct) p.classList.add('correct-choice');
+    else if(i === chosen) p.classList.add('wrong-choice');
+  });
+  const res = document.getElementById('priorityResult');
+  res.style.display = 'block';
+  res.style.background = chosen===s.correct ? 'rgba(26,188,156,0.12)' : 'rgba(192,57,43,0.12)';
+  res.style.border = `1px solid ${chosen===s.correct?'rgba(26,188,156,0.4)':'rgba(192,57,43,0.4)'}`;
+  res.style.color = 'var(--cloud)';
+  res.innerHTML = `<strong style="color:${chosen===s.correct?'var(--teal)':'var(--coral)'}">${chosen===s.correct?'✅ Correct Priority!':'❌ Reassess.'}</strong><br><br>${s.explanation}`;
+}
+function resetPriority() { buildPriority(); }
+
+// ══════════════════════════════════════════
+// CLOT BUILDER
+// ══════════════════════════════════════════
+const correctClotOrder = [
+  'Vessel injury occurs',
+  'Vascular spasm (vasoconstriction)',
+  'Platelet adhesion to injury site',
+  'Platelet activation & aggregation',
+  'Coagulation cascade begins',
+  'Intrinsic/extrinsic pathways activate',
+  'Prothrombin → Thrombin',
+  'Fibrinogen → Fibrin mesh',
+  'Stable fibrin clot formed'
+];
+
+let clotPlaced = [];
+let clotBank = [...correctClotOrder].sort(() => Math.random()-0.5);
+
+function buildClot() {
+  const bankDiv = document.getElementById('clotBank');
+  bankDiv.innerHTML = '';
+  clotBank.forEach(step => {
+    const chip = document.createElement('div');
+    chip.className = 'clot-chip';
+    chip.textContent = step;
+    chip.onclick = () => placeClotStep(step, chip);
+    bankDiv.appendChild(chip);
+  });
+}
+
+function placeClotStep(step, chip) {
+  if(chip.classList.contains('placed')) return;
+  chip.classList.add('placed');
+  clotPlaced.push(step);
+  const seq = document.getElementById('clotSequence');
+  if(seq.children.length === 1 && seq.children[0].tagName === 'SPAN') seq.innerHTML = '';
+  const placed = document.createElement('div');
+  placed.className = 'clot-chip';
+  placed.style.background = 'rgba(108,92,231,0.3)';
+  placed.textContent = `${clotPlaced.length}. ${step}`;
+  seq.appendChild(placed);
+}
+
+function checkClot() {
+  const res = document.getElementById('clotResult');
+  res.style.display = 'block';
+  let correct = 0;
+  clotPlaced.forEach((step, i) => {
+    if(step === correctClotOrder[i]) correct++;
+  });
+  if(correct === correctClotOrder.length && clotPlaced.length === correctClotOrder.length) {
+    res.style.background = 'rgba(26,188,156,0.15)';
+    res.style.border = '1px solid rgba(26,188,156,0.4)';
+    res.innerHTML = '<strong style="color:var(--teal)">✅ Perfect! You built the clot cascade correctly!</strong><br><br>You understand that hemostasis requires vascular spasm → platelet plug → coagulation cascade → fibrin clot. Anticoagulants interrupt this process at different points!';
+  } else {
+    res.style.background = 'rgba(243,156,18,0.12)';
+    res.style.border = '1px solid rgba(243,156,18,0.3)';
+    const correctAnswer = correctClotOrder.map((s,i)=>`${i+1}. ${s}`).join('<br>');
+    res.innerHTML = `<strong style="color:var(--amber-light)">⚡ Not quite — ${correct}/${correctClotOrder.length} in correct position.</strong><br><br><strong>Correct order:</strong><br>${correctAnswer}<br><br>Hit Reset and try again!`;
+  }
+}
+
+function resetClot() {
+  clotPlaced = [];
+  clotBank = [...correctClotOrder].sort(() => Math.random()-0.5);
+  document.getElementById('clotSequence').innerHTML = '<span style="color:var(--smoke);font-size:0.82rem;align-self:center">Click steps from the bank below to build the clot cascade →</span>';
+  document.getElementById('clotResult').style.display = 'none';
+  buildClot();
+}
+
+// ══════════════════════════════════════════
+// LAB CASES
+// ══════════════════════════════════════════
+const labCases = [
+  {
+    title: 'Post-op Cardiac Patient on Heparin',
+    labs: [
+      {name:'aPTT',val:'148 sec',cls:'high',ref:'Normal: 25–35 | Therapeutic: 60–100'},
+      {name:'Platelets',val:'62,000',cls:'low',ref:'Normal: 150–400k'},
+      {name:'BP',val:'104/62',cls:'low',ref:''},
+    ],
+    prompt: 'Patient is on continuous IV heparin. aPTT is 148 sec and platelets have dropped from 180,000 to 62,000 over 5 days. What is the priority action?',
+    actions: ['Continue heparin — aPTT is just slightly high', 'Hold heparin, notify provider, suspect HIT — prepare for alternative anticoagulant', 'Increase heparin dose to prevent clot extension', 'Give protamine sulfate now without notifying provider'],
+    correct: 1,
+    explain: 'aPTT of 148 is supratherapeutic (goal 60–100) AND platelets have dropped >50% — classic presentation of Heparin-Induced Thrombocytopenia (HIT). Despite low platelets, HIT causes a HYPERCOAGULABLE state. Stop heparin immediately, notify provider. Protamine would require an order. Alternative anticoagulants (like argatroban) will be used.'
+  },
+  {
+    title: 'Warfarin Patient with INR Results',
+    labs: [
+      {name:'INR',val:'3.9',cls:'high',ref:'Therapeutic: 2–3'},
+      {name:'BP',val:'136/84',cls:'normal',ref:''},
+      {name:'HR',val:'72',cls:'normal',ref:''},
+    ],
+    prompt: 'Patient on warfarin for AFib. INR today is 3.9. No visible bleeding. What should the nurse do?',
+    actions: ['Give warfarin as scheduled — minor elevation', 'Hold warfarin, notify provider, monitor for bleeding signs', 'Give vitamin K immediately', 'Double the warfarin dose to "balance out"'],
+    correct: 1,
+    explain: 'INR 3.9 is above the therapeutic range of 2–3. The nurse should hold warfarin and notify the provider. Vitamin K is the antidote but requires a provider order. Continue monitoring for any bleeding signs. Doubling warfarin would be extremely dangerous — never adjust anticoagulant doses without orders.'
+  },
+  {
+    title: 'New Chest Pain Patient',
+    labs: [
+      {name:'Troponin I',val:'2.4 ng/mL',cls:'high',ref:'Normal: undetectable'},
+      {name:'BP',val:'92/58',cls:'low',ref:''},
+      {name:'HR',val:'118',cls:'high',ref:''},
+    ],
+    prompt: 'A 58-year-old patient arrives with crushing chest pain, diaphoresis, and these labs. What is the priority nursing action?',
+    actions: ['Draw repeat troponin in 6 hours before acting', 'Call rapid response, 12-lead EKG, supplemental O₂, aspirin, notify provider STAT', 'Reassure patient and get vital signs q4h', 'Administer warfarin to prevent clot extension'],
+    correct: 1,
+    explain: 'Elevated troponin + hemodynamic instability (hypotension + tachycardia) + chest pain = presumed STEMI/acute MI until proven otherwise. This is a cardiac emergency. Priority: MONA (Morphine, O₂, Nitro, Aspirin), 12-lead EKG, rapid response. Time is muscle — goal is reperfusion within 90 minutes.'
+  }
+];
+
+function buildLabCases() {
+  const container = document.getElementById('labCases');
+  labCases.forEach((lc, ci) => {
+    const html = `<div class="lab-case">
+      <h3 style="font-family:'DM Serif Display',serif;font-size:1.2rem;margin-bottom:16px">${lc.title}</h3>
+      <div class="lab-results">${lc.labs.map(l=>`<div class="lab-value"><div class="lab-name">${l.name}</div><div class="lab-num ${l.cls}">${l.val}</div>${l.ref?`<div class="lab-ref">${l.ref}</div>`:''}</div>`).join('')}</div>
+      <p style="color:var(--cloud);font-size:0.92rem;margin-bottom:16px;line-height:1.7">${lc.prompt}</p>
+      <div class="lab-actions">${lc.actions.map((a,i)=>`<button class="lab-action" onclick="answerLab(this,${ci},${i})">${String.fromCharCode(65+i)}. ${a}</button>`).join('')}</div>
+      <div class="lab-explain" id="lab-exp-${ci}"></div>
+    </div>`;
+    container.insertAdjacentHTML('beforeend', html);
+  });
+}
+
+function answerLab(btn, caseIdx, chosen) {
+  const lc = labCases[caseIdx];
+  const actions = btn.parentElement.querySelectorAll('.lab-action');
+  actions.forEach(a => a.style.pointerEvents = 'none');
+  btn.classList.add(chosen === lc.correct ? 'selected-correct' : 'selected-wrong');
+  actions[lc.correct].classList.add('selected-correct');
+  const exp = document.getElementById(`lab-exp-${caseIdx}`);
+  exp.classList.add('show');
+  exp.textContent = lc.explain;
+}
+
+// ══════════════════════════════════════════
+// NCLEX CASES
+// ══════════════════════════════════════════
+const nclexCases = [
+  {
+    case: 'A patient with chronic heart failure has gained 3 lbs overnight. They have crackles at lung bases and O₂ sat is 91% on room air. What is the priority action?',
+    framework: '1. Is perfusion decreased? → Low O₂ sat. 2. Is O₂ delivery impaired? → YES — crackles = pulmonary edema. 3. Clotting/bleeding? → Not primary. 4. Med safety? → Will likely need furosemide.',
+    answer: 'Position in High Fowler\'s immediately (gravity reduces venous return → less pulmonary congestion), apply supplemental O₂, and notify the provider about weight gain and desaturation. The provider will likely order IV furosemide. Prepare to monitor I&O, electrolytes, and response to diuresis.'
+  },
+  {
+    case: 'A patient on digoxin reports seeing yellow halos around lights and feels nauseated. HR is 52. What is the framework for thinking through this question?',
+    framework: '1. Perfusion decreased? → HR 52 = yes, bradycardia. 2. O₂ impaired? → Not primarily. 3. Clotting/bleeding? → No. 4. Med safety issue? → YES — digoxin toxicity symptoms.',
+    answer: 'Hold digoxin immediately — do NOT give the next dose. Check serum digoxin level and potassium (hypokalemia increases toxicity). Notify provider. Monitor apical HR continuously. Antidote: Digibind (Digoxin immune Fab) for severe toxicity. Document all findings.'
+  }
+];
+
+function buildNclexCases() {
+  const container = document.getElementById('nclexCases');
+  nclexCases.forEach((nc, i) => {
+    const div = document.createElement('div');
+    div.style.marginBottom = '24px';
+    div.innerHTML = `<div style="background:rgba(255,255,255,0.04);border-radius:12px;padding:20px;margin-bottom:12px">
+      <div style="font-size:0.72rem;color:var(--mist);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Clinical Case ${i+1}</div>
+      <div style="font-size:0.95rem;line-height:1.75;color:var(--white)">${nc.case}</div>
+    </div>
+    <div style="background:rgba(243,156,18,0.08);border:1px solid rgba(243,156,18,0.2);border-radius:10px;padding:14px;margin-bottom:8px;font-size:0.82rem;color:var(--amber-light);line-height:1.7">
+      <strong>🎯 Framework Thinking:</strong><br>${nc.framework}
+    </div>
+    <div style="background:rgba(26,188,156,0.08);border:1px solid rgba(26,188,156,0.2);border-radius:10px;padding:14px;font-size:0.85rem;color:var(--cloud);line-height:1.75">
+      <strong style="color:var(--teal)">✅ Best Response:</strong><br>${nc.answer}
+    </div>`;
+    container.appendChild(div);
+  });
+}
+
+// ══════════════════════════════════════════
+// GAME TAB SWITCHING
+// ══════════════════════════════════════════
+function showGame(id) {
+  document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.game-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('game-'+id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+// CONFIDENCE CHECK
+// ══════════════════════════════════════════
+const confMessages = [
+  '',
+  '💡 No worries! Review the sections and come back. You\'ve got this!',
+  '📚 Good start. A few more read-throughs and you\'ll feel more solid.',
+  '👍 Getting there! Focus on the red flags and medication safety points.',
+  '⭐ Great job! You\'re building strong clinical reasoning skills.',
+  '🏆 You\'re ready! Excellent preparation — go ace that exam, Jacqueline!'
+];
+
+function rate(id, val, el) {
+  const stars = el.parentElement.querySelectorAll('.conf-star');
+  stars.forEach((s, i) => s.classList.toggle('lit', i < val));
+  document.getElementById(id+'-msg').textContent = confMessages[val];
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+buildMedCards();
+buildQuizQuestion();
+buildScenario();
+buildMatch();
+buildPriority();
+buildClot();
+buildLabCases();
+buildNclexCases();
+</script>
+</body>
+</html>
