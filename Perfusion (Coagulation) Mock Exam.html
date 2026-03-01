@@ -1,0 +1,2522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfusion & Coagulation — Mock Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d45;
+    --accent: #00e5c3;
+    --accent2: #0096ff;
+    --accent3: #ff5e8a;
+    --text: #e8edf8;
+    --muted: #6b7fa3;
+    --correct: #00c98d;
+    --incorrect: #ff4d6d;
+    --warning: #ffc94d;
+    --option-hover: #1e2d48;
+    --option-selected: #163450;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* EKG background animation */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,229,195,0.04) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(0,150,255,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* EKG SVG line at top */
+  .ekg-header {
+    width: 100%;
+    height: 60px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+  }
+
+  .ekg-header svg {
+    width: 200%;
+    height: 40px;
+    animation: ekg-scroll 6s linear infinite;
+  }
+
+  @keyframes ekg-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .header-overlay {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    background: linear-gradient(90deg, var(--surface) 0%, transparent 15%, transparent 85%, var(--surface) 100%);
+  }
+
+  .header-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .header-right {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .pulse-dot {
+    width: 8px; height: 8px;
+    background: var(--correct);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* Progress bar */
+  .progress-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.6rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .progress-bar-bg {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  .score-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* Main layout */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Question card */
+  .question-card {
+    display: none;
+    animation: fadeSlide 0.35s ease;
+  }
+
+  .question-card.active {
+    display: block;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .q-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .q-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .q-tag {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .tag-sata { color: var(--accent); border-color: var(--accent); background: rgba(0,229,195,0.08); }
+  .tag-mc { color: var(--accent2); border-color: var(--accent2); background: rgba(0,150,255,0.08); }
+  .tag-priority { color: var(--warning); border-color: var(--warning); background: rgba(255,201,77,0.08); }
+  .tag-case { color: var(--accent3); border-color: var(--accent3); background: rgba(255,94,138,0.08); }
+  .tag-pharm { color: #c77dff; border-color: #c77dff; background: rgba(199,125,255,0.08); }
+  .tag-matrix { color: #ff9966; border-color: #ff9966; background: rgba(255,153,102,0.08); }
+
+  /* Case study box */
+  .case-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent3);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.7;
+  }
+
+  .case-box-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent3);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .case-box strong { color: var(--warning); }
+
+  /* Question text */
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 1.6rem;
+  }
+
+  .q-text em { color: var(--accent); font-style: normal; font-weight: 600; }
+
+  /* Answer options */
+  .options { display: flex; flex-direction: column; gap: 0.7rem; margin-bottom: 1.8rem; }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    position: relative;
+  }
+
+  .option:hover {
+    border-color: var(--accent2);
+    background: var(--option-hover);
+    transform: translateX(3px);
+  }
+
+  .option.selected {
+    border-color: var(--accent2);
+    background: var(--option-selected);
+  }
+
+  .option.correct {
+    border-color: var(--correct) !important;
+    background: rgba(0,201,141,0.12) !important;
+  }
+
+  .option.incorrect {
+    border-color: var(--incorrect) !important;
+    background: rgba(255,77,109,0.1) !important;
+  }
+
+  .option.revealed-correct {
+    border-color: var(--correct);
+    background: rgba(0,201,141,0.07);
+  }
+
+  .option-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 22px;
+    padding-top: 1px;
+    transition: color 0.2s;
+  }
+
+  .option:hover .option-letter { color: var(--accent); }
+  .option.correct .option-letter { color: var(--correct); }
+  .option.incorrect .option-letter { color: var(--incorrect); }
+
+  .option-text {
+    font-size: 0.93rem;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .option-icon {
+    margin-left: auto;
+    font-size: 1rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .option.correct .option-icon, .option.incorrect .option-icon, .option.revealed-correct .option-icon {
+    opacity: 1;
+  }
+
+  /* SATA checkboxes */
+  .sata-check {
+    width: 18px; height: 18px;
+    border: 2px solid var(--muted);
+    border-radius: 4px;
+    min-width: 18px;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .option.selected .sata-check {
+    border-color: var(--accent2);
+    background: var(--accent2);
+  }
+
+  .option.correct .sata-check { border-color: var(--correct); background: var(--correct); }
+  .option.incorrect .sata-check { border-color: var(--incorrect); background: rgba(255,77,109,0.2); }
+  .option.revealed-correct .sata-check { border-color: var(--correct); background: rgba(0,201,141,0.3); }
+
+  /* Matrix table */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+  }
+
+  .matrix-table th {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.7rem 1rem;
+    text-align: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .matrix-table td {
+    border: 1px solid var(--border);
+    padding: 0.7rem 1rem;
+    vertical-align: middle;
+  }
+
+  .matrix-table tr:nth-child(even) td { background: rgba(26,34,53,0.5); }
+
+  .matrix-radio {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .matrix-radio label {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  .matrix-radio label:hover { border-color: var(--accent2); background: var(--option-hover); }
+  .matrix-radio input[type="radio"] { accent-color: var(--accent2); }
+
+  /* Submit buttons */
+  .btn-row {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 0.7rem 1.6rem;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-submit {
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    color: #000;
+    box-shadow: 0 4px 20px rgba(0,229,195,0.25);
+  }
+
+  .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,229,195,0.35); }
+  .btn-submit:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-next {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-next:hover { border-color: var(--accent2); background: var(--option-hover); }
+
+  .btn-nav {
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    font-size: 0.82rem;
+  }
+
+  .btn-nav:hover { color: var(--text); border-color: var(--muted); }
+
+  /* Rationale box */
+  .rationale-box {
+    display: none;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.2rem 1.4rem;
+    margin-top: 1.2rem;
+    animation: fadeSlide 0.3s ease;
+  }
+
+  .rationale-box.show { display: block; }
+
+  .rationale-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .rationale-body {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: #b8c5df;
+  }
+
+  .rationale-body strong { color: var(--text); }
+  .rationale-body .wrong-note { color: var(--muted); font-size: 0.83rem; margin-top: 0.5rem; }
+
+  /* Popup overlay */
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .popup-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .popup-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    max-width: 380px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .popup-overlay.show .popup-card { transform: scale(1); }
+
+  .popup-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .popup-card.correct-popup::before { background: linear-gradient(90deg, var(--correct), var(--accent)); }
+  .popup-card.incorrect-popup::before { background: linear-gradient(90deg, var(--incorrect), var(--accent3)); }
+
+  .popup-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+
+  .popup-heading {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .popup-card.correct-popup .popup-heading { color: var(--correct); }
+  .popup-card.incorrect-popup .popup-heading { color: var(--incorrect); }
+
+  .popup-sub {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+  }
+
+  .btn-popup {
+    padding: 0.6rem 1.8rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .popup-card.correct-popup .btn-popup { background: var(--correct); color: #000; }
+  .popup-card.incorrect-popup .btn-popup { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+
+  /* Results screen */
+  #results-screen {
+    display: none;
+    animation: fadeSlide 0.5s ease;
+  }
+
+  .results-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .results-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .score-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem auto;
+    box-shadow: 0 0 40px rgba(0,229,195,0.2);
+  }
+
+  .score-pct {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .score-frac {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .score-msg {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 2rem;
+  }
+
+  .btn-restart {
+    padding: 0.8rem 2.5rem;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+  }
+
+  .btn-restart:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(0,229,195,0.3); }
+
+  /* Navigation dots */
+  .nav-dots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .nav-dot {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .nav-dot:hover { border-color: var(--accent2); color: var(--accent2); }
+  .nav-dot.current { border-color: var(--accent2); background: rgba(0,150,255,0.15); color: var(--accent2); }
+  .nav-dot.answered-correct { border-color: var(--correct); background: rgba(0,201,141,0.15); color: var(--correct); }
+  .nav-dot.answered-wrong { border-color: var(--incorrect); background: rgba(255,77,109,0.12); color: var(--incorrect); }
+
+  /* Responsive */
+  @media (max-width: 600px) {
+    .main { padding: 1.5rem 1rem 3rem; }
+    .q-text { font-size: 0.97rem; }
+    .option { padding: 0.8rem 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- EKG Header -->
+<div class="ekg-header">
+  <svg viewBox="0 0 800 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <polyline points="0,20 40,20 50,20 55,5 60,35 65,5 70,35 75,20 90,20 100,20 105,20 108,10 112,30 115,10 118,30 120,20 140,20 160,20 165,5 170,35 175,5 180,35 185,20 200,20 220,20 225,10 228,30 231,10 234,30 236,20 260,20 270,20 275,5 280,35 285,5 290,35 295,20 310,20 330,20 335,10 338,30 341,10 344,30 346,20 370,20 380,20 385,5 390,35 395,5 400,35 405,20 420,20 440,20 445,10 448,30 451,10 454,30 456,20 480,20 490,20 495,5 500,35 505,5 510,35 515,20 530,20 550,20 555,10 558,30 561,10 564,30 566,20 590,20 600,20 605,5 610,35 615,5 620,35 625,20 640,20 660,20 665,10 668,30 671,10 674,30 676,20 700,20 710,20 715,5 720,35 725,5 730,35 735,20 750,20 770,20 775,10 778,30 781,10 784,30 786,20 800,20 810,20 815,5 820,35 825,5 830,35 835,20 850,20 870,20 875,10 878,30 881,10 884,30 886,20 910,20 920,20 925,5 930,35 935,5 940,35 945,20 960,20 980,20 985,10 988,30 991,10 994,30 996,20 1010,20 1020,20 1025,5 1030,35 1035,5 1040,35 1045,20 1060,20 1080,20 1085,10 1088,30 1091,10 1094,30 1096,20 1110,20 1130,20 1135,5 1140,35 1145,5 1150,35 1155,20 1170,20 1190,20 1195,10 1198,30 1201,10 1204,30 1206,20 1230,20 1240,20 1245,5 1250,35 1255,5 1260,35 1265,20 1280,20 1300,20 1305,10 1308,30 1311,10 1314,30 1316,20 1340,20 1350,20 1355,5 1360,35 1365,5 1370,35 1375,20 1390,20 1400,20 1405,10 1408,30 1411,10 1414,30 1416,20 1430,20 1450,20 1455,5 1460,35 1465,5 1470,35 1475,20 1490,20 1500,20 1505,10 1508,30 1511,10 1514,30 1516,20 1530,20 1550,20 1555,5 1560,35 1565,5 1570,35 1575,20 1590,20 1600,20" stroke="#00e5c3" stroke-width="1.5" stroke-linejoin="round"/>
+  </svg>
+  <div class="header-overlay">
+    <div class="header-title">Perfusion &amp; Coagulation — Mock Exam</div>
+    <div class="header-right">
+      <div class="pulse-dot"></div>
+      <span>PP2 · 60 Questions</span>
+    </div>
+  </div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-fill" style="width:1.67%"></div></div>
+  <div class="progress-label" id="progress-label">Q1 / 60</div>
+  <div class="score-label" id="score-label">Score: 0</div>
+</div>
+
+<!-- Main -->
+<div class="main" id="exam-container">
+
+<!-- ==============================
+     QUESTIONS
+     ============================== -->
+
+<!-- Q1 -->
+<div class="question-card active" id="q1" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 01</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">During the coagulation cascade, the intrinsic and extrinsic pathways converge at a common point. Which factor marks this convergence?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Factor VII</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Factor X</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Thrombin (Factor IIa)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Fibrinogen</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(1)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(2)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat1">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> The extrinsic (tissue factor) and intrinsic (contact activation) pathways converge at <strong>Factor X</strong>, forming the common pathway. The formula 3 + 7 = 10 helps recall that factors III and VII of the extrinsic pathway lead to Factor X. Factor VII is specific to the extrinsic pathway only. Thrombin (IIa) and fibrinogen are downstream products of the common pathway, not the convergence point itself.</div>
+  </div>
+</div>
+
+<!-- Q2 -->
+<div class="question-card" id="q2" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 02</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client is prescribed <em>heparin</em> for DVT treatment. Which laboratory value does the nurse monitor to evaluate therapeutic effectiveness?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">INR 2.0–3.0</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Platelet count > 150,000/mm³</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">aPTT 60–80 seconds (1.5–2× normal)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Factor Xa level within 0.5–1.0 IU/mL</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(2)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(1)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(3)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat2">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> Heparin therapy is monitored with the <strong>aPTT</strong>. The therapeutic range is <strong>60–80 seconds</strong>, which represents 1.5–2× the normal value of ~40 seconds. aPTT is monitored every 4–6 hours during therapy. INR monitors warfarin, not heparin. Factor Xa levels monitor LMWH (enoxaparin), not unfractionated heparin. Platelet count is monitored for HIT but does not indicate anticoagulant effectiveness.</div>
+  </div>
+</div>
+
+<!-- Q3 -->
+<div class="question-card" id="q3" data-type="priority" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 03</span>
+    <span class="q-tag tag-priority">Priority</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario</div>
+    A client receiving IV heparin for PE treatment has the following findings: <strong>BP 110/70 mmHg, HR 88 bpm, aPTT 180 seconds</strong>, a new ecchymotic area on the abdomen, and the client reports a headache rated 7/10.
+  </div>
+  <div class="q-text">What is the nurse's <em>FIRST</em> priority action?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Apply ice pack to the ecchymotic site</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Reduce the heparin infusion rate by half</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Discontinue the heparin infusion and notify the provider immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Administer acetaminophen for the headache and recheck aPTT in 4 hours</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(3)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(2)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(4)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat3">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> An aPTT of 180 seconds is <strong>supratherapeutic</strong> (therapeutic is 60–80 sec). Combined with a new headache and ecchymosis, this picture suggests <strong>active bleeding, potentially intracranial</strong>. The nurse must stop the heparin immediately and notify the provider so that protamine sulfate (the antidote) can be ordered. Simply reducing the rate (B) is too slow a response for a supratherapeutic level with bleeding signs. Ice pack (A) and acetaminophen (D) do not address the root emergency of heparin toxicity.</div>
+  </div>
+</div>
+
+<!-- Q4 -->
+<div class="question-card" id="q4" data-type="sata" data-correct="a,c,d,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 04</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A nurse is providing discharge teaching to a client newly prescribed <em>warfarin</em>. Which statements by the nurse are appropriate? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q4">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Use a soft-bristle toothbrush and an electric razor to reduce bleeding risk</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">You may take ibuprofen freely since it does not interact with warfarin</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Wear a medical alert bracelet at all times</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Report any red, pink, or dark brown urine immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Notify your surgeon or dentist that you are taking warfarin before any procedures</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(4)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(3)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(5)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat4">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, C, D, E are correct.</strong> Warfarin increases bleeding risk, so soft toothbrushes and electric razors reduce trauma. A medical alert bracelet alerts emergency providers. Discolored urine suggests blood loss and requires immediate reporting. Surgeons/dentists must be notified to plan anticoagulation management perioperatively. <strong>B is incorrect:</strong> NSAIDs like ibuprofen significantly increase bleeding risk and have drug-drug interactions with warfarin — they are contraindicated or require close monitoring.</div>
+  </div>
+</div>
+
+<!-- Q5 -->
+<div class="question-card" id="q5" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 05</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client's warfarin dose was increased two weeks ago. Today the INR is <em>4.8</em>. Which medication should the nurse anticipate administering?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Protamine sulfate IV</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Vitamin K</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Idarucizumab (Praxbind)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Aminocaproic acid</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(5)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(4)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(6)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat5">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> <strong>Vitamin K</strong> is the antidote for warfarin overdose. It replaces the vitamin K that warfarin has suppressed, restoring production of clotting factors VII, IX, X, and prothrombin. An INR of 4.8 is above the therapeutic range (2.0–3.0 for most; 2.5–3.5 for high-risk patients), indicating over-anticoagulation. Protamine sulfate (A) reverses heparin, not warfarin. Idarucizumab (C) reverses dabigatran. Aminocaproic acid (D) is the antidote for alteplase (fibrinolytic overdose).</div>
+  </div>
+</div>
+
+<!-- Q6 -->
+<div class="question-card" id="q6" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 06</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client is prescribed <em>enoxaparin (Lovenox)</em>. Which instruction is correct regarding subcutaneous administration?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Inject at a 90-degree angle into the deltoid muscle</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Express the air bubble before injection to ensure accurate dosing</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Massage the injection site vigorously after administration</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Inject at a 45-degree angle into abdominal subcutaneous tissue; do not express the air bubble</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(6)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(5)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(7)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat6">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> Enoxaparin is given subcutaneously at a <strong>45-degree angle</strong> into the abdomen (alternating sides). The air bubble should <strong>NOT be expelled</strong> before injection, as it helps prevent medication loss and hematoma. The deltoid is an IM site, not appropriate here. Massaging the site can cause hematoma formation and should be avoided. The 90-degree angle is used for IM injections or insulin in some areas.</div>
+  </div>
+</div>
+
+<!-- Q7 -->
+<div class="question-card" id="q7" data-type="priority" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 07</span>
+    <span class="q-tag tag-priority">Priority / Triage</span>
+  </div>
+  <div class="q-text">The nurse is caring for four clients. Which client requires assessment <em>FIRST</em>?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">A client on heparin infusion who reports a sudden severe headache and has a platelet count of 48,000/mm³</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">A client on warfarin with an INR of 3.1 who had a small epistaxis episode that resolved</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">A client on enoxaparin asking about when to take the next dose</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">A client on clopidogrel with a hemoglobin of 11.5 g/dL (baseline 11.8 g/dL)</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(7)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(6)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(8)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat7">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> This client has two critical red flags: a <strong>sudden severe headache</strong> (possible intracranial bleed — neurological emergency) and a platelet count of <strong>48,000/mm³</strong>, which is below the critical threshold of 100,000 and strongly suggests <strong>Heparin-Induced Thrombocytopenia (HIT)</strong>. HIT with active heparin administration is life-threatening. The heparin must be stopped immediately. Client B has a slightly elevated INR but stable bleeding. Client C is stable with a routine question. Client D shows minimal hemoglobin drop.</div>
+  </div>
+</div>
+
+<!-- Q8 -->
+<div class="question-card" id="q8" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 08</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client with <em>atrial fibrillation</em> is started on <em>dabigatran (Pradaxa)</em>. The nurse understands that the primary mechanism of this medication is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Direct inhibition of Factor Xa</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Direct inhibition of thrombin</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Enhancement of antithrombin activity</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Vitamin K antagonism</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(8)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(7)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(9)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat8">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Dabigatran (Pradaxa) is a <strong>direct thrombin inhibitor</strong>. Its antidote is idarucizumab (Praxbind). Remember: <strong>D</strong>abigatran → <strong>D</strong>irect thrombin inhibitor. Factor Xa inhibitors include apixaban (Eliquis) and rivaroxaban (Xarelto) — their antidote is andexanet alfa. Heparin works by enhancing antithrombin. Warfarin is the vitamin K antagonist.</div>
+  </div>
+</div>
+
+<!-- Q9 -->
+<div class="question-card" id="q9" data-type="sata" data-correct="b,c,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 09</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A client is being discharged on <em>apixaban (Eliquis)</em> for DVT prevention after knee replacement surgery. Which instructions should the nurse include? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q9">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Your INR must be checked weekly to ensure therapeutic levels</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">Do not stop this medication without guidance from your provider</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Report any unusual bruising, blood in urine, or dark tarry stools immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Aspirin can be taken freely with apixaban as it has no interaction</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Inform your dentist and any other providers that you take a blood thinner</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(9)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(8)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(10)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat9">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B, C, E are correct.</strong> DOACs like apixaban do NOT require routine INR monitoring (A is incorrect) — this is a major advantage over warfarin. Stopping DOACs abruptly can cause rebound clotting, so provider guidance is essential. Signs of bleeding must be reported promptly. Concurrent aspirin increases hemorrhage risk significantly (D is incorrect). All healthcare providers should know about anticoagulation for procedural planning.</div>
+  </div>
+</div>
+
+<!-- Q10 -->
+<div class="question-card" id="q10" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 10</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client receiving heparin develops a platelet count drop from 280,000 to 72,000/mm³ over 8 days and is now reporting new leg pain. The nurse suspects <em>Heparin-Induced Thrombocytopenia (HIT)</em>. Which action is the priority?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Increase the heparin dose to maintain therapeutic aPTT since the clot is worsening</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Administer protamine sulfate immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Discontinue all heparin products immediately and notify the provider</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Monitor the platelet count daily and reassess if it drops below 50,000</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(10)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(9)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(11)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat10">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> HIT is a paradoxical prothrombotic disorder caused by heparin. Despite thrombocytopenia, the client is at HIGH risk for thrombosis. All heparin products (including flushes and LMWH) must be <strong>immediately discontinued</strong>. Increasing heparin (A) is dangerous and contraindicated. Protamine sulfate (B) reverses heparin anticoagulation but does not treat HIT's thrombotic component. Watchful waiting (D) is inappropriate given active new symptoms of thrombosis.</div>
+  </div>
+</div>
+
+<!-- Q11 -->
+<div class="question-card" id="q11" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 11</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client asks why they received <em>heparin</em> during pregnancy for DVT rather than warfarin. The nurse's best response is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Heparin does not cross the placental barrier, making it safe for use in pregnancy</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Warfarin has a shorter half-life and is harder to monitor during pregnancy</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Heparin has a longer therapeutic window and requires less frequent dosing</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Warfarin is contraindicated only in the third trimester of pregnancy</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(11)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(10)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(12)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat11">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> Heparin is a large molecule that <strong>does not cross the placenta</strong>, making it the preferred anticoagulant during pregnancy. Warfarin is <strong>teratogenic</strong> (causes birth defects) and is contraindicated throughout pregnancy, not just in the third trimester. Heparin actually has a short half-life (~1.5 hours) — not longer. Warfarin has a half-life of 6 hours to 2.5 days.</div>
+  </div>
+</div>
+
+<!-- Q12 -->
+<div class="question-card" id="q12" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 12</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A nurse is preparing to administer the heparin antidote <em>protamine sulfate</em>. Which administration principle is essential to prevent adverse effects?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Administer as a rapid IV bolus for maximum effectiveness</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Give IM in the gluteal muscle and massage well after injection</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Dose is 100 mg protamine per 1 unit of heparin in the body</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Administer by slow IV injection at no faster than 20 mg/min or 50 mg in 10 minutes</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(12)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(11)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(13)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat12">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> Protamine sulfate must be given as a <strong>slow IV injection</strong>, no faster than 20 mg/min or 50 mg over 10 minutes. Rapid infusion causes hypotension, bradycardia, and cardiovascular collapse. The dosing ratio is 1 mg protamine per 100 units of heparin (not 100 mg per 1 unit as in C — that is inverted). It must be given IV, not IM. Rapid bolus (A) is dangerous.</div>
+  </div>
+</div>
+
+<!-- Q13 -->
+<div class="question-card" id="q13" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 13</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">Aspirin exerts its antiplatelet effect primarily by:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Irreversibly blocking P2Y12 ADP receptors on platelets</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Irreversibly inhibiting cyclooxygenase (COX), blocking synthesis of thromboxane A2 (TXA2)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Directly inhibiting thrombin formation in the coagulation cascade</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Activating antithrombin to inactivate Factor Xa</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(13)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(12)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(14)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat13">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Aspirin's antiplatelet effect comes from <strong>irreversible COX inhibition</strong>, which prevents synthesis of <strong>TXA2 (thromboxane A2)</strong> — a potent platelet activator and vasoconstrictor. Since platelets cannot synthesize new COX, this effect lasts the lifetime of the platelet (~7–10 days). Option A describes clopidogrel's mechanism. Options C and D describe mechanisms of DOACs and heparin/LMWH, respectively.</div>
+  </div>
+</div>
+
+<!-- Q14 -->
+<div class="question-card" id="q14" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 14</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client is prescribed <em>clopidogrel (Plavix)</em> after coronary stent placement. Two weeks into therapy, the client develops a purpuric rash, fever, confusion, and lab results show low platelets and elevated creatinine. The nurse recognizes this as:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Heparin-induced thrombocytopenia (HIT)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Warfarin-associated coagulopathy</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Thrombotic thrombocytopenic purpura (TTP)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Disseminated intravascular coagulation (DIC)</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(14)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(13)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(15)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat14">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> Clopidogrel is associated with <strong>TTP</strong> during the first 2 weeks of therapy. The classic pentad of TTP includes: thrombocytopenia, microangiopathic hemolytic anemia, neurological symptoms (confusion), renal impairment (elevated creatinine), and fever. Nurses must monitor for TTP in the first 2 weeks. HIT is caused by heparin, not clopidogrel. Warfarin coagulopathy would present differently. DIC involves consumption of all clotting factors systemically.</div>
+  </div>
+</div>
+
+<!-- Q15 -->
+<div class="question-card" id="q15" data-type="case" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 15</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario — STEMI</div>
+    A 58-year-old male presents to the ED with crushing chest pain radiating to the left arm for 90 minutes. Diaphoresis noted. ECG shows ST elevation in leads II, III, aVF. BP 134/82, HR 102. The provider orders <strong>alteplase (tPA)</strong>.
+  </div>
+  <div class="q-text">Prior to alteplase administration, the nurse reviews the client's history. Which finding is a <em>contraindication</em> to fibrinolytic therapy?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">History of appendectomy 3 years ago</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">History of hemorrhagic stroke 6 months ago</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Current aspirin use for chronic stable angina</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Age 58 with a history of hypertension</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(15)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(14)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(16)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat15">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> A <strong>recent history of hemorrhagic stroke</strong> is an absolute contraindication to fibrinolytic therapy. Alteplase converts plasminogen to plasmin, which dissolves clots — but in a client with a prior intracranial bleed, this could cause catastrophic rebleeding into the brain. A remote appendectomy (A) is not a contraindication. Current aspirin use (C) is actually part of standard STEMI co-therapy. Age and treated hypertension (D) are not contraindications, though severe uncontrolled hypertension would be.</div>
+  </div>
+</div>
+
+<!-- Q16 -->
+<div class="question-card" id="q16" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 16</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">During alteplase infusion for an acute ischemic stroke, the nurse notes the client is now unresponsive with fixed dilated pupils. Which action should the nurse take <em>FIRST</em>?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Stop the alteplase infusion immediately and notify the provider</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Increase the infusion rate to ensure full dose delivery</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Administer vitamin K IV to reverse the fibrinolytic</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Reposition the client and obtain a repeat neurological exam in 30 minutes</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(16)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(15)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(17)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat16">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> Sudden neurological deterioration during tPA infusion — especially unresponsiveness with fixed/dilated pupils — signals <strong>intracranial hemorrhage</strong>, the most feared complication of fibrinolytic therapy. The infusion must be stopped <strong>immediately</strong>, and the provider notified for emergent CT scan and administration of the antidote: <strong>IV aminocaproic acid</strong>. Increasing the rate (B) would worsen the hemorrhage. Vitamin K (C) reverses warfarin, not alteplase. Waiting 30 minutes (D) is dangerously delayed for a neurological emergency.</div>
+  </div>
+</div>
+
+<!-- Q17 -->
+<div class="question-card" id="q17" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 17</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">Warfarin's mechanism of action suppresses the production of clotting factors. Which set of clotting factors does warfarin affect?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Factors I, II, V, and VIII</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Factors II, V, VII, and X</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Factors II (prothrombin), VII, IX, and X — the vitamin K–dependent factors</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Factors X, XI, XII, and XIII</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(17)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(16)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(18)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat17">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> Warfarin (a vitamin K antagonist) suppresses production of the four <strong>vitamin K–dependent clotting factors: II (prothrombin), VII, IX, and X</strong>. A classic mnemonic is <strong>1972</strong> (factors 1, 9, 7, 2) or simply remembering "Warfarin Works on Vitamin K factors." All others require vitamin K for their synthesis in the liver. Factors I, V, VIII, XI, XII, XIII are not vitamin K–dependent.</div>
+  </div>
+</div>
+
+<!-- Q18 -->
+<div class="question-card" id="q18" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 18</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client has been on warfarin for 3 months for atrial fibrillation. Today's INR is <em>1.4</em>. The nurse anticipates the provider will:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Administer vitamin K to reduce the INR further</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Hold the warfarin dose and repeat INR in 24 hours</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Discontinue warfarin and switch to enoxaparin</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Increase the warfarin dose since the INR is below the therapeutic range of 2.0–3.0</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(18)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(17)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(19)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat18">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> An INR of 1.4 is <strong>sub-therapeutic</strong> — below the target range of 2.0–3.0 for most patients on warfarin (including those with AFib). A sub-therapeutic INR means insufficient anticoagulation and increased stroke/thrombus risk. The provider will increase the warfarin dose. Vitamin K (A) would further lower the INR (worsening under-anticoagulation). Holding warfarin (B) would also worsen the problem. Switching to enoxaparin (C) is not indicated for chronic AFib management.</div>
+  </div>
+</div>
+
+<!-- Q19 -->
+<div class="question-card" id="q19" data-type="sata" data-correct="a,b,d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 19</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A nurse is monitoring a client on heparin infusion for signs of bleeding. Which findings require the nurse to notify the provider? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q19">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Guaiac-positive black, tarry stool</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">New onset of lumbar pain and hematuria</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">aPTT of 68 seconds</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">New petechiae on the abdomen and sudden severe headache</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Mild soreness at the peripheral IV site</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(19)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(18)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(20)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat19">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, B, D are correct.</strong> Black tarry stool indicates GI bleeding. Lumbar pain + hematuria suggests retroperitoneal or renal bleeding. New petechiae + sudden severe headache raises concern for intracranial hemorrhage — a neurological emergency. These require immediate provider notification. <strong>C (aPTT 68)</strong> is within therapeutic range (60–80 sec) — no action needed. <strong>E (IV site soreness)</strong> is a routine finding unrelated to systemic anticoagulant-related bleeding.</div>
+  </div>
+</div>
+
+<!-- Q20 -->
+<div class="question-card" id="q20" data-type="matrix">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 20</span>
+    <span class="q-tag tag-matrix">Matrix / Chart</span>
+  </div>
+  <div class="q-text">For each nursing action, indicate whether it is <em>appropriate</em> or <em>contraindicated</em> for a client receiving enoxaparin (LMWH) at home.</div>
+  <table class="matrix-table">
+    <tr>
+      <th style="text-align:left">Nursing Action</th>
+      <th>Appropriate</th>
+      <th>Contraindicated</th>
+    </tr>
+    <tr>
+      <td>Administer via IM injection into the deltoid</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20a" value="a"> Yes</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20a" value="b"> No</label></div></td>
+    </tr>
+    <tr>
+      <td>Rotate injection sites between left and right abdomen</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20b" value="a"> Yes</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20b" value="b"> No</label></div></td>
+    </tr>
+    <tr>
+      <td>Squeeze air bubble from prefilled syringe before injecting</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20c" value="a"> Yes</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20c" value="b"> No</label></div></td>
+    </tr>
+    <tr>
+      <td>Monitor aPTT levels daily to adjust dose</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20d" value="a"> Yes</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m20d" value="b"> No</label></div></td>
+    </tr>
+  </table>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMatrix(20)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(19)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(21)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat20">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>Correct answers:</strong> IM injection = <strong>Contraindicated</strong> (SQ only). Rotating abdominal sites = <strong>Appropriate</strong>. Squeezing air bubble = <strong>Contraindicated</strong> (do NOT express the air bubble). Monitoring aPTT = <strong>Contraindicated / Not required</strong> — unlike UFH, LMWH uses fixed dosing and does NOT require aPTT monitoring for dose adjustment.</div>
+  </div>
+</div>
+
+<!-- Q21 -->
+<div class="question-card" id="q21" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 21</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client prescribed <em>rivaroxaban (Xarelto)</em> for DVT treatment develops uncontrolled bleeding after a fall. Which antidote is indicated?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Protamine sulfate</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Andexanet alfa (Andexxa)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Idarucizumab (Praxbind)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Vitamin K</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(21)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(20)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(22)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat21">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Rivaroxaban is a direct Factor Xa inhibitor. Its antidote is <strong>andexanet alfa (Andexxa)</strong>, which binds and neutralizes Factor Xa inhibitors (apixaban and rivaroxaban). Idarucizumab (C) reverses dabigatran only. Protamine sulfate (A) reverses heparin. Vitamin K (D) reverses warfarin. Remember: <strong>Factor Xa inhibitors → Andexanet alfa; Dabigatran (thrombin inhibitor) → Idarucizumab</strong>.</div>
+  </div>
+</div>
+
+<!-- Q22 -->
+<div class="question-card" id="q22" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 22</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A nurse is preparing to administer <em>alteplase</em> for an acute ischemic stroke. The stroke onset was confirmed at <em>5 hours ago</em>. Which action should the nurse take?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Administer as ordered — the window for ischemic stroke is up to 24 hours</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Administer the medication and also start heparin simultaneously</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Hold the medication and notify the provider — alteplase for stroke should ideally be given within 4.5 hours of onset</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Administer at half dose since the window has partially closed</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(22)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(21)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(23)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat22">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> For ischemic stroke, alteplase is ideally given within <strong>4.5 hours</strong> of symptom onset; some guidelines allow up to 3–4.5 hours in select patients. At 5 hours, the window has closed for most patients and the risk of intracranial hemorrhage outweighs benefit. The nurse should hold and clarify with the provider. For MI, the window is up to 12 hours. The 24-hour window (A) applies to STEMI in some protocols, not ischemic stroke. Simultaneous heparin (B) is contraindicated with fibrinolytics. Half-dose (D) is not an evidence-based approach in this context.</div>
+  </div>
+</div>
+
+<!-- Q23 -->
+<div class="question-card" id="q23" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 23</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with a <em>mechanical heart valve</em> asks whether they can switch from warfarin to a DOAC. The nurse's best response is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Yes — DOACs are preferred in all valve conditions because they don't require monitoring</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Yes — you can switch to dabigatran since it is superior for valve protection</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Yes — rivaroxaban is specifically approved for mechanical heart valves</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">No — warfarin is still the standard of care for mechanical heart valve patients; DOACs are not approved for this indication</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(23)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(22)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(24)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat23">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> Warfarin remains the <strong>standard of care for mechanical heart valves</strong>. DOACs are not approved for this indication — in fact, the RE-ALIGN trial showed that dabigatran caused more strokes and bleeding in mechanical valve patients compared to warfarin. Warfarin's target INR for prosthetic valves is typically 2.5–3.5 (higher than standard). DOACs ARE used for AFib, DVT, and PE prevention, but not for mechanical valves.</div>
+  </div>
+</div>
+
+<!-- Q24 -->
+<div class="question-card" id="q24" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 24</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">During Stage 1 of hemostasis, platelet plug formation requires activation of which receptor to bind fibrinogen and enable platelet aggregation?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Glycoprotein IIb/IIIa receptor</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">P2Y12 ADP receptor</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">COX-1 receptor</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Antithrombin III receptor</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(24)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(23)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(25)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat24">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> The <strong>glycoprotein IIb/IIIa receptor</strong> undergoes activation (triggered by thrombin, collagen, TXA2, PAF, and ADP), then changes its shape to bind fibrinogen, creating cross-links between platelets and enabling aggregation — the platelet plug. P2Y12 is the ADP receptor blocked by clopidogrel. COX-1 is the enzyme inhibited by aspirin. Antithrombin III is a clotting inhibitor — not a receptor on platelets.</div>
+  </div>
+</div>
+
+<!-- Q25 -->
+<div class="question-card" id="q25" data-type="case" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 25</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario — DVT / PE</div>
+    A 42-year-old woman, 3 days post-hip replacement surgery, develops sudden onset dyspnea, pleuritic chest pain, and tachycardia (HR 118). SpO₂ 90% on room air. <strong>CT pulmonary angiography confirms bilateral pulmonary emboli.</strong>
+  </div>
+  <div class="q-text">The provider initiates anticoagulation therapy. Which <em>initial</em> treatment is most appropriate?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Start oral warfarin immediately and titrate to INR 2.0–3.0</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Initiate IV unfractionated heparin or LMWH for rapid anticoagulation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Administer aspirin 325 mg immediately for antiplatelet coverage</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Start clopidogrel as first-line therapy for PE prevention</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(25)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(24)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(26)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat25">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> For acute PE, <strong>heparin (IV UFH or SQ LMWH)</strong> is the first-line treatment due to its rapid onset. Warfarin (A) has a delayed onset of 3–5 days and must overlap with heparin for at least 5 days and until INR is therapeutic for 2 consecutive days. Aspirin (C) and clopidogrel (D) are antiplatelets — they do not treat established venous thromboembolism (PE/DVT). PE is caused by fibrin-rich clot (venous), not platelet-rich arterial clot.</div>
+  </div>
+</div>
+
+<!-- Q26 -->
+<div class="question-card" id="q26" data-type="sata" data-correct="a,c,d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 26</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A client taking <em>clopidogrel</em> after MI asks about important teaching. Which statements by the nurse are correct? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q26">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Do not stop this medication unless instructed by your provider — stopping suddenly after a stent increases your risk of re-occlusion</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">You can take ibuprofen alongside clopidogrel as they have no interaction</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Monitor for unusual bruising, blood in your stool, or prolonged bleeding from small cuts</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Inform your dentist and other healthcare providers that you take this medication before any procedures</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">This medication cures your artery disease permanently after 30 days of use</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(26)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(25)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(27)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat26">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, C, D are correct.</strong> Stopping clopidogrel abruptly after coronary stenting risks acute stent thrombosis. Bleeding precautions are essential. All providers need to know before invasive procedures. <strong>B is incorrect:</strong> NSAIDs increase bleeding risk significantly when combined with antiplatelets. <strong>E is incorrect:</strong> Clopidogrel prevents platelet aggregation but does not cure atherosclerosis — it is ongoing secondary prevention therapy.</div>
+  </div>
+</div>
+
+<!-- Q27 -->
+<div class="question-card" id="q27" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 27</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with a PE is prescribed <em>alteplase</em>. During administration, the nurse should minimize which activities to reduce bleeding risk?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Oral fluid intake and ambulation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">ECG monitoring and oxygen delivery</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Physical manipulation of the patient, IM/SQ injections, and invasive procedures</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">IV fluid administration and cardiac monitoring</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(27)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(26)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(28)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat27">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> During fibrinolytic therapy with alteplase, the nurse must minimize: (1) <strong>physical manipulation</strong> of the patient, (2) <strong>SQ and IM injections</strong> (which create bleeding points), and (3) <strong>invasive procedures</strong> such as arterial lines, bladder catheterization, or central lines unless absolutely necessary. ECG monitoring, oxygen, and IV fluids are essential and non-negotiable. Oral intake restrictions are not typically related to bleeding risk in this context.</div>
+  </div>
+</div>
+
+<!-- Q28 -->
+<div class="question-card" id="q28" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 28</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client asks why they cannot take their warfarin with spinach or kale every day. The nurse's BEST explanation is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Foods high in vitamin K like leafy greens can decrease warfarin's anticoagulant effectiveness by competing with its mechanism</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Leafy greens interact with warfarin by increasing platelet aggregation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Vitamin K foods should be completely avoided forever while on warfarin</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Green vegetables increase the metabolism of warfarin, reducing its half-life to less than 1 hour</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(28)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(27)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(29)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat28">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> Warfarin works by <strong>blocking vitamin K</strong> to suppress clotting factor synthesis. Foods high in vitamin K (leafy greens: spinach, kale, broccoli) provide exogenous vitamin K that can <strong>counteract warfarin's effect</strong>, raising clotting risk. Importantly, clients do NOT need to completely avoid these foods — they should maintain a <strong>consistent</strong> dietary intake of vitamin K so INR remains predictable. Avoiding then suddenly eating spinach causes INR fluctuations. Option D is incorrect — warfarin's half-life is 6 hours to 2.5 days, not reduced by food.</div>
+  </div>
+</div>
+
+<!-- Q29 -->
+<div class="question-card" id="q29" data-type="priority" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 29</span>
+    <span class="q-tag tag-priority">Priority</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario</div>
+    A client on warfarin for AFib is scheduled for <strong>emergency cholecystectomy</strong> today. INR is 3.1. The surgical team is requesting the patient be taken to the OR in 2 hours.
+  </div>
+  <div class="q-text">Which action should the nurse anticipate the provider ordering?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Continue warfarin and proceed with surgery as scheduled</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Administer heparin to replace warfarin immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Administer idarucizumab to reverse anticoagulation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Administer vitamin K to reverse warfarin anticoagulation prior to emergency surgery</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(29)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(28)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(30)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat29">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> For a client on warfarin who needs emergency surgery, <strong>vitamin K</strong> is administered to reverse anticoagulation by restoring clotting factor production. This is listed explicitly in the warfarin nursing considerations: "Client taking warfarin who needs emergency surgery → vitamin K." The INR of 3.1 is above the safe surgical threshold. Continuing warfarin (A) risks massive surgical hemorrhage. Heparin (B) would worsen bleeding. Idarucizumab (C) reverses dabigatran, not warfarin.</div>
+  </div>
+</div>
+
+<!-- Q30 -->
+<div class="question-card" id="q30" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 30</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with a history of peptic ulcer disease (PUD) requires anticoagulation therapy for a new DVT. Which medication would be most concerning to administer?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Enoxaparin 40 mg subcutaneous daily</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Unfractionated heparin IV infusion</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Rivaroxaban oral daily</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Apixaban oral twice daily</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(30)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(29)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(31)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat30">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct — this question tests recognition of contraindications.</strong> PUD is listed as a contraindication for <strong>unfractionated heparin</strong> use. The inflamed, eroded gastric mucosa in PUD is at extremely high risk for GI hemorrhage when systemic anticoagulation is added. While all anticoagulants increase GI bleeding risk, heparin is explicitly contraindicated with PUD per the drug's nursing considerations. This is the most concerning choice in this scenario. DOACs and LMWH may be used with caution and close monitoring, but the contraindication is explicitly listed for unfractionated heparin.</div>
+  </div>
+</div>
+
+<!-- Q31 -->
+<div class="question-card" id="q31" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 31</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client's platelet count drops from 310,000 to 62,000/mm³ after 7 days of heparin therapy. The nurse understands that HIT is different from regular thrombocytopenia because HIT causes:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Decreased clotting risk due to low platelet numbers</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Bone marrow suppression leading to pancytopenia</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">A paradoxical <em>increased</em> risk of thrombosis despite low platelets</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Activation of the extrinsic coagulation pathway only</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(31)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(30)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(32)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat31">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> HIT is paradoxical: the immune-mediated destruction of platelets releases platelet factor 4 (PF4), which activates the remaining platelets and generates thrombin — causing a <strong>prothrombotic state</strong>. Despite having low platelet counts, clients with HIT are at HIGH risk for DVT, PE, stroke, and limb ischemia, not bleeding. This is why heparin must be discontinued immediately and an alternative anticoagulant used. HIT does not cause pancytopenia (B) or specifically activate only the extrinsic pathway (D).</div>
+  </div>
+</div>
+
+<!-- Q32 -->
+<div class="question-card" id="q32" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 32</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client taking <em>warfarin</em> reports taking a new herbal supplement their neighbor recommended. Which statement by the client indicates a need for <em>immediate follow-up</em>?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">"I have been taking a daily multivitamin."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">"I started taking calcium and vitamin D supplements."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">"I started taking a fiber supplement."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">"I started taking high-dose fish oil and garlic tablets every day."</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(32)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(31)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(33)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat32">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> Warfarin has <strong>multiple drug-drug and drug-supplement interactions</strong>. High-dose <strong>fish oil (omega-3s)</strong> and <strong>garlic tablets</strong> both have antiplatelet and anticoagulant properties that can significantly potentiate warfarin's effect, raising the risk of hemorrhage. This requires immediate provider notification and INR recheck. A standard multivitamin (A) at normal doses is generally low risk. Calcium/vitamin D (B) and fiber (C) do not significantly interact with warfarin.</div>
+  </div>
+</div>
+
+<!-- Q33 -->
+<div class="question-card" id="q33" data-type="case" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 33</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario</div>
+    A 67-year-old client is being discharged home after hip replacement surgery on enoxaparin 40 mg SQ daily for DVT prophylaxis. The client has a history of type 2 diabetes, hypertension, and <strong>chronic kidney disease (CrCl 25 mL/min)</strong>.
+  </div>
+  <div class="q-text">Which finding is most important for the nurse to report to the provider before discharge?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">The client has a BMI of 32</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">The severely reduced creatinine clearance (CrCl 25 mL/min) indicating significant renal impairment</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">The client's HbA1c is 7.8%</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">The client is allergic to penicillin</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(33)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(32)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(34)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat33">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Enoxaparin (LMWH) is renally cleared. In clients with severe renal impairment (CrCl < 30 mL/min), the drug accumulates, dramatically increasing bleeding risk. The dose must be adjusted (typically reduced to once daily instead of twice daily, or a different agent selected). This requires provider clarification before discharge. Obesity (A) may require dose adjustment but CKD is the most critical concern here. HbA1c (C) relates to diabetes management. Penicillin allergy (D) is unrelated to enoxaparin.</div>
+  </div>
+</div>
+
+<!-- Q34 -->
+<div class="question-card" id="q34" data-type="sata" data-correct="a,b,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 34</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A client is started on aspirin therapy after a TIA. Which statements are correct regarding aspirin's use in this context? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q34">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Aspirin reduces the risk of death and nonfatal stroke in TIA patients</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">Aspirin irreversibly inhibits COX, so its antiplatelet effect lasts the lifetime of the platelet</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Aspirin is safe to take with NSAIDs because both reduce inflammation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Aspirin INR monitoring is required weekly</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">The client should report unusual bleeding, black stools, or coffee-ground emesis</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(34)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(33)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(35)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat34">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, B, E are correct.</strong> Aspirin is indicated for TIA to reduce stroke/death risk. Its COX inhibition is irreversible — lasting 7–10 days (platelet lifespan). GI bleeding signs must always be monitored. <strong>C is incorrect:</strong> NSAIDs can competitively inhibit aspirin's COX binding, reducing its cardioprotective effect; also increase GI bleeding risk. <strong>D is incorrect:</strong> Aspirin does not require INR monitoring — INR monitors warfarin. Aspirin has no effect on INR.</div>
+  </div>
+</div>
+
+<!-- Q35 -->
+<div class="question-card" id="q35" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 35</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with a newly diagnosed DVT asks the nurse: <em>"Why do I have to take both heparin and warfarin at the same time?"</em> The nurse's best response is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">"The two medications together are stronger than either one alone and prevent more clots."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">"Heparin is given until the DVT dissolves, then warfarin maintains blood thinning."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">"Warfarin takes 3–5 days to reach therapeutic levels, so heparin provides immediate anticoagulation during that bridge period."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">"Heparin prevents the DVT from worsening while warfarin dissolves the existing clot."</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(35)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(34)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(36)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat35">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> This is the concept of <strong>"bridging therapy."</strong> Warfarin requires 3–5 days to achieve therapeutic anticoagulation because it suppresses vitamin K–dependent clotting factors that must be naturally depleted. During this delay, heparin provides immediate, reliable anticoagulation. Once the INR is therapeutic (2.0–3.0) for ≥2 consecutive days and at least 5 days of overlap, heparin is discontinued. Neither medication dissolves the existing clot (D) — anticoagulants prevent clot growth and new clot formation; fibrinolytics dissolve clots.</div>
+  </div>
+</div>
+
+<!-- Q36 -->
+<div class="question-card" id="q36" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 36</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">Which client history is a contraindication to heparin therapy?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Hemophilia with a known dissecting aortic aneurysm</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">History of hypertension managed with lisinopril</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Pregnancy at 28 weeks gestation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">History of coronary artery disease post-stent 2 years ago</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(36)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(35)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(37)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat36">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> Heparin is contraindicated with <strong>bleeding disorders (hemophilia), dissecting aneurysm, increased capillary permeability, PUD, severe hypertension, and threatened abortion</strong>. A client with hemophilia and a dissecting aneurysm represents two absolute contraindications simultaneously — extremely high hemorrhagic risk. Controlled hypertension on medication (B) is not listed as a contraindication. Pregnancy (C) is actually a situation WHERE heparin is preferred over warfarin (it's safe in pregnancy). Post-stent CAD (D) may actually be an indication for anticoagulation, not a contraindication.</div>
+  </div>
+</div>
+
+<!-- Q37 -->
+<div class="question-card" id="q37" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 37</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">The nurse is evaluating whether a client's <em>heparin infusion</em> is producing the expected therapeutic response. Which finding best indicates effectiveness?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Platelet count remains above 150,000/mm³</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">aPTT of 72 seconds and no new signs of thrombus formation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">INR of 2.5</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Hemoglobin 13.8 g/dL with no bruising noted</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(37)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(36)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(38)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat37">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> The expected therapeutic response to heparin is: (1) <strong>aPTT within 60–80 seconds</strong> (1.5–2× normal), AND (2) <strong>no extension of existing clot or new thrombus formation</strong>. An aPTT of 72 falls squarely within the therapeutic window. Platelet count (A) monitors for HIT, not effectiveness. INR (C) monitors warfarin. Normal Hgb (D) suggests no bleeding (a safety parameter), but does not confirm anticoagulant effectiveness.</div>
+  </div>
+</div>
+
+<!-- Q38 -->
+<div class="question-card" id="q38" data-type="matrix">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 38</span>
+    <span class="q-tag tag-matrix">Matrix / Chart</span>
+  </div>
+  <div class="q-text">Match each anticoagulant with its correct antidote by indicating which column applies.</div>
+  <table class="matrix-table">
+    <tr>
+      <th style="text-align:left">Drug</th>
+      <th>Protamine Sulfate</th>
+      <th>Vitamin K</th>
+      <th>Idarucizumab</th>
+      <th>Andexanet Alfa</th>
+    </tr>
+    <tr>
+      <td>Heparin (UFH)</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38a" value="a"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38a" value="b"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38a" value="c"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38a" value="d"> ✓</label></div></td>
+    </tr>
+    <tr>
+      <td>Warfarin</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38b" value="a"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38b" value="b"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38b" value="c"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38b" value="d"> ✓</label></div></td>
+    </tr>
+    <tr>
+      <td>Dabigatran</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38c" value="a"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38c" value="b"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38c" value="c"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38c" value="d"> ✓</label></div></td>
+    </tr>
+    <tr>
+      <td>Apixaban / Rivaroxaban</td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38d" value="a"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38d" value="b"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38d" value="c"> ✓</label></div></td>
+      <td><div class="matrix-radio"><label><input type="radio" name="m38d" value="d"> ✓</label></div></td>
+    </tr>
+  </table>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMatrix(38)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(37)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(39)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat38">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>Correct answers:</strong> Heparin → <strong>Protamine Sulfate</strong>. Warfarin → <strong>Vitamin K</strong>. Dabigatran (direct thrombin inhibitor) → <strong>Idarucizumab (Praxbind)</strong>. Apixaban/Rivaroxaban (Factor Xa inhibitors) → <strong>Andexanet alfa (Andexxa)</strong>. Alteplase (fibrinolytic) → aminocaproic acid (not shown in this table). Know this antidote matching table perfectly for exams!</div>
+  </div>
+</div>
+
+<!-- Q39 -->
+<div class="question-card" id="q39" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 39</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">Which laboratory finding should cause the nurse to hold a dose of <em>enoxaparin</em> and notify the provider?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">aPTT of 72 seconds</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Hemoglobin of 12.8 g/dL</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Serum creatinine of 1.1 mg/dL</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Platelet count of 72,000/mm³ in a client who has been on enoxaparin for 6 days</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(39)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(38)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(40)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat39">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> A platelet count of 72,000/mm³ after 6 days of LMWH therapy is highly suspicious for <strong>HIT (Heparin-Induced Thrombocytopenia)</strong>, which can occur with LMWH as well as UFH (though less commonly). The threshold requiring immediate action is a platelet count below 100,000/mm³ or a significant sudden drop. The drug must be held and provider notified. aPTT of 72 (A) is therapeutic for UFH but is not routinely monitored with enoxaparin. Normal Hgb (B) and normal creatinine (C) are expected values that do not require the medication to be held.</div>
+  </div>
+</div>
+
+<!-- Q40 -->
+<div class="question-card" id="q40" data-type="priority" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 40</span>
+    <span class="q-tag tag-priority">Priority / Triage</span>
+  </div>
+  <div class="q-text">The charge nurse receives report on four clients. Which client is the nurse's <em>highest priority</em> for immediate assessment?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">A client on warfarin with an INR of 2.4 reporting mild fatigue after starting therapy</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">A client on apixaban reporting a small bruise on the forearm</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">A client receiving alteplase for STEMI who suddenly reports slurred speech and left-sided facial droop</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">A client on heparin asking when they can eat dinner</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(40)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(39)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(41)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat40">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct — emergent priority.</strong> Slurred speech and facial droop during alteplase infusion for STEMI indicates <strong>intracranial hemorrhage</strong> — the most feared and immediately life-threatening complication of fibrinolytic therapy. The infusion must be stopped IMMEDIATELY and the provider called for emergent CT and reversal with aminocaproic acid. This is a true neurological emergency. All other clients are stable: INR 2.4 is therapeutic (A), a small bruise on apixaban (B) is minor, and a dietary question (D) is non-urgent.</div>
+  </div>
+</div>
+
+<!-- Q41 -->
+<div class="question-card" id="q41" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 41</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client with a newly placed prosthetic heart valve is prescribed <em>dipyridamole</em>. The nurse understands that dipyridamole:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Irreversibly blocks P2Y12 ADP receptors on platelets</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Suppresses platelet aggregation and is approved for thromboembolism prevention after heart valve replacement</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Inhibits COX-1, reducing TXA2 synthesis</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Converts plasminogen to plasmin to dissolve the valve thrombosis</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(41)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(40)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(42)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat41">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Dipyridamole suppresses platelet aggregation and is specifically approved for <strong>prevention of thromboembolism after heart valve replacement</strong> — this is its unique indication among antiplatelet drugs. It is combined with warfarin for this purpose. P2Y12 inhibition (A) is clopidogrel's mechanism. COX-1 inhibition (C) is aspirin's mechanism. Plasminogen activation (D) is the mechanism of fibrinolytics like alteplase. The standard dipyridamole dose is 75–100 mg four times daily.</div>
+  </div>
+</div>
+
+<!-- Q42 -->
+<div class="question-card" id="q42" data-type="sata" data-correct="b,c,d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 42</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A client receiving alteplase (tPA) for acute MI is being cared for by the nurse. Which nursing interventions are appropriate? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q42">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Administer the tPA simultaneously with antiplatelet therapy and heparin for additive effect</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">Start heparin before the fibrinolytic infusion as ordered</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Avoid IM and SQ injections during alteplase infusion to reduce bleeding points</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Monitor the patient for neurological changes that could indicate intracranial hemorrhage</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Massage the patient's legs vigorously every 2 hours to prevent DVT</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(42)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(41)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(43)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat42">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B, C, D are correct.</strong> Heparin is started before the fibrinolytic as ordered for MI protocols. All IM/SQ injections must be avoided during infusion to prevent bleeding. Neurological monitoring is essential to detect intracranial hemorrhage. <strong>A is incorrect:</strong> Concurrent use of anticoagulants and antiplatelets with alteplase should be minimized, not increased — this potentiates bleeding risk. <strong>E is incorrect:</strong> Physical manipulation during fibrinolytic therapy must be minimized; vigorous massage would increase bleeding risk and cause trauma.</div>
+  </div>
+</div>
+
+<!-- Q43 -->
+<div class="question-card" id="q43" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 43</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client undergoes spinal epidural anesthesia while taking <em>rivaroxaban (Xarelto)</em>. The nurse recognizes this is a significant concern because:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Rivaroxaban will reduce the effectiveness of epidural analgesia</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Rivaroxaban increases the INR making spinal procedures riskier to monitor</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Spinal/epidural procedures on patients on DOACs carry a risk of spinal or epidural hematoma, which can cause permanent paralysis</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Rivaroxaban must be given IV rather than orally when epidural anesthesia is used</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(43)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(42)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(44)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat43">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> A critical risk of DOACs (and LMWH) in patients undergoing <strong>spinal puncture or epidural anesthesia</strong> is <strong>spinal or epidural hematoma</strong>, which can compress the spinal cord and cause permanent paralysis or death. This risk applies to all anticoagulants. Rivaroxaban does not affect INR (B) — it's a DOAC, not warfarin. It is never given IV (D) — it's an oral medication. It does not reduce analgesia effectiveness (A).</div>
+  </div>
+</div>
+
+<!-- Q44 -->
+<div class="question-card" id="q44" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 44</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with DVT has been receiving heparin and warfarin together for 5 days. Today's INR is 2.5. The nurse anticipates the provider will:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Discontinue the heparin infusion since INR is now therapeutic for 2+ days and adequate overlap has been achieved</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Increase the warfarin dose since 2.5 is still not high enough</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Continue both medications for another 2 weeks as standard protocol</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Hold the warfarin since the INR of 2.5 is above therapeutic range</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(44)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(43)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(45)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat44">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> The <strong>bridging protocol</strong> requires: (1) at least 5 days of heparin/warfarin overlap, AND (2) INR therapeutic (2.0–3.0) for ≥2 consecutive days. At day 5 with an INR of 2.5, both criteria are met — heparin can be safely discontinued. INR of 2.5 is within the therapeutic range (B is wrong — 2.5 is correct). Continuing both for weeks (C) increases unnecessary bleeding risk. Holding warfarin (D) would be done if INR were supratherapeutic (>3.0 for most patients).</div>
+  </div>
+</div>
+
+<!-- Q45 -->
+<div class="question-card" id="q45" data-type="case" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 45</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario — Pathophysiology Application</div>
+    A 54-year-old male presents with sudden onset of severe tearing chest pain radiating to his back, unequal blood pressure in both arms (R: 180/100; L: 140/72), and widened mediastinum on chest X-ray.
+  </div>
+  <div class="q-text">The nurse recognizes this clinical picture is most consistent with which condition — and understands that heparin would be:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Acute MI — heparin is indicated as first-line treatment</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Pulmonary embolism — heparin is the treatment of choice</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Dissecting aortic aneurysm — heparin is contraindicated in this condition</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Tension pneumothorax — heparin has no role but is not contraindicated</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(45)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(44)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(46)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat45">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> The classic triad of <strong>dissecting aortic aneurysm</strong>: severe tearing/ripping chest-to-back pain + <strong>unequal BP between arms</strong> + widened mediastinum. Critically, <strong>dissecting aneurysm is an explicit contraindication to heparin therapy</strong> — anticoagulation would extend the hemorrhagic dissection and worsen outcomes. MI (A) presents with crushing chest pressure, ST changes, and troponin elevation. PE (B) presents with dyspnea, hypoxia, and pleuritic pain. Tension pneumothorax (D) presents with absent breath sounds, tracheal deviation, and hypotension.</div>
+  </div>
+</div>
+
+<!-- Q46 -->
+<div class="question-card" id="q46" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 46</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with <em>thrombocytopenia</em> from chemotherapy has a platelet count of 18,000/mm³. The nurse assesses the client and is most concerned about which finding?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Mild fatigue and decreased appetite</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Three small petechiae noted on the upper arm</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Blood pressure of 118/72 mmHg</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Sudden onset of severe headache, visual changes, and confusion</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(46)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(45)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(47)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat46">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> With a critically low platelet count of 18,000/mm³, the client is at extreme risk for spontaneous hemorrhage. The combination of <strong>sudden severe headache, visual changes, and confusion</strong> is the classic presentation of <strong>intracranial hemorrhage</strong> — a life-threatening emergency. These neurological changes require immediate provider notification and emergent CT. Petechiae (B) are expected findings at these platelet levels and are concerning but less immediately dangerous. Fatigue/anorexia (A) are non-specific. Normal BP (C) is actually reassuring.</div>
+  </div>
+</div>
+
+<!-- Q47 -->
+<div class="question-card" id="q47" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 47</span>
+    <span class="q-tag tag-pharm">Pharmacology</span>
+  </div>
+  <div class="q-text">A client on <em>enoxaparin</em> is to have a spinal epidural placed. The nurse recognizes that:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">LMWH does not pose any risk for spinal procedures since it is not an anticoagulant</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">There is a risk of severe neurologic injury from spinal hematoma formation with LMWH use and spinal procedures</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Enoxaparin should be increased in dose before spinal procedures to prevent clot formation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Enoxaparin has no effect on spinal blood vessels since it acts only in the venous system</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(47)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(46)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(48)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat47">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Enoxaparin, like all anticoagulants, carries a significant risk of <strong>spinal or epidural hematoma</strong> when used concurrently with neuraxial procedures (spinal/epidural). This can cause permanent paralysis. The risk requires careful timing of the last enoxaparin dose before procedure placement and removal. Guidelines typically recommend holding LMWH for ≥12 hours (prophylactic) or ≥24 hours (therapeutic) before spinal procedures. Increasing the dose (C) would dramatically worsen this risk.</div>
+  </div>
+</div>
+
+<!-- Q48 -->
+<div class="question-card" id="q48" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 48</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">The nurse is preparing a client for discharge on <em>warfarin</em>. Which statement by the client demonstrates a <em>need for more teaching</em>?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">"I will keep my regular INR lab appointments to make sure my dose is right."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">"I will tell my doctor if I start any new medications or supplements."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">"I will stop eating any foods with vitamin K — like salads — since they make the medication not work."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">"I will use my electric razor instead of a regular razor to avoid cuts."</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(48)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(47)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(49)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat48">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is the incorrect statement — it indicates a need for more teaching.</strong> Clients should NOT completely eliminate vitamin K foods. Instead, they should <strong>maintain a CONSISTENT dietary intake</strong> of vitamin K. Sudden elimination of foods containing vitamin K can spike the INR dangerously high. Sudden increase can lower it. Consistency allows stable INR. Eliminating all salads (C) is an overreaction and represents a misunderstanding. Statements A, B, and D all reflect correct and appropriate understanding of warfarin management.</div>
+  </div>
+</div>
+
+<!-- Q49 -->
+<div class="question-card" id="q49" data-type="case" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 49</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario — Bow Tie</div>
+    A 71-year-old client with atrial fibrillation on warfarin (INR target 2.0–3.0) is admitted with confusion, right-sided weakness, and aphasia of 1-hour duration. CT shows no hemorrhage. Current INR is <strong>1.1</strong>. Diagnosis: acute ischemic stroke.
+  </div>
+  <div class="q-text">Based on the clinical picture, which assessment finding is most consistent with the underlying pathophysiology of this event?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Sub-therapeutic INR of 1.1 indicating inadequate anticoagulation, allowing thrombus formation from the fibrillating atrium to embolize to the brain</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Supratherapeutic INR causing hemorrhagic transformation of the stroke</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Normal cardiac output maintaining cerebral perfusion despite atrial fibrillation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">PE causing paradoxical embolism to the cerebral circulation</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(49)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(48)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(50)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat49">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> This scenario perfectly illustrates why warfarin is used for AFib. In AFib, the atria quiver erratically instead of contracting — blood pools and forms clots in the left atrial appendage. When inadequately anticoagulated (INR 1.1 — well below target of 2.0–3.0), these clots can embolize to the brain, causing <strong>cardioembolic ischemic stroke</strong>. The sub-therapeutic INR directly explains the mechanism. Option B is incorrect — INR 1.1 is sub-therapeutic, not supratherapeutic. CT showed no hemorrhage, confirming ischemic (not hemorrhagic) stroke.</div>
+  </div>
+</div>
+
+<!-- Q50 -->
+<div class="question-card" id="q50" data-type="sata" data-correct="a,c,d,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 50</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">The nurse is reviewing a client's medication list and notes the client is on warfarin. Which medications should the nurse flag for potential drug-drug interactions that could increase bleeding risk? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q50">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Aspirin</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">Omeprazole (PPI)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Ibuprofen (NSAID)</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Clopidogrel</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Aspirin-containing antacids</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(50)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(49)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(51)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat50">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, C, D, E are correct.</strong> Aspirin (A), NSAIDs like ibuprofen (C), and clopidogrel (D) all increase bleeding risk when combined with warfarin through antiplatelet effects and GI irritation. Aspirin-containing antacids (E) may contain hidden antiplatelet agents. Warfarin has extensive drug-drug interactions — this is a major clinical consideration. <strong>B (omeprazole)</strong> is actually recommended with warfarin and NSAIDs to protect the GI mucosa — it does not increase bleeding risk and may be protective. However, some interactions with warfarin metabolism do exist with PPIs, so close INR monitoring is still warranted.</div>
+  </div>
+</div>
+
+<!-- Q51 -->
+<div class="question-card" id="q51" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 51</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client asks about the difference between heparin and enoxaparin. The nurse explains that a key advantage of enoxaparin over unfractionated heparin is:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Enoxaparin can be reversed with protamine sulfate at any time without dose calculations</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Enoxaparin requires aPTT monitoring every 4 hours for safe administration</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Enoxaparin uses fixed dosing without routine aPTT monitoring, has a longer half-life, and can be used at home</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Enoxaparin is the only anticoagulant safe for use with mechanical heart valves</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(51)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(50)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(52)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat51">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> The advantages of LMWH (enoxaparin) over UFH include: <strong>fixed dosing</strong> (weight-based, no aPTT monitoring needed for dose adjustment), <strong>longer half-life</strong> allowing q12h or daily dosing, <strong>home administration</strong> by the patient, and a more predictable pharmacokinetic profile. UFH requires continuous IV infusion and frequent aPTT monitoring. Enoxaparin is not approved for mechanical heart valves (D). Protamine partially reverses enoxaparin but is less reliable than it is for UFH (A).</div>
+  </div>
+</div>
+
+<!-- Q52 -->
+<div class="question-card" id="q52" data-type="mc" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 52</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">Protamine sulfate reverses heparin's anticoagulant effect through which mechanism?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Protamine's positively charged groups bind ionically to heparin's negatively charged groups, forming an inactive complex</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Protamine activates antithrombin III to rapidly eliminate heparin from circulation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Protamine restores Factor X function by competitively displacing heparin at the receptor site</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Protamine replaces vitamin K and resynthesizes clotting factors destroyed by heparin</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(52)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(51)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(53)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat52">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> Protamine is a small, positively charged protein. Heparin is negatively charged. The two molecules form a stable <strong>ionic bond</strong>, creating a heparin-protamine complex that is devoid of anticoagulant activity — effectively neutralizing heparin. This electrostatic interaction is the exact mechanism. Dosing: 1 mg protamine inactivates 100 units of heparin. Protamine does not affect antithrombin (B), Factor X directly (C), or vitamin K pathways (D).</div>
+  </div>
+</div>
+
+<!-- Q53 -->
+<div class="question-card" id="q53" data-type="priority" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 53</span>
+    <span class="q-tag tag-priority">Priority</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario</div>
+    A 63-year-old client on heparin for 5 days reports new left calf pain and swelling despite anticoagulation therapy. Platelet count today is 58,000/mm³ (was 260,000 at admission). HR 112 bpm, BP 104/68 mmHg.
+  </div>
+  <div class="q-text">Which clinical syndrome is this client experiencing, and what is the nurse's PRIORITY action?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Warfarin-induced skin necrosis; administer vitamin K immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">HIT with new thrombosis; immediately discontinue ALL heparin products and notify provider</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">DVT extension; increase heparin dose and recheck aPTT in 2 hours</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Drug-induced thrombocytopenia; transfuse platelets and continue heparin</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(53)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(52)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(54)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat53">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> This is the classic presentation of <strong>HIT with thrombosis (HITT)</strong>: thrombocytopenia developing 5–10 days after starting heparin (platelet drop from 260,000 → 58,000 = 78% drop), and NEW thrombus formation (calf DVT) DESPITE anticoagulation. HIT is paradoxically prothrombotic. The PRIORITY is to <strong>immediately stop ALL heparin</strong> — including heparin flushes and LMWH — and notify the provider. Increasing heparin (C) or transfusing platelets (D) would worsen outcomes. Vitamin K (A) is for warfarin reversal, not relevant here.</div>
+  </div>
+</div>
+
+<!-- Q54 -->
+<div class="question-card" id="q54" data-type="mc" data-correct="d">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 54</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client is prescribed aspirin therapy after coronary stenting. The nurse teaches the client about which <em>primary indication</em> for aspirin in this setting?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">To thin the blood and lower the hematocrit</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">To reduce inflammation at the stent insertion site</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">To reduce fever and pain after the procedure</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">To prevent stent re-occlusion by inhibiting platelet aggregation</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(54)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(53)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(55)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat54">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>D is correct.</strong> After coronary stenting, aspirin is used specifically to <strong>prevent stent re-occlusion</strong> through its antiplatelet effect. The bare metal or drug-eluting stent is a foreign surface that activates platelets — aspirin's irreversible COX inhibition blocks TXA2, preventing platelet aggregation and stent thrombosis. Aspirin does not lower hematocrit (A), reduce localized stent inflammation specifically (B), or serve primarily as an analgesic in this context (C).</div>
+  </div>
+</div>
+
+<!-- Q55 -->
+<div class="question-card" id="q55" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 55</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A nurse is educating a group of student nurses about coagulation pathways. Which statement about the <em>extrinsic pathway</em> is correct?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">The extrinsic pathway is activated by contact with collagen in the subendothelium</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">The extrinsic pathway is triggered by vascular trauma, which releases thromboplastin (Factor III), activating Factor VII</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">The extrinsic pathway converges with the intrinsic pathway at Factor IX</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">The extrinsic pathway is measured by the aPTT laboratory test</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(55)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(54)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(56)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat55">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> The <strong>extrinsic (tissue factor) pathway</strong> is triggered by trauma to the vascular wall, which releases <strong>thromboplastin (tissue factor/Factor III)</strong>. This activates Factor VII, which then activates Factor X at the common pathway (3+7=10). The <strong>intrinsic (contact activation) pathway</strong> is triggered by collagen contact (A). Both converge at <strong>Factor X</strong>, not Factor IX (C). The <strong>PT/INR</strong> monitors the extrinsic pathway; the <strong>aPTT</strong> monitors the intrinsic pathway (D is incorrect).</div>
+  </div>
+</div>
+
+<!-- Q56 -->
+<div class="question-card" id="q56" data-type="mc" data-correct="c">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 56</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A client with a DVT is on oral rivaroxaban. Three weeks later, the client's repeat Doppler ultrasound shows resolution of the clot. The client asks when they should stop taking rivaroxaban. The nurse responds:</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">"The clot is gone, so you can stop taking the medication immediately."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">"You should switch to warfarin now that the acute DVT has resolved."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">"The duration of therapy is determined by your provider based on your underlying risk factors — do not stop without guidance."</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">"Since the ultrasound is clear, you can reduce the dose to half for the next 2 weeks then stop."</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(56)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(55)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(57)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat56">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>C is correct.</strong> DVT treatment duration depends on individualized risk stratification: provoked DVT (e.g., post-surgery) may require 3 months; unprovoked DVT may require 6–12 months or indefinite therapy. The clot resolving on imaging does not indicate the underlying thrombophilic risk has resolved. Stopping abruptly (A) risks recurrence. Switching to warfarin (B) is not necessary — DOACs like rivaroxaban are preferred for DVT. Half-dosing without evidence (D) is not a guideline-supported approach.</div>
+  </div>
+</div>
+
+<!-- Q57 -->
+<div class="question-card" id="q57" data-type="sata" data-correct="a,b,d,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 57</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">The nurse is assessing a client receiving heparin therapy for signs of bleeding. Which findings indicate <em>active bleeding</em> requiring immediate intervention? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q57">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Blood pressure drop from 130/80 to 88/56 mmHg with heart rate increase to 124 bpm</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">New onset severe headache with confusion and left arm weakness</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Two small ecchymoses on the forearm at IV insertion sites</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Grossly bloody urine with new onset flank pain</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Hemoglobin drop from 13.2 to 9.4 g/dL over 4 hours with no documented blood loss</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(57)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(56)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(58)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat57">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, B, D, E are correct.</strong> (A) Hypotension + tachycardia = classic hemorrhagic shock signs. (B) Sudden neurological changes on anticoagulation = presumed intracranial hemorrhage until proven otherwise. (D) Gross hematuria + flank pain = renal or retroperitoneal hemorrhage. (E) A drop of 3.8 g/dL in hemoglobin over 4 hours with no visible bleeding source = occult significant hemorrhage. <strong>C (two small IV-site ecchymoses)</strong> is an expected, minor finding that does not require immediate intervention — IV sites bruise easily on anticoagulants. Monitor, but not an emergency.</div>
+  </div>
+</div>
+
+<!-- Q58 -->
+<div class="question-card" id="q58" data-type="mc" data-correct="b">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 58</span>
+    <span class="q-tag tag-mc">Multiple Choice</span>
+  </div>
+  <div class="q-text">A nurse administers protamine sulfate too rapidly. Which adverse effect should the nurse monitor for?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Anaphylaxis and thrombocytopenia</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Hypotension, bradycardia, and cardiovascular collapse</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Enhanced anticoagulation and prolonged aPTT</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Acute hepatotoxicity and elevated liver enzymes</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(58)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(57)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(59)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat58">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>B is correct.</strong> Rapid administration of protamine sulfate causes <strong>hypotension, bradycardia, and cardiovascular collapse</strong> — a life-threatening adverse reaction. This is why protamine must be given as a slow IV injection: no faster than 20 mg/min or 50 mg in 10 minutes. Anaphylaxis (A) is a known risk (especially in patients with fish allergy or prior protamine exposure), but the most direct consequence of <em>rapid infusion specifically</em> is cardiovascular compromise. Enhanced anticoagulation (C) is the opposite of what protamine does — it reverses anticoagulation.</div>
+  </div>
+</div>
+
+<!-- Q59 -->
+<div class="question-card" id="q59" data-type="case" data-correct="a">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 59</span>
+    <span class="q-tag tag-case">Case Study</span>
+  </div>
+  <div class="case-box">
+    <div class="case-box-title">Clinical Scenario — Bow Tie Style</div>
+    A 46-year-old woman with a history of chronic DVT and antiphospholipid syndrome has been stable on warfarin for 2 years with INR consistently 2.2–2.8. She presents to the clinic after 2 weeks of nausea and vomiting, reporting she has been unable to eat and has had no leafy vegetables during this time. Today's INR is <strong>5.6</strong>. No active bleeding noted.
+  </div>
+  <div class="q-text">Which assessment finding BEST explains the pathophysiology behind the elevated INR in this scenario?</div>
+  <div class="options">
+    <div class="option" data-val="a"><span class="option-letter">A</span><span class="option-text">Reduced dietary vitamin K intake from inability to eat has decreased competitive antagonism of warfarin, allowing enhanced anticoagulant effect and INR elevation</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><span class="option-letter">B</span><span class="option-text">Nausea and vomiting caused her body to produce excessive clotting factors, paradoxically raising INR</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><span class="option-letter">C</span><span class="option-text">Dehydration from vomiting concentrated the warfarin in the blood, causing a false elevation of INR</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><span class="option-letter">D</span><span class="option-text">Antiphospholipid syndrome has suddenly worsened and is now directly elevating the INR</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitMC(59)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(58)">← Prev</button>
+    <button class="btn btn-nav" onclick="goTo(60)">Skip →</button>
+  </div>
+  <div class="rationale-box" id="rat59">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A is correct.</strong> This is a classic clinical scenario demonstrating the warfarin-vitamin K interaction. Warfarin works by <strong>blocking vitamin K</strong>. Normally, dietary vitamin K partially counteracts warfarin's effect, keeping the INR stable. When the client stops eating (and therefore consumes no vitamin K for 2 weeks), warfarin's effect becomes <strong>unopposed</strong>, causing the INR to climb to 5.6. This is supratherapeutic and increases bleeding risk significantly, even without active bleeding. The provider will likely hold 1–2 warfarin doses and recheck the INR. This scenario illustrates why <em>consistency</em> of vitamin K intake is critical.</div>
+  </div>
+</div>
+
+<!-- Q60 -->
+<div class="question-card" id="q60" data-type="sata" data-correct="a,c,d,e">
+  <div class="q-meta">
+    <span class="q-number">QUESTION 60</span>
+    <span class="q-tag tag-sata">SATA</span>
+  </div>
+  <div class="q-text">A nurse is reviewing discharge teaching for a client prescribed <em>warfarin</em> for long-term AFib management. Which instructions should the nurse include? <em>Select all that apply.</em></div>
+  <div class="options" id="sata-q60">
+    <div class="option" data-val="a"><div class="sata-check"></div><span class="option-text">Schedule routine INR blood tests as directed by your provider — do not skip appointments</span><span class="option-icon"></span></div>
+    <div class="option" data-val="b"><div class="sata-check"></div><span class="option-text">If you miss a dose, double your next dose to make up for it</span><span class="option-icon"></span></div>
+    <div class="option" data-val="c"><div class="sata-check"></div><span class="option-text">Wear a medical alert bracelet or carry a card identifying you as an anticoagulated patient</span><span class="option-icon"></span></div>
+    <div class="option" data-val="d"><div class="sata-check"></div><span class="option-text">Report any unusual bruising, prolonged bleeding, blood in urine/stool, or severe headache immediately</span><span class="option-icon"></span></div>
+    <div class="option" data-val="e"><div class="sata-check"></div><span class="option-text">Inform all healthcare providers — including dentists — that you take warfarin before any procedures</span><span class="option-icon"></span></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-submit" onclick="submitSATA(60)">Submit Answer</button>
+    <button class="btn btn-nav" onclick="goTo(59)">← Prev</button>
+    <button class="btn btn-next" onclick="showResults()">Finish Exam →</button>
+  </div>
+  <div class="rationale-box" id="rat60">
+    <div class="rationale-title">📋 Rationale</div>
+    <div class="rationale-body"><strong>A, C, D, E are correct.</strong> Routine INR monitoring is essential and non-negotiable on warfarin. Medical alert identification is critical for emergency providers. Bleeding signs must be reported promptly. All providers must know about anticoagulation. <strong>B is incorrect and dangerous:</strong> If a warfarin dose is missed, the client should take it as soon as they remember the same day — NEVER double the next dose. Doubling would create a supratherapeutic INR and risk dangerous bleeding. This is a key safety teaching point.</div>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div id="results-screen">
+  <div class="results-card">
+    <div class="results-title">Exam Complete</div>
+    <p style="color:var(--muted); margin-bottom: 0.5rem; font-family: 'Space Mono', monospace; font-size: 0.7rem; letter-spacing: 0.1em;">PERFUSION &amp; COAGULATION · PP2</p>
+    <div class="score-circle" id="score-circle">
+      <div class="score-pct" id="score-pct">–</div>
+      <div class="score-frac" id="score-frac">– / 60</div>
+    </div>
+    <p class="score-msg" id="score-msg"></p>
+    <button class="btn-restart" onclick="restartExam()">Restart Exam</button>
+    <p style="margin-top: 1.5rem; font-size: 0.82rem; color: var(--muted);">Review any question by clicking the navigation dots below.</p>
+    <div class="nav-dots" id="results-nav-dots"></div>
+  </div>
+</div>
+
+<!-- Nav dots (persistent) -->
+<div class="nav-dots" id="main-nav-dots"></div>
+
+</div><!-- end .main -->
+
+<!-- Popup -->
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup-card" id="popup-card">
+    <div class="popup-icon" id="popup-icon"></div>
+    <div class="popup-heading" id="popup-heading"></div>
+    <div class="popup-sub" id="popup-sub"></div>
+    <button class="btn-popup" id="popup-btn" onclick="closePopup()">Continue</button>
+  </div>
+</div>
+
+<script>
+const TOTAL = 60;
+const answered = {};  // {qNum: boolean (true=correct, false=wrong)}
+let correctCount = 0;
+
+const correctMessages = [
+  "Excellent clinical reasoning!",
+  "Spot on — you're thinking like a nurse.",
+  "Precisely right. Keep it up!",
+  "That's the correct priority. Well done.",
+  "Perfect pharmacology knowledge!",
+  "Sharp assessment — correct answer.",
+  "Your clinical judgment is on point.",
+  "Textbook answer. Excellent work.",
+];
+
+const incorrectMessages = [
+  "Not quite — review the rationale below.",
+  "Close, but not the priority. Check the rationale.",
+  "Incorrect — the rationale below explains why.",
+  "That's a common trap — read the rationale carefully.",
+  "Review this concept — the rationale has full detail.",
+];
+
+function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function updateProgress(qNum) {
+  const pct = (qNum / TOTAL * 100).toFixed(1);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = `Q${qNum} / ${TOTAL}`;
+  document.getElementById('score-label').textContent = `Score: ${correctCount}`;
+}
+
+function buildNavDots() {
+  const containers = ['main-nav-dots', 'results-nav-dots'];
+  containers.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerHTML = '';
+    for (let i = 1; i <= TOTAL; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'nav-dot';
+      dot.textContent = i;
+      dot.id = `dot-${id}-${i}`;
+      dot.onclick = () => goTo(i);
+      el.appendChild(dot);
+    }
+  });
+}
+
+function updateDots(qNum) {
+  for (let i = 1; i <= TOTAL; i++) {
+    ['main-nav-dots', 'results-nav-dots'].forEach(id => {
+      const dot = document.getElementById(`dot-${id}-${i}`);
+      if (!dot) return;
+      dot.className = 'nav-dot';
+      if (i === qNum) dot.classList.add('current');
+      if (answered[i] === true) dot.classList.add('answered-correct');
+      else if (answered[i] === false) dot.classList.add('answered-wrong');
+    });
+  }
+}
+
+function goTo(n) {
+  document.querySelectorAll('.question-card').forEach(c => c.classList.remove('active'));
+  const card = document.getElementById('q' + n);
+  if (card) {
+    card.classList.add('active');
+    document.getElementById('results-screen').style.display = 'none';
+    document.getElementById('exam-container').style.display = 'block';
+    updateProgress(n);
+    updateDots(n);
+    window.scrollTo(0, 0);
+  }
+}
+
+function showResult(qNum, isCorrect) {
+  if (!(qNum in answered)) {
+    answered[qNum] = isCorrect;
+    if (isCorrect) correctCount++;
+    document.getElementById('score-label').textContent = `Score: ${correctCount}`;
+  }
+  updateDots(0); // refresh dots
+  updateDots(getCurrentQ());
+}
+
+function getCurrentQ() {
+  const active = document.querySelector('.question-card.active');
+  if (!active) return 0;
+  return parseInt(active.id.replace('q',''));
+}
+
+function showPopup(isCorrect) {
+  const overlay = document.getElementById('popup-overlay');
+  const card = document.getElementById('popup-card');
+  const icon = document.getElementById('popup-icon');
+  const heading = document.getElementById('popup-heading');
+  const sub = document.getElementById('popup-sub');
+  
+  if (isCorrect) {
+    card.className = 'popup-card correct-popup';
+    icon.textContent = '✓';
+    heading.textContent = 'Correct!';
+    sub.textContent = rand(correctMessages);
+  } else {
+    card.className = 'popup-card incorrect-popup';
+    icon.textContent = '✕';
+    heading.textContent = 'Incorrect';
+    sub.textContent = rand(incorrectMessages);
+  }
+  overlay.classList.add('show');
+}
+
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('show');
+}
+
+function submitMC(qNum) {
+  const card = document.getElementById('q' + qNum);
+  const correct = card.dataset.correct;
+  const options = card.querySelectorAll('.option');
+  const selected = card.querySelector('.option.selected');
+  
+  if (!selected) return;
+  
+  const alreadyAnswered = qNum in answered;
+  
+  options.forEach(opt => {
+    const val = opt.dataset.val;
+    opt.onclick = null;
+    if (val === correct) {
+      opt.classList.add('revealed-correct');
+      opt.querySelector('.option-icon').textContent = '✓';
+    }
+    if (opt.classList.contains('selected') && val !== correct) {
+      opt.classList.add('incorrect');
+      opt.querySelector('.option-icon').textContent = '✕';
+    }
+  });
+  
+  card.querySelector('.rationale-box').classList.add('show');
+  card.querySelector('.btn-submit').disabled = true;
+  
+  const isCorrect = selected.dataset.val === correct;
+  if (!alreadyAnswered) {
+    showResult(qNum, isCorrect);
+    showPopup(isCorrect);
+  }
+}
+
+function selectOption(qNum, isSATA) {
+  const card = document.getElementById('q' + qNum);
+  if (qNum in answered) return;
+  const options = card.querySelectorAll('.option');
+  options.forEach(opt => {
+    opt.onclick = () => {
+      if (isSATA) {
+        opt.classList.toggle('selected');
+        const check = opt.querySelector('.sata-check');
+        if (check) check.innerHTML = opt.classList.contains('selected') ? '✓' : '';
+      } else {
+        options.forEach(o => o.classList.remove('selected'));
+        opt.classList.add('selected');
+      }
+    };
+  });
+}
+
+function submitSATA(qNum) {
+  const card = document.getElementById('q' + qNum);
+  const correctStr = card.dataset.correct;
+  const corrects = correctStr.split(',');
+  const options = card.querySelectorAll('.option');
+  const selectedVals = Array.from(card.querySelectorAll('.option.selected')).map(o => o.dataset.val);
+  
+  if (selectedVals.length === 0) return;
+  
+  const alreadyAnswered = qNum in answered;
+  
+  const isCorrect = corrects.length === selectedVals.length && 
+    corrects.every(c => selectedVals.includes(c));
+  
+  options.forEach(opt => {
+    const val = opt.dataset.val;
+    opt.onclick = null;
+    if (corrects.includes(val)) {
+      opt.classList.add('revealed-correct');
+      opt.querySelector('.option-icon').textContent = '✓';
+    }
+    if (selectedVals.includes(val) && !corrects.includes(val)) {
+      opt.classList.add('incorrect');
+      opt.querySelector('.option-icon').textContent = '✕';
+    }
+  });
+  
+  card.querySelector('.rationale-box').classList.add('show');
+  card.querySelector('.btn-submit').disabled = true;
+  
+  if (!alreadyAnswered) {
+    showResult(qNum, isCorrect);
+    showPopup(isCorrect);
+  }
+}
+
+function submitMatrix(qNum) {
+  const card = document.getElementById('q' + qNum);
+  card.querySelector('.rationale-box').classList.add('show');
+  card.querySelector('.btn-submit').disabled = true;
+  if (!(qNum in answered)) {
+    showResult(qNum, true); // matrices are self-grading via rationale
+    showPopup(true);
+  }
+}
+
+function showResults() {
+  document.getElementById('exam-container').style.display = 'none';
+  const screen = document.getElementById('results-screen');
+  screen.style.display = 'block';
+  
+  const pct = Math.round(correctCount / TOTAL * 100);
+  document.getElementById('score-pct').textContent = pct + '%';
+  document.getElementById('score-frac').textContent = correctCount + ' / ' + TOTAL;
+  
+  let msg = '';
+  if (pct >= 90) msg = 'Outstanding! You demonstrate mastery of coagulation pharmacology.';
+  else if (pct >= 80) msg = 'Great work! Review your missed questions for exam day.';
+  else if (pct >= 70) msg = 'Good foundation — focus on the rationales for deeper understanding.';
+  else msg = 'Keep studying! Use the rationales below to solidify your understanding.';
+  document.getElementById('score-msg').textContent = msg;
+  
+  updateDots(0);
+  window.scrollTo(0, 0);
+}
+
+function restartExam() {
+  location.reload();
+}
+
+// Initialize
+function init() {
+  buildNavDots();
+  
+  // Set up click handlers for all MC questions
+  for (let i = 1; i <= TOTAL; i++) {
+    const card = document.getElementById('q' + i);
+    if (!card) continue;
+    const type = card.dataset.type;
+    const isSATA = type === 'sata';
+    const options = card.querySelectorAll('.option');
+    
+    options.forEach(opt => {
+      opt.onclick = () => {
+        if (i in answered) return;
+        if (isSATA) {
+          opt.classList.toggle('selected');
+          const check = opt.querySelector('.sata-check');
+          if (check) check.innerHTML = opt.classList.contains('selected') ? '✓' : '';
+        } else if (type === 'mc' || type === 'priority' || type === 'case' || type === 'pharm') {
+          options.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        }
+      };
+    });
+  }
+  
+  updateDots(1);
+  updateProgress(1);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

@@ -1,0 +1,3278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PP2 Perfusion & Coagulation — Mock Exam</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS
+═══════════════════════════════════════════ */
+:root {
+  --bg-deep:     #0d0b1e;
+  --bg-mid:      #130f2a;
+  --bg-card:     #ffffff;
+  --pink:        #f472b6;
+  --pink-soft:   #fce7f3;
+  --pink-border: #fbcfe8;
+  --purple:      #a78bfa;
+  --purple-dark: #7c3aed;
+  --purple-mid:  #8b5cf6;
+  --purple-soft: #ede9fe;
+  --purple-border:#ddd6fe;
+  --green:       #22c55e;
+  --green-soft:  #f0fdf4;
+  --green-border:#86efac;
+  --red:         #ef4444;
+  --red-soft:    #fef2f2;
+  --red-border:  #fca5a5;
+  --gold:        #f59e0b;
+  --gold-soft:   #fffbeb;
+  --text-dark:   #1e1b4b;
+  --text-mid:    #4b5563;
+  --text-light:  #9ca3af;
+  --border:      #e5e7eb;
+  --shadow-sm:   0 2px 8px rgba(124,58,237,0.10);
+  --shadow-md:   0 8px 32px rgba(124,58,237,0.15);
+  --shadow-lg:   0 20px 60px rgba(124,58,237,0.22);
+  --radius-sm:   10px;
+  --radius-md:   16px;
+  --radius-lg:   24px;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
+  background: var(--bg-deep);
+  color: var(--text-dark);
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ═══════════════════════════════════════════
+   EKG BACKGROUND
+═══════════════════════════════════════════ */
+.ekg-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.ekg-stripe {
+  position: absolute;
+  left: 0;
+  width: 200%;
+  height: 3px;
+  opacity: 0.07;
+}
+
+.ekg-stripe::after {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 40'%3E%3Cpolyline points='0,20 60,20 75,20 90,4 100,36 110,2 122,38 134,20 160,20 220,20 280,20 295,20 310,4 320,36 330,2 342,38 354,20 380,20 500,20' fill='none' stroke='%23a78bfa' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E") repeat-x center / 500px 40px;
+}
+
+.ekg-stripe:nth-child(1) { top:12%;  animation: ekgMove 9s linear infinite; }
+.ekg-stripe:nth-child(2) { top:35%;  animation: ekgMove 13s linear infinite reverse; opacity: 0.05; }
+.ekg-stripe:nth-child(3) { top:58%;  animation: ekgMove 11s linear infinite; opacity: 0.04; }
+.ekg-stripe:nth-child(4) { top:80%;  animation: ekgMove 7s linear infinite reverse; opacity: 0.06; }
+
+@keyframes ekgMove {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Orbiting particles */
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  animation: particleFloat linear infinite;
+  opacity: 0.03;
+}
+
+@keyframes particleFloat {
+  0%   { transform: translateY(110vh) scale(0); opacity: 0; }
+  5%   { opacity: 0.04; transform: scale(1); }
+  95%  { opacity: 0.04; }
+  100% { transform: translateY(-15vh) scale(0.5); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
+   HEADER
+═══════════════════════════════════════════ */
+.site-header {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  padding: 28px 24px 12px;
+}
+
+.header-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(167,139,250,0.15);
+  border: 1px solid rgba(167,139,250,0.3);
+  border-radius: 100px;
+  padding: 5px 16px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  color: var(--purple);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.header-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--pink); animation: pulse 1.5s ease-in-out infinite; }
+
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.4); } }
+
+.site-header h1 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: clamp(1rem, 2.8vw, 1.5rem);
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
+.site-header h1 .accent { color: var(--pink); }
+.site-header h1 .accent2 { color: var(--purple); }
+
+.header-sub {
+  margin-top: 6px;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ═══════════════════════════════════════════
+   PROGRESS STRIP
+═══════════════════════════════════════════ */
+.progress-strip {
+  position: relative;
+  z-index: 10;
+  max-width: 860px;
+  margin: 10px auto 0;
+  padding: 0 20px;
+}
+
+.progress-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.q-counter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.5);
+}
+
+.score-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.score-chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 100px;
+  padding: 4px 14px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: rgba(255,255,255,0.7);
+}
+
+.streak-chip {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #f59e0b22, #f59e0b44);
+  border: 1px solid #f59e0b66;
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  color: #fbbf24;
+}
+
+.streak-chip.visible { display: flex; }
+
+.progress-track {
+  height: 5px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 100px;
+  overflow: visible;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--pink), var(--purple-mid));
+  border-radius: 100px;
+  transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+  position: relative;
+  box-shadow: 0 0 12px rgba(244,114,182,0.5);
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  right: -4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 0 8px var(--pink);
+}
+
+/* ═══════════════════════════════════════════
+   MAIN LAYOUT
+═══════════════════════════════════════════ */
+.exam-layout {
+  position: relative;
+  z-index: 10;
+  max-width: 860px;
+  margin: 18px auto 0;
+  padding: 0 20px;
+}
+
+/* ═══════════════════════════════════════════
+   QUESTION CARD
+═══════════════════════════════════════════ */
+.question-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.35s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(24px) scale(0.98); opacity: 0; }
+  to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+.card-top-bar {
+  height: 4px;
+  background: linear-gradient(90deg, var(--pink), var(--purple-dark), var(--pink));
+  background-size: 200%;
+  animation: barShimmer 3s linear infinite;
+}
+
+@keyframes barShimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.card-body {
+  padding: 28px 32px 32px;
+}
+
+/* Badge + number row */
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 5px 13px;
+  border-radius: 100px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.badge-mcq    { background: var(--purple-soft);  color: var(--purple-dark); border: 1px solid var(--purple-border); }
+.badge-sata   { background: var(--pink-soft);    color: #be185d;            border: 1px solid var(--pink-border); }
+.badge-priority { background: var(--red-soft);   color: #b91c1c;            border: 1px solid var(--red-border); }
+.badge-case   { background: var(--green-soft);   color: #065f46;            border: 1px solid var(--green-border); }
+.badge-pharm  { background: var(--gold-soft);    color: #92400e;            border: 1px solid #fde68a; }
+.badge-patho  { background: #eff6ff;             color: #1e40af;            border: 1px solid #bfdbfe; }
+.badge-bowtie { background: var(--purple-soft);  color: var(--purple-dark); border: 1px solid var(--purple-border); }
+.badge-matrix { background: var(--green-soft);   color: #065f46;            border: 1px solid var(--green-border); }
+
+.q-number-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Scenario box */
+.scenario-box {
+  background: linear-gradient(135deg, #f8f4ff 0%, #fdf2f8 100%);
+  border-left: 3px solid var(--purple-mid);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.65;
+}
+
+/* Stem */
+.q-stem {
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--text-dark);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* SATA instruction */
+.sata-instruction {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fffbeb;
+  border: 1px solid #fde68a;
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  margin-bottom: 14px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #92400e;
+  font-family: 'IBM Plex Mono', monospace;
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════
+   ANSWER OPTIONS — MCQ & SATA
+═══════════════════════════════════════════ */
+.options-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 13px 16px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.18s;
+  background: #fff;
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.55;
+  user-select: none;
+  position: relative;
+}
+
+.option-item:not(.locked):hover {
+  border-color: var(--purple-mid);
+  background: var(--purple-soft);
+  transform: translateX(3px);
+}
+
+.option-item.selected-opt {
+  border-color: var(--purple-dark);
+  background: var(--purple-soft);
+}
+
+/* Post-submit states */
+.option-item.state-correct  { border-color: var(--green); background: var(--green-soft); }
+.option-item.state-wrong    { border-color: var(--red);   background: var(--red-soft);   }
+.option-item.state-missed   { border-color: var(--green); background: #dcfce7;           }
+.option-item.locked { cursor: default; }
+
+/* Key bubble */
+.opt-key {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+  font-family: 'IBM Plex Mono', monospace;
+  transition: all 0.18s;
+  color: #9ca3af;
+}
+
+.option-item.selected-opt .opt-key { border-color: var(--purple-dark); color: var(--purple-dark); background: var(--purple-soft); }
+.option-item.state-correct  .opt-key { background: var(--green); border-color: var(--green); color: #fff; }
+.option-item.state-wrong    .opt-key { background: var(--red);   border-color: var(--red);   color: #fff; }
+.option-item.state-missed   .opt-key { background: var(--green); border-color: var(--green); color: #fff; }
+
+/* SATA checkbox */
+.opt-checkbox {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  transition: all 0.18s;
+  background: white;
+  color: white;
+}
+
+.option-item.selected-opt .opt-checkbox,
+.option-item.state-correct .opt-checkbox,
+.option-item.state-missed  .opt-checkbox { background: var(--green); border-color: var(--green); }
+.option-item.state-wrong   .opt-checkbox { background: var(--red);   border-color: var(--red);   }
+
+/* Correct/wrong icon overlay */
+.opt-status-icon {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  display: none;
+}
+.option-item.state-correct  .opt-status-icon,
+.option-item.state-wrong    .opt-status-icon,
+.option-item.state-missed   .opt-status-icon { display: block; }
+
+/* ═══════════════════════════════════════════
+   MATRIX TABLE
+═══════════════════════════════════════════ */
+.matrix-wrap { overflow-x: auto; margin-top: 4px; }
+
+.matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 500px;
+  font-size: 0.85rem;
+}
+
+.matrix-table thead tr { background: var(--text-dark); }
+.matrix-table thead th {
+  padding: 11px 14px;
+  color: white;
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+.matrix-table thead th:first-child { text-align: left; border-radius: 10px 0 0 0; }
+.matrix-table thead th:last-child  { border-radius: 0 10px 0 0; }
+
+.matrix-table tbody tr { border-bottom: 1px solid #f3f4f6; transition: background 0.15s; }
+.matrix-table tbody tr:hover { background: #fafafa; }
+.matrix-table tbody tr:last-child { border-bottom: none; }
+
+.matrix-table tbody td {
+  padding: 11px 14px;
+  color: var(--text-dark);
+  vertical-align: middle;
+}
+
+.matrix-table tbody td:first-child { font-weight: 500; }
+
+.matrix-btn {
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1.5px solid var(--border);
+  background: white;
+  color: var(--text-mid);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'DM Sans', sans-serif;
+  margin: 2px;
+  white-space: nowrap;
+}
+
+.matrix-btn:hover:not(.locked) { border-color: var(--purple-mid); color: var(--purple-dark); background: var(--purple-soft); }
+.matrix-btn.m-selected { background: var(--purple-mid); border-color: var(--purple-mid); color: white; }
+.matrix-btn.m-correct  { background: var(--green); border-color: var(--green); color: white; }
+.matrix-btn.m-wrong    { background: var(--red);   border-color: var(--red);   color: white; }
+.matrix-btn.m-missed   { background: #bbf7d0; border-color: var(--green); color: #14532d; }
+.matrix-btn.locked { cursor: default; }
+
+/* ═══════════════════════════════════════════
+   BOW-TIE
+═══════════════════════════════════════════ */
+.bowtie-layout {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.bowtie-col-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-light);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.bowtie-center-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bowtie-gem {
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(135deg, var(--pink), var(--purple-dark));
+  border-radius: 14px;
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 24px rgba(124,58,237,0.35);
+  flex-shrink: 0;
+}
+
+.bowtie-gem-label {
+  transform: rotate(-45deg);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: rgba(255,255,255,0.95);
+  text-align: center;
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+}
+
+.bowtie-option {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  background: white;
+  font-size: 0.83rem;
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  user-select: none;
+}
+
+.bowtie-option:not(.locked):hover { border-color: var(--purple-mid); background: var(--purple-soft); color: var(--purple-dark); }
+.bowtie-option.bt-selected { border-color: var(--purple-dark); background: var(--purple-soft); color: var(--purple-dark); font-weight: 600; }
+.bowtie-option.bt-correct  { border-color: var(--green); background: var(--green-soft); color: #14532d; }
+.bowtie-option.bt-wrong    { border-color: var(--red);   background: var(--red-soft);   color: #7f1d1d; }
+.bowtie-option.bt-missed   { border-color: var(--green); background: #dcfce7; color: #14532d; font-weight: 600; }
+.bowtie-option.locked { cursor: default; }
+
+/* ═══════════════════════════════════════════
+   SUBMIT BUTTON
+═══════════════════════════════════════════ */
+.btn-submit {
+  width: 100%;
+  margin-top: 24px;
+  padding: 15px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--pink), var(--purple-dark));
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.22s;
+  font-family: 'DM Sans', sans-serif;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s;
+}
+
+.btn-submit:not(:disabled):hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.45); }
+.btn-submit:not(:disabled):hover::before { transform: translateX(100%); }
+.btn-submit:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+/* ═══════════════════════════════════════════
+   RATIONALE
+═══════════════════════════════════════════ */
+.rationale-wrap {
+  margin-top: 22px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+  animation: rationaleFadeIn 0.4s ease both;
+}
+
+@keyframes rationaleFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.rationale-banner {
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.3px;
+}
+
+.rationale-banner.correct-banner { background: var(--green); color: white; }
+.rationale-banner.wrong-banner   { background: var(--red);   color: white; }
+
+.rationale-banner .banner-icon {
+  width: 22px; height: 22px; border-radius: 50%; background: rgba(255,255,255,0.25);
+  display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;
+}
+
+.rationale-body {
+  background: #fafafa;
+  padding: 20px;
+}
+
+.rationale-main {
+  font-size: 0.88rem;
+  color: #374151;
+  line-height: 1.75;
+  margin-bottom: 14px;
+}
+
+.rationale-main strong { color: var(--purple-dark); }
+
+.choice-explanations {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.choice-exp {
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  border: 1px solid transparent;
+}
+
+.choice-exp.exp-correct { background: var(--green-soft); border-color: var(--green-border); color: #14532d; }
+.choice-exp.exp-wrong   { background: var(--red-soft);   border-color: var(--red-border);   color: #7f1d1d; }
+
+.choice-exp-key {
+  font-weight: 700;
+  font-family: 'IBM Plex Mono', monospace;
+  margin-right: 8px;
+}
+
+/* ═══════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════ */
+.exam-nav {
+  position: relative;
+  z-index: 10;
+  max-width: 860px;
+  margin: 14px auto 24px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+
+.btn-nav {
+  padding: 11px 22px;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.8);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
+}
+
+.btn-nav:hover:not(:disabled) {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--pink);
+  color: white;
+  transform: scale(1.03);
+}
+
+.btn-nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* Dots */
+.dots-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  justify-content: center;
+}
+
+.q-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.07);
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.q-dot:hover { transform: scale(1.35); border-color: var(--pink); }
+.q-dot.dot-current { border-color: var(--pink); background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+.q-dot.dot-correct  { background: var(--green); border-color: #16a34a; }
+.q-dot.dot-wrong    { background: var(--red);   border-color: #b91c1c; }
+
+/* ═══════════════════════════════════════════
+   SUCCESS POPUP — PROFESSIONAL
+═══════════════════════════════════════════ */
+.popup-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,11,30,0.65);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+  padding: 20px;
+  animation: overlayIn 0.2s ease;
+}
+
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+.popup-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.05);
+  animation: popupIn 0.4s cubic-bezier(0.34,1.5,0.64,1) both;
+}
+
+@keyframes popupIn {
+  from { transform: scale(0.75) translateY(20px); opacity: 0; }
+  to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+
+.popup-accent-bar {
+  height: 5px;
+  background: linear-gradient(90deg, var(--pink), var(--purple-dark), var(--pink));
+  background-size: 200%;
+  animation: barShimmer 2.5s linear infinite;
+}
+
+.popup-inner {
+  padding: 28px 32px 28px;
+}
+
+.popup-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.popup-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--green-soft), #bbf7d0);
+  border: 1.5px solid var(--green-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  animation: iconBounce 0.5s cubic-bezier(0.34,1.7,0.64,1) both;
+  animation-delay: 0.1s;
+}
+
+@keyframes iconBounce {
+  from { transform: scale(0) rotate(-20deg); }
+  to   { transform: scale(1) rotate(0deg); }
+}
+
+.popup-streak-badge {
+  display: none;
+  align-items: center;
+  gap: 5px;
+  background: var(--gold-soft);
+  border: 1px solid #fde68a;
+  border-radius: 100px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #92400e;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.popup-streak-badge.show { display: flex; animation: fadeSlideIn 0.3s ease 0.2s both; }
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.popup-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-dark);
+  margin-bottom: 4px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.popup-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-mid);
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.popup-stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.popup-stat {
+  background: #f9fafb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  text-align: center;
+}
+
+.popup-stat-num {
+  font-size: 1.4rem;
+  font-weight: 800;
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--purple-dark);
+  line-height: 1;
+}
+
+.popup-stat-label {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.popup-timer-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 100px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+.popup-timer-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--green), var(--purple-mid));
+  border-radius: 100px;
+  width: 100%;
+  animation: timerDrain 3.2s linear forwards;
+}
+
+@keyframes timerDrain {
+  from { width: 100%; }
+  to   { width: 0%; }
+}
+
+.popup-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.popup-btn-continue {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--text-dark);
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+}
+
+.popup-btn-continue:hover { background: var(--purple-dark); transform: translateY(-1px); }
+
+.popup-btn-review {
+  padding: 12px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: white;
+  color: var(--text-mid);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.18s;
+}
+
+.popup-btn-review:hover { border-color: var(--purple-mid); color: var(--purple-dark); }
+
+/* ═══════════════════════════════════════════
+   RESULTS SCREEN
+═══════════════════════════════════════════ */
+.results-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  animation: slideUp 0.4s cubic-bezier(0.34,1.4,0.64,1) both;
+}
+
+.results-hero {
+  background: linear-gradient(135deg, var(--text-dark), var(--purple-dark));
+  padding: 40px 32px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.results-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: radial-gradient(circle at center, rgba(244,114,182,0.15) 0%, transparent 60%);
+}
+
+.results-trophy { font-size: 3.5rem; margin-bottom: 8px; display: block; position: relative; z-index: 1; }
+.results-pct {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 4rem;
+  font-weight: 700;
+  color: white;
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+}
+.results-pct .pct-sign { font-size: 2rem; opacity: 0.6; }
+.results-grade { font-size: 1rem; color: rgba(255,255,255,0.7); margin-top: 8px; position: relative; z-index: 1; }
+
+.results-body { padding: 28px 32px; }
+
+.results-breakdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.breakdown-card {
+  background: #f9fafb;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+}
+
+.bd-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.bd-lbl {
+  font-size: 0.65rem;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.breakdown-card.bd-correct .bd-num { color: var(--green); }
+.breakdown-card.bd-wrong   .bd-num { color: var(--red); }
+.breakdown-card.bd-pct     .bd-num { color: var(--purple-dark); }
+
+.results-note {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.btn-restart {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--pink), var(--purple-dark));
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.22s;
+  box-shadow: 0 4px 20px rgba(124,58,237,0.3);
+}
+
+.btn-restart:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(124,58,237,0.4); }
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════ */
+@media (max-width: 640px) {
+  .card-body { padding: 20px 18px 24px; }
+  .bowtie-layout { grid-template-columns: 1fr; }
+  .bowtie-center-col { order: -1; margin-bottom: 4px; }
+  .popup-inner { padding: 22px 20px; }
+  .popup-stats-row { grid-template-columns: 1fr 1fr; }
+  .popup-stats-row .popup-stat:last-child { grid-column: span 2; }
+  .results-breakdown { grid-template-columns: 1fr 1fr; }
+  .breakdown-card.bd-pct { grid-column: span 2; }
+  .exam-nav { grid-template-columns: auto auto auto; }
+}
+</style>
+</head>
+<body>
+
+<!-- EKG Background -->
+<div class="ekg-canvas">
+  <div class="ekg-stripe"></div>
+  <div class="ekg-stripe"></div>
+  <div class="ekg-stripe"></div>
+  <div class="ekg-stripe"></div>
+</div>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="header-eyebrow">UWG BSN · PP2 Pathopharm · May 2027 Cohort</div>
+  <h1>PP2 <span class="accent">Perfusion</span> &amp; <span class="accent2">Coagulation</span><br>Clinical Reasoning Exam</h1>
+  <div class="header-sub">60 Questions · NCLEX-Style · Applied Pharmacology</div>
+</header>
+
+<!-- Progress -->
+<div class="progress-strip">
+  <div class="progress-meta">
+    <span class="q-counter" id="q-counter">Question 1 of 60</span>
+    <div class="score-pill">
+      <div class="streak-chip" id="streak-chip">🔥 <span id="streak-num">0</span> Streak</div>
+      <div class="score-chip" id="score-chip">Score: 0 / 0</div>
+    </div>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progress-fill" style="width:1.67%"></div>
+  </div>
+</div>
+
+<!-- Question Area -->
+<div class="exam-layout" id="exam-layout"></div>
+
+<!-- Navigation -->
+<nav class="exam-nav">
+  <button class="btn-nav" id="btn-prev" onclick="navigate(-1)" disabled>← Prev</button>
+  <div class="dots-row" id="dots-row"></div>
+  <button class="btn-nav" id="btn-next" onclick="navigate(1)">Next →</button>
+</nav>
+
+<!-- SUCCESS POPUP -->
+<div class="popup-overlay" id="popup" style="display:none">
+  <div class="popup-card" id="popup-card">
+    <div class="popup-accent-bar"></div>
+    <div class="popup-inner">
+      <div class="popup-header">
+        <div class="popup-icon-wrap" id="popup-icon">✓</div>
+        <div class="popup-streak-badge" id="popup-streak">🔥 <span id="popup-streak-num">3</span> in a row!</div>
+      </div>
+      <div class="popup-title" id="popup-title">Correct!</div>
+      <div class="popup-subtitle" id="popup-subtitle">Sharp clinical reasoning. Keep that momentum going.</div>
+      <div class="popup-stats-row">
+        <div class="popup-stat">
+          <div class="popup-stat-num" id="ps-correct">0</div>
+          <div class="popup-stat-label">Correct</div>
+        </div>
+        <div class="popup-stat">
+          <div class="popup-stat-num" id="ps-total">0</div>
+          <div class="popup-stat-label">Answered</div>
+        </div>
+        <div class="popup-stat">
+          <div class="popup-stat-num" id="ps-pct">0%</div>
+          <div class="popup-stat-label">Accuracy</div>
+        </div>
+      </div>
+      <div class="popup-timer-bar"><div class="popup-timer-fill" id="popup-timer"></div></div>
+      <div class="popup-actions">
+        <button class="popup-btn-continue" id="popup-continue-btn">Continue →</button>
+        <button class="popup-btn-review" onclick="closePopup(false)">Review Answer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// QUESTION BANK — injected below
+// ════════════════════════════════════════════════════════
+const questions = [
+
+// ───────── Q1 ─────────
+{
+  type: 'mcq',
+  topic: 'Heparin Monitoring',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with a DVT is receiving unfractionated heparin via IV infusion. The nurse reviews the most recent laboratory results and notes an aPTT of 124 seconds.',
+  stem: 'What is the nurse\'s PRIORITY action?',
+  options: [
+    { key:'A', text:'Continue the infusion at the current rate — the aPTT is within therapeutic range.' },
+    { key:'B', text:'Hold the infusion and notify the provider immediately.' },
+    { key:'C', text:'Increase the infusion rate to maintain a higher aPTT.' },
+    { key:'D', text:'Administer protamine sulfate immediately without waiting for a provider order.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'The therapeutic aPTT range for heparin is <strong>60–80 seconds</strong> (1.5–2 times the normal of 40 seconds). A result of 124 seconds is critically supratherapeutic and places the client at serious risk for hemorrhage. The nurse must HOLD the infusion and notify the provider so dosage adjustments or reversal can be ordered.',
+    choices: [
+      { key:'A', why:'Incorrect. 124 seconds far exceeds the therapeutic range of 60–80 seconds. Continuing at this rate dramatically increases hemorrhage risk.', correct: false },
+      { key:'B', why:'CORRECT. The aPTT of 124 seconds is supratherapeutic. Holding the infusion and notifying the provider is the safest, most appropriate priority action.', correct: true },
+      { key:'C', why:'Incorrect. Increasing the rate when the aPTT is already dangerously elevated would worsen the risk of life-threatening bleeding.', correct: false },
+      { key:'D', why:'Incorrect. Protamine sulfate is the antidote for heparin overdose, but it requires a provider order. Administering it without an order is outside nursing scope and premature.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q2 ─────────
+{
+  type: 'sata',
+  topic: 'Warfarin Discharge Teaching',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client with atrial fibrillation is being discharged home on warfarin. The nurse is preparing discharge education.',
+  stem: 'Which of the following nursing teaching statements are appropriate? Select all that apply.',
+  options: [
+    { key:'A', text:'Use an electric razor instead of a straight razor to shave.' },
+    { key:'B', text:'You may eat as many leafy green vegetables as you like — they are healthy.' },
+    { key:'C', text:'You will need regular blood tests (INR) to ensure your dose is safe.' },
+    { key:'D', text:'Wear a medical alert bracelet at all times.' },
+    { key:'E', text:'It is safe to take aspirin for mild headaches while on warfarin.' },
+    { key:'F', text:'Notify any surgeon or dentist of your anticoagulation therapy before procedures.' },
+  ],
+  answer: ['A','C','D','F'],
+  rationale: {
+    correct: 'Warfarin teaching focuses on <strong>bleeding precautions</strong> and <strong>INR monitoring</strong>. Electric razors reduce laceration risk. INR must be monitored regularly (target 2–3 for most clients). Medical alert bracelets notify emergency providers. Surgeons must know to plan for anticoagulation reversal. Green leafy vegetables contain Vitamin K (warfarin\'s antagonist), so intake must be <em>consistent</em>, not unlimited. Aspirin combined with warfarin significantly increases bleeding risk.',
+    choices: [
+      { key:'A', why:'CORRECT. Electric razors reduce the risk of cuts that could cause significant bleeding.', correct: true },
+      { key:'B', why:'Incorrect. Dietary Vitamin K directly antagonizes warfarin. Clients should keep Vitamin K intake consistent — not unlimited — to maintain stable INR.', correct: false },
+      { key:'C', why:'CORRECT. INR must be routinely monitored; the target range for most clients is 2–3.', correct: true },
+      { key:'D', why:'CORRECT. A medical alert bracelet informs emergency providers about anticoagulation therapy.', correct: true },
+      { key:'E', why:'Incorrect. Aspirin (an antiplatelet) combined with warfarin (an anticoagulant) significantly increases hemorrhage risk. It should be avoided unless specifically prescribed.', correct: false },
+      { key:'F', why:'CORRECT. Warfarin must be discontinued before surgery or procedures; providers need this information for safe planning.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q3 ─────────
+{
+  type: 'mcq',
+  topic: 'Enoxaparin vs Heparin',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client post hip replacement surgery is prescribed enoxaparin (Lovenox) subcutaneously every 12 hours for DVT prophylaxis. A new nurse asks why they do not check aPTT levels.',
+  stem: 'What is the BEST explanation for why aPTT monitoring is not required when administering enoxaparin?',
+  options: [
+    { key:'A', text:'Enoxaparin has no anticoagulant effect and only reduces inflammation.' },
+    { key:'B', text:'Enoxaparin uses fixed dosing and preferentially inhibits Factor Xa, so dose adjustments based on aPTT are unnecessary.' },
+    { key:'C', text:'Enoxaparin directly inhibits thrombin, making aPTT an unreliable measure.' },
+    { key:'D', text:'The INR is used instead of aPTT to monitor enoxaparin therapy.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Enoxaparin (LMWH)</strong> preferentially inhibits <strong>Factor Xa</strong> (with only minimal effect on thrombin), uses <strong>fixed weight-based dosing</strong>, has a longer and more predictable half-life than unfractionated heparin, and does not require aPTT-based dose titration. Unfractionated heparin requires aPTT monitoring because its effect is more variable.',
+    choices: [
+      { key:'A', why:'Incorrect. Enoxaparin is definitely an anticoagulant — it prevents clot formation via Factor Xa inhibition.', correct: false },
+      { key:'B', why:'CORRECT. Fixed dosing and predictable Factor Xa inhibition eliminate the need for aPTT-based dose adjustments, unlike unfractionated heparin.', correct: true },
+      { key:'C', why:'Incorrect. Enoxaparin primarily inhibits Factor Xa, not thrombin. Unfractionated heparin has greater thrombin inhibition.', correct: false },
+      { key:'D', why:'Incorrect. INR monitors warfarin (Vitamin K antagonist) therapy. It does not apply to LMWH.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q4 ─────────
+{
+  type: 'priority',
+  topic: 'Priority — Anticoagulated Clients',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'The nurse is managing a unit with four clients, all receiving anticoagulation therapy.',
+  stem: 'Which client should the nurse assess FIRST?',
+  options: [
+    { key:'A', text:'A client on warfarin with an INR of 2.5 who has no complaints.' },
+    { key:'B', text:'A client on IV unfractionated heparin who suddenly reports a new, severe headache.' },
+    { key:'C', text:'A client on enoxaparin who has minor bruising at the subcutaneous injection site.' },
+    { key:'D', text:'A client on clopidogrel who reports mild GI upset after taking the medication.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'A <strong>new, severe headache in a client on heparin</strong> is a red flag for <strong>intracranial (neurological) hemorrhage</strong> — a life-threatening complication. The outline specifically lists headache as a sign of neuro bleed. This is the most unstable, potentially life-threatening finding and demands immediate assessment.',
+    choices: [
+      { key:'A', why:'Incorrect. An INR of 2.5 is within the therapeutic range of 2–3 for warfarin. This client is stable.', correct: false },
+      { key:'B', why:'CORRECT. A sudden severe headache on heparin suggests intracranial bleeding — a medical emergency requiring immediate action.', correct: true },
+      { key:'C', why:'Incorrect. Minor bruising at the injection site is an expected, manageable side effect of LMWH, not an emergency.', correct: false },
+      { key:'D', why:'Incorrect. Mild GI upset from clopidogrel is a common, non-urgent side effect.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q5 ─────────
+{
+  type: 'mcq',
+  topic: 'Heparin-Induced Thrombocytopenia (HIT)',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'A client receiving IV heparin for PE treatment develops a platelet count that drops from 280,000/mm³ to 62,000/mm³ over 5 days. The client develops a new DVT despite being on anticoagulation.',
+  stem: 'The nurse recognizes this presentation as consistent with which condition, and what is the underlying mechanism?',
+  options: [
+    { key:'A', text:'Warfarin-induced skin necrosis, caused by depletion of Protein C.' },
+    { key:'B', text:'Heparin-induced thrombocytopenia (HIT), caused by antibodies forming against heparin–platelet protein complexes.' },
+    { key:'C', text:'Disseminated intravascular coagulation (DIC), caused by widespread fibrin deposition.' },
+    { key:'D', text:'Idiopathic thrombocytopenic purpura (ITP), caused by autoimmune destruction of platelets.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>HIT</strong> occurs when the immune system develops antibodies against <strong>heparin–platelet factor 4 (PF4) complexes</strong>. These antibodies paradoxically activate platelets, causing both thrombocytopenia AND a hypercoagulable state — explaining why this client developed a new DVT despite being anticoagulated. HIT should be suspected when platelets fall significantly OR when thrombosis develops despite heparin therapy.',
+    choices: [
+      { key:'A', why:'Incorrect. Warfarin-induced skin necrosis relates to depletion of Protein C and is not caused by heparin.', correct: false },
+      { key:'B', why:'CORRECT. HIT is characterized by platelet drop + thrombosis (paradoxically) caused by immune-mediated activation of platelets by heparin–PF4 antibodies.', correct: true },
+      { key:'C', why:'Incorrect. DIC involves widespread coagulation activation with fibrin consumption, not the specific antibody-driven mechanism of HIT.', correct: false },
+      { key:'D', why:'Incorrect. ITP is autoimmune platelet destruction but is not triggered by heparin and does not cause paradoxical thrombosis.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q6 ─────────
+{
+  type: 'mcq',
+  topic: 'INR Interpretation & Action',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with a mechanical heart valve is on warfarin. Their provider has set a target INR of 2.5–3.5. The nurse reviews today\'s lab: INR = 4.8.',
+  stem: 'Which nursing action is MOST appropriate?',
+  options: [
+    { key:'A', text:'Administer the next scheduled warfarin dose as ordered.' },
+    { key:'B', text:'Hold the warfarin dose, notify the provider, and monitor for signs of bleeding.' },
+    { key:'C', text:'Immediately administer IV Vitamin K without a provider order.' },
+    { key:'D', text:'Increase dietary Vitamin K intake to lower the INR.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'An INR of 4.8 is <strong>above the therapeutic target of 2.5–3.5</strong> and significantly increases hemorrhage risk. The correct action is to <strong>hold the warfarin dose</strong>, <strong>notify the provider</strong>, and closely <strong>monitor for bleeding signs</strong>. The provider may order Vitamin K (oral or IV) for reversal if needed, but the nurse cannot initiate this independently.',
+    choices: [
+      { key:'A', why:'Incorrect. Administering warfarin when the INR is supratherapeutic would worsen the bleeding risk.', correct: false },
+      { key:'B', why:'CORRECT. Holding the dose and notifying the provider is the appropriate response to a supratherapeutic INR, along with close monitoring.', correct: true },
+      { key:'C', why:'Incorrect. Vitamin K can reverse warfarin effects, but administering it requires a provider order. Independent administration is outside nursing scope.', correct: false },
+      { key:'D', why:'Incorrect. While dietary Vitamin K affects INR, advising the client to increase it at home is not an immediate nursing action for a critical lab value.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q7 ─────────
+{
+  type: 'mcq',
+  topic: 'Enoxaparin Injection Technique',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'The nurse is preparing to administer enoxaparin subcutaneously. Which technique is correct?',
+  options: [
+    { key:'A', text:'Inject at a 90-degree angle and express the air bubble before injection.' },
+    { key:'B', text:'Inject at a 45-degree angle and do NOT express the air bubble.' },
+    { key:'C', text:'Aspirate before injecting to ensure the needle is not in a vessel.' },
+    { key:'D', text:'Massage the injection site vigorously after administration to enhance absorption.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Enoxaparin should be given <strong>subcutaneously at a 45-degree angle</strong>. The air bubble in the prefilled syringe should <strong>NOT be expelled</strong> — it helps ensure the full dose is delivered and prevents leakage into surrounding tissue. Aspiration is not done with subcutaneous injections. Massaging the site can cause bruising and tissue trauma.',
+    choices: [
+      { key:'A', why:'Incorrect. A 90-degree angle is used for some SubQ injections but NOT for enoxaparin. The air bubble must NOT be expelled.', correct: false },
+      { key:'B', why:'CORRECT. Enoxaparin is given at a 45-degree angle without expelling the air bubble to ensure complete, safe delivery of the dose.', correct: true },
+      { key:'C', why:'Incorrect. Aspiration is not recommended for subcutaneous injections as it can damage tissue and is unnecessary.', correct: false },
+      { key:'D', why:'Incorrect. Massaging the site after SubQ enoxaparin injection causes bruising and hematoma formation and is contraindicated.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q8 ─────────
+{
+  type: 'sata',
+  topic: 'DOACs vs Warfarin',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  stem: 'The nurse is teaching a client about transitioning from warfarin to rivaroxaban (Xarelto), a direct Factor Xa inhibitor. Which statements accurately describe DOACs compared to warfarin? Select all that apply.',
+  options: [
+    { key:'A', text:'DOACs require frequent INR monitoring to adjust the dose.' },
+    { key:'B', text:'DOACs carry a lower risk of bleeding compared to warfarin.' },
+    { key:'C', text:'Rivaroxaban must be discontinued before elective surgery.' },
+    { key:'D', text:'If dabigatran is used, idarucizumab is an available antidote.' },
+    { key:'E', text:'DOACs can be safely used in patients with mechanical heart valves.' },
+  ],
+  answer: ['B','C','D'],
+  rationale: {
+    correct: 'DOACs have several advantages over warfarin: <strong>lower bleeding risk</strong>, no routine INR monitoring (fixed dosing), and fewer food-drug interactions. However, they must be <strong>discontinued before surgery</strong>. <strong>Idarucizumab</strong> reverses dabigatran; <strong>andexanet alfa</strong> reverses Factor Xa inhibitors. Importantly, DOACs are NOT approved for patients with mechanical heart valves — warfarin remains the standard for that indication.',
+    choices: [
+      { key:'A', why:'Incorrect. Unlike warfarin, DOACs use fixed dosing and do NOT require INR monitoring.', correct: false },
+      { key:'B', why:'CORRECT. DOACs have a lower overall risk of bleeding compared to warfarin, particularly intracranial hemorrhage.', correct: true },
+      { key:'C', why:'CORRECT. Like all anticoagulants, DOACs must be discontinued before surgical procedures to reduce hemorrhage risk.', correct: true },
+      { key:'D', why:'CORRECT. Idarucizumab (Praxbind) is FDA-approved to reverse dabigatran (a direct thrombin inhibitor).', correct: true },
+      { key:'E', why:'Incorrect. DOACs are NOT approved for use with mechanical heart valves. Warfarin is the required anticoagulant for this indication.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q9 ─────────
+{
+  type: 'mcq',
+  topic: 'Alteplase Administration Window',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A 62-year-old client arrives to the ED with sudden onset left arm weakness, facial droop, and slurred speech. CT scan rules out hemorrhagic stroke. Onset of symptoms was 3 hours ago.',
+  stem: 'The nurse anticipates administration of alteplase (tPA). Which nursing consideration is MOST critical?',
+  options: [
+    { key:'A', text:'Alteplase must be started within 30 minutes of hospital arrival.' },
+    { key:'B', text:'Alteplase is contraindicated for ischemic stroke and only indicated for STEMI.' },
+    { key:'C', text:'Minimize physical manipulation and avoid IM injections after administration.' },
+    { key:'D', text:'Aspirin should be withheld until alteplase therapy is complete.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'After administering alteplase, the nurse must <strong>minimize physical manipulation, avoid SubQ and IM injections, minimize invasive procedures</strong>, and minimize concurrent anticoagulants to reduce serious bleeding risk — especially <strong>intracranial hemorrhage</strong>, the greatest concern. Option A describes the 30-minute door-to-needle time for MI/STEMI fibrinolysis, which is a separate consideration.',
+    choices: [
+      { key:'A', why:'Incorrect. The 30-minute target applies to the time from ED arrival to fibrinolysis initiation — this is an important time metric but is not the most critical nursing consideration after administration.', correct: false },
+      { key:'B', why:'Incorrect. Alteplase IS indicated for acute ischemic stroke (as well as STEMI and PE). Hemorrhagic stroke is the contraindication.', correct: false },
+      { key:'C', why:'CORRECT. Post-alteplase, the nurse must aggressively minimize ALL sources of bleeding — no IM injections, no unnecessary invasive procedures, minimal physical manipulation.', correct: true },
+      { key:'D', why:'Incorrect. Per the outline, for MI, patients may simultaneously receive ASA, clopidogrel, and heparin with fibrinolytics; however, minimizing hemorrhage risk takes priority in the nursing considerations listed.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q10 ─────────
+{
+  type: 'matrix',
+  topic: 'Anticoagulant Antidotes',
+  badge: 'badge-matrix',
+  badgeLabel: '📊 Matrix Question',
+  stem: 'Match each anticoagulant to its correct antidote by selecting the appropriate response for each drug.',
+  matrixRows: [
+    { label: 'Unfractionated Heparin', options: ['Protamine Sulfate','Vitamin K','Idarucizumab','Andexanet Alfa'], answer: 'Protamine Sulfate' },
+    { label: 'Warfarin', options: ['Protamine Sulfate','Vitamin K','Idarucizumab','Andexanet Alfa'], answer: 'Vitamin K' },
+    { label: 'Dabigatran (Pradaxa)', options: ['Protamine Sulfate','Vitamin K','Idarucizumab','Andexanet Alfa'], answer: 'Idarucizumab' },
+    { label: 'Rivaroxaban (Xarelto)', options: ['Protamine Sulfate','Vitamin K','Idarucizumab','Andexanet Alfa'], answer: 'Andexanet Alfa' },
+  ],
+  rationale: {
+    correct: '<strong>Protamine sulfate</strong> reverses heparin by ionically binding to it (1 mg per 100 units of heparin). <strong>Vitamin K</strong> reverses warfarin by replacing the Vitamin K that warfarin antagonizes. <strong>Idarucizumab</strong> is a specific antidote to dabigatran (direct thrombin inhibitor). <strong>Andexanet alfa</strong> reverses Factor Xa inhibitors like rivaroxaban and apixaban.',
+    choices: []
+  }
+},
+
+// ───────── Q11 ─────────
+{
+  type: 'mcq',
+  topic: 'Aspirin Mechanism',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A client with a history of TIAs is prescribed low-dose aspirin daily. The nurse explains that aspirin works by which mechanism to prevent clot formation?',
+  options: [
+    { key:'A', text:'Inhibits vitamin K–dependent clotting factors VII, IX, X, and prothrombin.' },
+    { key:'B', text:'Irreversibly inhibits cyclooxygenase (COX), blocking synthesis of thromboxane A2 (TXA2).' },
+    { key:'C', text:'Blocks P2Y12 ADP receptors on the platelet surface.' },
+    { key:'D', text:'Converts plasminogen to plasmin to dissolve existing clots.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Aspirin <strong>irreversibly inhibits cyclooxygenase (COX)</strong>, which blocks the synthesis of <strong>thromboxane A2 (TXA2)</strong> — a potent vasoconstrictor and platelet aggregation promoter. Since platelets have no nucleus to produce new COX, aspirin\'s antiplatelet effect lasts the lifetime of the platelet (~7–10 days).',
+    choices: [
+      { key:'A', why:'Incorrect. This describes warfarin\'s mechanism — inhibition of Vitamin K–dependent clotting factors.', correct: false },
+      { key:'B', why:'CORRECT. Aspirin irreversibly inhibits COX-1 in platelets, blocking TXA2 synthesis and preventing platelet aggregation.', correct: true },
+      { key:'C', why:'Incorrect. Blocking P2Y12 ADP receptors is the mechanism of clopidogrel (Plavix), not aspirin.', correct: false },
+      { key:'D', why:'Incorrect. Converting plasminogen to plasmin describes fibrinolytics (alteplase/tPA), not aspirin.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q12 ─────────
+{
+  type: 'sata',
+  topic: 'Clopidogrel Teaching',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client received a coronary stent 2 days ago and is being discharged on aspirin 81 mg daily AND clopidogrel (Plavix) 75 mg daily.',
+  stem: 'Which discharge teaching points are most important? Select all that apply.',
+  options: [
+    { key:'A', text:'Do NOT stop either medication unless specifically instructed by your provider.' },
+    { key:'B', text:'Clopidogrel must be discontinued 5 days before any surgical procedure.' },
+    { key:'C', text:'During the first 2 weeks, monitor for unusual bruising or signs of thrombotic thrombocytopenic purpura (TTP).' },
+    { key:'D', text:'Report blood in urine, black tarry stools, or coffee ground emesis immediately.' },
+    { key:'E', text:'It is safe to take ibuprofen (Advil) for pain while on clopidogrel.' },
+  ],
+  answer: ['A','B','C','D'],
+  rationale: {
+    correct: 'After coronary stenting, dual antiplatelet therapy (DAPT) is critical to prevent <strong>stent thrombosis</strong>. Stopping either medication early can be fatal. Clopidogrel is discontinued <strong>5 days before surgery</strong>. TTP (a rare but serious clotting disorder) must be watched for during the <strong>first 2 weeks</strong>. Signs of bleeding must be reported immediately. NSAIDs like ibuprofen interact with both antiplatelet agents and significantly increase GI bleeding risk.',
+    choices: [
+      { key:'A', why:'CORRECT. Stopping DAPT early after stenting dramatically increases risk of stent thrombosis and myocardial infarction.', correct: true },
+      { key:'B', why:'CORRECT. Clopidogrel should be held for 5 days before elective surgery to allow platelet function to recover.', correct: true },
+      { key:'C', why:'CORRECT. TTP can develop in the first 2 weeks of clopidogrel therapy and requires close monitoring.', correct: true },
+      { key:'D', why:'CORRECT. These are classic signs of GI or urinary bleeding that require immediate medical attention.', correct: true },
+      { key:'E', why:'Incorrect. NSAIDs (ibuprofen) increase the risk of GI bleeding when combined with antiplatelet agents and should be avoided.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q13 ─────────
+{
+  type: 'mcq',
+  topic: 'Protamine Sulfate Mechanism',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client receives an accidental overdose of heparin. The provider orders protamine sulfate. The nurse understands this drug works by which mechanism?',
+  options: [
+    { key:'A', text:'Competing with heparin for binding sites on antithrombin, reducing heparin\'s effect.' },
+    { key:'B', text:'Binding ionically to heparin\'s negative charges via positively charged groups, forming an inactive complex.' },
+    { key:'C', text:'Stimulating Vitamin K production to replace clotting factors depleted by heparin.' },
+    { key:'D', text:'Directly activating thrombin to overcome heparin\'s anticoagulant effect.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Protamine sulfate is a small protein with multiple <strong>positively charged groups</strong> that bind <strong>ionically</strong> to the <strong>negatively charged groups on heparin</strong>, forming an inactive <strong>heparin–protamine complex</strong> that has no anticoagulant activity. Dosing: 1 mg of protamine inactivates 100 units of heparin. It is given by slow IV injection — no faster than 20 mg/min.',
+    choices: [
+      { key:'A', why:'Incorrect. Protamine does not compete for antithrombin binding sites; it directly neutralizes heparin via ionic bonding.', correct: false },
+      { key:'B', why:'CORRECT. Protamine\'s positively charged groups ionically bond to heparin\'s negatively charged groups, creating an inactive complex.', correct: true },
+      { key:'C', why:'Incorrect. Vitamin K replaces clotting factors inhibited by warfarin — not by heparin. These are separate mechanisms.', correct: false },
+      { key:'D', why:'Incorrect. Protamine does not activate thrombin; it neutralizes heparin directly.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q14 ─────────
+{
+  type: 'priority',
+  topic: 'Heparin Overdose Signs',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'A client on IV heparin infusion for pulmonary embolism develops the following: BP 88/50 mmHg, HR 118 bpm, petechiae on the forearms, and black tarry stools.',
+  stem: 'Which intervention is the PRIORITY?',
+  options: [
+    { key:'A', text:'Recheck the aPTT and call the lab for a stat CBC.' },
+    { key:'B', text:'Turn the client to their left side to reduce aspiration risk.' },
+    { key:'C', text:'Stop the heparin infusion and immediately notify the provider.' },
+    { key:'D', text:'Administer vitamin K IV as ordered.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'The clinical picture — <strong>hypotension, tachycardia, petechiae, and black tarry stools</strong> — collectively signal <strong>significant hemorrhage</strong> related to heparin overdose. The immediate priority is to <strong>discontinue the heparin infusion</strong> and notify the provider. The provider will then determine whether protamine sulfate is indicated. Vitamin K is for warfarin overdose, not heparin.',
+    choices: [
+      { key:'A', why:'Incorrect. Lab results are important but take time. The bleeding emergency requires action NOW, not waiting for results.', correct: false },
+      { key:'B', why:'Incorrect. Positioning is not the priority in an active hemorrhage situation.', correct: false },
+      { key:'C', why:'CORRECT. Stopping the heparin infusion immediately is the first priority when serious bleeding occurs; then notify the provider for further orders (possibly protamine sulfate).', correct: true },
+      { key:'D', why:'Incorrect. Vitamin K is the antidote for warfarin, NOT heparin. The antidote for heparin is protamine sulfate, and it requires a provider order.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q15 ─────────
+{
+  type: 'mcq',
+  topic: 'Fibrinolytic Contraindication',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client presents with a STEMI. The provider considers alteplase (tPA) for fibrinolytic therapy. The nurse reviews the client\'s history: atrial fibrillation, currently on aspirin, history of hemorrhagic stroke 6 months ago.',
+  stem: 'The nurse should recognize which finding as a CONTRAINDICATION to fibrinolytic therapy?',
+  options: [
+    { key:'A', text:'Current use of aspirin therapy.' },
+    { key:'B', text:'Diagnosis of atrial fibrillation.' },
+    { key:'C', text:'History of hemorrhagic stroke 6 months ago.' },
+    { key:'D', text:'Chest pain onset within the past 10 hours.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'A <strong>prior hemorrhagic (intracranial) stroke</strong> is an absolute contraindication to fibrinolytic therapy. Alteplase converts plasminogen to plasmin, which dissolves clots — including any clot that may have formed at the prior bleed site, risking devastating rebleeding. Aspirin is routinely given with fibrinolytics for STEMI. AFib is not a contraindication. Chest pain within 12–24 hours falls within the treatment window.',
+    choices: [
+      { key:'A', why:'Incorrect. Aspirin is actually given concurrently with alteplase in STEMI management.', correct: false },
+      { key:'B', why:'Incorrect. Atrial fibrillation is not a contraindication to fibrinolytic therapy.', correct: false },
+      { key:'C', why:'CORRECT. Prior hemorrhagic stroke is an absolute contraindication to fibrinolytic therapy due to the risk of catastrophic rebleeding.', correct: true },
+      { key:'D', why:'Incorrect. Chest pain within 12–24 hours falls within the treatment window for fibrinolytic therapy.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q16 ─────────
+{
+  type: 'mcq',
+  topic: 'Atherosclerosis Pathophysiology',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A nurse is teaching a patient about how atherosclerosis leads to cardiovascular disease. Which sequence BEST describes the pathophysiological process?',
+  options: [
+    { key:'A', text:'High LDL → vessel wall inflammation → fatty streaks → fibrous plaque formation → calcification → plaque rupture → thrombosis → ischemia.' },
+    { key:'B', text:'High HDL → vessel wall inflammation → clot formation → plaque deposition → ischemia.' },
+    { key:'C', text:'Fibrous plaques form first, followed by fatty streak development, then vessel injury occurs.' },
+    { key:'D', text:'Vessel inflammation leads directly to myocardial infarction without plaque formation.' },
+  ],
+  answer: ['A'],
+  rationale: {
+    correct: 'Atherosclerosis follows a cascade: <strong>vascular injury/inflammation → LDL accumulation → fatty streaks form on inner arterial walls → collagen forms fibrous plaques → plaques become calcified, hemorrhagic, ulcerated, or thrombosed → rupture exposes underlying tissue → platelet adhesion → thrombus → vessel occlusion → ischemia/infarction</strong>.',
+    choices: [
+      { key:'A', why:'CORRECT. This accurately reflects the atherosclerotic cascade from LDL-driven inflammation through plaque rupture and thrombosis.', correct: true },
+      { key:'B', why:'Incorrect. High HDL (the "good" cholesterol) is actually protective. Low HDL is the risk factor. The sequence is also incorrect.', correct: false },
+      { key:'C', why:'Incorrect. The sequence is reversed — fatty streaks develop first from LDL accumulation, followed by fibrous plaque formation.', correct: false },
+      { key:'D', why:'Incorrect. The plaque formation and rupture process is central to MI pathophysiology; MI does not occur directly from inflammation alone.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q17 ─────────
+{
+  type: 'mcq',
+  topic: 'ACEI — Adverse Effect Recognition',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with hypertension and heart failure is started on lisinopril (an ACE inhibitor). Three days later, the client calls the clinic reporting swelling of the tongue and difficulty breathing.',
+  stem: 'The nurse recognizes this as which complication, and what is the PRIORITY treatment?',
+  options: [
+    { key:'A', text:'Hyperkalemia from ACE inhibition; stop lisinopril and increase fluid intake.' },
+    { key:'B', text:'Angioedema related to increased bradykinin; treat with epinephrine — this is a medical emergency.' },
+    { key:'C', text:'ACE inhibitor cough; switch to an ARB as a less urgent outpatient change.' },
+    { key:'D', text:'First-dose hypotension; have the client lie down and the symptoms will resolve.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Angioedema</strong> — edema of the tongue, glottis, pharynx, lips, and eyes — is a <strong>medical emergency</strong> caused by elevated <strong>bradykinin</strong> levels (ACE inhibitors block the enzyme that normally breaks down bradykinin). Airway compromise can occur rapidly. <strong>Epinephrine</strong> is the treatment. Lisinopril must be permanently discontinued and the client should never receive another ACE inhibitor.',
+    choices: [
+      { key:'A', why:'Incorrect. Hyperkalemia presents with weakness, cardiac arrhythmias, and EKG changes — not tongue swelling and airway compromise.', correct: false },
+      { key:'B', why:'CORRECT. Tongue swelling + dyspnea in a patient on an ACEI = angioedema = medical emergency → epinephrine immediately.', correct: true },
+      { key:'C', why:'Incorrect. ACE inhibitor cough is the most common side effect (also from elevated bradykinin) but presents as a dry cough, not tongue swelling.', correct: false },
+      { key:'D', why:'Incorrect. First-dose hypotension causes dizziness and low BP — not tongue/facial swelling.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q18 ─────────
+{
+  type: 'sata',
+  topic: 'Loop Diuretic Adverse Effects',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client with heart failure is admitted and started on furosemide (Lasix) 80 mg IV. The nurse is monitoring for adverse effects.',
+  stem: 'Which laboratory changes should the nurse anticipate with furosemide therapy? Select all that apply.',
+  options: [
+    { key:'A', text:'Hypokalemia' },
+    { key:'B', text:'Hyponatremia' },
+    { key:'C', text:'Hypercalcemia' },
+    { key:'D', text:'Hypocalcemia' },
+    { key:'E', text:'Elevated BUN and creatinine' },
+    { key:'F', text:'Hypomagnesemia' },
+  ],
+  answer: ['A','B','D','E','F'],
+  rationale: {
+    correct: 'Loop diuretics block the chloride pump in the loop of Henle, causing loss of <strong>sodium, potassium, chloride, calcium, and magnesium</strong>. This results in: hypokalemia, hyponatremia, hypocalcemia, hypochloremia, hypomagnesemia. BUN and creatinine rise due to dehydration (prerenal azotemia). Note: thiazides cause <strong>hyper</strong>calcemia; loops cause <strong>hypo</strong>calcemia — this is a classic exam distinction!',
+    choices: [
+      { key:'A', why:'CORRECT. Loop diuretics cause significant potassium wasting (hypokalemia), increasing digoxin toxicity risk.', correct: true },
+      { key:'B', why:'CORRECT. Sodium is wasted in the loop of Henle, leading to hyponatremia.', correct: true },
+      { key:'C', why:'Incorrect. Hypercalcemia is associated with THIAZIDE diuretics, NOT loop diuretics. Loop diuretics cause HYPOcalcemia.', correct: false },
+      { key:'D', why:'CORRECT. Loop diuretics cause calcium wasting (hypocalcemia) — the opposite of thiazides.', correct: true },
+      { key:'E', why:'CORRECT. Dehydration from aggressive diuresis causes prerenal azotemia, raising BUN and creatinine.', correct: true },
+      { key:'F', why:'CORRECT. Magnesium is lost in the loop of Henle, resulting in hypomagnesemia.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q19 ─────────
+{
+  type: 'mcq',
+  topic: 'Digoxin Toxicity',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with chronic heart failure is on digoxin and furosemide. Current serum potassium is 2.9 mEq/L. The client reports new-onset nausea, yellow-green visual halos, and bradycardia with HR of 46.',
+  stem: 'The nurse recognizes these findings as consistent with which condition, and which factor MOST contributed to its development?',
+  options: [
+    { key:'A', text:'Digoxin toxicity, most likely exacerbated by hypokalemia from furosemide.' },
+    { key:'B', text:'Heart failure exacerbation, caused by fluid overload.' },
+    { key:'C', text:'Furosemide toxicity, causing ototoxicity and cardiac symptoms.' },
+    { key:'D', text:'Normal digoxin effects — bradycardia is the expected therapeutic response.' },
+  ],
+  answer: ['A'],
+  rationale: {
+    correct: '<strong>Digoxin toxicity</strong> presents with bradycardia, nausea/vomiting, and classic <strong>yellow-green visual disturbances/halos</strong>. <strong>Hypokalemia</strong> (K⁺ = 2.9 mEq/L) from furosemide significantly potentiates digoxin toxicity because low potassium increases digoxin binding to cardiac cells. The antidote is <strong>digoxin immune Fab (Digibind)</strong>. The nurse must hold digoxin and notify the provider.',
+    choices: [
+      { key:'A', why:'CORRECT. Classic digoxin toxicity triad: bradycardia + N/V + visual halos. Hypokalemia from furosemide is the precipitating factor.', correct: true },
+      { key:'B', why:'Incorrect. HF exacerbation would present with fluid overload signs (crackles, edema, dyspnea) — not visual disturbances or bradycardia.', correct: false },
+      { key:'C', why:'Incorrect. Furosemide\'s main toxicity is ototoxicity (hearing loss/tinnitus), not bradycardia or visual halos.', correct: false },
+      { key:'D', why:'Incorrect. While digoxin does decrease HR (therapeutic), a HR of 46 with N/V and visual changes is NOT therapeutic — it is toxicity. The nurse must withhold digoxin if HR is below 60.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q20 ─────────
+{
+  type: 'mcq',
+  topic: 'Spironolactone Contraindications',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with heart failure is on an ACE inhibitor (enalapril), furosemide, and the provider wants to add spironolactone (Aldactone). The nurse reviews labs: K⁺ = 5.6 mEq/L.',
+  stem: 'What is the MOST appropriate nursing action before administering spironolactone?',
+  options: [
+    { key:'A', text:'Administer the spironolactone as ordered — it will help balance potassium.' },
+    { key:'B', text:'Hold the spironolactone, notify the provider, as the potassium level is already elevated.' },
+    { key:'C', text:'Administer potassium supplements with the spironolactone.' },
+    { key:'D', text:'Withhold only if the potassium exceeds 6.0 mEq/L.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Spironolactone is a potassium-<strong>sparing</strong> diuretic — it causes potassium <strong>retention</strong>. The nurse should withhold spironolactone when K⁺ > <strong>5 mEq/L</strong> and notify the provider. Adding spironolactone to an already elevated potassium level (5.6 mEq/L), especially in a client also on an ACE inhibitor (which also raises potassium), creates a serious risk of <strong>life-threatening hyperkalemia</strong> and cardiac arrhythmias.',
+    choices: [
+      { key:'A', why:'Incorrect. Spironolactone retains potassium — adding it when K⁺ is already 5.6 mEq/L would worsen hyperkalemia.', correct: false },
+      { key:'B', why:'CORRECT. Hold spironolactone and notify the provider when K⁺ > 5 mEq/L. The combination of ACEI + K⁺-sparing diuretic further elevates potassium.', correct: true },
+      { key:'C', why:'Incorrect. Adding potassium supplements to a client with already-elevated potassium would be dangerous and potentially fatal.', correct: false },
+      { key:'D', why:'Incorrect. The threshold for holding spironolactone is K⁺ > 5 mEq/L, not 6.0 mEq/L. Waiting until 6.0 is too late.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q21 ─────────
+{
+  type: 'mcq',
+  topic: 'Preload & Afterload — Furosemide',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client in acute heart failure is given furosemide IV. The nurse explains the drug helps the heart by affecting which cardiac parameter?',
+  options: [
+    { key:'A', text:'Increases preload and decreases afterload.' },
+    { key:'B', text:'Decreases preload by promoting fluid loss.' },
+    { key:'C', text:'Decreases afterload by vasodilating the arterial system.' },
+    { key:'D', text:'Increases contractility of the myocardium.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Furosemide works by blocking sodium and chloride reabsorption in the loop of Henle, promoting <strong>fluid loss (diuresis)</strong>. By removing excess fluid, furosemide <strong>decreases preload</strong> (ventricular filling pressure/end-diastolic volume). Reducing preload reduces the heart\'s workload in a failing, overloaded heart. It does NOT directly vasodilate arteries (that would decrease afterload) or increase contractility.',
+    choices: [
+      { key:'A', why:'Incorrect. Furosemide decreases preload by removing fluid — it does not increase preload or directly affect afterload.', correct: false },
+      { key:'B', why:'CORRECT. Furosemide decreases preload through diuresis — reducing the volume returning to the heart.', correct: true },
+      { key:'C', why:'Incorrect. Afterload reduction via arterial vasodilation is the mechanism of drugs like ACE inhibitors and nitroglycerin, not furosemide.', correct: false },
+      { key:'D', why:'Incorrect. Furosemide is a diuretic — it does not increase cardiac contractility. Positive inotropes (digoxin, dobutamine) perform this function.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q22 ─────────
+{
+  type: 'mcq',
+  topic: 'Left vs Right Heart Failure S&S',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'A client with a history of MI presents to the clinic. Assessment reveals: crackles bilaterally in lung bases, frothy pink-tinged sputum, paroxysmal nocturnal dyspnea, and S3 heart sound.',
+  stem: 'These findings are MOST consistent with which type of heart failure?',
+  options: [
+    { key:'A', text:'Right ventricular heart failure with systemic venous congestion.' },
+    { key:'B', text:'Left ventricular heart failure with pulmonary congestion.' },
+    { key:'C', text:'Diastolic heart failure with preserved ejection fraction.' },
+    { key:'D', text:'Cardiogenic shock with peripheral vasodilation.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Left ventricular HF</strong> causes <strong>pulmonary congestion</strong> because the left ventricle cannot adequately eject blood, causing backup into the pulmonary vasculature. Classic signs: <strong>crackles (bilateral bases), frothy pink-tinged sputum, paroxysmal nocturnal dyspnea (PND), orthopnea, S3 heart sound, tachycardia, tachypnea</strong>. Right HF causes systemic congestion (JVD, peripheral edema, ascites, hepatomegaly).',
+    choices: [
+      { key:'A', why:'Incorrect. Right HF causes systemic venous congestion with JVD, peripheral edema, hepatosplenomegaly, and ascites — not pulmonary signs.', correct: false },
+      { key:'B', why:'CORRECT. Left HF → pulmonary backup → crackles, frothy sputum, PND, orthopnea, S3.', correct: true },
+      { key:'C', why:'Incorrect. Diastolic HF (preserved EF) has the same symptoms as systolic HF but involves the ventricle\'s inability to relax. The specific combination presented is classic for left ventricular failure.', correct: false },
+      { key:'D', why:'Incorrect. Cardiogenic shock presents with hypotension, cold/clammy skin, poor peripheral pulses, and decreased urine output — signs of profound pump failure.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q23 ─────────
+{
+  type: 'mcq',
+  topic: 'Right Heart Failure S&S',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'A client with COPD-related pulmonary hypertension reports increasing leg swelling, abdominal distension, and 5 kg weight gain over 1 week. Assessment reveals jugular venous distension (JVD) and pitting edema to the knees.',
+  stem: 'The nurse recognizes these findings as MOST consistent with:',
+  options: [
+    { key:'A', text:'Left ventricular heart failure with pulmonary edema.' },
+    { key:'B', text:'Acute pulmonary embolism with sudden onset dyspnea.' },
+    { key:'C', text:'Right ventricular heart failure with systemic venous congestion.' },
+    { key:'D', text:'Hypoalbuminemia causing decreased oncotic pressure.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: '<strong>Right HF</strong> prevents the right ventricle from pumping blood forward into the lungs. Blood backs up into the <strong>systemic venous system</strong>, causing: <strong>JVD, peripheral edema, weight gain, ascites, hepatosplenomegaly, nausea/anorexia, polyuria at night</strong>. COPD and pulmonary hypertension are classic right-sided HF causes.',
+    choices: [
+      { key:'A', why:'Incorrect. Left HF causes pulmonary congestion (crackles, dyspnea, frothy sputum) — not dependent edema and JVD.', correct: false },
+      { key:'B', why:'Incorrect. PE presents with sudden dyspnea, tachycardia, and chest pain — not this gradual systemic congestion picture.', correct: false },
+      { key:'C', why:'CORRECT. JVD + bilateral edema + ascites + weight gain = right HF causing systemic venous backup.', correct: true },
+      { key:'D', why:'Incorrect. Hypoalbuminemia causes edema but would not explain JVD or the cardiac history.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q24 ─────────
+{
+  type: 'bowtie',
+  topic: 'Heart Failure Bow-Tie',
+  badge: 'badge-bowtie',
+  badgeLabel: '🎀 Bow-Tie Question',
+  scenario: 'A 70-year-old client with systolic HF (EF 30%) presents with increasing dyspnea, 3+ pitting edema, and BP 148/92. Weight is up 5 kg from last week.',
+  centerLabel: 'PRIORITY\nNURSING\nACTION',
+  leftLabel: 'Contributing Condition',
+  rightLabel: 'Expected Outcome',
+  leftOptions: [
+    'Decreased preload',
+    'Fluid overload / increased preload',
+    'Coronary vasospasm',
+    'Decreased afterload',
+  ],
+  rightOptions: [
+    'Increased heart rate',
+    'Increased urine output and reduced edema',
+    'Elevated potassium levels',
+    'Increased contractility only',
+  ],
+  leftAnswer: 'Fluid overload / increased preload',
+  rightAnswer: 'Increased urine output and reduced edema',
+  rationale: {
+    correct: 'The client has <strong>fluid overload causing increased preload</strong> — the hallmark of decompensated HF. Priority intervention is IV furosemide to promote diuresis. The expected therapeutic outcome is <strong>increased urine output, reduced edema, and weight loss</strong> — signs that preload is decreasing and congestion is resolving. Monitoring weight daily (0.5–1 kg/day loss) confirms effectiveness.',
+    choices: []
+  }
+},
+
+// ───────── Q25 ─────────
+{
+  type: 'mcq',
+  topic: 'Nitroglycerin — Preload/Afterload',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client with STEMI is receiving IV nitroglycerin. The nurse explains to the student nurse how this drug benefits the client. Which statement is MOST accurate regarding nitroglycerin\'s cardiac effects?',
+  options: [
+    { key:'A', text:'Nitroglycerin primarily increases contractility to improve cardiac output.' },
+    { key:'B', text:'Nitroglycerin decreases preload (venodilation) and afterload (arterial dilation), reducing cardiac oxygen demand.' },
+    { key:'C', text:'Nitroglycerin increases preload by increasing venous return to the heart.' },
+    { key:'D', text:'Nitroglycerin works by blocking beta receptors to reduce heart rate.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Nitroglycerin is a <strong>vasodilator acting directly on vascular smooth muscle</strong>. Its mechanisms include: (1) <strong>venodilation → decreased preload</strong> (less blood returning to the heart), (2) <strong>arterial dilation → decreased afterload</strong>, (3) increased collateral blood flow to ischemic myocardium, (4) controls hypertension. Net effect: reduced cardiac workload and oxygen demand, and improved perfusion to ischemic tissue.',
+    choices: [
+      { key:'A', why:'Incorrect. Nitroglycerin does not affect contractility. Positive inotropes (dobutamine, digoxin) increase contractility.', correct: false },
+      { key:'B', why:'CORRECT. NTG decreases both preload (venodilation) and afterload (arterial dilation), reducing myocardial oxygen demand.', correct: true },
+      { key:'C', why:'Incorrect. Nitroglycerin DECREASES venous return (preload) through venodilation — the opposite of this answer.', correct: false },
+      { key:'D', why:'Incorrect. Beta-blocking is the mechanism of beta blockers (metoprolol, atenolol), not nitroglycerin.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q26 ─────────
+{
+  type: 'mcq',
+  topic: 'Nitroglycerin SL Teaching',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with angina is prescribed sublingual nitroglycerin 0.4 mg PRN for chest pain and is being taught how to use it at home.',
+  stem: 'Which teaching point indicates the client needs MORE education?',
+  options: [
+    { key:'A', text:'"I will take one tablet under my tongue at the onset of chest pain and sit or lie down."' },
+    { key:'B', text:'"If pain persists after 5 minutes, I can take a second tablet, and a third after another 5 minutes if needed."' },
+    { key:'C', text:'"If my pain is not relieved after one tablet, I should wait 30 minutes before calling 911."' },
+    { key:'D', text:'"I should store nitroglycerin at room temperature in its original dark glass container."' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'Per teaching guidelines: <strong>at home, take ONE SL nitroglycerin → if not relieved, call 911 immediately</strong>. The 3-dose protocol (one every 5 minutes x3) applies in the hospital setting. At home, waiting 30 minutes before calling 911 is dangerous — this delay could result in a completed MI. Correct teaching: take one tablet at home, then call 911.',
+    choices: [
+      { key:'A', why:'Incorrect (teaching is correct). Sitting or lying down prevents falls from orthostatic hypotension.', correct: false },
+      { key:'B', why:'Incorrect (teaching is correct for hospital setting). In the ED/hospital, up to 3 doses every 5 minutes is the protocol.', correct: false },
+      { key:'C', why:'CORRECT — this statement needs correction. At home, take ONE SL tablet, then call 911 if not relieved. Waiting 30 minutes is dangerous.', correct: true },
+      { key:'D', why:'Incorrect (teaching is correct). NTG is photosensitive and must be stored in its original dark glass container at room temperature.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q27 ─────────
+{
+  type: 'mcq',
+  topic: 'Beta Blockers — When to Hold',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with hypertension and asthma is admitted to the cardiac floor. The prescriber orders metoprolol (a selective beta-1 blocker) 25 mg PO BID.',
+  stem: 'Which assessment finding would be MOST important for the nurse to report to the provider before administering?',
+  options: [
+    { key:'A', text:'Blood pressure of 138/84 mmHg.' },
+    { key:'B', text:'Heart rate of 62 beats/minute.' },
+    { key:'C', text:'Active wheezing with prolonged expiration on auscultation.' },
+    { key:'D', text:'Blood glucose of 112 mg/dL.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'Even though metoprolol is a <strong>selective beta-1 blocker</strong>, it can still cause <strong>bronchoconstriction in clients with asthma or severe reactive airway disease</strong>, especially at higher doses. Active wheezing indicates ongoing bronchospasm — administering a beta blocker in this state can precipitate a life-threatening asthma attack. The provider must be notified for potential medication change.',
+    choices: [
+      { key:'A', why:'Incorrect. A BP of 138/84 is only mildly elevated — beta blockers are indicated for hypertension and this is not a contraindication.', correct: false },
+      { key:'B', why:'Incorrect. HR of 62 is within the acceptable range. Beta blockers are typically held for HR < 50-60 depending on institutional protocol; 62 is acceptable.', correct: false },
+      { key:'C', why:'CORRECT. Active wheezing signals bronchospasm — a serious concern when administering any beta blocker to an asthmatic client, even a selective one.', correct: true },
+      { key:'D', why:'Incorrect. A glucose of 112 is borderline but not a contraindication. Beta blockers can mask hypoglycemia symptoms, but this glucose level is not in a concerning range.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q28 ─────────
+{
+  type: 'mcq',
+  topic: 'Atorvastatin — Rhabdomyolysis',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client on atorvastatin for hypercholesterolemia calls the nurse reporting severe muscle pain and dark brown-colored urine for the past day.',
+  stem: 'The nurse recognizes these findings as MOST concerning for which complication?',
+  options: [
+    { key:'A', text:'UTI — dark urine is typical of concentrated urine in dehydration.' },
+    { key:'B', text:'Rhabdomyolysis — muscle breakdown releasing myoglobin into the urine.' },
+    { key:'C', text:'Hepatotoxicity — statins can cause liver damage causing dark urine.' },
+    { key:'D', text:'A normal side effect of statins — the client should continue medication.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Rhabdomyolysis</strong> is a rare but potentially fatal side effect of statins. Muscle fibers break down, releasing <strong>myoglobin</strong> into the bloodstream, which filters through the kidneys and causes <strong>dark brown (tea-colored) urine</strong>. If untreated, it leads to acute kidney failure. The statin must be stopped IMMEDIATELY and the client evaluated urgently. The nurse should direct this client to the ED.',
+    choices: [
+      { key:'A', why:'Incorrect. UTI typically causes cloudy or pink-tinged urine with dysuria — not dark brown tea-colored urine with muscle pain.', correct: false },
+      { key:'B', why:'CORRECT. Severe myalgia + dark brown/tea-colored urine in a patient on a statin = rhabdomyolysis until proven otherwise. Stop the statin immediately.', correct: true },
+      { key:'C', why:'Incorrect. Statin-related hepatotoxicity causes jaundice (yellow skin/eyes) and elevated liver enzymes but not muscle pain with tea-colored urine.', correct: false },
+      { key:'D', why:'Incorrect. Muscle pain + tea-colored urine is NEVER a normal statin side effect — this is a medical emergency.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q29 ─────────
+{
+  type: 'priority',
+  topic: 'Cardiogenic Shock Recognition',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'The nurse is rounding on four clients in the cardiac step-down unit. Client assessments are as follows:\nA) Post-MI day 2, BP 90/60, HR 124, cool clammy skin, urine output 15 mL over the last hour.\nB) Client with HF, BP 138/88, mild bilateral ankle edema, crackles at bases.\nC) Client post PCI, BP 118/74, HR 76, no complaints.\nD) Client with angina, BP 144/90, reporting mild chest tightness (6/10) that started 10 minutes ago.',
+  stem: 'Which client requires IMMEDIATE intervention and provider notification?',
+  options: [
+    { key:'A', text:'Client A — post-MI with hypotension, tachycardia, cold/clammy skin, and oliguria.' },
+    { key:'B', text:'Client B — HF client with elevated BP and mild edema.' },
+    { key:'C', text:'Client C — stable post-PCI client.' },
+    { key:'D', text:'Client D — angina client with moderate chest pain.' },
+  ],
+  answer: ['A'],
+  rationale: {
+    correct: 'Client A shows the classic presentation of <strong>cardiogenic shock</strong>: <strong>hypotension (systolic < 90 mmHg), tachycardia, cold/clammy skin, poor peripheral perfusion, and oliguria (< 0.5–1 mL/kg/hr)</strong>. This is a life-threatening complication of MI requiring immediate intervention. Early detection is critical because undiagnosed cardiogenic shock carries an extremely high mortality rate.',
+    choices: [
+      { key:'A', why:'CORRECT. BP 90/60 + HR 124 + cold/clammy + oliguria = cardiogenic shock = immediate emergency.', correct: true },
+      { key:'B', why:'Incorrect. This client has compensated HF with elevated but manageable BP — not immediately life-threatening.', correct: false },
+      { key:'C', why:'Incorrect. This client is stable post-PCI with normal vitals.', correct: false },
+      { key:'D', why:'Incorrect. Client D is experiencing angina and needs attention, but is hemodynamically stable. Client A is in shock.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q30 ─────────
+{
+  type: 'mcq',
+  topic: 'HF Compensatory Mechanisms',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A nurse is educating a student about why heart failure worsens over time despite initial compensatory mechanisms. Which explanation is MOST accurate?',
+  options: [
+    { key:'A', text:'The kidneys stop responding to aldosterone, causing fluid depletion.' },
+    { key:'B', text:'SNS activation and RAS stimulation temporarily increase CO but ultimately worsen HF by increasing preload, afterload, and promoting maladaptive remodeling.' },
+    { key:'C', text:'Elevated BNP levels suppress RAS activity, leading to hypotension.' },
+    { key:'D', text:'Cardiac contractility increases over time as the heart adapts to higher workload.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'In HF, compensatory mechanisms (SNS activation → tachycardia/vasoconstriction; RAS activation → Na/water retention; ADH release → fluid retention) initially maintain CO but lead to <strong>increased preload and afterload, cardiac remodeling (hypertrophy/dilation), and worsening pump function over time</strong>. Elevated BNP signals ongoing stress. This vicious cycle is why HF drugs (ACEIs, beta blockers, diuretics) target these same pathways.',
+    choices: [
+      { key:'A', why:'Incorrect. In HF, aldosterone levels are ELEVATED (not suppressed), causing excessive sodium and water retention.', correct: false },
+      { key:'B', why:'CORRECT. The compensatory SNS/RAS activation that temporarily helps becomes harmful over time, increasing cardiac workload and promoting remodeling.', correct: true },
+      { key:'C', why:'Incorrect. BNP is a marker of ventricular stress. While it does promote vasodilation and natriuresis, it does not suppress RAS enough to counteract the disease.', correct: false },
+      { key:'D', why:'Incorrect. Over time, the overloaded heart undergoes maladaptive remodeling, becoming dilated and less contractile — not more effective.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q31 ─────────
+{
+  type: 'mcq',
+  topic: 'STEMI vs NSTEMI',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'A client arrives to the ED with crushing chest pain radiating to the left arm. ECG reveals ST elevation in leads II, III, and aVF. Troponin is elevated.',
+  stem: 'The nurse understands that this ECG finding is MOST consistent with which condition, and what is the initial treatment priority?',
+  options: [
+    { key:'A', text:'NSTEMI — initiate clopidogrel and observe for 12–24 hours.' },
+    { key:'B', text:'STEMI — PCI within 90 minutes of arrival is the priority, or fibrinolytic therapy within 30 minutes if PCI unavailable.' },
+    { key:'C', text:'Unstable angina — ECG changes will resolve with nitroglycerin.' },
+    { key:'D', text:'NSTEMI — only seen with ST depression and T wave inversion, not ST elevation.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>ST elevation in ≥2 contiguous leads = STEMI</strong>, caused by complete (100%) coronary artery occlusion and full-thickness myocardial necrosis. Treatment priority: <strong>PCI (angioplasty/stent) within 90 minutes of arrival</strong>, or if PCI unavailable, fibrinolytic therapy (alteplase) within <strong>30 minutes of ED arrival</strong>. Time is muscle — every minute of delay = more myocardial cell death.',
+    choices: [
+      { key:'A', why:'Incorrect. NSTEMI involves partial occlusion with subendocardial ischemia. ST elevation on ECG defines STEMI, not NSTEMI.', correct: false },
+      { key:'B', why:'CORRECT. STEMI = ST elevation + 100% occlusion = necrosis. Priority: PCI within 90 min or tPA within 30 min.', correct: true },
+      { key:'C', why:'Incorrect. Unstable angina does not produce ST elevation and troponin elevation. This client has an MI.', correct: false },
+      { key:'D', why:'Incorrect. This reverses the definitions. NSTEMI = ST depression/T-wave inversion. STEMI = ST elevation.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q32 ─────────
+{
+  type: 'sata',
+  topic: 'THROMBINS2 — ACS Management',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client with STEMI arrives to the ED. The interdisciplinary team activates the STEMI protocol.',
+  stem: 'Using the THROMBINS2 mnemonic, which interventions are indicated in STEMI management? Select all that apply.',
+  options: [
+    { key:'A', text:'Thienopyridines (clopidogrel) for antiplatelet blockade.' },
+    { key:'B', text:'Heparin anticoagulation.' },
+    { key:'C', text:'RAAS blockade with ACE inhibitor or ARB.' },
+    { key:'D', text:'Oxygen if saturation < 90%.' },
+    { key:'E', text:'Morphine for pain management.' },
+    { key:'F', text:'Beta blocker (start within 24 hours if no HF or heart block).' },
+    { key:'G', text:'Immediate NSAID therapy for inflammation.' },
+    { key:'H', text:'Nitroglycerin for vasodilation.' },
+    { key:'I', text:'Statins (e.g., atorvastatin).' },
+    { key:'J', text:'Aspirin for antiplatelet action.' },
+  ],
+  answer: ['A','B','C','D','E','F','H','I','J'],
+  rationale: {
+    correct: 'THROMBINS²: <strong>T</strong>hienopyridines, <strong>H</strong>eparin, <strong>R</strong>enin-angiotensin blockade (ACEI/ARB), <strong>O</strong>xygen for hypoxia, <strong>M</strong>orphine, <strong>B</strong>eta-blocker, <strong>I</strong>nterventions (PCI), <strong>N</strong>itroglycerine, <strong>S</strong>tatins, <strong>S</strong>aspirin. NSAIDs are specifically CONTRAINDICATED in MI — they increase risk of mortality, reinfarction, hypertension, HF, and myocardial rupture.',
+    choices: [
+      { key:'A', why:'CORRECT. Clopidogrel provides antiplatelet blockade, especially for stent patients.', correct: true },
+      { key:'B', why:'CORRECT. Heparin is anticoagulation therapy in STEMI management.', correct: true },
+      { key:'C', why:'CORRECT. ACEI/ARB promotes ventricular remodeling after MI.', correct: true },
+      { key:'D', why:'CORRECT. Supplemental oxygen is given when O₂ saturation is < 90%.', correct: true },
+      { key:'E', why:'CORRECT. Morphine reduces pain and decreases oxygen demand (venodilation).', correct: true },
+      { key:'F', why:'CORRECT. Beta blocker started within 24 hours reduces infarct size and mortality.', correct: true },
+      { key:'G', why:'Incorrect. NSAIDs are CONTRAINDICATED in MI — they worsen outcomes and increase mortality.', correct: false },
+      { key:'H', why:'CORRECT. Nitroglycerin provides vasodilation and reduces cardiac workload.', correct: true },
+      { key:'I', why:'CORRECT. Atorvastatin (statin) inhibits cholesterol production and stabilizes plaques.', correct: true },
+      { key:'J', why:'CORRECT. Aspirin 325 mg chewed immediately on arrival for antiplatelet effect.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q33 ─────────
+{
+  type: 'mcq',
+  topic: 'Morphine in STEMI',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with STEMI receives morphine 4 mg IV. The client\'s BP drops to 88/52 mmHg within 20 minutes and respirations slow to 8 breaths/minute.',
+  stem: 'Which nursing intervention is the PRIORITY?',
+  options: [
+    { key:'A', text:'Administer another dose of morphine as the pain may be causing the hypotension.' },
+    { key:'B', text:'Withhold further morphine, position the client flat, and administer naloxone as ordered.' },
+    { key:'C', text:'Administer atropine IV for the low respiratory rate.' },
+    { key:'D', text:'Encourage the client to deep breathe — respiratory depression is a normal expected effect.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Morphine\'s adverse effects include <strong>hypotension, bradycardia, respiratory depression, and sedation</strong>. With BP 88/52 and RR 8, the client is experiencing serious adverse effects. The nurse must: <strong>withhold further morphine, position flat (or Trendelenburg for hypotension as appropriate), and administer naloxone (Narcan)</strong> — the opioid antidote — as ordered. Vital signs must be closely monitored.',
+    choices: [
+      { key:'A', why:'Incorrect. Additional morphine would worsen the hypotension and respiratory depression — potentially lethal.', correct: false },
+      { key:'B', why:'CORRECT. Hold morphine, address hemodynamic instability, and use naloxone to reverse opioid effects.', correct: true },
+      { key:'C', why:'Incorrect. Atropine is for bradycardia, not respiratory depression. Naloxone reverses opioid-induced respiratory depression.', correct: false },
+      { key:'D', why:'Incorrect. A respiratory rate of 8 breaths/minute is respiratory depression — this is an emergency, not a normal expected effect.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q34 ─────────
+{
+  type: 'mcq',
+  topic: 'PAD vs Venous Insufficiency',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'Two clients present with lower extremity ulcers. Client 1: ulcer on the outer ankle, round with well-defined borders, dry skin, loss of hair on the lower leg, cold extremity, and intermittent claudication. Client 2: ulcer on the inner ankle with irregular borders, reddish-brown discoloration of the lower leg, and significant swelling.',
+  stem: 'Based on pathophysiology, Client 1 has _____ and Client 2 has _____.',
+  options: [
+    { key:'A', text:'Client 1 = Venous insufficiency; Client 2 = PAD' },
+    { key:'B', text:'Client 1 = PAD (arterial); Client 2 = Venous insufficiency' },
+    { key:'C', text:'Both clients have PAD with different presentations.' },
+    { key:'D', text:'Both clients have venous insufficiency — ulcer location varies with severity.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>PAD (arterial)</strong>: ulcers are <strong>round, well-defined borders, outer ankle/foot, cold extremities, hair loss, claudication</strong> — caused by arterial occlusion (poor O₂ delivery). <strong>Venous insufficiency</strong>: ulcers on the <strong>inner ankle, irregular borders, reddish-brown (hemosiderin) discoloration, significant edema</strong> — caused by venous hypertension and stasis.',
+    choices: [
+      { key:'A', why:'Incorrect. The descriptions are reversed. Round, well-defined ulcers with cold/pale extremities = arterial PAD.', correct: false },
+      { key:'B', why:'CORRECT. Client 1\'s features (round ulcer, cold limb, claudication, hair loss) = PAD. Client 2\'s (inner ankle, irregular, brownish staining, edema) = venous insufficiency.', correct: true },
+      { key:'C', why:'Incorrect. The two presentations are distinct pathologies with different mechanisms, locations, and management.', correct: false },
+      { key:'D', why:'Incorrect. Venous ulcers do not cause intermittent claudication, hair loss, or cold extremities.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q35 ─────────
+{
+  type: 'mcq',
+  topic: '6 Ps of Acute Arterial Ischemia',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'A client who underwent cardiac catheterization 3 hours ago now reports sudden onset of severe pain in the right leg. Assessment: right foot is pale, pulseless, and cold. The client cannot move their toes and reports numbness.',
+  stem: 'The nurse recognizes this presentation as which emergency, and what is the PRIORITY intervention?',
+  options: [
+    { key:'A', text:'Deep vein thrombosis — initiate compression therapy and LMWH.' },
+    { key:'B', text:'Acute arterial insufficiency (the 6 Ps) — immediately notify the provider for emergent intervention.' },
+    { key:'C', text:'Post-procedural swelling — elevate the leg and apply ice.' },
+    { key:'D', text:'Peripheral neuropathy — reassure the client and continue monitoring.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'The <strong>6 Ps of acute arterial ischemia</strong>: <strong>Pain, Pallor, Pulselessness, Paresthesia, Paralysis, Polar (coldness)</strong>. This client has all six — a limb-threatening emergency likely caused by arterial embolism post-catheterization. <strong>Immediate provider notification</strong> is critical. Treatment includes heparin and emergency thrombectomy/embolectomy. Every minute of delay risks permanent ischemic damage or limb loss.',
+    choices: [
+      { key:'A', why:'Incorrect. DVT affects veins, not arteries, and presents with swelling, warmth, and pain — not pallor, pulselessness, and paralysis.', correct: false },
+      { key:'B', why:'CORRECT. Pulselessness + pallor + pain + cold + paresthesia + paralysis = acute arterial occlusion → emergent intervention needed NOW.', correct: true },
+      { key:'C', why:'Incorrect. Post-procedural swelling does not cause pulselessness, pallor, and inability to move. Never elevate an arterially ischemic limb.', correct: false },
+      { key:'D', why:'Incorrect. Peripheral neuropathy is a gradual, chronic condition. This presentation is sudden and constitutes a limb-threatening emergency.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q36 ─────────
+{
+  type: 'sata',
+  topic: 'Angina Teaching',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client with new-onset chronic stable angina is being educated about lifestyle modifications and medications.',
+  stem: 'Which teaching points reflect EFFECTIVE education? Select all that apply.',
+  options: [
+    { key:'A', text:'Avoid heavy meals, smoking, extreme weather changes, and emotional stress when possible.' },
+    { key:'B', text:'Physical activity is completely contraindicated — rest at all times.' },
+    { key:'C', text:'Nitroglycerin patches should be removed at bedtime to prevent tolerance.' },
+    { key:'D', text:'Calcium channel blockers can help relax coronary artery spasms in vasospastic angina.' },
+    { key:'E', text:'If taking sildenafil (Viagra), you must avoid nitroglycerin due to severe hypotension risk.' },
+  ],
+  answer: ['A','C','D','E'],
+  rationale: {
+    correct: 'Non-pharmacologic management of angina includes <strong>avoiding triggers</strong> (heavy meals, smoking, temperature extremes, emotional stress) and maintaining moderate exercise (not absolute rest). NTG patch tolerance develops — patches are removed at <strong>bedtime (HS)</strong> to prevent tolerance. <strong>Calcium channel blockers</strong> relieve coronary vasospasms. <strong>Nitroglycerin + sildenafil/PDE5 inhibitors = severe, potentially fatal hypotension</strong> — absolutely contraindicated.',
+    choices: [
+      { key:'A', why:'CORRECT. These are classic angina triggers to avoid.', correct: true },
+      { key:'B', why:'Incorrect. Moderate, controlled exercise is encouraged. Only strenuous exercise that precipitates angina should be limited.', correct: false },
+      { key:'C', why:'CORRECT. Removing patches at bedtime prevents nitrate tolerance from developing.', correct: true },
+      { key:'D', why:'CORRECT. CCBs relax arterial smooth muscle and relieve coronary vasospasm (Prinzmetal/variant angina).', correct: true },
+      { key:'E', why:'CORRECT. NTG is withheld if sildenafil (or any PDE5 inhibitor) was taken within the last 24–48 hours due to severe, potentially fatal hypotension.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q37 ─────────
+{
+  type: 'mcq',
+  topic: 'ACE Inhibitor — Preload/Afterload',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client with heart failure is started on enalapril (an ACE inhibitor). The nurse explains to the client how this medication helps their heart by asking: "This medication helps your heart by:"',
+  options: [
+    { key:'A', text:'Increasing heart rate so more blood gets pumped out each minute.' },
+    { key:'B', text:'Reducing afterload (by vasodilation) and preload (by reducing sodium/water retention), decreasing the heart\'s workload.' },
+    { key:'C', text:'Increasing contractility of the heart muscle.' },
+    { key:'D', text:'Blocking calcium channels to slow the heart rate.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>ACE inhibitors</strong> (enalapril, lisinopril, captopril) work through the RAAS: they inhibit ACE → less angiotensin II (a potent vasoconstrictor) → <strong>vasodilation = decreased afterload</strong>. They also block aldosterone → less sodium/water retention → <strong>decreased preload</strong>. Additionally, elevated bradykinin causes further vasodilation. Net result: reduced cardiac workload from both sides.',
+    choices: [
+      { key:'A', why:'Incorrect. ACE inhibitors do not increase heart rate. Increased HR would worsen myocardial oxygen demand.', correct: false },
+      { key:'B', why:'CORRECT. ACEI reduces both preload (via sodium/water excretion) and afterload (via vasodilation), reducing cardiac workload.', correct: true },
+      { key:'C', why:'Incorrect. Positive inotropes (digoxin, dobutamine) increase contractility. ACE inhibitors do not directly affect contractility.', correct: false },
+      { key:'D', why:'Incorrect. Calcium channel blockers block Ca²⁺ channels to reduce HR and contractility. This is a separate drug class.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q38 ─────────
+{
+  type: 'mcq',
+  topic: 'Dobutamine — HF Management',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with decompensated heart failure post-STEMI is started on IV dobutamine.',
+  stem: 'Which assessment finding would indicate that dobutamine is achieving its therapeutic effect?',
+  options: [
+    { key:'A', text:'Heart rate increases from 78 to 114 bpm.' },
+    { key:'B', text:'Urine output increases from 10 mL/hr to 45 mL/hr and dyspnea decreases.' },
+    { key:'C', text:'Serum potassium drops from 4.2 to 2.9 mEq/L.' },
+    { key:'D', text:'Blood pressure drops from 110/70 to 85/50 mmHg.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Dobutamine is a <strong>selective beta-1 agonist</strong> that increases myocardial contractility and improves cardiac output without primarily increasing heart rate. Therapeutic response: <strong>increased urine output (indicating improved renal perfusion), decreased dyspnea and orthopnea, improved exercise tolerance</strong>. A marked HR increase is an adverse effect (tachycardia), not a goal.',
+    choices: [
+      { key:'A', why:'Incorrect. Significant tachycardia (HR 114) is an adverse effect of dobutamine, not a therapeutic goal. It increases myocardial oxygen demand.', correct: false },
+      { key:'B', why:'CORRECT. Improved CO → better kidney perfusion → increased UOP. Decreased dyspnea reflects improved CO and reduced congestion.', correct: true },
+      { key:'C', why:'Incorrect. Hypokalemia is not a therapeutic effect of dobutamine and signals an adverse complication (possibly from concurrent diuresis).', correct: false },
+      { key:'D', why:'Incorrect. Dobutamine should improve BP by improving CO, not cause hypotension. A drop to 85/50 is concerning, not therapeutic.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q39 ─────────
+{
+  type: 'mcq',
+  topic: 'Cardiogenic Shock Pathophysiology',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A client develops cardiogenic shock following an anterior STEMI. The nurse understands cardiogenic shock develops when:',
+  options: [
+    { key:'A', text:'More than 40% of the left ventricular myocardium undergoes necrosis, causing the heart to fail as a pump.' },
+    { key:'B', text:'Massive vasodilation occurs in response to myocardial infarction.' },
+    { key:'C', text:'Excessive fluid loss from the vascular space causes decreased preload.' },
+    { key:'D', text:'Complete AV block prevents effective cardiac conduction.' },
+  ],
+  answer: ['A'],
+  rationale: {
+    correct: '<strong>Cardiogenic shock</strong> is also called <strong>Class IV heart failure</strong> or post-MI HF. It develops when <strong>necrosis of more than 40% of the left ventricular myocardium</strong> occurs, resulting in severe pump failure. The heart cannot maintain adequate cardiac output, leading to hypotension, decreased perfusion to all organs, and the shock state.',
+    choices: [
+      { key:'A', why:'CORRECT. >40% LV necrosis = cardiogenic shock. This massive loss of muscle leaves the heart unable to pump effectively.', correct: true },
+      { key:'B', why:'Incorrect. Massive vasodilation describes distributive/septic shock, not cardiogenic shock. Cardiogenic shock involves vasoconstriction as a compensatory response.', correct: false },
+      { key:'C', why:'Incorrect. Fluid loss causing decreased preload describes hypovolemic shock — a different mechanism.', correct: false },
+      { key:'D', why:'Incorrect. AV block causes dysrhythmias and can contribute to hemodynamic instability, but is not the definition of cardiogenic shock.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q40 ─────────
+{
+  type: 'mcq',
+  topic: 'Dipyridamole Indication',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client asks why they are being prescribed dipyridamole. The nurse explains this antiplatelet agent is SPECIFICALLY approved for:',
+  options: [
+    { key:'A', text:'Primary prevention of MI in clients over age 65.' },
+    { key:'B', text:'Prevention of thromboembolism after heart valve replacement, used in combination with warfarin.' },
+    { key:'C', text:'Treatment of acute PE as a fibrinolytic agent.' },
+    { key:'D', text:'Treatment of HIT (heparin-induced thrombocytopenia).' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Dipyridamole\'s approved indication is <strong>prevention of thromboembolism in clients with prosthetic heart valves</strong>, used in combination with <strong>warfarin</strong>. It suppresses platelet aggregation. The typical dose is 75–100 mg four times daily. It is NOT a fibrinolytic and is not indicated for HIT or primary MI prevention.',
+    choices: [
+      { key:'A', why:'Incorrect. Aspirin (not dipyridamole) is used for primary MI prevention in men and women over 65.', correct: false },
+      { key:'B', why:'CORRECT. Dipyridamole is specifically approved for post-heart valve replacement thromboembolism prevention in combination with warfarin.', correct: true },
+      { key:'C', why:'Incorrect. Dipyridamole is an antiplatelet, not a fibrinolytic. Alteplase (tPA) is the fibrinolytic.', correct: false },
+      { key:'D', why:'Incorrect. HIT management involves stopping heparin and using a direct thrombin inhibitor (argatroban), not dipyridamole.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q41 ─────────
+{
+  type: 'mcq',
+  topic: 'Calcium Channel Blocker — Drug Interaction',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with hypertension and chronic stable angina is prescribed amlodipine (a calcium channel blocker). During medication reconciliation, the nurse notes the client drinks a large glass of grapefruit juice every morning.',
+  stem: 'The nurse is MOST concerned because:',
+  options: [
+    { key:'A', text:'Grapefruit juice increases calcium absorption, counteracting the drug\'s effects.' },
+    { key:'B', text:'Grapefruit juice inhibits CYP3A4 metabolism, increasing drug plasma levels and risk of toxicity.' },
+    { key:'C', text:'Grapefruit juice contains potassium that can cause hyperkalemia with CCBs.' },
+    { key:'D', text:'Grapefruit juice has no interaction with calcium channel blockers.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Grapefruit juice inhibits CYP3A4</strong> — the hepatic enzyme responsible for metabolizing many calcium channel blockers. This inhibition increases the drug\'s plasma concentration, potentially causing <strong>severe hypotension, bradycardia, and toxicity</strong>. The client should be instructed to avoid grapefruit and grapefruit juice entirely while on this medication.',
+    choices: [
+      { key:'A', why:'Incorrect. Grapefruit juice does not increase calcium absorption and does not work through this mechanism.', correct: false },
+      { key:'B', why:'CORRECT. Grapefruit juice inhibits CYP3A4 metabolism → increased drug levels → risk of hypotension, bradycardia, and CCB toxicity.', correct: true },
+      { key:'C', why:'Incorrect. Grapefruit juice does not contain clinically significant amounts of potassium and does not interact with CCBs via potassium pathways.', correct: false },
+      { key:'D', why:'Incorrect. Grapefruit juice has a well-documented, clinically significant interaction with calcium channel blockers.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q42 ─────────
+{
+  type: 'mcq',
+  topic: 'ARBs vs ACEIs',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client with hypertension and HF developed a persistent dry cough on lisinopril. The provider switches to losartan (an ARB). The nurse explains the difference to the client. Which statement is MOST accurate?',
+  options: [
+    { key:'A', text:'ARBs and ACEIs work identically, so losartan will cause the same cough.' },
+    { key:'B', text:'ARBs block angiotensin II receptors directly and do not increase bradykinin levels, so cough is much less likely.' },
+    { key:'C', text:'ARBs are first-line for HF because they are superior to ACEIs in reducing mortality.' },
+    { key:'D', text:'Both ARBs and ACEIs can be safely combined to achieve maximum BP reduction.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'ACEIs cause a dry cough because they raise <strong>bradykinin</strong> levels (which promotes vasodilation AND cough). <strong>ARBs block angiotensin II receptors directly</strong> — they do NOT affect bradykinin levels, so <strong>cough is not a side effect</strong>. ARBs are reserved for HF clients who cannot tolerate ACEIs; ACEIs have slightly better cardiac remodeling effects. ACEIs + ARBs should NOT be combined (excessive hyperkalemia risk).',
+    choices: [
+      { key:'A', why:'Incorrect. ARBs and ACEIs work differently — ARBs block angiotensin II receptors, not the ACE enzyme, so they do not raise bradykinin and do not cause cough.', correct: false },
+      { key:'B', why:'CORRECT. ARBs do not affect bradykinin; therefore, cough is not a side effect. This is the key pharmacological difference.', correct: true },
+      { key:'C', why:'Incorrect. ACEIs are actually preferred over ARBs for HF because their effects on cardiac remodeling are more favorable (bradykinin-mediated).', correct: false },
+      { key:'D', why:'Incorrect. Combining ACEIs and ARBs is generally avoided because the combination dramatically increases the risk of hyperkalemia and renal failure.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q43 ─────────
+{
+  type: 'mcq',
+  topic: 'BNP Laboratory Value',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  scenario: 'A client presents to the ED with dyspnea. B-type natriuretic peptide (BNP) is significantly elevated.',
+  stem: 'The nurse understands that an elevated BNP MOST specifically indicates:',
+  options: [
+    { key:'A', text:'Active myocardial infarction with ST elevation.' },
+    { key:'B', text:'Ventricular stress and volume overload — supporting a diagnosis of heart failure.' },
+    { key:'C', text:'Chronic renal failure causing decreased BNP clearance.' },
+    { key:'D', text:'Pulmonary embolism causing right ventricular strain.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>BNP (B-type natriuretic peptide)</strong> is released by the ventricles in response to <strong>increased pressure and volume (ventricular stress/stretch)</strong>. It is a highly sensitive and specific biomarker for <strong>heart failure</strong>. Elevated BNP confirms HF, helps determine severity, and guides therapy. Microalbuminuria can appear even before BNP rises.',
+    choices: [
+      { key:'A', why:'Incorrect. Troponin (I and T) and CK-MB are the markers for acute MI. BNP measures ventricular wall stress, not acute ischemia.', correct: false },
+      { key:'B', why:'CORRECT. BNP rises when ventricles are under pressure/volume overload — the hallmark of heart failure.', correct: true },
+      { key:'C', why:'Incorrect. While renal failure can affect BNP clearance, the primary clinical interpretation of elevated BNP is ventricular stress/HF.', correct: false },
+      { key:'D', why:'Incorrect. While severe PE can cause right ventricular strain and elevate BNP, BNP elevation is most specifically associated with and diagnostic for heart failure.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q44 ─────────
+{
+  type: 'priority',
+  topic: 'Which Client to Assess First',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'The nurse on the telemetry unit receives change-of-shift report for four clients.',
+  stem: 'Which client is the PRIORITY to assess FIRST?',
+  options: [
+    { key:'A', text:'Client with HF on furosemide whose potassium came back 3.1 mEq/L.' },
+    { key:'B', text:'Client admitted for chest pain rule-out MI with HR 52 on metoprolol, alert and oriented, complaining of mild fatigue.' },
+    { key:'C', text:'Client with STEMI 2 hours ago whose urine output has dropped to 8 mL in the last hour and BP is 84/50.' },
+    { key:'D', text:'Client on warfarin with an INR of 1.8 who will need their dose adjusted.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'Client C has active <strong>cardiogenic shock</strong> after a STEMI: BP 84/50 (systolic < 90 mmHg), severely decreased urine output (8 mL/hr — indicates renal hypoperfusion), occurring within 2 hours of an MI. This is the most immediately life-threatening situation. Client A needs potassium replacement. Client B\'s bradycardia on metoprolol is worth monitoring but the client is stable. Client D\'s INR needs adjustment but is not an emergency.',
+    choices: [
+      { key:'A', why:'Incorrect. Potassium of 3.1 is low and needs replacement (especially on digoxin), but is not immediately life-threatening.', correct: false },
+      { key:'B', why:'Incorrect. HR 52 on metoprolol in an alert, stable client warrants assessment but is not the priority over a client in cardiogenic shock.', correct: false },
+      { key:'C', why:'CORRECT. BP 84/50 + urine output 8 mL/hr post-STEMI = cardiogenic shock = immediate life-threatening emergency.', correct: true },
+      { key:'D', why:'Incorrect. INR 1.8 is slightly below therapeutic range — a dose adjustment is needed, but this is not an acute emergency.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q45 ─────────
+{
+  type: 'mcq',
+  topic: 'Morphine Preload/Afterload',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client with HF is given morphine for dyspnea. How does morphine help reduce cardiac workload in this client?',
+  options: [
+    { key:'A', text:'Morphine increases contractility of the myocardium.' },
+    { key:'B', text:'Morphine causes venodilation (reducing preload) and arterial dilation (reducing afterload), decreasing cardiac oxygen demand.' },
+    { key:'C', text:'Morphine stimulates the SNS to improve cardiac output.' },
+    { key:'D', text:'Morphine works by blocking calcium channels in cardiac muscle.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'In HF, morphine works through <strong>multiple mechanisms</strong>: (1) <strong>Venodilation → decreased venous return → reduced preload</strong>, (2) <strong>Arterial dilation → reduced afterload</strong>, (3) <strong>Reduced anxiety → decreased sympathetic tone → decreased HR and BP</strong>. All of these reduce myocardial oxygen demand. The nurse must monitor for hypotension, bradycardia, and respiratory depression.',
+    choices: [
+      { key:'A', why:'Incorrect. Morphine does not increase contractility. Positive inotropes (dobutamine, digoxin) do this.', correct: false },
+      { key:'B', why:'CORRECT. Morphine\'s venodilation reduces preload and arterial dilation reduces afterload — both decrease the heart\'s workload.', correct: true },
+      { key:'C', why:'Incorrect. Morphine causes CNS depression, reducing sympathetic tone — the opposite of SNS stimulation.', correct: false },
+      { key:'D', why:'Incorrect. Calcium channel blocking is the mechanism of CCBs (amlodipine, diltiazem, verapamil), not morphine.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q46 ─────────
+{
+  type: 'mcq',
+  topic: 'Metabolic Syndrome — Risk Factors',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A client is told they have metabolic syndrome. The nurse educates the client on modifiable risk factors for cardiovascular disease. Which risk factors CAN be modified with lifestyle changes? Select the BEST answer.',
+  options: [
+    { key:'A', text:'Advanced age, family history, and male sex.' },
+    { key:'B', text:'Dyslipidemia, hypertension, smoking, obesity, diabetes, and sedentary lifestyle.' },
+    { key:'C', text:'Genetics, family history, and post-menopausal status in women.' },
+    { key:'D', text:'Age over 55 in women and age over 45 in men.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Modifiable cardiovascular risk factors</strong>: dyslipidemia, hypertension, cigarette smoking, diabetes/insulin resistance, obesity, sedentary lifestyle, atherogenic diet (high salt, fats, trans-fats, carbs), excessive alcohol, inflammatory conditions, and mental stress. <strong>Non-modifiable factors</strong>: advanced age, male sex (or women after menopause), family history, and genetics.',
+    choices: [
+      { key:'A', why:'Incorrect. Age, family history, and male sex are non-modifiable risk factors.', correct: false },
+      { key:'B', why:'CORRECT. Dyslipidemia, HTN, smoking, obesity, diabetes, and sedentary lifestyle are all modifiable through lifestyle changes and medication.', correct: true },
+      { key:'C', why:'Incorrect. Genetics, family history, and post-menopausal status are non-modifiable risk factors.', correct: false },
+      { key:'D', why:'Incorrect. Age thresholds for cardiovascular risk are non-modifiable factors — you cannot change your age.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q47 ─────────
+{
+  type: 'mcq',
+  topic: 'Cardiac Output — Starling\'s Law',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'The nursing instructor asks a student to explain Frank-Starling\'s Law as it relates to heart failure. Which explanation is MOST accurate?',
+  options: [
+    { key:'A', text:'The less blood volume that enters the ventricle, the stronger the contraction — the heart compensates for reduced preload.' },
+    { key:'B', text:'Greater ventricular preload (filling) increases myocardial stretch, increasing contractile force — until the muscle is overstretched and function declines.' },
+    { key:'C', text:'Cardiac output remains constant regardless of preload or afterload changes.' },
+    { key:'D', text:'Increased afterload always improves cardiac output by increasing resistance.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Frank-Starling\'s Law</strong>: "The greater the volume of blood that enters the ventricle during diastole (preload), the greater the volume ejected during systole" — the more cardiac muscle is stretched, the stronger it contracts. However, this has limits: when the muscle is <strong>over-stretched</strong> (as in HF with severe volume overload), contractility <strong>declines</strong>, leading to pump failure.',
+    choices: [
+      { key:'A', why:'Incorrect. This reverses the law. Greater preload (not less) increases stretch and contractile force — up to a point.', correct: false },
+      { key:'B', why:'CORRECT. This accurately describes Frank-Starling: greater preload → greater stretch → stronger contraction, until the muscle is overstretched and function declines.', correct: true },
+      { key:'C', why:'Incorrect. Cardiac output is significantly influenced by preload, afterload, HR, and contractility — it is not constant.', correct: false },
+      { key:'D', why:'Incorrect. Increased afterload increases the workload against which the heart must pump — in HF, this worsens cardiac output.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q48 ─────────
+{
+  type: 'mcq',
+  topic: 'Hypertension — Lipid Goals',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A client with hypertension and hypercholesterolemia has the following labs: Total cholesterol 235 mg/dL, LDL 158 mg/dL, HDL 38 mg/dL (male), Triglycerides 200 mg/dL. The nurse recognizes which values are OUTSIDE the desired range?',
+  options: [
+    { key:'A', text:'Only the LDL is abnormal.' },
+    { key:'B', text:'All values are within normal limits.' },
+    { key:'C', text:'Total cholesterol, LDL, HDL (for a male), and triglycerides are all outside the desired range.' },
+    { key:'D', text:'Only the total cholesterol and triglycerides are abnormal.' },
+  ],
+  answer: ['C'],
+  rationale: {
+    correct: 'Desired ranges: <strong>Total cholesterol < 200 mg/dL</strong> (235 = high). <strong>LDL < 130 mg/dL</strong> (158 = high). <strong>HDL > 45 mg/dL for men</strong> (38 = low — HDL is the "good" cholesterol; low is bad). <strong>Triglycerides: men 40–160 mg/dL</strong> (200 = high). All four values are outside desired ranges in this client.',
+    choices: [
+      { key:'A', why:'Incorrect. All four values are abnormal, not just LDL.', correct: false },
+      { key:'B', why:'Incorrect. All four values deviate from desired ranges.', correct: false },
+      { key:'C', why:'CORRECT. Total cholesterol 235 (>200), LDL 158 (>130), HDL 38 (men need >45), Triglycerides 200 (>160 for men) — all abnormal.', correct: true },
+      { key:'D', why:'Incorrect. LDL is also outside the desired range (<130 mg/dL), and low HDL in a male is also abnormal.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q49 ─────────
+{
+  type: 'mcq',
+  topic: 'Warfarin — Drug-Food Interaction Teaching',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client on warfarin for atrial fibrillation reports starting a new "clean eating" diet with daily kale smoothies, spinach salads, and broccoli.',
+  stem: 'The nurse is MOST concerned that this dietary change will:',
+  options: [
+    { key:'A', text:'Increase INR levels, increasing risk of therapeutic anticoagulation.' },
+    { key:'B', text:'Decrease INR levels by increasing Vitamin K intake, potentially reducing anticoagulation effectiveness.' },
+    { key:'C', text:'Have no significant effect as dietary changes do not affect warfarin.' },
+    { key:'D', text:'Increase potassium levels, causing hyperkalemia with warfarin.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Warfarin is a <strong>Vitamin K antagonist</strong>. <strong>Suddenly increasing dietary Vitamin K</strong> (found in green leafy vegetables: kale, spinach, broccoli) will <strong>lower the INR</strong> because more Vitamin K is available to compete with warfarin at clotting factor synthesis sites. This reduces anticoagulation effectiveness and increases clot risk. Clients should keep Vitamin K intake CONSISTENT — not necessarily avoid it, but not dramatically change intake.',
+    choices: [
+      { key:'A', why:'Incorrect. Increased Vitamin K from food DECREASES the warfarin effect (lowers INR), not increases it.', correct: false },
+      { key:'B', why:'CORRECT. Increased dietary Vitamin K competes with warfarin → decreased anticoagulation → lower INR → increased clot risk.', correct: true },
+      { key:'C', why:'Incorrect. Dietary Vitamin K has a very significant effect on warfarin — this is one of warfarin\'s most important teaching points.', correct: false },
+      { key:'D', why:'Incorrect. Warfarin does not cause hyperkalemia. Green vegetables do not significantly affect serum potassium in this context.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q50 ─────────
+{
+  type: 'sata',
+  topic: 'Heparin Administration — Nursing Considerations',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  stem: 'The nurse is preparing to administer IV unfractionated heparin. Which nursing considerations apply? Select all that apply.',
+  options: [
+    { key:'A', text:'Administer via IV infusion pump only.' },
+    { key:'B', text:'Monitor aPTT every 4–6 hours; target is 60–80 seconds.' },
+    { key:'C', text:'Heparin crosses the placenta and is contraindicated in pregnancy.' },
+    { key:'D', text:'Aspirin and NSAIDs should be avoided concurrently due to increased bleeding risk.' },
+    { key:'E', text:'Monitor platelet count for signs of HIT.' },
+    { key:'F', text:'Antidote for heparin overdose is protamine sulfate.' },
+  ],
+  answer: ['A','B','D','E','F'],
+  rationale: {
+    correct: 'Key heparin considerations: IV pump administration only. aPTT monitoring q4–6h (target 60–80 seconds = 1.5–2x normal of 40). Avoid aspirin/NSAIDs (increased bleeding). Monitor platelets for HIT. Antidote = protamine sulfate. <strong>IMPORTANT</strong>: Heparin does NOT cross the placenta (unlike warfarin) — it is actually SAFE in pregnancy. Warfarin is teratogenic.',
+    choices: [
+      { key:'A', why:'CORRECT. Heparin must be administered via IV infusion pump for precise dosing control.', correct: true },
+      { key:'B', why:'CORRECT. aPTT is monitored every 4–6 hours; therapeutic range is 60–80 seconds (1.5–2x the normal of 40 seconds).', correct: true },
+      { key:'C', why:'Incorrect. Heparin does NOT cross placental membranes and is therefore SAFE in pregnancy. Warfarin is the anticoagulant that is teratogenic.', correct: false },
+      { key:'D', why:'CORRECT. Aspirin and NSAIDs increase bleeding risk when combined with heparin and should be avoided.', correct: true },
+      { key:'E', why:'CORRECT. Platelet counts should be monitored; a significant drop or new thrombosis on heparin = suspect HIT.', correct: true },
+      { key:'F', why:'CORRECT. Protamine sulfate reverses heparin overdose at 1 mg per 100 units of heparin.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q51 ─────────
+{
+  type: 'mcq',
+  topic: 'Cilostazol — PAD Medication',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with PAD and intermittent claudication is prescribed cilostazol. The client asks why they need to avoid grapefruit juice.',
+  stem: 'Which additional teaching point should the nurse include about cilostazol?',
+  options: [
+    { key:'A', text:'Cilostazol causes fluid retention — weigh yourself daily.' },
+    { key:'B', text:'Avoid grapefruit juice (increases drug levels) and avoid smoking (nicotine causes vasoconstriction).' },
+    { key:'C', text:'Monitor INR weekly — cilostazol acts like warfarin and requires close monitoring.' },
+    { key:'D', text:'Take cilostazol only during angina episodes, not daily.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Cilostazol inhibits platelet aggregation and causes vasodilation to treat intermittent claudication in PAD. Key teaching: <strong>avoid grapefruit juice</strong> (raises cilostazol blood levels via CYP3A4 inhibition) and <strong>avoid smoking</strong> — nicotine causes vasoconstriction, directly counteracting the drug\'s vasodilating effect. Expected outcomes: improved claudication symptoms and increased walking distance.',
+    choices: [
+      { key:'A', why:'Incorrect. Fluid retention is not a primary concern with cilostazol.', correct: false },
+      { key:'B', why:'CORRECT. Both grapefruit juice avoidance (CYP3A4 interaction) and smoking cessation (nicotine = vasoconstriction) are critical teaching points.', correct: true },
+      { key:'C', why:'Incorrect. Cilostazol is an antiplatelet/vasodilator — it does not require INR monitoring (that\'s for warfarin).', correct: false },
+      { key:'D', why:'Incorrect. Cilostazol is taken daily as a scheduled medication, not as a PRN for symptom episodes.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q52 ─────────
+{
+  type: 'mcq',
+  topic: 'Cardiac Output Formula',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A client in cardiogenic shock has a HR of 120 bpm and a stroke volume of 30 mL/beat. The nurse calculates the cardiac output. What does the nurse calculate?',
+  options: [
+    { key:'A', text:'CO = 3.6 L/min (below normal range of 4–8 L/min)' },
+    { key:'B', text:'CO = 7.0 L/min (within normal range)' },
+    { key:'C', text:'CO = 1.2 L/min (critically low)' },
+    { key:'D', text:'CO = 4.0 L/min (lower end of normal)' },
+  ],
+  answer: ['A'],
+  rationale: {
+    correct: '<strong>CO = SV × HR</strong>. CO = 30 mL/beat × 120 beats/min = <strong>3,600 mL/min = 3.6 L/min</strong>. Normal CO is <strong>4–8 L/min</strong>. Despite tachycardia (a compensatory mechanism), the severely reduced stroke volume (normal ~70 mL) keeps CO below normal — hallmark of cardiogenic shock where the heart compensates with rate but cannot compensate for lost contractility.',
+    choices: [
+      { key:'A', why:'CORRECT. 30 mL × 120 = 3,600 mL = 3.6 L/min. Below normal (4–8 L/min), consistent with cardiogenic shock.', correct: true },
+      { key:'B', why:'Incorrect. 7.0 L/min would require a SV of ~58 mL at HR 120 — this client\'s severely reduced SV prevents normal CO.', correct: false },
+      { key:'C', why:'Incorrect. 1.2 L/min would be critically low and not compatible with life for long. Calculation: 30 × 120 = 3,600 mL.', correct: false },
+      { key:'D', why:'Incorrect. 4.0 L/min would require 30 mL × 133 bpm, which is not the given data.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q53 ─────────
+{
+  type: 'mcq',
+  topic: 'Diastolic HF vs Systolic HF',
+  badge: 'badge-patho',
+  badgeLabel: '🔬 Pathophysiology Application',
+  stem: 'A 78-year-old woman with chronic hypertension and no prior MI is diagnosed with diastolic heart failure (HFpEF). The nurse understands this condition involves:',
+  options: [
+    { key:'A', text:'Reduced ejection fraction (< 40%) caused by poor systolic contractility.' },
+    { key:'B', text:'A stiff, non-compliant left ventricle that cannot relax during diastole — impaired filling despite preserved systolic function.' },
+    { key:'C', text:'Biventricular failure affecting both right and left sides simultaneously.' },
+    { key:'D', text:'Complete heart block preventing electrical conduction.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Diastolic HF (HFpEF)</strong>: The left ventricle cannot <strong>relax adequately during diastole</strong> → impaired filling → decreased CO despite a <strong>preserved ejection fraction (EF > 50%)</strong>. Over time, the ventricle becomes increasingly stiff (less compliant). It occurs most often in <strong>older women with chronic hypertension</strong>. Symptoms are similar to systolic HF, but the treatment focus differs.',
+    choices: [
+      { key:'A', why:'Incorrect. Reduced EF < 40% describes systolic HF (HFrEF), caused by impaired contractility during systole.', correct: false },
+      { key:'B', why:'CORRECT. Diastolic HF = impaired relaxation = impaired filling = decreased CO with preserved EF. Stiffness, not contractility failure.', correct: true },
+      { key:'C', why:'Incorrect. Biventricular failure is a separate condition; diastolic HF specifically involves the left ventricle\'s relaxation impairment.', correct: false },
+      { key:'D', why:'Incorrect. Complete heart block is a conduction abnormality — not diastolic HF.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q54 ─────────
+{
+  type: 'mcq',
+  topic: 'Which Finding Requires Immediate Intervention',
+  badge: 'badge-priority',
+  badgeLabel: '🚨 Priority / Triage',
+  scenario: 'A client 6 hours post-STEMI with PCI is receiving IV heparin. Assessment findings include: BP 106/68, HR 88, SpO₂ 96% on 2L NC, patient alert and reporting mild chest discomfort rated 3/10.',
+  stem: 'Which NEW assessment finding would require the nurse to IMMEDIATELY notify the provider?',
+  options: [
+    { key:'A', text:'Urine output of 40 mL over the past hour.' },
+    { key:'B', text:'Sudden onset severe midsternal chest pain 9/10 with diaphoresis and new ST elevation on telemetry.' },
+    { key:'C', text:'SpO₂ drops from 96% to 94%.' },
+    { key:'D', text:'Client reports feeling anxious about the diagnosis.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>New severe chest pain (9/10) with diaphoresis and new ST elevation</strong> in a post-STEMI client indicates a possible <strong>re-occlusion, reinfarction, or stent thrombosis</strong> — a medical emergency requiring IMMEDIATE provider notification and intervention. This is a time-critical finding. UOP of 40 mL/hr is acceptable (minimum 30 mL/hr). A SpO₂ of 94% warrants monitoring but is not as immediately critical as re-MI.',
+    choices: [
+      { key:'A', why:'Incorrect. Urine output of 40 mL/hr is acceptable (> 30 mL/hr minimum). Not immediately critical.', correct: false },
+      { key:'B', why:'CORRECT. Sudden severe CP + diaphoresis + new ST elevation post-PCI = possible stent thrombosis/re-MI = EMERGENCY.', correct: true },
+      { key:'C', why:'Incorrect. SpO₂ dropping from 96% to 94% warrants a nursing response (increase O₂, reposition) but is not as immediately critical as signs of re-infarction.', correct: false },
+      { key:'D', why:'Incorrect. Anxiety is expected post-MI and can be addressed with emotional support and education. Not an immediate physiologic emergency.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q55 ─────────
+{
+  type: 'mcq',
+  topic: 'Loop Diuretic — Digoxin Drug Interaction',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  stem: 'A client with HF is on both furosemide and digoxin. The nurse understands this combination creates a risk for digoxin toxicity primarily because:',
+  options: [
+    { key:'A', text:'Furosemide directly competes with digoxin at cardiac receptor sites.' },
+    { key:'B', text:'Furosemide causes hypokalemia, and low potassium increases digoxin\'s binding to cardiac cells, leading to toxicity.' },
+    { key:'C', text:'Furosemide increases digoxin blood levels by reducing renal excretion.' },
+    { key:'D', text:'Both drugs decrease heart rate and the combined effect causes extreme bradycardia.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: 'Furosemide causes <strong>hypokalemia</strong> (potassium wasting). <strong>Low potassium increases digoxin\'s binding affinity to myocardial Na-K-ATPase pumps</strong>, effectively increasing the drug\'s effect at the cardiac level — even at "normal" digoxin blood levels. This leads to <strong>digoxin toxicity</strong>: bradycardia, nausea/vomiting, and visual disturbances (yellow-green halos). The nurse must monitor serum K⁺ closely when both drugs are given.',
+    choices: [
+      { key:'A', why:'Incorrect. Furosemide does not compete at cardiac receptor sites with digoxin.', correct: false },
+      { key:'B', why:'CORRECT. Furosemide → hypokalemia → increased digoxin-receptor binding → digoxin toxicity, even at normal serum digoxin levels.', correct: true },
+      { key:'C', why:'Incorrect. Furosemide does not significantly affect digoxin\'s renal excretion or blood levels directly.', correct: false },
+      { key:'D', why:'Incorrect. Furosemide does not decrease heart rate; it is a diuretic. The interaction is electrolyte-mediated, not direct rate reduction.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q56 ─────────
+{
+  type: 'matrix',
+  topic: 'Medication Preload/Afterload Effects',
+  badge: 'badge-matrix',
+  badgeLabel: '📊 Matrix Question',
+  stem: 'For each medication, select whether it primarily decreases preload, decreases afterload, or both.',
+  matrixRows: [
+    { label: 'Furosemide (Lasix)', options: ['Decreases Preload','Decreases Afterload','Both'], answer: 'Decreases Preload' },
+    { label: 'Nitroglycerin (IV)', options: ['Decreases Preload','Decreases Afterload','Both'], answer: 'Both' },
+    { label: 'ACE Inhibitor (enalapril)', options: ['Decreases Preload','Decreases Afterload','Both'], answer: 'Both' },
+    { label: 'Morphine Sulfate (IV)', options: ['Decreases Preload','Decreases Afterload','Both'], answer: 'Both' },
+  ],
+  rationale: {
+    correct: '<strong>Furosemide</strong>: diuresis removes fluid → decreases venous return → <strong>preload only</strong>. <strong>Nitroglycerin IV</strong>: primarily venodilation (preload↓) PLUS arterial dilation (afterload↓) = <strong>both</strong>. <strong>ACE inhibitors</strong>: reduce sodium/water retention (preload↓) AND vasodilate arterioles (afterload↓) = <strong>both</strong>. <strong>Morphine</strong>: venodilation (preload↓) AND arterial dilation (afterload↓) = <strong>both</strong>.',
+    choices: []
+  }
+},
+
+// ───────── Q57 ─────────
+{
+  type: 'mcq',
+  topic: 'Nitroglycerin — Sildenafil Interaction',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with angina presents to the ED with chest pain. Before administering nitroglycerin SL, the nurse asks about recent medications. The client states they took sildenafil (Viagra) 18 hours ago.',
+  stem: 'What is the MOST appropriate nursing action?',
+  options: [
+    { key:'A', text:'Administer nitroglycerin as ordered — 18 hours is sufficient time for sildenafil to clear.' },
+    { key:'B', text:'Withhold nitroglycerin and notify the provider — sildenafil within 24 hours is a contraindication due to severe hypotension risk.' },
+    { key:'C', text:'Administer half the prescribed nitroglycerin dose to minimize interaction.' },
+    { key:'D', text:'Proceed with nitroglycerin only if the client\'s BP is above 120/80.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>Sildenafil (Viagra) and nitroglycerin combination = life-threatening hypotension</strong>. Both drugs cause vasodilation through different mechanisms (NTG via NO pathway; sildenafil via PDE5 inhibition of cGMP breakdown), and their combined effect causes profound, potentially fatal hypotension. Nitroglycerin must be <strong>withheld if sildenafil was taken within the last 24 hours</strong> (some sources say 48 hours for tadalafil/Cialis). Notify the provider immediately.',
+    choices: [
+      { key:'A', why:'Incorrect. Sildenafil\'s half-life and vasodilatory effects persist for at least 24 hours. 18 hours is NOT adequate clearance time.', correct: false },
+      { key:'B', why:'CORRECT. Withhold NTG when sildenafil was taken within 24 hours — the combination causes severe, potentially fatal hypotension.', correct: true },
+      { key:'C', why:'Incorrect. There is no safe "half dose" of nitroglycerin when combined with sildenafil — the drug interaction causes unpredictable hypotension regardless of dose.', correct: false },
+      { key:'D', why:'Incorrect. This is an absolute contraindication based on recent sildenafil use, not a conditional one based on current BP.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q58 ─────────
+{
+  type: 'mcq',
+  topic: 'NSAIDs in Heart Failure',
+  badge: 'badge-pharm',
+  badgeLabel: '💊 Pharmacology Application',
+  scenario: 'A client with known heart failure reports taking ibuprofen 400 mg three times daily for knee arthritis. The nurse is reviewing their medications.',
+  stem: 'The nurse is MOST concerned because NSAIDs in heart failure:',
+  options: [
+    { key:'A', text:'Cause tachycardia that worsens the heart\'s oxygen demand.' },
+    { key:'B', text:'Promote sodium retention and peripheral vasoconstriction, worsening HF, and intensify diuretic and ACE inhibitor toxicity.' },
+    { key:'C', text:'Interfere with iron absorption, worsening anemia in HF.' },
+    { key:'D', text:'Are safe in HF as long as the client stays well-hydrated.' },
+  ],
+  answer: ['B'],
+  rationale: {
+    correct: '<strong>NSAIDs (ibuprofen, diclofenac)</strong> are <strong>contraindicated in heart failure</strong> because they: (1) promote <strong>sodium and water retention</strong> → increased preload → worsened congestion, (2) cause <strong>peripheral vasoconstriction</strong> → increased afterload, (3) <strong>intensify the toxicity of diuretics and ACE inhibitors</strong>, and (4) increase risk of thrombosis. They can also precipitate acute kidney injury in the setting of HF.',
+    choices: [
+      { key:'A', why:'Incorrect. NSAIDs do not primarily cause tachycardia in this context.', correct: false },
+      { key:'B', why:'CORRECT. NSAIDs promote Na/water retention, vasoconstriction, and interfere with diuretic/ACEI effects — all worsening HF.', correct: true },
+      { key:'C', why:'Incorrect. NSAIDs do not primarily interfere with iron absorption.', correct: false },
+      { key:'D', why:'Incorrect. NSAIDs are contraindicated in HF regardless of hydration status — this is not a safe strategy.', correct: false },
+    ]
+  }
+},
+
+// ───────── Q59 ─────────
+{
+  type: 'sata',
+  topic: 'Client on Warfarin — Which Assessment Findings Require Follow-up',
+  badge: 'badge-sata',
+  badgeLabel: '☑️ Select All That Apply',
+  scenario: 'A client on warfarin for mechanical heart valve replacement comes for their weekly INR check. The nurse reviews assessment findings.',
+  stem: 'Which findings require FOLLOW-UP or provider notification? Select all that apply.',
+  options: [
+    { key:'A', text:'INR of 4.9' },
+    { key:'B', text:'Client reports blood in their urine (pink-tinged)' },
+    { key:'C', text:'Client reports using a soft toothbrush and electric razor' },
+    { key:'D', text:'Client reports starting daily aspirin 81 mg for headaches 2 weeks ago' },
+    { key:'E', text:'Client reports their INR was 3.0 last week and they have been compliant with medication' },
+    { key:'F', text:'Client reports dark tarry stools for the past 2 days' },
+  ],
+  answer: ['A','B','D','F'],
+  rationale: {
+    correct: 'Critical findings: <strong>INR 4.9</strong> = supratherapeutic (target for mechanical valve is 2.5–3.5) → risk of hemorrhage. <strong>Pink urine</strong> = hematuria → possible bleeding. <strong>Aspirin added without provider knowledge</strong> = drug interaction that significantly increases bleeding risk. <strong>Dark tarry stools</strong> = GI bleed → emergency. Using a soft toothbrush and electric razor are CORRECT safety behaviors (no follow-up needed). Stable INR with medication compliance is positive.',
+    choices: [
+      { key:'A', why:'CORRECT. INR 4.9 is supratherapeutic for a target of 2.5–3.5 → hold warfarin, notify provider.', correct: true },
+      { key:'B', why:'CORRECT. Hematuria (blood in urine) indicates possible urinary tract bleeding and requires evaluation.', correct: true },
+      { key:'C', why:'Incorrect. Using a soft toothbrush and electric razor are the CORRECT safety behaviors for a client on warfarin. No follow-up needed.', correct: false },
+      { key:'D', why:'CORRECT. Adding aspirin (antiplatelet) without provider knowledge dramatically increases bleeding risk with warfarin — this must be addressed.', correct: true },
+      { key:'E', why:'Incorrect. Stable INR and medication compliance is the expected, positive finding. No follow-up needed.', correct: false },
+      { key:'F', why:'CORRECT. Dark tarry stools = melena = GI hemorrhage — a potentially life-threatening complication requiring immediate intervention.', correct: true },
+    ]
+  }
+},
+
+// ───────── Q60 ─────────
+{
+  type: 'bowtie',
+  topic: 'Final Case Study — STEMI Bow-Tie',
+  badge: 'badge-bowtie',
+  badgeLabel: '🎀 Final Bow-Tie — STEMI',
+  scenario: 'A 58-year-old client presents to the ED with crushing substernal chest pain 10/10 radiating to the left jaw, diaphoresis, and nausea. ECG shows ST elevation in V1-V4. BP 148/90, HR 104, RR 20, SpO₂ 88%.',
+  centerLabel: 'HIGHEST\nPRIORITY\nINTERVENTION',
+  leftLabel: 'Most Likely Pathophysiology',
+  rightLabel: 'Expected Outcome of Treatment',
+  leftOptions: [
+    'Coronary vasospasm with no plaque involvement',
+    'Ruptured atherosclerotic plaque → thrombus → 100% coronary occlusion → transmural ischemia',
+    'Aortic dissection causing decreased perfusion',
+    'Viral myocarditis with diffuse inflammation',
+  ],
+  rightOptions: [
+    'Resolution of ST elevation and pain relief indicating restored coronary perfusion',
+    'Increased bleeding time indicating therapeutic anticoagulation',
+    'Blood pressure rise indicating improved contractility',
+    'Increased heart rate indicating improved cardiac output',
+  ],
+  leftAnswer: 'Ruptured atherosclerotic plaque → thrombus → 100% coronary occlusion → transmural ischemia',
+  rightAnswer: 'Resolution of ST elevation and pain relief indicating restored coronary perfusion',
+  rationale: {
+    correct: '<strong>Pathophysiology</strong>: STEMI is caused by a ruptured atherosclerotic plaque → platelet aggregation → thrombus formation → <strong>100% coronary artery occlusion</strong> → transmural ischemia and necrosis. <strong>Priority interventions</strong>: Oxygen (SpO₂ 88%), Aspirin 325 mg chewed, Nitroglycerin, Heparin, and emergent PCI within 90 minutes. <strong>Expected outcomes</strong>: <strong>Resolution of ST elevation on ECG and relief of chest pain</strong> indicate successful reperfusion. These are the primary clinical markers confirming treatment effectiveness in STEMI management.',
+    choices: []
+  }
+},
+
+]; // END OF QUESTIONS ARRAY
+
+// ════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════
+let currentQ    = 0;
+let answers     = new Array(questions.length).fill(null);
+let submitted   = new Array(questions.length).fill(false);
+let correctCount = 0;
+let totalAnswered = 0;
+let streak      = 0;
+let popupTimer  = null;
+let autoAdvance = true;  // popup auto-advance after 3.2s
+
+// Message bank
+const msgs = [
+  { icon:'✓', title:'Correct!',          sub:'Sharp clinical thinking. Keep it up.' },
+  { icon:'✓', title:'Well Done!',         sub:'Your pharmacology knowledge is solid.' },
+  { icon:'✓', title:'Excellent!',         sub:'That\'s NCLEX-level reasoning right there.' },
+  { icon:'✓', title:'Right Answer!',      sub:'Clinical reasoning confirmed. Move forward.' },
+  { icon:'✓', title:'Nailed It!',         sub:'Exactly what a practicing RN would choose.' },
+  { icon:'✓', title:'Perfect!',           sub:'Your pathophysiology framework is working.' },
+  { icon:'✓', title:'Correct!',           sub:'Future RN energy confirmed. Keep going.' },
+  { icon:'✓', title:'Outstanding!',       sub:'Every correct answer builds exam confidence.' },
+  { icon:'✓', title:'Right!',             sub:'That critical thinking is going to serve you well.' },
+  { icon:'✓', title:'Spot On!',           sub:'The May 2027 cohort is in good hands.' },
+];
+
+// ════════════════════════════════════════════════════════
+// RENDER ENGINE
+// ════════════════════════════════════════════════════════
+function renderQuestion() {
+  const q   = questions[currentQ];
+  const sub = submitted[currentQ];
+  const layout = document.getElementById('exam-layout');
+
+  let inner = '';
+
+  if (q.type === 'bowtie')       inner = buildBowtie(q, sub);
+  else if (q.type === 'matrix')  inner = buildMatrix(q, sub);
+  else                           inner = buildChoices(q, sub);
+
+  const submitBtn = sub ? '' : `
+    <button class="btn-submit" id="btn-submit" onclick="submitAnswer()" disabled>
+      Submit Answer
+    </button>`;
+
+  const rationaleHtml = sub ? buildRationale(q) : '';
+
+  layout.innerHTML = `
+    <div class="question-card">
+      <div class="card-top-bar"></div>
+      <div class="card-body">
+        <div class="card-meta">
+          <div class="type-badge ${q.badge}">${q.badgeLabel}</div>
+          <div class="q-number-label">Q ${currentQ+1} / ${questions.length} &nbsp;·&nbsp; ${q.topic}</div>
+        </div>
+        ${q.scenario ? `<div class="scenario-box">${q.scenario.replace(/\n/g,'<br>')}</div>` : ''}
+        ${inner}
+        ${submitBtn}
+        ${rationaleHtml}
+      </div>
+    </div>`;
+
+  // Attach delegated events AFTER DOM insertion
+  attachEvents(q, sub);
+  updateProgress();
+  updateDots();
+  updateNav();
+}
+
+// ─── Choice builder (MCQ & SATA) ──────────────────────
+function buildChoices(q, sub) {
+  const ua = normalizeAnswer(answers[currentQ]);
+  const isSATA = q.type === 'sata';
+
+  let html = `<div class="q-stem">${q.stem}</div>`;
+  if (isSATA) {
+    html += `<div class="sata-instruction">▸ Select ALL that apply, then click Submit</div>`;
+  }
+  html += `<ul class="options-list" id="options-list">`;
+
+  q.options.forEach(opt => {
+    const sel    = ua.includes(opt.key);
+    const isCorr = q.answer.includes(opt.key);
+    let cls      = 'option-item';
+
+    if (sub) {
+      cls += ' locked';
+      if (isCorr && sel)   cls += ' state-correct';
+      else if (!isCorr && sel) cls += ' state-wrong';
+      else if (isCorr && !sel) cls += ' state-missed';
+    } else {
+      if (sel) cls += ' selected-opt';
+    }
+
+    const statusIcon = sub
+      ? (isCorr && sel   ? '<span class="opt-status-icon">✔</span>'
+       : !isCorr && sel  ? '<span class="opt-status-icon">✖</span>'
+       : isCorr && !sel  ? '<span class="opt-status-icon">↑</span>'
+       : '')
+      : '';
+
+    if (isSATA) {
+      const check = (sel || (sub && isCorr)) ? '✓' : '';
+      html += `<li class="${cls}" data-key="${opt.key}" role="checkbox">
+        <div class="opt-checkbox">${check}</div>
+        <span><strong>${opt.key}.</strong> ${opt.text}</span>
+        ${statusIcon}
+      </li>`;
+    } else {
+      html += `<li class="${cls}" data-key="${opt.key}" role="radio">
+        <div class="opt-key">${opt.key}</div>
+        <span>${opt.text}</span>
+        ${statusIcon}
+      </li>`;
+    }
+  });
+
+  html += '</ul>';
+  return html;
+}
+
+// ─── Matrix builder ───────────────────────────────────
+function buildMatrix(q, sub) {
+  const ua = answers[currentQ] || {};
+  let html = `<div class="q-stem">${q.stem}</div>
+    <div class="matrix-wrap"><table class="matrix-table">
+      <thead><tr>
+        <th style="text-align:left">Item</th>
+        ${q.matrixRows[0].options.map(o=>`<th>${o}</th>`).join('')}
+      </tr></thead><tbody>`;
+
+  q.matrixRows.forEach((row, ri) => {
+    html += `<tr><td>${row.label}</td>`;
+    row.options.forEach(opt => {
+      const sel   = ua[ri] === opt;
+      const isCorr = opt === row.answer;
+      let cls = 'matrix-btn';
+      if (sub) {
+        cls += ' locked';
+        if (isCorr && sel)    cls += ' m-correct';
+        else if (!isCorr && sel) cls += ' m-wrong';
+        else if (isCorr && !sel) cls += ' m-missed';
+        else if (sel)         cls += ' m-selected';
+      } else {
+        if (sel) cls += ' m-selected';
+      }
+      html += `<td><button class="${cls}" data-row="${ri}" data-val="${escAttr(opt)}">${opt}</button></td>`;
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  return html;
+}
+
+// ─── Bowtie builder ────────────────────────────────────
+function buildBowtie(q, sub) {
+  const ua = answers[currentQ] || { left: null, right: null };
+  let html = `<div class="q-stem">${q.stem || 'Complete the clinical bow-tie below.'}</div>
+    <div class="bowtie-layout">
+      <div class="bowtie-left-col">
+        <div class="bowtie-col-title">← ${q.leftLabel}</div>`;
+  q.leftOptions.forEach(opt => {
+    const sel   = ua.left === opt;
+    const isCorr = opt === q.leftAnswer;
+    let cls = 'bowtie-option';
+    if (sub) {
+      cls += ' locked';
+      if (isCorr && sel)    cls += ' bt-correct';
+      else if (!isCorr && sel) cls += ' bt-wrong';
+      else if (isCorr && !sel) cls += ' bt-missed';
+    } else { if (sel) cls += ' bt-selected'; }
+    html += `<div class="${cls}" data-side="left" data-val="${escAttr(opt)}">${opt}</div>`;
+  });
+  html += `</div>
+      <div class="bowtie-center-col">
+        <div class="bowtie-gem">
+          <div class="bowtie-gem-label">${q.centerLabel.replace(/\n/g,'<br>')}</div>
+        </div>
+      </div>
+      <div class="bowtie-right-col">
+        <div class="bowtie-col-title">${q.rightLabel} →</div>`;
+  q.rightOptions.forEach(opt => {
+    const sel   = ua.right === opt;
+    const isCorr = opt === q.rightAnswer;
+    let cls = 'bowtie-option';
+    if (sub) {
+      cls += ' locked';
+      if (isCorr && sel)    cls += ' bt-correct';
+      else if (!isCorr && sel) cls += ' bt-wrong';
+      else if (isCorr && !sel) cls += ' bt-missed';
+    } else { if (sel) cls += ' bt-selected'; }
+    html += `<div class="${cls}" data-side="right" data-val="${escAttr(opt)}">${opt}</div>`;
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+// ─── Rationale builder ────────────────────────────────
+function buildRationale(q) {
+  const ua = answers[currentQ];
+  const ok = checkCorrect(q, ua);
+  const bannerCls = ok ? 'correct-banner' : 'wrong-banner';
+  const bannerTxt = ok ? 'Correct Answer — Here\'s Why' : 'Incorrect — Study This Carefully';
+
+  let html = `<div class="rationale-wrap">
+    <div class="rationale-banner ${bannerCls}">
+      <div class="banner-icon">${ok ? '✓' : '✗'}</div>
+      ${bannerTxt}
+    </div>
+    <div class="rationale-body">
+      <p class="rationale-main">${q.rationale.correct}</p>`;
+
+  if (q.rationale.choices && q.rationale.choices.length > 0) {
+    html += '<div class="choice-explanations">';
+    q.rationale.choices.forEach(c => {
+      const cls = c.correct ? 'choice-exp exp-correct' : 'choice-exp exp-wrong';
+      const icon = c.correct ? '✔' : '✖';
+      html += `<div class="${cls}"><span class="choice-exp-key">${icon} ${c.key}.</span>${c.why}</div>`;
+    });
+    html += '</div>';
+  }
+  html += '</div></div>';
+  return html;
+}
+
+// ════════════════════════════════════════════════════════
+// EVENT DELEGATION — called after render
+// ════════════════════════════════════════════════════════
+function attachEvents(q, sub) {
+  if (sub) return;
+
+  // MCQ
+  if (q.type === 'mcq') {
+    const list = document.getElementById('options-list');
+    if (!list) return;
+    list.addEventListener('click', e => {
+      const li = e.target.closest('[data-key]');
+      if (!li) return;
+      answers[currentQ] = li.dataset.key;
+      list.querySelectorAll('.option-item').forEach(el => el.classList.remove('selected-opt'));
+      li.classList.add('selected-opt');
+      document.getElementById('btn-submit').disabled = false;
+    });
+  }
+
+  // SATA
+  if (q.type === 'sata') {
+    const list = document.getElementById('options-list');
+    if (!list) return;
+    list.addEventListener('click', e => {
+      const li = e.target.closest('[data-key]');
+      if (!li) return;
+      if (!answers[currentQ]) answers[currentQ] = [];
+      const arr = answers[currentQ];
+      const k   = li.dataset.key;
+      const idx = arr.indexOf(k);
+      if (idx === -1) { arr.push(k); li.classList.add('selected-opt'); li.querySelector('.opt-checkbox').textContent = '✓'; }
+      else            { arr.splice(idx,1); li.classList.remove('selected-opt'); li.querySelector('.opt-checkbox').textContent = ''; }
+      document.getElementById('btn-submit').disabled = arr.length === 0;
+    });
+  }
+
+  // Matrix
+  if (q.type === 'matrix') {
+    const wrap = document.querySelector('.matrix-wrap');
+    if (!wrap) return;
+    wrap.addEventListener('click', e => {
+      const btn = e.target.closest('.matrix-btn');
+      if (!btn) return;
+      const ri  = parseInt(btn.dataset.row);
+      const val = btn.dataset.val;
+      if (!answers[currentQ]) answers[currentQ] = {};
+      answers[currentQ][ri] = val;
+      // Update UI inline (no full re-render to avoid scroll jump)
+      wrap.querySelectorAll(`.matrix-btn[data-row="${ri}"]`).forEach(b => b.classList.remove('m-selected'));
+      btn.classList.add('m-selected');
+      // Check if all rows answered
+      const allAnswered = q.matrixRows.every((_,i) => answers[currentQ][i]);
+      const sb = document.getElementById('btn-submit');
+      if (sb) sb.disabled = !allAnswered;
+    });
+  }
+
+  // Bowtie
+  if (q.type === 'bowtie') {
+    const layout = document.querySelector('.bowtie-layout');
+    if (!layout) return;
+    layout.addEventListener('click', e => {
+      const el = e.target.closest('.bowtie-option');
+      if (!el) return;
+      const side = el.dataset.side;
+      const val  = el.dataset.val;
+      if (!answers[currentQ]) answers[currentQ] = { left: null, right: null };
+      answers[currentQ][side] = val;
+      // Update selection visual inline
+      layout.querySelectorAll(`.bowtie-option[data-side="${side}"]`).forEach(o => o.classList.remove('bt-selected'));
+      el.classList.add('bt-selected');
+      // Enable submit if both sides answered
+      const a = answers[currentQ];
+      const sb = document.getElementById('btn-submit');
+      if (sb) sb.disabled = !a.left || !a.right;
+    });
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// SUBMIT
+// ════════════════════════════════════════════════════════
+function submitAnswer() {
+  if (submitted[currentQ]) return;
+  submitted[currentQ] = true;
+  totalAnswered++;
+
+  const q  = questions[currentQ];
+  const ua = answers[currentQ];
+  const ok = checkCorrect(q, ua);
+
+  if (ok) {
+    correctCount++;
+    streak++;
+    showSuccessPopup();
+  } else {
+    streak = 0;
+    // Update streak display
+    document.getElementById('streak-chip').classList.remove('visible');
+  }
+
+  updateScoreChip();
+  renderQuestion();
+}
+
+// ════════════════════════════════════════════════════════
+// CORRECT CHECK
+// ════════════════════════════════════════════════════════
+function checkCorrect(q, ua) {
+  if (q.type === 'bowtie') {
+    return ua && ua.left === q.leftAnswer && ua.right === q.rightAnswer;
+  }
+  if (q.type === 'matrix') {
+    return q.matrixRows.every((row, i) => ua && ua[i] === row.answer);
+  }
+  if (q.type === 'sata') {
+    const uArr = [...(ua || [])].sort();
+    const cArr = [...q.answer].sort();
+    return JSON.stringify(uArr) === JSON.stringify(cArr);
+  }
+  // MCQ
+  return ua === q.answer[0];
+}
+
+// ════════════════════════════════════════════════════════
+// POPUP
+// ════════════════════════════════════════════════════════
+function showSuccessPopup() {
+  const m   = msgs[Math.floor(Math.random() * msgs.length)];
+  const pct = totalAnswered > 0 ? Math.round((correctCount/totalAnswered)*100) : 0;
+
+  document.getElementById('popup-icon').textContent       = m.icon;
+  document.getElementById('popup-title').textContent      = m.title;
+  document.getElementById('popup-subtitle').textContent   = m.sub;
+  document.getElementById('ps-correct').textContent       = correctCount;
+  document.getElementById('ps-total').textContent         = totalAnswered;
+  document.getElementById('ps-pct').textContent           = pct + '%';
+
+  const streakBadge = document.getElementById('popup-streak');
+  if (streak >= 3) {
+    document.getElementById('popup-streak-num').textContent = streak;
+    streakBadge.classList.add('show');
+  } else {
+    streakBadge.classList.remove('show');
+  }
+
+  // Update streak chip in header
+  if (streak >= 2) {
+    document.getElementById('streak-num').textContent = streak;
+    document.getElementById('streak-chip').classList.add('visible');
+  }
+
+  // Reset timer bar by re-creating the element
+  const timerBar = document.getElementById('popup-timer');
+  timerBar.style.animation = 'none';
+  void timerBar.offsetWidth; // force reflow
+  timerBar.style.animation = '';
+
+  document.getElementById('popup').style.display = 'flex';
+
+  // Auto-advance after 3.2s
+  clearTimeout(popupTimer);
+  autoAdvance = true;
+  popupTimer = setTimeout(() => {
+    if (autoAdvance) closePopup(true);
+  }, 3200);
+
+  // Continue button
+  document.getElementById('popup-continue-btn').onclick = () => closePopup(true);
+}
+
+function closePopup(advance) {
+  clearTimeout(popupTimer);
+  document.getElementById('popup').style.display = 'none';
+  if (advance) {
+    // Auto-advance to next question
+    const next = currentQ + 1;
+    if (next < questions.length) {
+      currentQ = next;
+      renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      showResults();
+    }
+  }
+}
+
+// ════════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════════
+function navigate(dir) {
+  const next = currentQ + dir;
+  if (next >= 0 && next < questions.length) {
+    currentQ = next;
+    renderQuestion();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (next === questions.length) {
+    showResults();
+  }
+}
+
+function goTo(idx) {
+  currentQ = idx;
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateNav() {
+  document.getElementById('btn-prev').disabled = currentQ === 0;
+  document.getElementById('btn-next').textContent = currentQ === questions.length - 1 ? 'Finish →' : 'Next →';
+}
+
+// ════════════════════════════════════════════════════════
+// PROGRESS & DOTS
+// ════════════════════════════════════════════════════════
+function updateProgress() {
+  const pct = ((currentQ + 1) / questions.length) * 100;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('q-counter').textContent = `Question ${currentQ+1} of ${questions.length}`;
+}
+
+function updateScoreChip() {
+  document.getElementById('score-chip').textContent = `Score: ${correctCount} / ${totalAnswered}`;
+}
+
+function updateDots() {
+  const row = document.getElementById('dots-row');
+  row.innerHTML = '';
+  questions.forEach((q, i) => {
+    const d = document.createElement('div');
+    d.className = 'q-dot';
+    d.title = `Q${i+1}: ${q.topic}`;
+    if (i === currentQ) d.classList.add('dot-current');
+    if (submitted[i]) {
+      d.classList.add(checkCorrect(questions[i], answers[i]) ? 'dot-correct' : 'dot-wrong');
+    }
+    d.onclick = () => goTo(i);
+    row.appendChild(d);
+  });
+}
+
+// ════════════════════════════════════════════════════════
+// RESULTS
+// ════════════════════════════════════════════════════════
+function showResults() {
+  const pct   = Math.round((correctCount / questions.length) * 100);
+  const wrong = questions.length - correctCount;
+  const trophy = pct >= 90 ? '🏆' : pct >= 80 ? '⭐' : pct >= 76 ? '✅' : '📚';
+  const grade  = pct >= 90 ? 'Outstanding — NCLEX Confidence Level: High'
+               : pct >= 80 ? 'Excellent — Well Within Passing Range'
+               : pct >= 76 ? 'Passing — Continue Targeted Review'
+               : 'Below Passing — Focus Review on Missed Topics';
+
+  document.getElementById('exam-layout').innerHTML = `
+    <div class="results-card">
+      <div class="results-hero">
+        <span class="results-trophy">${trophy}</span>
+        <div class="results-pct">${pct}<span class="pct-sign">%</span></div>
+        <div class="results-grade">${grade}</div>
+      </div>
+      <div class="results-body">
+        <div class="results-breakdown">
+          <div class="breakdown-card bd-correct">
+            <div class="bd-num">${correctCount}</div>
+            <div class="bd-lbl">Correct</div>
+          </div>
+          <div class="breakdown-card bd-wrong">
+            <div class="bd-num">${wrong}</div>
+            <div class="bd-lbl">Missed</div>
+          </div>
+          <div class="breakdown-card bd-pct">
+            <div class="bd-num">${pct}%</div>
+            <div class="bd-lbl">Accuracy</div>
+          </div>
+        </div>
+        <p class="results-note">Use the navigation dots above to review any missed questions and their rationales.</p>
+        <button class="btn-restart" onclick="restartExam()">↺ Restart Exam</button>
+      </div>
+    </div>`;
+
+  document.getElementById('btn-next').textContent = 'Finish →';
+  document.getElementById('btn-next').disabled    = true;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('q-counter').textContent = 'Exam Complete';
+}
+
+function restartExam() {
+  currentQ      = 0;
+  answers       = new Array(questions.length).fill(null);
+  submitted     = new Array(questions.length).fill(false);
+  correctCount  = 0;
+  totalAnswered = 0;
+  streak        = 0;
+  document.getElementById('btn-next').disabled    = false;
+  document.getElementById('btn-next').textContent = 'Next →';
+  document.getElementById('score-chip').textContent = 'Score: 0 / 0';
+  document.getElementById('streak-chip').classList.remove('visible');
+  renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ════════════════════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════════════════════
+function normalizeAnswer(ua) {
+  if (!ua) return [];
+  if (typeof ua === 'string') return [ua];
+  if (Array.isArray(ua)) return ua;
+  return [];
+}
+
+function escAttr(str) {
+  return str.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════
+renderQuestion();
+</script>
+</body>
+</html>
